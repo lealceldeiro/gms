@@ -4,7 +4,6 @@ buildscript {
 	}
 	repositories {
 		mavenLocal()
-        jcenter()
 		mavenCentral()
 	}
 	dependencies {
@@ -28,7 +27,6 @@ war {
 
 repositories {
 	mavenLocal()
-    jcenter()
 	mavenCentral()
 }
 
