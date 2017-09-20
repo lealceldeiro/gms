@@ -21,6 +21,10 @@ group = 'com.gmsboilerplatesbng'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+war {
+    baseName = 'GMSBoilerplate_SB-NG'
+}
+
 repositories {
 	mavenLocal()
 	mavenCentral()
