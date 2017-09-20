@@ -15,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
 
 group = 'com.gmsboilerplatesbng'
 version = '0.0.1-SNAPSHOT'
