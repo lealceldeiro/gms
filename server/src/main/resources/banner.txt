@@ -1,6 +1,6 @@
 
 
-${application.title} ${application.version} ${AnsiStyle.ITALIC}(${application.env})${AnsiStyle.NORMAL}
+${spring.application.name} ${application.version} ${AnsiStyle.ITALIC}(${application.env})${AnsiStyle.NORMAL}
 -----------------------------------------------------
 Running with ${AnsiColor.YELLOW}Spring Boot${spring-boot.formatted-version}${AnsiStyle.NORMAL} and ${AnsiColor.RED}Angular ${angular.version}${AnsiStyle.NORMAL}
 
