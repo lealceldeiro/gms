@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.6.RELEASE'
+        buildClient = false
 	}
 	repositories {
 		mavenLocal()
@@ -52,7 +53,16 @@ dependencies {
 task clientBuild(type: NpmTask) {
     group = 'client tasks'
     description = "Compiles client side folder for production"
-    args = ['run', 'build']
+    def exArgs = ['--version']
+
+    if(buildClient) {
+        exArgs = ['run', 'buildProd']
+        System.out.println("Building client resources (if configured)")
+    }
+    else {
+        System.out.println("Build client resources SKIPPED")
+    }
+    args = exArgs
 }
 
 task checkClientBuild(type: Copy, dependsOn: ['clientBuild']) {
