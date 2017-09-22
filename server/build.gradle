@@ -65,6 +65,13 @@ task clientBuild(type: NpmTask) {
     args = exArgs
 }
 
+task deleteStatic(type: Delete) {
+	group = 'build'
+	description = "Deletes all resources insiden the static folder"
+
+	delete fileTree(dir:'src/main/resources/static', include: '**.**')
+}
+
 task checkClientBuild(type: Copy, dependsOn: ['clientBuild']) {
     group = 'client tasks'
     description = "Checks all client side resources are ready for deployment"
