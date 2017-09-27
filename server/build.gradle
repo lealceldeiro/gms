@@ -1,7 +1,10 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.6.RELEASE'
-        buildClient = false
+        buildClient = true
+        envSet = false
+        deleteStaticContent = true
+        buildPropertiesFilePath = "./build/resources/main/application.properties"
 	}
 	repositories {
 		mavenLocal()
@@ -50,19 +53,13 @@ dependencies {
 	testCompile('org.springframework.security:spring-security-test')
 }
 
+//region custom tasks
+
+//region client task
 task clientBuild(type: NpmTask) {
     group = 'client tasks'
     description = "Compiles client side folder for production"
-    def exArgs = ['--version']
-
-    if(buildClient) {
-        exArgs = ['run', 'buildProd']
-        System.out.println("Building client resources (if configured)")
-    }
-    else {
-        System.out.println("Build client resources SKIPPED")
-    }
-    args = exArgs
+    args = ['run', 'buildProd']
 }
 
 task deleteStatic(type: Delete) {
@@ -72,12 +69,115 @@ task deleteStatic(type: Delete) {
 	delete fileTree(dir:'src/main/resources/static', include: '**.**')
 }
 
-task checkClientBuild(type: Copy, dependsOn: ['clientBuild']) {
+task copyClientBuild(type: Copy, dependsOn: ['clientBuild']) {
     group = 'client tasks'
     description = "Checks all client side resources are ready for deployment"
     from '../client/dist'
     into 'src/main/resources/static'
 }
+//endregion
+
+//region environments config
+task setDevConfig() {
+    group = 'other'
+    description = "Sets the environment for development mode"
+    doFirst {
+        def p = getSpringAppPropertyInBuild('spring.profiles.active')
+        if (p && p  != 'development') {
+            ant.propertyfile(file: buildPropertiesFilePath) {
+                entry(key: "spring.profiles.active", value: "development")
+            }
+            envSet = true
+        }
+    }
+    doLast {
+        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'development') {
+            println 'Environment set for development mode...'
+        }
+    }
+}
+
+task setTestingConfig() {
+    group = 'other'
+    description = "Sets the environment for testing mode"
+    doFirst {
+        def p = getSpringAppPropertyInBuild('spring.profiles.active')
+        if (p && p != 'test') {
+            ant.propertyfile(file: buildPropertiesFilePath) {
+                entry(key: "spring.profiles.active", value: "test")
+            }
+            envSet = true
+        }
+    }
+    doLast {
+        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'test') {
+            println 'Environment set for testing mode...'
+        }
+    }
+}
+
+task setProductionConfig() {
+    group = 'other'
+    description = "Sets the environment for production mode"
+    doFirst {
+        def p = getSpringAppPropertyInBuild('spring.profiles.active')
+        if (p && p  != 'production') {
+            ant.propertyfile(file: buildPropertiesFilePath) {
+                entry(key: "spring.profiles.active", value: "production")
+            }
+            envSet = true
+        }
+    }
+    doLast {
+        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'production') {
+            println 'Environment set for production mode...'
+        }
+    }
+}
+//endregion
+
+task warForTesting(type: War, dependsOn: ['copyClientBuild', 'setTestingConfig']) {
+    group = 'build'
+    description = "Generates a war archive with all the compiled classes, the web-app content and the libraries ready for testing environment"
+}
+
+//region control enabled tasks
+clientBuild.enabled = buildClient
+deleteStatic.enabled = deleteStaticContent
+copyClientBuild.enabled = buildClient
+
+task resetConfigTaskState(type: Exec) {
+    group = 'other'
+    description = 'Resets the custom tasks to their original state'
+    doLast {
+        clientBuild.enabled = buildClient
+        deleteStatic.enabled = deleteStaticContent
+        copyClientBuild.enabled = buildClient
+        setDevConfig.enabled = true
+        setTestingConfig.enabled = true
+        setProductionConfig.enabled = true
+    }
+}
+resetConfigTaskState.mustRunAfter(bootRun, war, warForTesting, clean)
+//endregion
+
+String getSpringAppPropertyInBuild(String key){
+    def props = new Properties()
+    def propFile = new File(buildPropertiesFilePath)
+    def p = null
+
+    if (propFile.exists() && propFile.canRead()){
+        props.load(new FileInputStream(propFile))
+        if (props!=null && props.containsKey(key)) {
+            p = props[key]
+        }
+    }
+    return p
+}
+//endregion
+
+clean.dependsOn(setDevConfig)
+bootRun.dependsOn(setDevConfig)
 
 // add client deployment to tasks when needed
-war.dependsOn(checkClientBuild)
+war.dependsOn(copyClientBuild, setProductionConfig)
