@@ -42,12 +42,16 @@ node {
 }
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-hateoas")
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
+    compileOnly ('org.projectlombok:lombok:1.16.18')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
+    testCompile("com.jayway.jsonpath:json-path")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 	testCompile('org.springframework.security:spring-security-test')
@@ -66,10 +70,17 @@ task deleteStatic(type: Delete) {
 	group = 'build'
 	description = "Deletes all resources insiden the static folder"
 
-	delete fileTree(dir:'src/main/resources/static', include: '**.**')
+    doFirst {
+        if(deleteStaticContent) {
+            delete fileTree(dir: 'src/main/resources/static', include: '**.**')
+        }
+    }
+    doLast {
+        println "Static content processed"
+    }
 }
 
-task copyClientBuild(type: Copy, dependsOn: ['clientBuild']) {
+task copyClientBuild(type: Copy, dependsOn: ['deleteStatic', 'clientBuild']) {
     group = 'client tasks'
     description = "Checks all client side resources are ready for deployment"
     from '../client/dist'
@@ -176,8 +187,9 @@ String getSpringAppPropertyInBuild(String key){
 }
 //endregion
 
-clean.dependsOn(setDevConfig)
-bootRun.dependsOn(setDevConfig)
+clean.dependsOn(setDevConfig, deleteStatic)
+bootRun.dependsOn(setDevConfig, deleteStatic)
 
 // add client deployment to tasks when needed
-war.dependsOn(copyClientBuild, setProductionConfig)
+processResources.dependsOn(copyClientBuild) //copy client source into static before copying them to war
+war.dependsOn(setProductionConfig) //before packing war, set prod env
