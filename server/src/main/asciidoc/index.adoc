@@ -1,0 +1,77 @@
+= General Management System (GMS) API docs
+
+__ Asiel Leal Celdeiro - http://mailto:lealceldeiro@gmail.com[lealceldeiro@gmail.com] __
+
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+== Introduction
+  GMS is an API for ...
+
+[[overview-http-verbs]]
+=== HTTP-verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `PUT`
+| Used to update an existing resource, full updates only
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+=== HTTP status codes
+  GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK` | Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
+
+| `201 Created`
+| The request has been fulfilled and resulted in a new resource being created.
+
+| `204 No Content`
+| The server successfully processed the request, but is not returning any content.
+
+| `400 Bad Request`
+| The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+
+| `404 Not Found`
+| The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
+|===
+
+[[resources]]
+== Resources
+
+
+[[resources-permission]]
+=== Permission
+The Permission resource is used to create, modify and list the user's permissions.
+
+[[resource-people-list]]
+==== Listing permissions
+A `GET` request lists all of the user's permissions.
+
+include::{snippets}/list-permissions/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/list-permissions/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/list-permissions/http-response.adoc[]
