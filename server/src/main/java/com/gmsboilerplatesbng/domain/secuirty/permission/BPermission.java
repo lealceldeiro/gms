@@ -2,7 +2,10 @@ package com.gmsboilerplatesbng.domain.secuirty.permission;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import com.gmsboilerplatesbng.domain.secuirty.role.BRole;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -12,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
