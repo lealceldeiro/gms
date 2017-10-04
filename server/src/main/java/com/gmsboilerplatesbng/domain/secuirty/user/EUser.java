@@ -1,8 +1,10 @@
 package com.gmsboilerplatesbng.domain.secuirty.user;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -12,6 +14,8 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class EUser extends GmsEntity{
@@ -23,23 +27,23 @@ public class EUser extends GmsEntity{
     @NotNull
     @NaturalId
     @NotBlank
-    private String username;
+    private final String username;
 
     @NotNull
     @NotBlank
-    private String email;
+    private final String email;
 
     @NotNull
     @NotBlank
-    private String name;
+    private final String name;
 
     @NotNull
     @NotBlank
-    private String lastName;
+    private final String lastName;
 
     @NotNull
     @NotBlank
-    private String password;
+    private final String password;
 
     private Boolean enabled = true;
 

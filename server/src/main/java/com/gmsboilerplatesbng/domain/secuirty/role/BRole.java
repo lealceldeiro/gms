@@ -2,8 +2,10 @@ package com.gmsboilerplatesbng.domain.secuirty.role;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import com.gmsboilerplatesbng.domain.secuirty.permission.BPermission;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -13,6 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class BRole extends GmsEntity{
@@ -24,8 +28,8 @@ public class BRole extends GmsEntity{
     @NotNull
     @NaturalId
     @NotBlank
-    @Column(unique = true)
-    private String label;
+    @Column(unique = true, nullable = false)
+    private final String label;
 
     @Lob
     private String description;
