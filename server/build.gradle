@@ -1,10 +1,11 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.6.RELEASE'
-        buildClient = false
+        buildClient = true
         envSet = false
-        deleteStaticContent = true
         buildPropertiesFilePath = "./build/resources/main/application.properties"
+        snippetsDir = file('build/generated-snippets')
+        apiDocsFolder = "apidocs"
 	}
 	repositories {
 		mavenLocal()
@@ -20,16 +21,13 @@ plugins {
     id "org.asciidoctor.convert" version "1.5.3"
 }
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
-apply plugin: "com.moowork.node"
+apply plugin: 'com.moowork.node'
+apply plugin: 'org.asciidoctor.convert'
 
 group = 'com.gmsboilerplatesbng'
 version = '0.0.1-SNAPSHOT'
@@ -46,7 +44,6 @@ node {
 }
 
 dependencies {
-    asciidoctor ('org.springframework.restdocs:spring-restdocs-asciidoctor')
     compile("org.springframework.boot:spring-boot-starter-hateoas")
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile("org.springframework.boot:spring-boot-starter-data-rest")
@@ -71,25 +68,11 @@ task clientBuild(type: NpmTask) {
     args = ['run', 'buildProd']
 }
 
-task deleteStatic(type: Delete) {
-	group = 'build'
-	description = "Deletes all resources insiden the static folder"
-
-    doFirst {
-        if(deleteStaticContent) {
-            delete fileTree(dir: 'src/main/resources/static', include: '**.**')
-        }
-    }
-    doLast {
-        println "Static content processed"
-    }
-}
-
-task copyClientBuild(type: Copy, dependsOn: ['deleteStatic', 'clientBuild']) {
+task copyClientBuild(type: Copy, dependsOn: ['clientBuild']) {
     group = 'client tasks'
     description = "Checks all client side resources are ready for deployment"
     from '../client/dist'
-    into 'src/main/resources/static'
+    into 'build/resources/main/static'
 }
 //endregion
 
@@ -150,32 +133,6 @@ task setProductionConfig() {
         }
     }
 }
-//endregion
-
-task warForTesting(type: War, dependsOn: ['copyClientBuild', 'setTestingConfig']) {
-    group = 'build'
-    description = "Generates a war archive with all the compiled classes, the web-app content and the libraries ready for testing environment"
-}
-
-//region control enabled tasks
-clientBuild.enabled = buildClient
-deleteStatic.enabled = deleteStaticContent
-copyClientBuild.enabled = buildClient
-
-task resetConfigTaskState(type: Exec) {
-    group = 'other'
-    description = 'Resets the custom tasks to their original state'
-    doLast {
-        clientBuild.enabled = buildClient
-        deleteStatic.enabled = deleteStaticContent
-        copyClientBuild.enabled = buildClient
-        setDevConfig.enabled = true
-        setTestingConfig.enabled = true
-        setProductionConfig.enabled = true
-    }
-}
-resetConfigTaskState.mustRunAfter(bootRun, war, warForTesting, clean)
-//endregion
 
 @SuppressWarnings("GrMethodMayBeStatic")
 private String getSpringAppPropertyInBuild(String key){
@@ -191,19 +148,27 @@ private String getSpringAppPropertyInBuild(String key){
     }
     return p
 }
+
 //endregion
 
-clean.dependsOn(setDevConfig, deleteStatic)
-bootRun.dependsOn(setDevConfig, deleteStatic)
+//region control enabled tasks
+clientBuild.enabled = buildClient
+copyClientBuild.enabled = buildClient
 
-// add client deployment to tasks when needed
-processResources.dependsOn(copyClientBuild) //copy client source into static before copying them to war
-
-test {
-    dependsOn setTestingConfig
-    outputs.dir snippetsDir
+task resetConfigTaskState(type: Exec) {
+    group = 'other'
+    description = 'Resets the custom tasks to their original state'
+    doLast {
+        clientBuild.enabled = buildClient
+        copyClientBuild.enabled = buildClient
+        setDevConfig.enabled = true
+        setTestingConfig.enabled = true
+        setProductionConfig.enabled = true
+    }
 }
+//endregion
 
+//region api docs
 asciidoctor {
     attributes 'snippets': snippetsDir
     inputs.dir snippetsDir
@@ -212,12 +177,31 @@ asciidoctor {
     sourceDir 'src/main/asciidoc'
 }
 
-war {
-    dependsOn setProductionConfig, asciidoctor
-    baseName = 'GMSBoilerplate_SB-NG'
-    from ("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
+task processApiDocs(type: Copy, dependsOn: asciidoctor) {
+    group = 'build'
+    description = "Copies de api documentation to the destinated folder"
+    from "${asciidoctor.outputDir}/html5"
+    into "build/resources/main/static/" + (apiDocsFolder as String)
+}
+//endregion
+//endregion
+
+task warForTesting(type: War, dependsOn: ['setTestingConfig', 'processApiDocs', 'copyClientBuild']) {
+    group = 'build'
+    description = "Generates a war archive with all the compiled classes, the web-app content and the libraries ready for testing environment"
 }
 
-clean.dependsOn deleteStatic
+resetConfigTaskState.mustRunAfter(bootRun, war, warForTesting, clean)
+
+clean.dependsOn(setDevConfig)
+bootRun.dependsOn(setDevConfig)
+
+test {
+    dependsOn setTestingConfig
+    outputs.dir snippetsDir
+}
+
+war {
+    dependsOn setProductionConfig, processApiDocs, copyClientBuild
+    baseName = 'GMSBoilerplate_SB-NG'
+}
