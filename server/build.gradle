@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.6.RELEASE'
-        buildClient = true
+        buildClient = false
         envSet = false
         buildPropertiesFilePath = "./build/resources/main/application.properties"
         snippetsDir = file('build/generated-snippets')
