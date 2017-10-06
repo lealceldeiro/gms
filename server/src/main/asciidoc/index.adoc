@@ -1,7 +1,5 @@
 = General Management System (GMS) API docs
-
-__ Asiel Leal Celdeiro - http://mailto:lealceldeiro@gmail.com[lealceldeiro@gmail.com] __
-
+Asiel Leal Celdeiro <lealceldeiro@gmail.com>
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -9,11 +7,15 @@ __ Asiel Leal Celdeiro - http://mailto:lealceldeiro@gmail.com[lealceldeiro@gmail
 :toclevels: 4
 :sectlinks:
 
-== Introduction
-  GMS is an API for ...
+[introduction]
+= Introduction
+  GMS (api) is an API for providing access to the GMS webservices to those developers who want to interact with the system in order to develop their own apps .
+
+[[overview]]
+= Overview
 
 [[overview-http-verbs]]
-=== HTTP-verbs
+== HTTP-verbs
 
 |===
 | Verb | Usage
@@ -35,7 +37,7 @@ __ Asiel Leal Celdeiro - http://mailto:lealceldeiro@gmail.com[lealceldeiro@gmail
 |===
 
 [[overview-http-status-codes]]
-=== HTTP status codes
+== HTTP status codes
   GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
 
 |===
@@ -57,16 +59,16 @@ __ Asiel Leal Celdeiro - http://mailto:lealceldeiro@gmail.com[lealceldeiro@gmail
 |===
 
 [[resources]]
-== Resources
+= Resources
 
 
 [[resources-permission]]
-=== Permission
+== Permission
 The Permission resource is used to create, modify and list the user's permissions.
 
-[[resource-people-list]]
-==== Listing permissions
-A `GET` request lists all of the user's permissions.
+[[resource-permission-list]]
+=== Listing permissions
+A `GET` request lists all permissions.
 
 include::{snippets}/list-permissions/response-fields.adoc[]
 
@@ -75,3 +77,41 @@ include::{snippets}/list-permissions/curl-request.adoc[]
 
 ==== Example response
 include::{snippets}/list-permissions/http-response.adoc[]
+
+[[resource-permission-get]]
+=== Getting one permission's info
+A `GET` request lists a permission's information.
+
+include::{snippets}/get-permission/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/get-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/get-permission/http-response.adoc[]
+
+
+[[resource-permission-get-roles]]
+=== Getting roles where one permission is used
+A `GET` request lists all roles where one permission is used.
+
+include::{snippets}/get-roles-permission/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/get-roles-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/get-roles-permission/http-response.adoc[]
+
+
+[[resource-permission-create]]
+=== Creating a new permission
+A `POST` request creates a new permission.
+
+include::{snippets}/create-permission/request-fields.adoc[]
+
+==== Example request
+include::{snippets}/create-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/create-permission/http-response.adoc[]

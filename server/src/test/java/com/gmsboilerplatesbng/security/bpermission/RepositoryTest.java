@@ -5,29 +5,38 @@ import com.gmsboilerplatesbng.Application;
 import com.gmsboilerplatesbng.domain.secuirty.permission.BPermission;
 import com.gmsboilerplatesbng.repository.security.permission.BPermissionRepository;
 import com.gmsboilerplatesbng.util.GMSRandom;
+import com.gmsboilerplatesbng.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestPropertySource("classpath:application.properties")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
@@ -38,6 +47,7 @@ public class RepositoryTest {
 
     @Autowired private WebApplicationContext context;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired private BPermissionRepository repository;
 
     @Autowired private ObjectMapper objectMapper;
@@ -46,7 +56,17 @@ public class RepositoryTest {
 
     private RestDocumentationResultHandler restDocResHandler;
 
-    private GMSRandom random = new GMSRandom();
+    @Value("${page.size}")
+    private int pageSize;
+
+    @Value("${page.sizeAttr}")
+    private String pageSizeAttr;
+
+    @Value("${spring.data.rest.basePath}")
+    private String apiPrefix;
+
+    private final String rn = "RandomName-";
+    private final String rl = "RandomLabel-";
 
     @Before
     public void setUp() {
@@ -56,27 +76,116 @@ public class RepositoryTest {
                 .alwaysDo(this.restDocResHandler)
                 .build();
     }
+
     @Test
     public void listPermissions() throws Exception {
         String reqString = "permission";
-        String rS1 = random.nextString(), rS2 = random.nextString();
-        createSamplePermission("defaultPN " + rS1, "defaultPL " + rS1);
-        createSamplePermission("defaultPN " + rS2, "defaultPL " + rS2);
 
-        this.restDocResHandler.snippets(
-                responseFields(
-                        fieldWithPath("_embedded." + reqString).description("Array of permissions"),
-                        fieldWithPath("_links").description("Available link for querying other webservices related to permissions"),
-                        fieldWithPath("page").description("Options for paging the permissions")
+        /*setUpPermissions();*/
+
+        this.mvc.perform(
+                get(this.apiPrefix + "/" + reqString + "?" + this.pageSizeAttr + "=" + this.pageSize)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andDo(
+                this.restDocResHandler.document(
+                        responseFields(
+                                fieldWithPath("_embedded." + reqString).description("Array of permissions"),
+                                fieldWithPath("_links").description("Available links for requesting other webservices related to permissions"),
+                                fieldWithPath("page").description("Options for paging the permissions")
+                        )
+                )
+        );
+    }
+
+    @Test
+    public void getPermission() throws Exception{
+        String reqString = "permission";
+
+        BPermission p = createPermissionUsingRepository();
+
+        this.mvc.perform(
+                get(this.apiPrefix + "/" + reqString + "/" + p.getId()).accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andDo(
+                this.restDocResHandler.document(
+                        responseFields(
+                                fieldWithPath("name").description("Name to be used for authenticating"),
+                                fieldWithPath("label").description("Label to be shown to the final user"),
+                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission")
+                        )
                 )
         );
 
-        this.mvc.perform(
-                get("/api/" + reqString).accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
     }
 
-    private BPermission createSamplePermission(String name, String label) {
+    @Test
+    public void getRolesPermission() throws Exception{
+        String reqString = "permission";
+
+        BPermission p = createPermissionUsingRepository();
+
+        this.mvc.perform(
+                get(this.apiPrefix + "/" + reqString + "/" + p.getId() + "/roles")
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andDo(
+                        this.restDocResHandler.document(
+                                responseFields(
+                                        fieldWithPath("_embedded.role").description("Array of roles in which the permission is included"),
+                                        fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission's roles")
+                                )
+                        )
+                );
+
+    }
+/*
+
+    @Test
+    public void createPermission() throws Exception{
+        String reqString = "permission";
+
+        Map<String, String> newPermission = new HashMap<>();
+        GMSRandom r = new GMSRandom();
+        newPermission.put("name", rn + r.nextString());
+        newPermission.put("label", rl + r.nextString());
+
+        ConstrainedFields reqFields = new ConstrainedFields(BPermission.class);
+
+        this.mvc.perform(
+                post(this.apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(newPermission))
+        ).andExpect(status().isCreated())
+                .andDo(
+                        this.restDocResHandler.document(
+                                requestFields(
+                                        reqFields.withPath("name").description("Name to be used for authenticating"),
+                                        reqFields.withPath("label").description("Label to be shown to the final user")
+                                )
+                        )
+                )
+                .andDo(
+                        this.restDocResHandler.document(
+                                responseFields(
+                                        fieldWithPath("name").description("Name to be used for authenticating"),
+                                        fieldWithPath("label").description("Label to be shown to the final user"),
+                                        fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission")
+                                )
+                        )
+                );
+
+    }
+*/
+
+    private void setUpPermissions() {
+        createPermissionUsingRepository();
+    }
+
+    private BPermission createPermissionUsingRepository() {
+        GMSRandom random = new GMSRandom();
+        return createPermissionUsingRepository(this.rn + random.nextString(), this.rl + random.nextString());
+    }
+    private BPermission createPermissionUsingRepository(String name, String label) {
         return this.repository.save(new BPermission(name, label));
     }
+
 }

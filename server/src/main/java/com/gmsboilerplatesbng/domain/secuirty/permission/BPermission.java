@@ -27,12 +27,12 @@ public class BPermission extends GmsEntity {
     @NaturalId
     @NotBlank
     @Column(unique = true, nullable = false)
-    private final String name;    //name to use for authenticating
+    private final String name;
 
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)
-    private final String label;   //label to show to final user
+    private final String label;
 
     @ManyToMany(mappedBy = "permissions")
     Set<BRole> roles = new HashSet<>();
