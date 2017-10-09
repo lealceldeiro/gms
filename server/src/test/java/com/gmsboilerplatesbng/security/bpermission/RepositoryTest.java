@@ -35,6 +35,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestPropertySource("classpath:application.properties")
@@ -195,6 +196,21 @@ public class RepositoryTest {
                         )
                 );
     }
+
+
+    //D
+    @Test
+    public void deletePermission() throws Exception {
+        String reqString = "permission";
+
+        BPermission p = createPermissionUsingRepository();
+
+        this.mvc.perform(
+                delete(this.apiPrefix + "/" + reqString + "/" + p.getId()).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNoContent());
+
+    }
+
 
     private void setUpPermissions() {
         createPermissionUsingRepository();
