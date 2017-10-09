@@ -34,6 +34,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestPropertySource("classpath:application.properties")
@@ -68,6 +69,8 @@ public class RepositoryTest {
     private final String rn = "RandomName-";
     private final String rl = "RandomLabel-";
 
+    private final GMSRandom random = new GMSRandom();
+
     @Before
     public void setUp() {
         this.restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
@@ -77,6 +80,33 @@ public class RepositoryTest {
                 .build();
     }
 
+    //C
+    @Test
+    public void createPermission() throws Exception {
+        String reqString = "permission";
+
+        Map<String, String> newPermission = new HashMap<>();
+        newPermission.put("name", rn + this.random.nextString());
+        newPermission.put("label", rl + this.random.nextString());
+
+        ConstrainedFields fields = new ConstrainedFields(BPermission.class);
+
+        this.mvc.perform(
+                post(this.apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(newPermission))
+        ).andExpect(status().isCreated())
+                .andDo(
+                        this.restDocResHandler.document(
+                                requestFields(
+                                        fields.withPath("name").description("Name to be used for authenticating"),
+                                        fields.withPath("label").description("Label to be shown to the final user")
+                                )
+                        )
+                );
+
+    }
+
+    //R
     @Test
     public void listPermissions() throws Exception {
         String reqString = "permission";
@@ -98,7 +128,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void getPermission() throws Exception{
+    public void getPermission() throws Exception {
         String reqString = "permission";
 
         BPermission p = createPermissionUsingRepository();
@@ -118,7 +148,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void getRolesPermission() throws Exception{
+    public void getRolesPermission() throws Exception {
         String reqString = "permission";
 
         BPermission p = createPermissionUsingRepository();
@@ -139,30 +169,31 @@ public class RepositoryTest {
 
     }
 
+    //U (partial)
     @Test
-    public void createPermission() throws Exception{
+    public void partialUpdatePermission() throws Exception {
         String reqString = "permission";
 
+        BPermission oldPermission = createPermissionUsingRepository();
         Map<String, String> newPermission = new HashMap<>();
-        GMSRandom r = new GMSRandom();
-        newPermission.put("name", rn + r.nextString());
-        newPermission.put("label", rl + r.nextString());
+        newPermission.put("name", this.rn + this.random.nextString());
+        newPermission.put("label", this.rl + this.random.nextString());
 
-        ConstrainedFields reqFields = new ConstrainedFields(BPermission.class);
+        ConstrainedFields fields = new ConstrainedFields(BPermission.class);
 
         this.mvc.perform(
-                post(this.apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
+                patch(this.apiPrefix + "/" + reqString + "/" + oldPermission.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(newPermission))
-        ).andExpect(status().isCreated())
+        ).andExpect(status().isNoContent())
                 .andDo(
                         this.restDocResHandler.document(
                                 requestFields(
-                                        reqFields.withPath("name").description("Name to be used for authenticating"),
-                                        reqFields.withPath("label").description("Label to be shown to the final user")
+                                        fields.withPath("name").description("Name to be used for authenticating"),
+                                        fields.withPath("label").description("Label to be shown to the final user")
                                 )
                         )
                 );
-
     }
 
     private void setUpPermissions() {
@@ -170,8 +201,7 @@ public class RepositoryTest {
     }
 
     private BPermission createPermissionUsingRepository() {
-        GMSRandom random = new GMSRandom();
-        return createPermissionUsingRepository(this.rn + random.nextString(), this.rl + random.nextString());
+        return createPermissionUsingRepository(this.rn + this.random.nextString(), this.rl + this.random.nextString());
     }
     private BPermission createPermissionUsingRepository(String name, String label) {
         return this.repository.save(new BPermission(name, label));
