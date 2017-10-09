@@ -2,7 +2,6 @@ package com.gmsboilerplatesbng.domain.secuirty.user;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
@@ -22,7 +21,6 @@ public class EUser extends GmsEntity{
     private Long id;
 
     @NotNull
-    @NaturalId
     @NotBlank
     private final String username;
 

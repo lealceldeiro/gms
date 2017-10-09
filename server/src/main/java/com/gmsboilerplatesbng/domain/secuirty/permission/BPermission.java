@@ -3,7 +3,6 @@ package com.gmsboilerplatesbng.domain.secuirty.permission;
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import com.gmsboilerplatesbng.domain.secuirty.role.BRole;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -23,7 +22,6 @@ public class BPermission extends GmsEntity {
     private Long id;
 
     @NotNull
-    @NaturalId
     @NotBlank
     @Column(unique = true, nullable = false)
     private final String name;
