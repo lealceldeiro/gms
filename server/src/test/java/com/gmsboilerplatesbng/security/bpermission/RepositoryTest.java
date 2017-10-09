@@ -138,7 +138,6 @@ public class RepositoryTest {
                 );
 
     }
-/*
 
     @Test
     public void createPermission() throws Exception{
@@ -162,19 +161,9 @@ public class RepositoryTest {
                                         reqFields.withPath("label").description("Label to be shown to the final user")
                                 )
                         )
-                )
-                .andDo(
-                        this.restDocResHandler.document(
-                                responseFields(
-                                        fieldWithPath("name").description("Name to be used for authenticating"),
-                                        fieldWithPath("label").description("Label to be shown to the final user"),
-                                        fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission")
-                                )
-                        )
                 );
 
     }
-*/
 
     private void setUpPermissions() {
         createPermissionUsingRepository();

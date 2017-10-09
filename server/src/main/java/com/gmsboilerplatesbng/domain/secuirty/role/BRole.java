@@ -14,7 +14,6 @@ import java.util.Set;
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class BRole extends GmsEntity{

@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class EUser extends GmsEntity{
