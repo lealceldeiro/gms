@@ -79,7 +79,7 @@ include::{snippets}/list-permissions/curl-request.adoc[]
 include::{snippets}/list-permissions/http-response.adoc[]
 
 [[resource-permission-get]]
-=== Getting one permission's info
+=== Getting a permission's info
 A `GET` request lists a permission's information.
 
 include::{snippets}/get-permission/response-fields.adoc[]
@@ -92,8 +92,8 @@ include::{snippets}/get-permission/http-response.adoc[]
 
 
 [[resource-permission-get-roles]]
-=== Getting roles where one permission is used
-A `GET` request lists all roles where one permission is used.
+=== Getting roles
+A `GET` request lists all roles where a permission is used.
 
 include::{snippets}/get-roles-permission/response-fields.adoc[]
 
