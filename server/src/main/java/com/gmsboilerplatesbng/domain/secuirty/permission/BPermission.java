@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = "id")
 @Entity
 public class BPermission extends GmsEntity {
 
