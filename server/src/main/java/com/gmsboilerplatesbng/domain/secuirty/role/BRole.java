@@ -26,7 +26,7 @@ public class BRole extends GmsEntity{
     @Column(unique = true, nullable = false)
     private final String label;
 
-    @Lob
+    @Column(length = 10000)
     private String description;
 
     private Boolean enabled = false;

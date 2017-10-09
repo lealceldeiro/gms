@@ -27,9 +27,9 @@ public class EOwnedEntity extends GmsEntity{
     @Column(unique = true, nullable = false)
     private final String username;
 
-    @Lob
     @NotNull
     @NotBlank
+    @Column(length = 10000)
     private final String description;
 
 }
