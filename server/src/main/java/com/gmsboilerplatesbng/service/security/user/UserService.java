@@ -40,7 +40,6 @@ public class UserService {
 
 
     public Boolean addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
-        ArrayList<BAuthorizationPk> pkList = new ArrayList<>();
         boolean roleNotFound = false;
 
         BAuthorizationPk pk;

@@ -6,6 +6,7 @@ import com.gmsboilerplatesbng.mapping.user.AddRolesToUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.GmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,9 +21,9 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "roles/add", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody GmsResponse addRolesToUser(@RequestBody AddRolesToUser postData) throws NotFoundEntityException {
         userService.addRolesToUser(postData.getUserId(), postData.getEntityId(), postData.getRolesId());
-
-        return new GmsResponse("saved OK (todo: message)");
+        return new GmsResponse("user.added.success");
     }
 }

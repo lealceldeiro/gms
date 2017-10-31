@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class GmsResponse {
-    // TODO: define standardized attributes for this response class
-    private final String message;
+    private String message = "";
 }
