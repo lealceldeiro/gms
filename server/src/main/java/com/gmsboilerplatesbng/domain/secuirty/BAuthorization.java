@@ -14,7 +14,6 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
 @Entity
 public class BAuthorization {
 
@@ -22,7 +21,7 @@ public class BAuthorization {
     @NoArgsConstructor
     @AllArgsConstructor
     @Embeddable
-    private static class Pk implements Serializable {
+    public static class BAuthorizationPk implements Serializable {
         @Column(nullable = false, updatable = false)
         private Long userId;
 
@@ -34,15 +33,17 @@ public class BAuthorization {
     }
 
     @EmbeddedId
-    private Pk pk;
+    private BAuthorizationPk BAuthorizationPk;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private EUser userId;
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    private EUser user;
+
     @ManyToOne
-    @JoinColumn(name = "entity_id", insertable = false, updatable = false)
-    private EOwnedEntity entityId;
+    @JoinColumn(name = "entityId", insertable = false, updatable = false)
+    private EOwnedEntity entity;
+
     @ManyToOne
-    @JoinColumn(name = "role_id", insertable = false, updatable = false)
-    private BRole roleId;
+    @JoinColumn(name = "roleId", insertable = false, updatable = false)
+    private BRole role;
 }
