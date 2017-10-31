@@ -19,7 +19,7 @@ public class UserController extends BaseController{
         this.userService = userService;
     }
 
-    @RequestMapping(value = "add-roles", method = RequestMethod.POST)
+    @RequestMapping(value = "roles/add", method = RequestMethod.POST)
     public @ResponseBody GmsResponse addRolesToUser(@RequestBody AddRolesToUser postData) throws NotFoundEntityException {
         userService.addRolesToUser(postData.getUserId(), postData.getEntityId(), postData.getRolesId());
 
