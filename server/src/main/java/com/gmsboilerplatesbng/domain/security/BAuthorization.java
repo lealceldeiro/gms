@@ -1,8 +1,8 @@
-package com.gmsboilerplatesbng.domain.secuirty;
+package com.gmsboilerplatesbng.domain.security;
 
-import com.gmsboilerplatesbng.domain.secuirty.ownedEntity.EOwnedEntity;
-import com.gmsboilerplatesbng.domain.secuirty.role.BRole;
-import com.gmsboilerplatesbng.domain.secuirty.user.EUser;
+import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.role.BRole;
+import com.gmsboilerplatesbng.domain.security.user.EUser;
 import lombok.*;
 
 import javax.persistence.*;

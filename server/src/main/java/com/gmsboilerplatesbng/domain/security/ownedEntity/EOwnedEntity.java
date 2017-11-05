@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.domain.secuirty.ownedEntity;
+package com.gmsboilerplatesbng.domain.security.ownedEntity;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import lombok.*;

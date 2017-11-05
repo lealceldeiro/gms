@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.repository.security.permission;
 
-import com.gmsboilerplatesbng.domain.secuirty.permission.BPermission;
+import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

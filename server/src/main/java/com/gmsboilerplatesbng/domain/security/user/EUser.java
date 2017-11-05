@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.domain.secuirty.user;
+package com.gmsboilerplatesbng.domain.security.user;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
 import lombok.*;

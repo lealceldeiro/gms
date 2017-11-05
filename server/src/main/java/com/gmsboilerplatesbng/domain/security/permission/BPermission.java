@@ -1,7 +1,7 @@
-package com.gmsboilerplatesbng.domain.secuirty.permission;
+package com.gmsboilerplatesbng.domain.security.permission;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
-import com.gmsboilerplatesbng.domain.secuirty.role.BRole;
+import com.gmsboilerplatesbng.domain.security.role.BRole;
 import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 

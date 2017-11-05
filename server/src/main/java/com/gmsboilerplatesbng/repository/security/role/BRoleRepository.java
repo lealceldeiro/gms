@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.repository.security.role;
 
-import com.gmsboilerplatesbng.domain.secuirty.role.BRole;
+import com.gmsboilerplatesbng.domain.security.role.BRole;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

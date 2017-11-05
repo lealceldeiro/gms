@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.repository.security.user;
 
-import com.gmsboilerplatesbng.domain.secuirty.user.EUser;
+import com.gmsboilerplatesbng.domain.security.user.EUser;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

@@ -2,7 +2,7 @@ package com.gmsboilerplatesbng.security.bpermission;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.Application;
-import com.gmsboilerplatesbng.domain.secuirty.permission.BPermission;
+import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import com.gmsboilerplatesbng.repository.security.permission.BPermissionRepository;
 import com.gmsboilerplatesbng.util.GMSRandom;
 import com.gmsboilerplatesbng.util.validation.ConstrainedFields;
