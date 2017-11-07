@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,19 +40,19 @@ public class UserService {
     }
 
 
-    public Boolean addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
+    public ArrayList<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
             GmsGeneralException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
     }
 
-    public Boolean removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
+    public ArrayList<Long> removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
             GmsGeneralException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
     }
 
-    private Boolean addRemoveRolesToFromUser (Long userId, Long entityId, List<Long> rolesId, Boolean add)
+    private ArrayList<Long> addRemoveRolesToFromUser (Long userId, Long entityId, List<Long> rolesId, Boolean add)
             throws NotFoundEntityException, GmsGeneralException {
-        int notFoundRoles = 0;
+        ArrayList<Long> addedOrRemoved = new ArrayList<>();
 
         BAuthorizationPk pk;
         BAuthorization newUserAuth;
@@ -65,9 +66,7 @@ public class UserService {
 
         for (Long iRoleId : rolesId) {
             r = roleRepository.findOne(iRoleId);
-            if (r == null) {
-                notFoundRoles++;
-            } else {
+            if (r != null) {
                 pk = new BAuthorizationPk();
                 pk.setEntityId(e.getId());
                 pk.setUserId(u.getId());
@@ -84,16 +83,14 @@ public class UserService {
                 else {
                     authorizationRepository.delete(newUserAuth);
                 }
+                addedOrRemoved.add(iRoleId);
             }
         }
-        //many roles (at least one not found
-        if(notFoundRoles > 1) {
-            String msg = notFoundRoles == rolesId.size() ? "user.roles.found.none"  //none of them found
-                    : "user.roles.found.not.some";                                  //some not found
-            throw new GmsGeneralException(msg, true);
+        //none of the roles was found
+        if (addedOrRemoved.isEmpty()) {
+            throw new NotFoundEntityException("user.add.roles.found.none");
         }
-        else if (notFoundRoles > 0) throw new NotFoundEntityException("role.not.found");
 
-        return true;
+        return addedOrRemoved;
     }
 }
