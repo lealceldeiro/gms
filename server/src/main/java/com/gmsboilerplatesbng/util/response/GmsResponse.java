@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.util;
+package com.gmsboilerplatesbng.util.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

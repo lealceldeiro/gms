@@ -5,8 +5,9 @@ import com.gmsboilerplatesbng.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.mapping.user.RolesForUserOverEntity;
 import com.gmsboilerplatesbng.service.security.user.UserService;
-import com.gmsboilerplatesbng.util.GmsResponse;
-import com.gmsboilerplatesbng.util.ResponseData;
+import com.gmsboilerplatesbng.util.i18n.MessageResolver;
+import com.gmsboilerplatesbng.util.response.GmsResponse;
+import com.gmsboilerplatesbng.util.response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,12 @@ public class UserController extends BaseController{
 
     private final UserService userService;
 
+    private final MessageResolver msg;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, MessageResolver messageResolver) {
         this.userService = userService;
+        this.msg = messageResolver;
     }
 
     @RequestMapping(value = "roles/add", method = RequestMethod.POST)
@@ -29,9 +33,9 @@ public class UserController extends BaseController{
     public @ResponseBody GmsResponse addRolesToUser(@RequestBody RolesForUserOverEntity data)
             throws NotFoundEntityException, GmsGeneralException {
         ArrayList<Long> addedRoles = userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
-        String key = "label.roles";
+        String key = msg.getMessage("label.roles");
         ResponseData[] rData = {new ResponseData<>(key, addedRoles)};
-        return new GmsResponse("user.roles.add.success", rData);
+        return new GmsResponse(msg.getMessage("user.roles.add.success"), rData);
     }
 
     @RequestMapping(value = "roles/remove", method = RequestMethod.DELETE)
