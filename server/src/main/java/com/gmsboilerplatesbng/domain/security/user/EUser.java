@@ -12,13 +12,9 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = true, of = "id")
+@EqualsAndHashCode(callSuper = true)
 @Entity
 public class EUser extends GmsEntity{
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @NotNull
     @NotBlank

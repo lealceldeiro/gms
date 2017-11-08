@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor(force = true)
 @Entity
-public class BAuthorization {
+public class BAuthorization implements Serializable{
 
     @Data
     @NoArgsConstructor
