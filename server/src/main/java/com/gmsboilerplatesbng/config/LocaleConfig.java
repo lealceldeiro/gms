@@ -1,6 +1,7 @@
 package com.gmsboilerplatesbng.config;
 
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,12 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
             "classpath:/i18n/user",
     };
 
+    @Value("${i18n.lang}")
+    private String lang;
+
+    @Value("${i18n.default}")
+    private String defaultLang;
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -38,14 +45,14 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("en"));
+        slr.setDefaultLocale(new Locale(this.defaultLang != null ? this.defaultLang : "en"));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang");
+        lci.setParamName(this.lang != null ? lang : "lang");
         return lci;
     }
 
