@@ -1,6 +1,7 @@
 package com.gmsboilerplatesbng.controller;
 import com.gmsboilerplatesbng.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.exception.domain.NotFoundEntityException;
+import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @RestController
 @RestControllerAdvice
-public class BaseController extends ResponseEntityExceptionHandler{
+public class BaseController extends ResponseEntityExceptionHandler {
+
+    protected MessageResolver msg;
 
     //region exceptions handling
 
@@ -28,7 +31,7 @@ public class BaseController extends ResponseEntityExceptionHandler{
      */
     @ExceptionHandler(NotFoundEntityException.class)
     protected ResponseEntity<Object> handleNotFoundEntityException(NotFoundEntityException ex, WebRequest req) {
-        String resBody = "Todo: " + ex.getMessage();// todo
+        String resBody = msg.getMessage(ex.getMessage());
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
     }
 
@@ -41,7 +44,7 @@ public class BaseController extends ResponseEntityExceptionHandler{
      */
     @ExceptionHandler(GmsGeneralException.class)
     protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
-        String resBody = "Todo: " + ex.getMessage()  + ". The request " + (ex.finishedOK() ? "" : "did not ") + "finished OK";// todo
+        String resBody = msg.getMessage(ex.getMessage()) + ". The request " + (ex.finishedOK() ? "" : "did not ") + "finished OK";
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED, req);
     }
 

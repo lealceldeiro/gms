@@ -20,7 +20,6 @@ public class UserController extends BaseController{
 
     private final UserService userService;
 
-    private final MessageResolver msg;
 
     @Autowired
     public UserController(UserService userService, MessageResolver messageResolver) {
