@@ -2,6 +2,7 @@ package com.gmsboilerplatesbng.controller;
 import com.gmsboilerplatesbng.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.HashMap;
+
 /**
  * Base controller for defining common actions to all controllers in the app.
  */
@@ -19,6 +22,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class BaseController extends ResponseEntityExceptionHandler {
 
     protected MessageResolver msg;
+
+    @Value("${response.messageVar}")
+    protected String messageVar = "message";
 
     //region exceptions handling
 
@@ -31,7 +37,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(NotFoundEntityException.class)
     protected ResponseEntity<Object> handleNotFoundEntityException(NotFoundEntityException ex, WebRequest req) {
-        String resBody = msg.getMessage(ex.getMessage());
+        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()));
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
     }
 
@@ -44,9 +50,16 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsGeneralException.class)
     protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
-        String resBody = msg.getMessage(ex.getMessage()) + ". The request " + (ex.finishedOK() ? "" : "did not ") + "finished OK";
+        String prefixCode = ex.finishedOK() ? "request.finished.OK" : "request.finished.KO";
+        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(prefixCode));
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED, req);
     }
 
     //endregion
+
+    private Object createResponseBodyAsMap(Object o) {
+        HashMap<String, Object> r = new HashMap<>();
+        r.put(this.messageVar, o);
+        return r;
+    }
 }
