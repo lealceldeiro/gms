@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.controller;
-import com.gmsboilerplatesbng.exception.GmsGeneralException;
-import com.gmsboilerplatesbng.exception.domain.NotFoundEntityException;
+import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
+import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;

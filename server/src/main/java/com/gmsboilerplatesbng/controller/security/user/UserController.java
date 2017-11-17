@@ -1,9 +1,9 @@
 package com.gmsboilerplatesbng.controller.security.user;
 
 import com.gmsboilerplatesbng.controller.BaseController;
-import com.gmsboilerplatesbng.exception.GmsGeneralException;
-import com.gmsboilerplatesbng.exception.domain.NotFoundEntityException;
-import com.gmsboilerplatesbng.mapping.user.RolesForUserOverEntity;
+import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
+import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
+import com.gmsboilerplatesbng.util.request.mapping.user.RolesForUserOverEntity;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import com.gmsboilerplatesbng.util.response.GmsResponse;

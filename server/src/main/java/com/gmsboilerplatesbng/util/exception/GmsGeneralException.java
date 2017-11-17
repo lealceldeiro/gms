@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.exception;
+package com.gmsboilerplatesbng.util.exception;
 
 public class GmsGeneralException extends Exception {
 

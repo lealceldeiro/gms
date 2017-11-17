@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.mapping.user;
+package com.gmsboilerplatesbng.util.request.mapping.user;
 
 import lombok.Data;
 

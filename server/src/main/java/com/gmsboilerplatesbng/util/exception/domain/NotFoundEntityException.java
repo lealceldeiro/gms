@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.exception.domain;
+package com.gmsboilerplatesbng.util.exception.domain;
 
 import javassist.NotFoundException;
 
