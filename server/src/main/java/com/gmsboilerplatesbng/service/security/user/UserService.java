@@ -12,6 +12,7 @@ import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityReposi
 import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +22,21 @@ import java.util.List;
 @Service
 @Transactional
 public class UserService {
+
+    @Value("${default.gmsuser.name}")
+    private String defaultUserName = "Admin";
+
+    @Value("${default.gmsuser.lastName}")
+    private String defaultUserLastName = "Default";
+
+    @Value("${default.gmsuser.username}")
+    private String defaultUserUsername = "admin";
+
+    @Value("${default.gmsuser.password}")
+    private String defaultUserPassword = "admin";
+
+    @Value("${default.gmsuser.email}")
+    private String defaultUserEmail = "admin@example.com";
 
     final private EUserRepository userRepository;
 
@@ -39,6 +55,16 @@ public class UserService {
         this.authorizationRepository = authorizationRepository;
     }
 
+    //region default user
+    public EUser createDefaultUser() {
+        EUser u = new EUser(this.defaultUserUsername, this.defaultUserEmail, this.defaultUserName,
+                this.defaultUserLastName, this.defaultUserPassword);
+        if(this.userRepository.save(u) != null) {
+            return u;
+        }
+        return null;
+    }
+    //endregion
 
     public ArrayList<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
             GmsGeneralException {
