@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  */
 @PropertySource("classpath:application.properties")
 @Configuration
-public class WebConfig {
+public class ApiPathConfig {
 
     @Bean
     public WebMvcRegistrationsAdapter webMvcRegistrationsHandlerMapping() {
