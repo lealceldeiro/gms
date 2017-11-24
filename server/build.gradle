@@ -171,6 +171,7 @@ task resetConfigTaskState(type: Exec) {
 
 //region api docs
 asciidoctor {
+    //noinspection GroovyAssignabilityCheck
     attributes 'snippets': snippetsDir
     inputs.dir snippetsDir
     outputDir "build/asciidoc"
