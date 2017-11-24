@@ -49,6 +49,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('io.jsonwebtoken:jjwt:0.7.0')
 	compile('org.springframework.boot:spring-boot-starter-web')
     compileOnly ('org.projectlombok:lombok:1.16.18')
 	runtime('org.springframework.boot:spring-boot-devtools')
