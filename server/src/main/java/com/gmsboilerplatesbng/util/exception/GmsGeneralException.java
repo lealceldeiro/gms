@@ -4,8 +4,8 @@ public class GmsGeneralException extends Exception {
 
     private final Boolean finishedOK;
 
-    public GmsGeneralException() {
-        super("exception.general");
+    public GmsGeneralException(String msg) {
+        super(msg);
         this.finishedOK = true;
     }
 
