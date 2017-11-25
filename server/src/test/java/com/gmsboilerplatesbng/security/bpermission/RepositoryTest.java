@@ -87,8 +87,8 @@ public class RepositoryTest {
         String reqString = "permission";
 
         Map<String, String> newPermission = new HashMap<>();
-        newPermission.put("name", rn + this.random.nextString());
-        newPermission.put("label", rl + this.random.nextString());
+        newPermission.put("name", this.rn + this.random.nextString());
+        newPermission.put("label", this.rl + this.random.nextString());
 
         ConstrainedFields fields = new ConstrainedFields(BPermission.class);
 

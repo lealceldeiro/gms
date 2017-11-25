@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer{
@@ -26,6 +27,9 @@ public class Application extends SpringBootServletInitializer{
         return builder.sources(Application.class);
     }
 
+    //region beans
+
+    //start up runner
     @Bean
     public CommandLineRunner commandLineRunner(ConfigurationService configurationService, UserService userService) {
         return strings -> {
@@ -35,4 +39,12 @@ public class Application extends SpringBootServletInitializer{
             }
         };
     }
+
+    //bCrypt
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    //endregion
 }
