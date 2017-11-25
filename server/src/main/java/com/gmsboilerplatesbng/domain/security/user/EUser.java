@@ -1,12 +1,14 @@
 package com.gmsboilerplatesbng.domain.security.user;
 
 import com.gmsboilerplatesbng.domain.GmsEntity;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -18,10 +20,12 @@ public class EUser extends GmsEntity{
 
     @NotNull
     @NotBlank
+    @Column(unique = true)
     private final String username;
 
     @NotNull
     @NotBlank
+    @Column(unique = true)
     private final String email;
 
     @NotNull

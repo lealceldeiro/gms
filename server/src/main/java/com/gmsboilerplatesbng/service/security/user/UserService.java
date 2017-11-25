@@ -13,6 +13,7 @@ import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,21 +39,25 @@ public class UserService {
     @Value("${default.gmsuser.email}")
     private String defaultUserEmail = "admin@example.com";
 
-    final private EUserRepository userRepository;
+    private final EUserRepository userRepository;
 
-    final private EOwnedEntityRepository entityRepository;
+    private final EOwnedEntityRepository entityRepository;
 
-    final private BRoleRepository roleRepository;
+    private final BRoleRepository roleRepository;
 
-    final private BAuthorizationRepository authorizationRepository;
+    private final BAuthorizationRepository authorizationRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(EUserRepository userRepository, EOwnedEntityRepository entityRepository,
-                       BRoleRepository roleRepository, BAuthorizationRepository authorizationRepository) {
+                       BRoleRepository roleRepository, BAuthorizationRepository authorizationRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authorizationRepository = authorizationRepository;
+        this.passwordEncoder = bCryptPasswordEncoder;
     }
 
     //region default user
@@ -65,6 +70,14 @@ public class UserService {
         return null;
     }
     //endregion
+
+    public EUser signUp(EUser u) {
+        EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
+                this.passwordEncoder.encode(u.getPassword()));
+        sU.setEnabled(false);
+        sU.setEmailVerified(false);
+        return this.userRepository.save(sU);
+    }
 
     public ArrayList<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
             GmsGeneralException {
