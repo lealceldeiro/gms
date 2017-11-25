@@ -64,18 +64,19 @@ public class UserService {
     public EUser createDefaultUser() {
         EUser u = new EUser(this.defaultUserUsername, this.defaultUserEmail, this.defaultUserName,
                 this.defaultUserLastName, this.defaultUserPassword);
-        if(this.userRepository.save(u) != null) {
-            return u;
-        }
-        return null;
+        return signUp(u, true, true);
     }
     //endregion
 
-    public EUser signUp(EUser u) {
+    public EUser signUp(EUser u) { return signUp(u, false); }
+
+    public EUser signUp(EUser u, Boolean enabled) { return signUp(u, enabled, false); }
+
+    public EUser signUp(EUser u, Boolean enabled, Boolean emailVerified) {
         EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
                 this.passwordEncoder.encode(u.getPassword()));
-        sU.setEnabled(false);
-        sU.setEmailVerified(false);
+        sU.setEnabled(enabled);
+        sU.setEmailVerified(emailVerified);
         return this.userRepository.save(sU);
     }
 
