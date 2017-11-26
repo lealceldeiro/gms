@@ -13,14 +13,19 @@ import javax.transaction.Transactional;
 @Transactional
 public class ConfigurationService {
 
-    @Value("${default.entity.multientity}")
-    private String multiEntity = "false";
+    @Value("${default.entity.multi-entity}")
+    private Boolean isMultiEntity = false;
+
+    @Value("${default.user.registration.allowed}")
+    private Boolean isUserRegistrationAllowed = true;
 
     private final BConfigurationRepository configurationRepository;
 
     @Autowired
     public ConfigurationService(BConfigurationRepository configurationRepository) {
         this.configurationRepository = configurationRepository;
+
+        loadDBConfig();
     }
 
     //region default config
@@ -28,12 +33,37 @@ public class ConfigurationService {
         return configurationRepository.count() > 0;
     }
 
-    public BConfiguration createDefaultConfig() {
-        BConfiguration c = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), this.multiEntity);
-        if(this.configurationRepository.save(c) != null) {
-            return c;
-        }
-        return null;
+    public Boolean createDefaultConfig() {
+        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), this.isMultiEntity.toString()),
+                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), this.isUserRegistrationAllowed.toString());
+
+        return
+                this.configurationRepository.save(multiEntity) != null &&
+                        this.configurationRepository.save(userRegistrationAllowed) != null;
     }
     //endregion
+
+    private void loadDBConfig() {
+        if (configurationExist()) {
+            this.isMultiEntity = Boolean.valueOf(
+                    this.configurationRepository.findFirstByKey(ConfigKey.IS_MULTI_ENTITY_APP.toString()).getValue());
+            this.isUserRegistrationAllowed = Boolean.valueOf(
+                    this.configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
+        }
+    }
+
+    public Boolean isUserUserRegistrationAllowed() {
+        return this.isUserRegistrationAllowed;
+    }
+
+    public void setUserRegistrationAllowed(Boolean userRegistrationAllowed) {
+        this.isUserRegistrationAllowed = userRegistrationAllowed;
+    }
+    public Boolean isMultiEntity() {
+        return this.isMultiEntity;
+    }
+
+    public void setIsMultiEntity(Boolean isMultiEntity) {
+        this.isMultiEntity = isMultiEntity;
+    }
 }

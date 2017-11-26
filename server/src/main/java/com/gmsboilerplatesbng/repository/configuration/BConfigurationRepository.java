@@ -5,5 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface BConfigurationRepository extends CrudRepository<BConfiguration, Long>{
+public interface BConfigurationRepository extends CrudRepository<BConfiguration, Long> {
+
+    BConfiguration findFirstByKey (String key);
 }

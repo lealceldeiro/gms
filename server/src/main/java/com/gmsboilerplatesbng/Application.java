@@ -34,7 +34,7 @@ public class Application extends SpringBootServletInitializer{
     public CommandLineRunner commandLineRunner(ConfigurationService configurationService, UserService userService) {
         return strings -> {
             if(!configurationService.configurationExist()) { //first app start up
-                boolean ok = configurationService.createDefaultConfig() != null;
+                boolean ok = configurationService.createDefaultConfig();
                 ok = ok && userService.createDefaultUser() != null;
                 if (!ok) {
                     System.exit(1);
