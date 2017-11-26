@@ -50,7 +50,7 @@ public class UserController extends BaseController{
      */
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object signUp(@RequestBody EUser user) throws GmsGeneralException {
+    public @ResponseBody EUser signUp(@RequestBody EUser user) throws GmsGeneralException {
         if (this.configuration.isUserUserRegistrationAllowed()) {
             return signUpUser(user, false);
         }
