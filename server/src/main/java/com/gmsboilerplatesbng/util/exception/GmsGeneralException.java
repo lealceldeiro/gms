@@ -16,6 +16,11 @@ public class GmsGeneralException extends Exception {
         this.finishedOK = true;
     }
 
+    public GmsGeneralException(Boolean finishedOK) {
+        super("exception.general");
+        this.finishedOK = finishedOK;
+    }
+
     public GmsGeneralException(String msg, Boolean finishedOK) {
         super(msg);
         this.finishedOK = finishedOK;
