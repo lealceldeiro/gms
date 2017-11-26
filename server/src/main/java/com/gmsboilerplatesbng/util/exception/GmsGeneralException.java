@@ -4,6 +4,13 @@ public class GmsGeneralException extends Exception {
 
     private final Boolean finishedOK;
 
+
+    public GmsGeneralException() {
+        super("exception.general");
+        this.finishedOK = true;
+    }
+
+
     public GmsGeneralException(String msg) {
         super(msg);
         this.finishedOK = true;
