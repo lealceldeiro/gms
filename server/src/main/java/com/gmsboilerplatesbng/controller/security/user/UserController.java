@@ -39,7 +39,7 @@ public class UserController extends BaseController{
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody EUser register(@RequestBody EUser user) throws GmsGeneralException {
-        return signUpUser(user, true);
+        return signUpUser(user, true); //todo: overwrite the default call to the repository
     }
 
     /**
@@ -58,7 +58,7 @@ public class UserController extends BaseController{
     }
 
     private EUser signUpUser(EUser user, Boolean emailVerified) throws GmsGeneralException{
-        EUser u = this.userService.signUp(user, emailVerified);
+        EUser u = this.userService.signUp(user, true, emailVerified);
         if (u != null) {
             return u;
         }
