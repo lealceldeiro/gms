@@ -2,7 +2,7 @@ package com.gmsboilerplatesbng.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
-import com.gmsboilerplatesbng.util.request.security.SecurityConstant;
+import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,16 +53,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         for (int i = 0; i < authoritiesO.length; i++) {
             authoritiesS[i] = authoritiesO[i].toString();
         }
-        Date expiration = new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME);
+        Date expiration = new Date(System.currentTimeMillis() + SecurityConst.EXPIRATION_TIME);
         String jwt = Jwts.builder()
                 .setSubject(((EUser)authResult.getPrincipal()).getUsername())
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.ES512, SecurityConstant.SECRET.getBytes())
-                .claim(SecurityConstant.AUTHORITIES_HOLDER, authoritiesS)
-                .claim(SecurityConstant.EXPIRATION_HOLDER, expiration)
+                .signWith(SignatureAlgorithm.ES512, SecurityConst.SECRET.getBytes())
+                .claim(SecurityConst.AUTHORITIES_HOLDER, authoritiesS)
+                .claim(SecurityConst.EXPIRATION_HOLDER, expiration)
                 .compact();
 
-        res.addHeader(SecurityConstant.HEADER, SecurityConstant.TOKEN_TYPE + " " + jwt);
+        res.addHeader(SecurityConst.HEADER, SecurityConst.TOKEN_TYPE + " " + jwt);
 
     }
 }

@@ -129,7 +129,7 @@ public class UserService implements UserDetailsService{
                 newUserAuth.setUser(u);
                 newUserAuth.setRole(r);
                 newUserAuth.setEntity(e);
-                if(add) {
+                if (add) {
                     authorizationRepository.save(newUserAuth);
                 }
                 else {
@@ -156,10 +156,10 @@ public class UserService implements UserDetailsService{
         BAuthorization auth = null;
         if (u != null) { //got user
             Long entityId = this.configService.getLastAccessedEntityIdByUser(u.getId());
-            if(entityId == null) { //no last accessed entity registered
+            if (entityId == null) { //no last accessed entity registered
                 auth = this.authorizationRepository.findFirstByUserAndEntityNotNull(u.getId()); //find any of the assigned entities
             }
-            if(entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
+            if (entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
                 if (auth == null) { //get authorization if it was not previously gotten
                     auth = this.authorizationRepository.findFirstByUserAndEntity(u.getId(), entityId);
                 }

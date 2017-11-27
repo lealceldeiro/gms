@@ -4,8 +4,8 @@ import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import com.gmsboilerplatesbng.domain.security.role.BRole;
 import com.gmsboilerplatesbng.repository.security.permission.BPermissionRepository;
 import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,14 +14,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class RoleService {
 
-    @Value("${default.gmsrole.label}")
-    private String defaultRoleLabel = "ROLE_ADMIN";
 
-    @Value("${default.gmsrole.description}")
-    private String defaultRoleDescription = "Default role";
-
-    @Value("${default.gmsrole.enabled}")
-    private Boolean defaultRoleEnabled = true;
 
     private final BRoleRepository repository;
 
@@ -36,9 +29,9 @@ public class RoleService {
 
     //region default user
     public BRole createDefaultRole() {
-        BRole role = new BRole(this.defaultRoleLabel);
-        role.setDescription(this.defaultRoleDescription);
-        role.setEnabled(this.defaultRoleEnabled);
+        BRole role = new BRole(DefaultConst.ROLE_LABEL);
+        role.setDescription(DefaultConst.ROLE_DESCRIPTION);
+        role.setEnabled(DefaultConst.ROLE_ENABLED);
 
         final Iterable<BPermission> permissions = this.permissionRepository.findAll();
 

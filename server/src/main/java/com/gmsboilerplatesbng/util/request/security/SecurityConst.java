@@ -2,7 +2,7 @@ package com.gmsboilerplatesbng.util.request.security;
 
 import org.springframework.beans.factory.annotation.Value;
 
-public class SecurityConstant {
+public class SecurityConst {
 
     @Value("${security.gms.jwt.secret}")
     public static String SECRET = "SecretForGeneratingTheJWTs";

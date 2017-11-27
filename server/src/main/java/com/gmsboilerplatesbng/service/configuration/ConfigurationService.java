@@ -1,10 +1,18 @@
 package com.gmsboilerplatesbng.service.configuration;
 
 import com.gmsboilerplatesbng.domain.configuration.BConfiguration;
+import com.gmsboilerplatesbng.domain.security.BAuthorization;
+import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.role.BRole;
+import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.repository.configuration.BConfigurationRepository;
+import com.gmsboilerplatesbng.repository.security.BAuthorizationRepository;
+import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityRepository;
+import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
+import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import com.gmsboilerplatesbng.util.configuration.ConfigKey;
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,17 +21,29 @@ import javax.transaction.Transactional;
 @Transactional
 public class ConfigurationService {
 
-    @Value("${default.entity.multi-entity}")
-    private Boolean isMultiEntity = false;
+    private Boolean isMultiEntity = DefaultConst.IS_MULTI_ENTITY;
 
-    @Value("${default.user.registration.allowed}")
-    private Boolean isUserRegistrationAllowed = true;
+    private Boolean isUserRegistrationAllowed = DefaultConst.IS_USER_REGISTRATION_ALLOWED;
 
     private final BConfigurationRepository configurationRepository;
 
+    private final EUserRepository userRepository;
+
+    private final EOwnedEntityRepository entityRepository;
+
+    private final BRoleRepository roleRepository;
+
+    private final BAuthorizationRepository authRepository;
+
     @Autowired
-    public ConfigurationService(BConfigurationRepository configurationRepository) {
+    public ConfigurationService(BConfigurationRepository configurationRepository, EUserRepository userRepository,
+                                EOwnedEntityRepository entityRepository, BRoleRepository roleRepository,
+                                BAuthorizationRepository authRepository) {
         this.configurationRepository = configurationRepository;
+        this.userRepository = userRepository;
+        this.entityRepository = entityRepository;
+        this.roleRepository = roleRepository;
+        this.authRepository = authRepository;
 
         loadDBConfig();
     }
@@ -34,15 +54,44 @@ public class ConfigurationService {
     }
 
     public Boolean createDefaultConfig() {
-        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), this.isMultiEntity.toString()),
-                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), this.isUserRegistrationAllowed.toString());
+        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), DefaultConst.IS_MULTI_ENTITY.toString()),
+                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), DefaultConst.IS_USER_REGISTRATION_ALLOWED.toString());
 
         return
                 this.configurationRepository.save(multiEntity) != null &&
                         this.configurationRepository.save(userRegistrationAllowed) != null;
     }
+
+    public boolean assignDefaultUserToEntityWithRole() {
+        EUser u = this.userRepository.findFirstByUsernameOrEmail(DefaultConst.USER_USERNAME, DefaultConst.USER_EMAIL);
+        if (u != null) { //got default user
+            EOwnedEntity e = this.entityRepository.findFirstByUsername(DefaultConst.ENTITY_USERNAME);
+            if (e != null) { //got entity
+                BRole role = this.roleRepository.findFirstByLabel(DefaultConst.ROLE_LABEL);
+                if (role != null) {
+                    com.gmsboilerplatesbng.domain.security.BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
+                    pk.setUserId(u.getId());
+                    pk.setEntityId(e.getId());
+                    pk.setRoleId(role.getId());
+
+                    BAuthorization auth = new BAuthorization();
+                    auth.setBAuthorizationPk(pk);
+                    auth.setUser(u);
+                    auth.setEntity(e);
+                    auth.setRole(role);
+
+                    return this.authRepository.save(auth) != null;
+                }
+            }
+        }
+        return false;
+    }
+
     //endregion
 
+    /**
+     * Loads the most frequently queried configuration from database to memory
+     */
     private void loadDBConfig() {
         if (configurationExist()) {
             this.isMultiEntity = Boolean.valueOf(
@@ -52,14 +101,14 @@ public class ConfigurationService {
         }
     }
 
-    public Boolean isUserUserRegistrationAllowed() {
+    public boolean isUserUserRegistrationAllowed() {
         return this.isUserRegistrationAllowed;
     }
 
     public void setUserRegistrationAllowed(Boolean userRegistrationAllowed) {
         this.isUserRegistrationAllowed = userRegistrationAllowed;
     }
-    public Boolean isMultiEntity() {
+    public boolean isMultiEntity() {
         return this.isMultiEntity;
     }
 

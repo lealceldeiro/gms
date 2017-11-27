@@ -1,7 +1,10 @@
 package com.gmsboilerplatesbng;
 
 import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
+import com.gmsboilerplatesbng.service.security.permission.PermissionService;
+import com.gmsboilerplatesbng.service.security.role.RoleService;
 import com.gmsboilerplatesbng.service.security.user.UserService;
+import com.gmsboilerplatesbng.service.security.ownedEntity.OwnedEntityService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,11 +34,17 @@ public class Application extends SpringBootServletInitializer{
 
     //start up runner
     @Bean
-    public CommandLineRunner commandLineRunner(ConfigurationService configurationService, UserService userService) {
+    public CommandLineRunner commandLineRunner(ConfigurationService configurationService, UserService userService,
+                                               OwnedEntityService oeService, PermissionService permissionService,
+                                               RoleService roleService) {
         return strings -> {
             if(!configurationService.configurationExist()) { //first app start up
                 boolean ok = configurationService.createDefaultConfig();
+                ok = ok && permissionService.createDefaultPermissions();
+                ok = ok && roleService.createDefaultRole() != null;
                 ok = ok && userService.createDefaultUser() != null;
+                ok = ok && oeService.createDefaultEntity() != null;
+                ok = ok && configurationService.assignDefaultUserToEntityWithRole();
                 if (!ok) {
                     System.exit(1);
                 }

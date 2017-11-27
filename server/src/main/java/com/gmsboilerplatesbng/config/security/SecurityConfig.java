@@ -1,7 +1,8 @@
 package com.gmsboilerplatesbng.config.security;
 
 import com.gmsboilerplatesbng.service.security.user.UserService;
-import com.gmsboilerplatesbng.util.request.security.SecurityConstant;
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
+import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
@@ -22,9 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${spring.data.rest.basePath}")
-    private String API_BASE_PATH;
-
     private final UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -38,17 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, this.API_BASE_PATH + SecurityConstant.SIGN_UP_URL).permitAll()
-                .antMatchers(HttpMethod.POST, this.API_BASE_PATH + SecurityConstant.SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, DefaultConst.API_BASE_PATH + SecurityConst.SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, DefaultConst.API_BASE_PATH + SecurityConst.SIGN_IN_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(SecurityConstant.HEADER));
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(SecurityConst.HEADER));
     }
 
     @Override

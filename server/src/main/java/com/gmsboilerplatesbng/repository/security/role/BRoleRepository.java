@@ -6,4 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "role", path = "role")
 public interface BRoleRepository extends PagingAndSortingRepository<BRole, Long> {
+
+    BRole findFirstByLabel(String label);
 }

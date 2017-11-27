@@ -26,7 +26,7 @@ public class PermissionService {
         for (BPermissionConst p : constPermissions) {
             ok = ok && this.repository.save(
                     new com.gmsboilerplatesbng.domain.security.permission.BPermission(
-                            p.toString(), p.toString().replaceAll("_", " ")
+                            p.toString(), p.toString().replaceAll("__", " ").replaceAll("_", " ")
                     )
             ) != null;
         }
