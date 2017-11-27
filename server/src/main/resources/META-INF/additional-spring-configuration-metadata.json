@@ -13,9 +13,9 @@
       "defaultValue": "864_000_000"
     },
     {
-      "name": "security.gms.jwt.token_prefix",
+      "name": "security.gms.jwt.token_type",
       "type": "java.lang.String",
-      "description": "Defines the token prefix for receiving the JWT.",
+      "description": "Defines the token type for receiving the JWT.",
       "defaultValue": "Bearer"
     },
     {
@@ -41,6 +41,16 @@
       "type": "java.lang.String",
       "description": "Defines the url for logging in the user.",
       "defaultValue": "/login"
+    },
+    {
+      "name": "security.gms.jwt.token_type_holder",
+      "type": "java.lang.String",
+      "description": "Defines the holder for the security.gms.jwt.token_type."
+    },
+    {
+      "name": "security.gms.jwt.token_holder",
+      "type": "java.lang.String",
+      "description": "Defines the token holder for retrieving the JWT which should be used in further requests."
     }
   ]
 }

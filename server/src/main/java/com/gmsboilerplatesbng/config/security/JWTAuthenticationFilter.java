@@ -62,8 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim(SecurityConstant.EXPIRATION_HOLDER, expiration)
                 .compact();
 
-        res.addHeader(SecurityConstant.HEADER, SecurityConstant.TOKEN_PREFIX + " " + jwt);
-        //todo: send information in response body
+        res.addHeader(SecurityConstant.HEADER, SecurityConstant.TOKEN_TYPE + " " + jwt);
 
     }
 }
