@@ -41,7 +41,7 @@ public class BRole extends GmsEntity{
      */
     public void addPermission(BPermission p) {
         permissions.add(p);
-        p.getRoles().add(this);
+        //p.getRoles().add(this);
     }
 
     /**
@@ -50,6 +50,6 @@ public class BRole extends GmsEntity{
      */
     public void removePermission(BPermission p) {
         permissions.remove(p);
-        p.getRoles().remove(this);
+        //p.getRoles().remove(this);
     }
 }

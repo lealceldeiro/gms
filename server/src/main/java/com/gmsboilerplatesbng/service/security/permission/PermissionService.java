@@ -19,7 +19,7 @@ public class PermissionService {
         this.repository = repository;
     }
 
-    //region default user
+    //region default permissions
     public Boolean createDefaultPermissions() {
         Boolean ok = true;
         final BPermissionConst[] constPermissions = BPermissionConst.values();

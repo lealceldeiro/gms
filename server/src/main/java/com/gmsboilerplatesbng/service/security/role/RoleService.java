@@ -27,7 +27,7 @@ public class RoleService {
         this.permissionRepository = permissionRepository;
     }
 
-    //region default user
+    //region default role
     public BRole createDefaultRole() {
         BRole role = new BRole(DefaultConst.ROLE_LABEL);
         role.setDescription(DefaultConst.ROLE_DESCRIPTION);
