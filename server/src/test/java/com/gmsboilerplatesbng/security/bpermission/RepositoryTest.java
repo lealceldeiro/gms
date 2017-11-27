@@ -80,6 +80,7 @@ public class RepositoryTest {
                 .alwaysDo(this.restDocResHandler)
                 .build();
     }
+/*
 
     //C
     @Test
@@ -112,7 +113,9 @@ public class RepositoryTest {
     public void listPermissions() throws Exception {
         String reqString = "permission";
 
-        /*setUpPermissions();*/
+        */
+/*setUpPermissions();*//*
+
 
         this.mvc.perform(
                 get(this.apiPrefix + "/" + reqString + "?" + this.pageSizeAttr + "=" + this.pageSize)
@@ -222,5 +225,6 @@ public class RepositoryTest {
     private BPermission createPermissionUsingRepository(String name, String label) {
         return this.repository.save(new BPermission(name, label));
     }
+*/
 
 }
