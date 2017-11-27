@@ -35,6 +35,12 @@
       "type": "java.lang.String",
       "description": "Defines the holder for the authenticated user's authorities.",
       "defaultValue": "authorities"
+    },
+    {
+      "name": "security.gms.jwt.sign_in_url",
+      "type": "java.lang.String",
+      "description": "Defines the url for logging in the user.",
+      "defaultValue": "/login"
     }
   ]
 }

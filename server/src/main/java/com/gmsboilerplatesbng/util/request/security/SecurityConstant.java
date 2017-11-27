@@ -19,6 +19,9 @@ public class SecurityConstant {
     @Value("${security.gms.jwt.sign_up_url}")
     public static final String SIGN_UP_URL = "/user/sign-up";
 
+    @Value("${security.gms.jwt.sign_in_url}")
+    public static final String SIGN_IN_URL = "/login";
+
     @Value("${security.gms.jwt.authorities_holder}")
     public static final String AUTHORITIES_HOLDER = "authorities";
 
