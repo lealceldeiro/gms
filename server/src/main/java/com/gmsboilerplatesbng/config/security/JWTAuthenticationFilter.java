@@ -2,6 +2,7 @@ package com.gmsboilerplatesbng.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
+import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,16 +18,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private final UserService userService;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @Override
@@ -34,9 +37,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
 
             EUser credentials = new ObjectMapper().readValue(req.getInputStream(), EUser.class);
-            List<GrantedAuthority> authorities = new ArrayList<>();
-
-            //todo: get permissions
+            String username = credentials.getUsername();
+            String email = credentials.getEmail();
+            HashSet<GrantedAuthority> authorities = this.userService.getUserAuthorities(
+                    username != null ? username : email
+            );
 
             return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     credentials.getUsername(), credentials.getPassword(), authorities
