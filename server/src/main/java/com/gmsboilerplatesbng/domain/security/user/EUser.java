@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.Set;
+import java.util.HashSet;
 
 @Data
 @NoArgsConstructor(force = true)
@@ -56,7 +56,7 @@ public class EUser extends GmsEntity implements UserDetails {
     private Boolean passwordExpired = false;
 
     @Getter(AccessLevel.NONE)
-    private Set<GrantedAuthority> authorities;
+    private HashSet<GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
