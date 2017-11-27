@@ -66,4 +66,12 @@ public class ConfigurationService {
     public void setIsMultiEntity(Boolean isMultiEntity) {
         this.isMultiEntity = isMultiEntity;
     }
+
+    public Long getLastAccessedEntityIdByUser(Long userId) {
+        final BConfiguration c = this.configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
+        if (c != null) {
+            return Long.valueOf(c.getValue());
+        }
+        return null;
+    }
 }

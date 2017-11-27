@@ -3,8 +3,10 @@ package com.gmsboilerplatesbng.service.security.user;
 import com.gmsboilerplatesbng.domain.security.BAuthorization;
 import com.gmsboilerplatesbng.domain.security.BAuthorization.BAuthorizationPk;
 import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import com.gmsboilerplatesbng.domain.security.role.BRole;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
+import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.repository.security.BAuthorizationRepository;
@@ -13,6 +15,8 @@ import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -52,15 +58,18 @@ public class UserService implements UserDetailsService{
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+    private final ConfigurationService configService;
+
     @Autowired
     public UserService(EUserRepository userRepository, EOwnedEntityRepository entityRepository,
                        BRoleRepository roleRepository, BAuthorizationRepository authorizationRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
+                       BCryptPasswordEncoder bCryptPasswordEncoder, ConfigurationService configService) {
         this.userRepository = userRepository;
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authorizationRepository = authorizationRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
+        this.configService = configService;
     }
 
     //region default user
@@ -140,5 +149,32 @@ public class UserService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         return this.userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+    }
+
+    public HashSet<GrantedAuthority> getUserAuthorities(String usernameOrEmail) {
+        EUser u = (EUser)loadUserByUsername(usernameOrEmail);
+        BAuthorization auth = null;
+        if (u != null) { //got user
+            Long entityId = this.configService.getLastAccessedEntityIdByUser(u.getId());
+            if(entityId == null) { //no last accessed entity registered
+                auth = this.authorizationRepository.findFirstByUserAndEntityNotNull(u.getId()); //find any of the assigned entities
+            }
+            if(entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
+                if (auth == null) { //get authorization if it was not previously gotten
+                    auth = this.authorizationRepository.findFirstByUserAndEntity(u.getId(), entityId);
+                }
+                if (auth != null) { //got authorization
+                    Set<BPermission> permissions = auth.getRole().getPermissions();
+                    HashSet<GrantedAuthority> authorities = new HashSet<>();
+                    for (BPermission p: permissions) {
+                        authorities.add(new SimpleGrantedAuthority(p.getName()));
+                    }
+                    return authorities;
+                }
+                return new HashSet<>();
+            }
+            return new HashSet<>();
+        }
+        return new HashSet<>();
     }
 }

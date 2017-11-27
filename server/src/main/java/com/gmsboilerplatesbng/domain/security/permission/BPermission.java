@@ -17,11 +17,17 @@ import java.util.Set;
 @Entity
 public class BPermission extends GmsEntity {
 
+    /**
+     * Name to be used for authenticating the user
+     */
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)
     private final String name;
 
+    /**
+     * Label to be shown to the final user
+     */
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)

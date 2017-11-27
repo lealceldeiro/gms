@@ -8,4 +8,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface BConfigurationRepository extends CrudRepository<BConfiguration, Long> {
 
     BConfiguration findFirstByKey (String key);
+    BConfiguration findFirstByKeyAndUserId (String key, Long userId);
 }

@@ -14,5 +14,10 @@ public enum ConfigKey {
     /**
      * Last language used by a user
      */
-    LANGUAGE
+    LANGUAGE,
+
+    /**
+     * Specifies the id of the last accessed entity by a user
+     */
+    LAST_ACCESSED_ENTITY
 }
