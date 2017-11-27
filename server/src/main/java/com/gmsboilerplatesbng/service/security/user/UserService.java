@@ -139,6 +139,6 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        return this.userRepository.findFirstByUsernameOrEmail();
+        return this.userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
     }
 }
