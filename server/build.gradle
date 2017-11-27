@@ -12,13 +12,21 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+        classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
 	}
 }
 
 plugins {
     id "org.asciidoctor.convert" version "1.5.3"
+}
+
+configure(allprojects) {
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
 }
 
 apply plugin: 'java'
@@ -58,6 +66,7 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 	testCompile('org.springframework.security:spring-security-test')
+    optional ("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 //region custom tasks
@@ -186,12 +195,13 @@ task processApiDocs(type: Copy, dependsOn: asciidoctor) {
     into "build/resources/main/static/" + (apiDocsFolder as String)
 }
 //endregion
-//endregion
 
 task warForTesting(type: War, dependsOn: ['setTestingConfig', 'processApiDocs', 'copyClientBuild']) {
     group = 'build'
     description = "Generates a war archive with all the compiled classes, the web-app content and the libraries ready for testing environment"
 }
+
+//endregion
 
 resetConfigTaskState.mustRunAfter(bootRun, war, warForTesting, clean)
 
@@ -207,3 +217,5 @@ war {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
     baseName = 'GMSBoilerplate_SB-NG'
 }
+
+compileJava.dependsOn(processResources)
