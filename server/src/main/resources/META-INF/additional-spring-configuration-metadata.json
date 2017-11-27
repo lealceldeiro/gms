@@ -1,0 +1,40 @@
+{
+  "properties": [
+    {
+      "name": "security.gms.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Defines the secret to be used for generating the JWT.",
+      "defaultValue": "SecretForGeneratingTheJWTs"
+    },
+    {
+      "name": "security.gms.jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "Defines the expiration time to be used for generating the JWT.",
+      "defaultValue": "864_000_000"
+    },
+    {
+      "name": "security.gms.jwt.token_prefix",
+      "type": "java.lang.String",
+      "description": "Defines the token prefix for receiving the JWT.",
+      "defaultValue": "Bearer"
+    },
+    {
+      "name": "security.gms.jwt.header",
+      "type": "java.lang.String",
+      "description": "Defines the header for receiving the JWT.",
+      "defaultValue": "Authorization"
+    },
+    {
+      "name": "security.gms.jwt.sign_up_url",
+      "type": "java.lang.String",
+      "description": "Defines the url for signing up the user.",
+      "defaultValue": "/user/sign-up"
+    },
+    {
+      "name": "security.gms.jwt.authorities_holder",
+      "type": "java.lang.String",
+      "description": "Defines the holder for the authenticated user's authorities.",
+      "defaultValue": "authorities"
+    }
+  ]
+}
