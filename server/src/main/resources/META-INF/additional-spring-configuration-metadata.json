@@ -1,56 +1,160 @@
 {
   "properties": [
     {
-      "name": "security.gms.jwt.secret",
+      "name": "gms.security.jwt.secret",
       "type": "java.lang.String",
       "description": "Defines the secret to be used for generating the JWT.",
       "defaultValue": "SecretForGeneratingTheJWTs"
     },
     {
-      "name": "security.gms.jwt.expiration",
+      "name": "gms.security.jwt.expiration",
       "type": "java.lang.Long",
       "description": "Defines the expiration time to be used for generating the JWT.",
-      "defaultValue": "864_000_000"
+      "defaultValue": 604800000
     },
     {
-      "name": "security.gms.jwt.token_type",
+      "name": "gms.security.jwt.token_type",
       "type": "java.lang.String",
       "description": "Defines the token type for receiving the JWT.",
       "defaultValue": "Bearer"
     },
     {
-      "name": "security.gms.jwt.header",
+      "name": "gms.security.jwt.header",
       "type": "java.lang.String",
       "description": "Defines the header for receiving the JWT.",
       "defaultValue": "Authorization"
     },
     {
-      "name": "security.gms.jwt.sign_up_url",
+      "name": "gms.security.jwt.sign_up_url",
       "type": "java.lang.String",
       "description": "Defines the url for signing up the user.",
-      "defaultValue": "/user/sign-up"
+      "defaultValue": "/sign-up"
     },
     {
-      "name": "security.gms.jwt.authorities_holder",
+      "name": "gms.security.jwt.authorities_holder",
       "type": "java.lang.String",
       "description": "Defines the holder for the authenticated user's authorities.",
       "defaultValue": "authorities"
     },
     {
-      "name": "security.gms.jwt.sign_in_url",
+      "name": "gms.security.jwt.sign_in_url",
       "type": "java.lang.String",
       "description": "Defines the url for logging in the user.",
       "defaultValue": "/login"
     },
     {
-      "name": "security.gms.jwt.token_type_holder",
+      "name": "gms.security.jwt.token_type_holder",
       "type": "java.lang.String",
-      "description": "Defines the holder for the security.gms.jwt.token_type."
+      "description": "Defines the holder for the security.gms.jwt.token_type.",
+      "defaultValue": "Bearer"
     },
     {
-      "name": "security.gms.jwt.token_holder",
+      "name": "gms.security.jwt.token_holder",
       "type": "java.lang.String",
-      "description": "Defines the token holder for retrieving the JWT which should be used in further requests."
+      "description": "Defines the token holder for retrieving the JWT which should be used in further requests.",
+      "defaultValue": "access_token"
+    },
+    {
+      "name": "gms.application.env",
+      "type": "java.lang.String",
+      "description": "Defines the environment in which the application is running.",
+      "defaultValue": "Development"
+    },
+    {
+      "name": "gms.user.default.name",
+      "type": "java.lang.String",
+      "description": "Defines name for the first user created by default for the application on first start-up.",
+      "defaultValue": "Admin"
+    },
+    {
+      "name": "gms.user.default.lastName",
+      "type": "java.lang.String",
+      "description": "Defines last name for the first user created by default for the application on first start-up.",
+      "defaultValue": "Default"
+    },
+    {
+      "name": "gms.user.default.username",
+      "type": "java.lang.String",
+      "description": "Defines username for the first user created by default for the application on first start-up.",
+      "defaultValue": "admin"
+    },
+    {
+      "name": "gms.user.default.password",
+      "type": "java.lang.String",
+      "description": "Defines password for the first user created by default for the application on first start-up.",
+      "defaultValue": "admin"
+    },
+    {
+      "name": "gms.user.default.email",
+      "type": "java.lang.String",
+      "description": "Defines email for the first user created by default for the application on first start-up.",
+      "defaultValue": "admin@gms.com"
+    },
+    {
+      "name": "gms.entity.default.name",
+      "type": "java.lang.String",
+      "description": "Defines name for the first entity created by default for the application on first start-up.",
+      "defaultValue": "HOME"
+    },
+    {
+      "name": "gms.entity.default.username",
+      "type": "java.lang.String",
+      "description": "Defines username for the first entity created by default for the application on first start-up.",
+      "defaultValue": "home"
+    },
+    {
+      "name": "gms.entity.default.description",
+      "type": "java.lang.String",
+      "description": "Defines description for the first entity created by default for the application on first start-up.",
+      "defaultValue": "Default entity"
+    },
+    {
+      "name": "gms.role.default.label",
+      "type": "java.lang.String",
+      "description": "Defines the label for the first role with administrative privileges created by default for the application on first start-up.",
+      "defaultValue": "ROLE_ADMIN"
+    },
+    {
+      "name": "gms.role.default.description",
+      "type": "java.lang.String",
+      "description": "Defines the description for the first role with administrative privileges created by default for the application on first start-up.",
+      "defaultValue": "Default role"
+    },
+    {
+      "name": "gms.role.default.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Defines whether the first role with administrative privileges created by default for the application on first start-up is enabled or not.",
+      "defaultValue": true
+    },
+    {
+      "name": "gms.config.multi-entity",
+      "type": "java.lang.Boolean",
+      "description": "Defines whether application will support multiple entity registration or not.",
+      "defaultValue": false
+    },
+    {
+      "name": "gms.config.user-registration-allowed",
+      "type": "java.lang.Boolean",
+      "description": "Defines whether application will allow new users to be register via registration form or not.",
+      "defaultValue": true
+    },
+    {
+      "name": "gms.config.api-docs.basePath",
+      "type": "java.lang.String",
+      "description": "Defines the base path for the api documentation resources.",
+      "defaultValue": true
+    },
+    {
+      "name": "gms.config.page.size",
+      "type": "java.lang.Integer",
+      "description": "Defines the number of pages to chow when doing request to resources lists.",
+      "defaultValue": 1
+    },
+    {
+      "name": "gms.config.page.size_holder",
+      "type": "java.lang.String",
+      "description": "Defines the var where the number of pages to chow when doing request to resources lists will be placed.",
+      "defaultValue": "size"
     }
   ]
 }

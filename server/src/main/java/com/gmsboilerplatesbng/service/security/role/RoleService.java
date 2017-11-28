@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class RoleService {
 
-
+    private final DefaultConst c;
 
     private final BRoleRepository repository;
 
@@ -22,16 +22,17 @@ public class RoleService {
 
 
     @Autowired
-    public RoleService(BRoleRepository repository, BPermissionRepository permissionRepository) {
+    public RoleService(BRoleRepository repository, BPermissionRepository permissionRepository, DefaultConst defaultConst) {
         this.repository = repository;
         this.permissionRepository = permissionRepository;
+        this.c = defaultConst;
     }
 
     //region default role
     public BRole createDefaultRole() {
-        BRole role = new BRole(DefaultConst.ROLE_LABEL);
-        role.setDescription(DefaultConst.ROLE_DESCRIPTION);
-        role.setEnabled(DefaultConst.ROLE_ENABLED);
+        BRole role = new BRole(this.c.ROLE_LABEL);
+        role.setDescription(this.c.ROLE_DESCRIPTION);
+        role.setEnabled(this.c.ROLE_ENABLED);
 
         final Iterable<BPermission> permissions = this.permissionRepository.findAll();
 

@@ -13,9 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.lang.reflect.Method;
 
-/**
- * Borrowed from
- */
 @PropertySource("classpath:application.properties")
 @Configuration
 public class ApiPathConfig {

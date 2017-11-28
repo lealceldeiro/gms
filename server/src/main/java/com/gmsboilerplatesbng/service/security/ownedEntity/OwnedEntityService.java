@@ -12,18 +12,21 @@ import javax.transaction.Transactional;
 @Transactional
 public class OwnedEntityService {
 
+    private final DefaultConst c;
+
     private final EOwnedEntityRepository entityRepository;
 
 
     @Autowired
-    public OwnedEntityService(EOwnedEntityRepository entityRepository) {
+    public OwnedEntityService(EOwnedEntityRepository entityRepository, DefaultConst defaultConst) {
         this.entityRepository = entityRepository;
+        this.c = defaultConst;
     }
 
     //region default entity
     public EOwnedEntity createDefaultEntity() {
         return this.entityRepository.save(
-                new EOwnedEntity(DefaultConst.ENTITY_NAME, DefaultConst.ENTITY_USERNAME, DefaultConst.ENTITY_DESCRIPTION)
+                new EOwnedEntity(this.c.ENTITY_NAME, this.c.ENTITY_USERNAME, this.c.ENTITY_DESCRIPTION)
         );
     }
     //endregion

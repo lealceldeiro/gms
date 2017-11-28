@@ -1,8 +1,9 @@
 package com.gmsboilerplatesbng.controller;
+
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,11 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     protected MessageResolver msg;
 
-    @Value("${response.messageVar}")
-    protected String messageVar = "message";
+    protected final DefaultConst c;
+
+    public BaseController(DefaultConst defaultConst) {
+        this.c = defaultConst;
+    }
 
     //region exceptions handling
 
@@ -59,7 +63,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     private Object createResponseBodyAsMap(Object o) {
         HashMap<String, Object> r = new HashMap<>();
-        r.put(this.messageVar, o);
+        r.put(this.c.RES_MESSAGE_HOLDER, o);
         return r;
     }
 }

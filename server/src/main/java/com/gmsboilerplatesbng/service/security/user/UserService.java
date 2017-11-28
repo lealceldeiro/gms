@@ -6,15 +6,15 @@ import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
 import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import com.gmsboilerplatesbng.domain.security.role.BRole;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
-import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
-import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
-import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.repository.security.BAuthorizationRepository;
 import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityRepository;
 import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
+import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
+import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
+import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,20 +33,7 @@ import java.util.Set;
 @Transactional
 public class UserService implements UserDetailsService{
 
-    @Value("${default.gmsuser.name}")
-    private String defaultUserName = "Admin";
-
-    @Value("${default.gmsuser.lastName}")
-    private String defaultUserLastName = "Default";
-
-    @Value("${default.gmsuser.username}")
-    private String defaultUserUsername = "admin";
-
-    @Value("${default.gmsuser.password}")
-    private String defaultUserPassword = "admin";
-
-    @Value("${default.gmsuser.email}")
-    private String defaultUserEmail = "admin@example.com";
+    private final DefaultConst c;
 
     private final EUserRepository userRepository;
 
@@ -63,20 +50,21 @@ public class UserService implements UserDetailsService{
     @Autowired
     public UserService(EUserRepository userRepository, EOwnedEntityRepository entityRepository,
                        BRoleRepository roleRepository, BAuthorizationRepository authorizationRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder, ConfigurationService configService) {
+                       BCryptPasswordEncoder bCryptPasswordEncoder, ConfigurationService configService,
+                       DefaultConst defaultConst) {
         this.userRepository = userRepository;
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authorizationRepository = authorizationRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
         this.configService = configService;
+        this.c = defaultConst;
     }
 
     //region default user
     public EUser createDefaultUser() {
-        EUser u = new EUser(this.defaultUserUsername, this.defaultUserEmail, this.defaultUserName,
-                this.defaultUserLastName, this.defaultUserPassword);
-        return signUp(u, true, true);
+        return signUp(new EUser(this.c.USER_USERNAME, this.c.USER_EMAIL, this.c.USER_NAME, this.c.USER_LAST_NAME,
+                this.c.USER_PASSWORD), true, true);
     }
     //endregion
 

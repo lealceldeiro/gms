@@ -23,11 +23,11 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
             "classpath:/i18n/user",
     };
 
-    @Value("${i18n.lang}")
-    private String lang;
+    @Value("${gms.i18n.lang_holder}")
+    private String lang = "lang";
 
-    @Value("${i18n.default}")
-    private String defaultLang;
+    @Value("${gms.i18n.default}")
+    private String defaultLang = "en";
 
     @Bean
     public MessageSource messageSource() {
@@ -45,14 +45,14 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale(this.defaultLang != null ? this.defaultLang : "en"));
+        slr.setDefaultLocale(new Locale(this.defaultLang));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName(this.lang != null ? this.lang : "lang");
+        lci.setParamName(this.lang);
         return lci;
     }
 

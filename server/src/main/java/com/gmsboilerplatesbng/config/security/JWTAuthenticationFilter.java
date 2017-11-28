@@ -23,13 +23,16 @@ import java.util.HashSet;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private final SecurityConst sc;
+
     private final AuthenticationManager authenticationManager;
 
     private final UserService userService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, SecurityConst sc) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.sc = sc;
     }
 
     @Override
@@ -58,16 +61,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         for (int i = 0; i < authoritiesO.length; i++) {
             authoritiesS[i] = authoritiesO[i].toString();
         }
-        Date expiration = new Date(System.currentTimeMillis() + SecurityConst.EXPIRATION_TIME);
+        Date expiration = new Date(System.currentTimeMillis() + this.sc.EXPIRATION_TIME);
         String jwt = Jwts.builder()
                 .setSubject(((EUser)authResult.getPrincipal()).getUsername())
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.ES512, SecurityConst.SECRET.getBytes())
-                .claim(SecurityConst.AUTHORITIES_HOLDER, authoritiesS)
-                .claim(SecurityConst.EXPIRATION_HOLDER, expiration)
+                .signWith(SignatureAlgorithm.ES512, this.sc.SECRET.getBytes())
+                .claim(this.sc.AUTHORITIES_HOLDER, authoritiesS)
+                .claim(this.sc.EXPIRATION_HOLDER, expiration)
                 .compact();
 
-        res.addHeader(SecurityConst.HEADER, SecurityConst.TOKEN_TYPE + " " + jwt);
+        res.addHeader(this.sc.HEADER, this.sc.TOKEN_TYPE + " " + jwt);
 
     }
 }

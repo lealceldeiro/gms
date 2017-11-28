@@ -21,22 +21,25 @@ import java.util.Collection;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
+    private final SecurityConst sc;
+
     private final UserService userService;
 
     private final IAuthenticationFacade authFacade;
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService,
-                                  IAuthenticationFacade authenticationFacade) {
+                                  IAuthenticationFacade authenticationFacade, SecurityConst sc) {
         super(authenticationManager);
         this.userService = userService;
         this.authFacade = authenticationFacade;
+        this.sc = sc;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        String header = req.getHeader(SecurityConst.HEADER);
-        if (header == null || !header.startsWith(SecurityConst.TOKEN_TYPE)) {
+        String header = req.getHeader(this.sc.HEADER);
+        if (header == null || !header.startsWith(this.sc.TOKEN_TYPE)) {
             chain.doFilter(req, res);
             return;
         }
@@ -47,13 +50,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(HttpServletRequest req) {
-        String token = req.getHeader(SecurityConst.HEADER);
+        String token = req.getHeader(this.sc.HEADER);
 
         if (token != null) {
             //parse the token
             String user = Jwts.parser()
-                    .setSigningKey(SecurityConst.SECRET.getBytes())
-                    .parseClaimsJws(token.replace(SecurityConst.TOKEN_TYPE, ""))
+                    .setSigningKey(this.sc.SECRET.getBytes())
+                    .parseClaimsJws(token.replace(this.sc.TOKEN_TYPE, ""))
                     .getBody()
                     .getSubject();
 

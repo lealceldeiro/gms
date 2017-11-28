@@ -23,6 +23,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final SecurityConst sc;
+    private final DefaultConst c;
+
     private final UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -30,27 +33,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final IAuthenticationFacade authFacade;
 
     public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder,
-                          IAuthenticationFacade authenticationFacade) {
+                          IAuthenticationFacade authenticationFacade, SecurityConst sc, DefaultConst c) {
         this.userDetailsService = userService;
         this.passwordEncoder = bCryptPasswordEncoder;
         this.authFacade = authenticationFacade;
+        this.sc = sc;
+        this.c = c;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String b = this.c.API_BASE_PATH;
+        String[] freePost = {
+                b + this.sc.SIGN_IN_URL,
+                b + this.sc.SIGN_UP_URL
+        };
+        String[] freeGet = {
+                this.c.API_DOC_PATH
+        };
         http
                 .cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.GET, DefaultConst.API_DOC_PATH).permitAll()
+                .antMatchers(HttpMethod.GET, freeGet).permitAll()
+                .antMatchers(HttpMethod.POST, freePost).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService, this.authFacade))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService, this.sc))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService,
+                        this.authFacade, this.sc))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 // 401 instead of 403
                 .exceptionHandling()
-                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(SecurityConst.HEADER));
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(this.sc.HEADER));
     }
 
     @Override
