@@ -44,14 +44,13 @@ public class SecurityController extends BaseController{
         return signUpUser(user, true); //todo: overwrite the default call to the repository
     }
 
-    //todo: make sign-up and login url changeable
     /**
      * Registers a new {@link EUser}
      * @param user {@link EUser} data to be created
      * @return A {@link EUser} mapped into a @{@link ResponseBody}
      * @throws GmsGeneralException when an unhandled exception occurs
      */
-    @PostMapping("/sign-up")
+    @PostMapping("${gms.security.jwt.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("permitAll()")
     public @ResponseBody EUser signUp(@RequestBody EUser user) throws GmsGeneralException {
@@ -61,7 +60,7 @@ public class SecurityController extends BaseController{
         else throw new GmsGeneralException("user.add.not_allowed", false);
     }
 
-    @PostMapping("/login")
+    @PostMapping("${gms.security.jwt.sign_in_url}")
     @PreAuthorize("permitAll()")
     public @ResponseBody Map login(@RequestBody Object authData) {
         return  new HashMap();// todo
