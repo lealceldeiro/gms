@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -60,16 +59,18 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
             if (user != null) {
                 Collection<? extends GrantedAuthority> authorities = null;
+                String password = "";
                 // get authorities from context if user is already logged in
                 Authentication ctxAuth = this.authFacade.getAuthentication();
                 if (((UserDetails)ctxAuth.getPrincipal()).getUsername().equals(user)) {
                     authorities = ctxAuth.getAuthorities();
+                    password = String.valueOf(ctxAuth.getCredentials());
                 }
                 // otherwise get authorities from service (user is being logged in)
                 if (authorities == null) {
                     authorities = this.userService.getUserAuthorities(user);
                 }
-                return new UsernamePasswordAuthenticationToken(user, authorities, new ArrayList<>());
+                return new UsernamePasswordAuthenticationToken(user, password, authorities);
             }
             return null;
         }
