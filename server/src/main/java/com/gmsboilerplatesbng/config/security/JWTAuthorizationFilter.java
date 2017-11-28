@@ -1,12 +1,15 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -15,15 +18,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final UserService userService;
 
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService) {
+    private final IAuthenticationFacade authFacade;
+
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService,
+                                  IAuthenticationFacade authenticationFacade) {
         super(authenticationManager);
         this.userService = userService;
+        this.authFacade = authenticationFacade;
     }
 
     @Override
@@ -52,7 +59,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
-                HashSet<GrantedAuthority> authorities = this.userService.getUserAuthorities(user);
+                Collection<? extends GrantedAuthority> authorities = null;
+                // get authorities from context if user is already logged in
+                Authentication ctxAuth = this.authFacade.getAuthentication();
+                if (((UserDetails)ctxAuth.getPrincipal()).getUsername().equals(user)) {
+                    authorities = ctxAuth.getAuthorities();
+                }
+                // otherwise get authorities from service (user is being logged in)
+                if (authorities == null) {
+                    authorities = this.userService.getUserAuthorities(user);
+                }
                 return new UsernamePasswordAuthenticationToken(user, authorities, new ArrayList<>());
             }
             return null;
