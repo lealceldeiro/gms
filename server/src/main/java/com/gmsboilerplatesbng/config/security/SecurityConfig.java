@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // 401 instead of 403
                 .exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint(SecurityConst.HEADER));
     }
