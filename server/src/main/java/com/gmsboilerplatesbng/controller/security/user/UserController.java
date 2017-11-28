@@ -10,9 +10,12 @@ import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import com.gmsboilerplatesbng.util.request.mapping.user.RolesForUserOverEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -50,11 +53,18 @@ public class UserController extends BaseController{
      */
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("permitAll()")
     public @ResponseBody EUser signUp(@RequestBody EUser user) throws GmsGeneralException {
         if (this.configuration.isUserUserRegistrationAllowed()) {
             return signUpUser(user, false);
         }
         else throw new GmsGeneralException("user.add.not_allowed", false);
+    }
+
+    @PostMapping("/login")
+    @PreAuthorize("permitAll()")
+    public @ResponseBody Map login(@RequestBody EUser authData) {
+        return  new HashMap();// todo
     }
 
     private EUser signUpUser(EUser user, Boolean emailVerified) throws GmsGeneralException{

@@ -4,7 +4,6 @@ import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -41,8 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, DefaultConst.API_BASE_PATH + SecurityConst.SIGN_UP_URL).permitAll()
-                .antMatchers(HttpMethod.POST, DefaultConst.API_BASE_PATH + SecurityConst.SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.GET, DefaultConst.API_DOC_PATH).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService))

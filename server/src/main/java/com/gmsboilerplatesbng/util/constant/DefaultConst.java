@@ -45,5 +45,7 @@ public class DefaultConst {
     //region system
     @Value("${spring.data.rest.basePath}")
     public static String API_BASE_PATH;
+
+    public static String API_DOC_PATH = "apidocs";
     //endregion
 }
