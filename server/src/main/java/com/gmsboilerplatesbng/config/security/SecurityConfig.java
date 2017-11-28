@@ -1,5 +1,6 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
@@ -27,9 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    private final IAuthenticationFacade authFacade;
+
+    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder,
+                          IAuthenticationFacade authenticationFacade) {
         this.userDetailsService = userService;
         this.passwordEncoder = bCryptPasswordEncoder;
+        this.authFacade = authenticationFacade;
     }
 
     @Override
@@ -40,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, DefaultConst.API_BASE_PATH + SecurityConst.SIGN_IN_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService, this.authFacade))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
