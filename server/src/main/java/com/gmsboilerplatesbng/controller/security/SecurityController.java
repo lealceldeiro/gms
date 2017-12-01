@@ -9,6 +9,9 @@ import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.data.rest.webmvc.PersistentEntityResource;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,14 +41,17 @@ public class SecurityController extends BaseController{
      * This method overrides the default "user" url in the EUserRepository by setting it path to 'user' (like in the
      * `EUserRepository` interface, by produces = 'application/hal+json' and by putting in within a controller
      * annotated as `@BasePathAwareController`.
-     * @param user {@link EUser} data to be created
-     * @return A {@link EUser} mapped into a @{@link ResponseBody}
+     * @param user {@link EUser} data to be created.
+     * @param pra Injected automatically by Spring.
+     * @return A {@link EUser} mapped into a @{@link ResponseBody}.
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
     @PostMapping(path = "user", produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody EUser register(@RequestBody EUser user) throws GmsGeneralException {
-        return signUpUser(user, true);
+    @ResponseBody
+    public PersistentEntityResource register(@RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+            throws GmsGeneralException {
+        return signUpUser(user, true, pra);
     }
 
     /**
@@ -57,17 +63,20 @@ public class SecurityController extends BaseController{
     @PostMapping("${gms.security.jwt.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("permitAll()")
-    public @ResponseBody EUser signUp(@RequestBody EUser user) throws GmsGeneralException {
+    @ResponseBody
+    public PersistentEntityResource signUp(@RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+            throws GmsGeneralException {
         if (this.configuration.isUserUserRegistrationAllowed()) {
-            return signUpUser(user, false);
+            return signUpUser(user, false, pra);
         }
         else throw new GmsGeneralException("user.add.not_allowed", false);
     }
 
-    private EUser signUpUser(EUser user, Boolean emailVerified) throws GmsGeneralException{
-        EUser u = this.userService.signUp(user, emailVerified);
+    private PersistentEntityResource signUpUser(Resource<EUser> user, Boolean emailVerified, PersistentEntityResourceAssembler pra)
+            throws GmsGeneralException{
+        EUser u = this.userService.signUp(user.getContent(), emailVerified);
         if (u != null) {
-            return u;
+            return pra.toResource(u);
         }
         else throw new GmsGeneralException("user.add.error", false);
     }

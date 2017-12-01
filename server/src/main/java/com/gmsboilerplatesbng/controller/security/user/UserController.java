@@ -27,13 +27,15 @@ public class UserController extends BaseController{
     }
 
     @PostMapping("roles/add")
-    public @ResponseBody ArrayList<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data)
+    @ResponseBody
+    public ArrayList<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data)
             throws NotFoundEntityException, GmsGeneralException {
         return this.userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
 
     @DeleteMapping("roles/remove")
-    public @ResponseBody ArrayList<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data)
+    @ResponseBody
+    public ArrayList<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data)
             throws NotFoundEntityException, GmsGeneralException {
         return this.userService.removeRolesFromUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
