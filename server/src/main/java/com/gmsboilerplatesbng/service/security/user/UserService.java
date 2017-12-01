@@ -136,7 +136,11 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        return this.userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        EUser u = this.userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        if (u == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return u;
     }
 
     public HashSet<GrantedAuthority> getUserAuthorities(String usernameOrEmail) {
