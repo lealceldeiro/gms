@@ -42,9 +42,9 @@ public class EUser extends GmsEntity implements UserDetails {
     private final String password;
 
     @Getter(AccessLevel.NONE)
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 
-    private Boolean emailVerified = true;
+    private Boolean emailVerified = false;
 
     @Getter(AccessLevel.NONE)
     private Boolean accountExpired = false;

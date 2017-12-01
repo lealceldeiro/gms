@@ -63,19 +63,17 @@ public class UserService implements UserDetailsService{
 
     //region default user
     public EUser createDefaultUser() {
-        return signUp(new EUser(this.c.USER_USERNAME, this.c.USER_EMAIL, this.c.USER_NAME, this.c.USER_LAST_NAME,
-                this.c.USER_PASSWORD), true, true);
+        EUser u = new EUser(this.c.USER_USERNAME, this.c.USER_EMAIL, this.c.USER_NAME, this.c.USER_LAST_NAME,
+                this.c.USER_PASSWORD);
+        u.setEnabled(true);
+        return signUp(u, true);
     }
     //endregion
 
-    public EUser signUp(EUser u) { return signUp(u, false); }
-
-    public EUser signUp(EUser u, Boolean enabled) { return signUp(u, enabled, false); }
-
-    public EUser signUp(EUser u, Boolean enabled, Boolean emailVerified) {
+    public EUser signUp(EUser u, Boolean emailVerified) {
         EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
                 this.passwordEncoder.encode(u.getPassword()));
-        sU.setEnabled(enabled);
+        sU.setEnabled(u.isEnabled());
         sU.setEmailVerified(emailVerified);
         return this.userRepository.save(sU);
     }
