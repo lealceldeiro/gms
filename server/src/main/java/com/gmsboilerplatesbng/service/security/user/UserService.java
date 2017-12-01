@@ -148,12 +148,16 @@ public class UserService implements UserDetailsService{
         BAuthorization auth = null;
         if (u != null) { //got user
             Long entityId = this.configService.getLastAccessedEntityIdByUser(u.getId());
+            EOwnedEntity e = null;
+            if (entityId != null) {
+                e = this.entityRepository.findOne(entityId);
+            }
             if (entityId == null) { //no last accessed entity registered
-                auth = this.authorizationRepository.findFirstByUserAndEntityNotNull(u.getId()); //find any of the assigned entities
+                auth = this.authorizationRepository.findFirstByUserAndEntityNotNull(u); //find any of the assigned entities
             }
             if (entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
                 if (auth == null) { //get authorization if it was not previously gotten
-                    auth = this.authorizationRepository.findFirstByUserAndEntity(u.getId(), entityId);
+                    auth = this.authorizationRepository.findFirstByUserAndEntity(u, e);
                 }
                 if (auth != null) { //got authorization
                     Set<BPermission> permissions = auth.getRole().getPermissions();
