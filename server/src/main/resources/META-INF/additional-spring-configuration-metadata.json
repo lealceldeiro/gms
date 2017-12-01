@@ -45,8 +45,14 @@
     {
       "name": "gms.security.jwt.sign_in_url",
       "type": "java.lang.String",
-      "description": "[Mandatory | default = /login] Defines the url for logging in the user.",
+      "description": "[Optional | default = /login] Defines the url for logging in the user.",
       "defaultValue": "/login"
+    },
+    {
+      "name": "gms.security.jwt.sign_out_url",
+      "type": "java.lang.String",
+      "description": "[Optional | default = /logout] Defines the url for logging out the user.",
+      "defaultValue": "/logout"
     },
     {
       "name": "gms.security.jwt.token_type_holder",

@@ -57,6 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, freePost).permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .logout()
+                .logoutUrl(this.sc.SIGN_OUT_URL)
+                .and()
+                .formLogin()
+                .loginPage(this.sc.SIGN_IN_URL)
+                .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService, this.sc))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService,
                         this.authFacade, this.sc))

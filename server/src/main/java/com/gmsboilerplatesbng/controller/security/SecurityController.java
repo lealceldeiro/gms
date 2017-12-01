@@ -60,12 +60,6 @@ public class SecurityController extends BaseController{
         else throw new GmsGeneralException("user.add.not_allowed", false);
     }
 
-    @PostMapping("${gms.security.jwt.sign_in_url}")
-    @PreAuthorize("permitAll()")
-    public @ResponseBody Map login(@RequestBody Object authData) {
-        return  new HashMap();// todo
-    }
-
     private EUser signUpUser(EUser user, Boolean emailVerified) throws GmsGeneralException{
         EUser u = this.userService.signUp(user, true, emailVerified);
         if (u != null) {
