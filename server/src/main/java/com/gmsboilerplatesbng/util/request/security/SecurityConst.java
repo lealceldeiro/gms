@@ -30,7 +30,7 @@ public class SecurityConst {
     @Value("${gms.security.jwt.sign_in_url:/login}")
     public String SIGN_IN_URL;
 
-    @Value("${gms.security.jwt.sign_out_url/logout}")
+    @Value("${gms.security.jwt.sign_out_url:/logout}")
     public String SIGN_OUT_URL;
 
     @Value("${gms.security.jwt.authorities_holder:authorities}")
