@@ -1,6 +1,10 @@
 buildscript {
 	ext {
 		springBootVersion = '1.5.6.RELEASE'
+		nodePluginVersion = '1.2.0'
+        propdepsPluginVersion = '0.0.9.RELEASE'
+        jwtVersion = '0.9.0'
+        lombokVersion = '1.16.18'
         buildClient = false
         envSet = false
         buildPropertiesFilePath = "./build/resources/main/application.properties"
@@ -13,8 +17,8 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-		classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
-        classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
+		classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
+        classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
 	}
 }
 
@@ -57,9 +61,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('io.jsonwebtoken:jjwt:0.9.0')
+	compile("io.jsonwebtoken:jjwt:${jwtVersion}")
 	compile('org.springframework.boot:spring-boot-starter-web')
-    compileOnly ('org.projectlombok:lombok:1.16.18')
+    compileOnly ("org.projectlombok:lombok:${lombokVersion}")
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
     testCompile("com.jayway.jsonpath:json-path")
