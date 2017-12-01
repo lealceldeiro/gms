@@ -7,76 +7,76 @@ import org.springframework.stereotype.Component;
 public class DefaultConst {
 
     //region role
-    @Value("${gms.role.default.label}")
-    public String ROLE_LABEL = "ROLE_ADMIN";
+    @Value("${gms.role.default.label:ROLE_ADMIN}")
+    public String ROLE_LABEL;
 
-    @Value("${gms.role.default.description}")
-    public String ROLE_DESCRIPTION = "Default role";
+    @Value("${gms.role.default.description:Default role}")
+    public String ROLE_DESCRIPTION;
 
-    @Value("${gms.role.default.enabled}")
-    public boolean ROLE_ENABLED = true;
+    @Value("${gms.role.default.enabled:true}")
+    public boolean ROLE_ENABLED;
     //endregion
 
     //region user
-    @Value("${gms.user.default.name}")
-    public String USER_USERNAME = "Admin";
+    @Value("${gms.user.default.name:Admin}")
+    public String USER_USERNAME;
 
-    @Value("${gms.user.default.lastName}")
-    public String USER_LAST_NAME = "Default";
+    @Value("${gms.user.default.lastName:Default}")
+    public String USER_LAST_NAME;
 
-    @Value("${gms.user.default.username}")
-    public String USER_NAME = "admin";
+    @Value("${gms.user.default.username:admin}")
+    public String USER_NAME;
 
-    @Value("${gms.user.default.password}")
-    public String USER_PASSWORD = "admin";
+    @Value("${gms.user.default.password:admin}")
+    public String USER_PASSWORD;
 
-    @Value("${gms.user.default.email}")
-    public String USER_EMAIL = "admin@gms.com";
+    @Value("${gms.user.default.email:admin@gms.com}")
+    public String USER_EMAIL;
     //endregion
 
     //region entity
-    @Value("${gms.entity.default.name}")
-    public String ENTITY_NAME = "HOME";
+    @Value("${gms.entity.default.name:HOME}")
+    public String ENTITY_NAME;
 
-    @Value("${gms.entity.default.username}")
-    public String ENTITY_USERNAME = "home";
+    @Value("${gms.entity.default.username:home}")
+    public String ENTITY_USERNAME;
 
-    @Value("${gms.entity.default.description}")
-    public String ENTITY_DESCRIPTION = "Default entity";
+    @Value("${gms.entity.default.description:Default entity}")
+    public String ENTITY_DESCRIPTION;
     //endregion
 
     //region config
-    @Value("${gms.config.multi-entity}")
-    public Boolean IS_MULTI_ENTITY = false;
+    @Value("${gms.config.multi-entity:false}")
+    public Boolean IS_MULTI_ENTITY;
 
-    @Value("${gms.config.user-registration-allowed}")
-    public Boolean IS_USER_REGISTRATION_ALLOWED = true;
+    @Value("${gms.config.user-registration-allowed:true}")
+    public Boolean IS_USER_REGISTRATION_ALLOWED;
     //endregion
 
     //region system
-    @Value("${spring.data.rest.basePath}")
-    public String API_BASE_PATH = "/api";
+    @Value("${spring.data.rest.basePath:/api}")
+    public String API_BASE_PATH;
 
-    @Value("${gms.config.api-docs.basePath}")
-    public String API_DOC_PATH = "/apidocs";
+    @Value("${gms.config.api-docs.basePath:/apidocs}")
+    public String API_DOC_PATH;
     //endregion
 
     //region vars
-    @Value("${gms.config.page.size}")
-    public int PAGE_SIZE = 1;
+    @Value("${gms.config.page.size:1}")
+    public int PAGE_SIZE;
 
-    @Value("${gms.config.page.size_holder}")
-    public String PAGE_SIZE_HOLDER = "size";
+    @Value("${gms.config.page.size_holder:size}")
+    public String PAGE_SIZE_HOLDER;
 
-    @Value("${gms.response.message}")
-    public String RES_MESSAGE_HOLDER = "message";
+    @Value("${gms.response.message:message}")
+    public String RES_MESSAGE_HOLDER;
     //endregion
 
     //region lang
-    @Value("${gms.i18n.lang_holder}")
-    public String LANGUAGE_HOLDER = "lang";
+    @Value("${gms.i18n.lang_holder:lang}")
+    public String LANGUAGE_HOLDER;
 
-    @Value("${gms.i18n.default}")
-    public String DEFAULT_LANGUAGE = "en";
+    @Value("${gms.i18n.default:en}")
+    public String DEFAULT_LANGUAGE;
     //endregion
 }
