@@ -39,6 +39,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
     public String EXPIRATION_HOLDER;
 
+    @Value("${gms.security.jwt.issued_time_holder:issued_at}")
+    public String ISSUED_TIME_HOLDER;
+
     @Value("${gms.response.auth.username:username}")
     public String USERNAME_HOLDER;
 

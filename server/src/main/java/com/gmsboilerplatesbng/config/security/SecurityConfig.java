@@ -1,9 +1,11 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -19,12 +21,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityConst sc;
-    private final DefaultConst c;
+    private final DefaultConst dc;
 
     private final UserDetailsService userDetailsService;
 
@@ -32,24 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final IAuthenticationFacade authFacade;
 
-    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder,
-                          IAuthenticationFacade authenticationFacade, SecurityConst sc, DefaultConst c) {
-        this.userDetailsService = userService;
-        this.passwordEncoder = bCryptPasswordEncoder;
-        this.authFacade = authenticationFacade;
-        this.sc = sc;
-        this.c = c;
-    }
+    private final ObjectMapper oMapper;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String b = this.c.API_BASE_PATH;
+        String b = this.dc.API_BASE_PATH;
         String[] freePost = {
                 b + this.sc.SIGN_IN_URL,
                 b + this.sc.SIGN_UP_URL
         };
         String[] freeGet = {
-                this.c.API_DOC_PATH
+                this.dc.API_DOC_PATH
         };
         http
                 .cors().and().csrf().disable().authorizeRequests()
@@ -63,7 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage(this.sc.SIGN_IN_URL)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) this.userDetailsService, this.sc))
+                .addFilter(new JWTAuthenticationFilter(this.sc, authenticationManager(),
+                        (UserService) this.userDetailsService, this.oMapper))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService,
                         this.authFacade, this.sc))
                 // disable session creation

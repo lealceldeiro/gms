@@ -6,6 +6,8 @@ import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,8 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
+@RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final SecurityConst sc;
@@ -29,11 +33,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final UserService userService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, SecurityConst sc) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.sc = sc;
-    }
+    private final ObjectMapper oMapper;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
@@ -61,16 +61,29 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         for (int i = 0; i < authoritiesO.length; i++) {
             authoritiesS[i] = authoritiesO[i].toString();
         }
-        Date expiration = new Date(System.currentTimeMillis() + this.sc.EXPIRATION_TIME);
+        long currentMillis = System.currentTimeMillis();
+        long expiration = currentMillis + this.sc.EXPIRATION_TIME;
+        String sub = ((EUser)authResult.getPrincipal()).getUsername();
         String jwt = Jwts.builder()
-                .setSubject(((EUser)authResult.getPrincipal()).getUsername())
-                .setExpiration(expiration)
+                .setSubject(sub)
+                .setExpiration(new Date(expiration))
+                .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, this.sc.SECRET.getBytes())
                 .claim(this.sc.AUTHORITIES_HOLDER, authoritiesS)
                 .claim(this.sc.EXPIRATION_HOLDER, expiration)
                 .compact();
 
-        res.addHeader(this.sc.HEADER, this.sc.TOKEN_TYPE + " " + jwt);
+        res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
+        HashMap<String, String> returnMap = new HashMap<>();
+        returnMap.put(sc.USERNAME_HOLDER, sub);
+        returnMap.put(sc.TOKEN_HOLDER, jwt);
+        returnMap.put(sc.AUTHORITIES_HOLDER, oMapper.writeValueAsString(authoritiesS));
+        returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
+        returnMap.put("header_to_be_sent", sc.HEADER);
+        returnMap.put(sc.EXPIRATION_HOLDER, String.valueOf(expiration));
+        returnMap.put(sc.ISSUED_TIME_HOLDER, String.valueOf(currentMillis));
+
+        res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }
 }

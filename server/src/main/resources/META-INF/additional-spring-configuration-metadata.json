@@ -43,6 +43,12 @@
       "defaultValue": "expiration_time"
     },
     {
+      "name": "gms.security.jwt.issued_time_holder",
+      "type": "java.lang.String",
+      "description": "[Optional | default = issued_at] Defines the holder for the issued_at value sent in the 'login' response.",
+      "defaultValue": "issued_at"
+    },
+    {
       "name": "gms.security.jwt.sign_in_url",
       "type": "java.lang.String",
       "description": "[Optional | default = /login] Defines the url for logging in the user.",
