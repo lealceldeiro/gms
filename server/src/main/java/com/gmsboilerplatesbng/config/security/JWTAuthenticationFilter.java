@@ -65,7 +65,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String jwt = Jwts.builder()
                 .setSubject(((EUser)authResult.getPrincipal()).getUsername())
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.ES512, this.sc.SECRET.getBytes())
+                .signWith(SignatureAlgorithm.HS512, this.sc.SECRET.getBytes())
                 .claim(this.sc.AUTHORITIES_HOLDER, authoritiesS)
                 .claim(this.sc.EXPIRATION_HOLDER, expiration)
                 .compact();
