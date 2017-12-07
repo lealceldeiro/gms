@@ -40,14 +40,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
 
             EUser credentials = new ObjectMapper().readValue(req.getInputStream(), EUser.class);
-            String username = credentials.getUsername();
-            String email = credentials.getEmail();
-            HashSet<GrantedAuthority> authorities = userService.getUserAuthorities(
-                    username != null ? username : email
-            );
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    credentials.getUsername(), credentials.getPassword(), authorities
+                    credentials.getUsername(), credentials.getPassword(), new HashSet<>()
             ));
 
         } catch (IOException e) { throw new RuntimeException(e); }
@@ -56,14 +51,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
-        final Object[] authoritiesO = authResult.getAuthorities().toArray();
+
+        Object principal = authResult.getPrincipal();
+        HashSet<GrantedAuthority> authorities = userService.getUserAuthorities(((EUser)principal).getUsername());
+
+        final Object[] authoritiesO = authorities.toArray();
         String [] authoritiesS = new String[authoritiesO.length];
         for (int i = 0; i < authoritiesO.length; i++) {
             authoritiesS[i] = authoritiesO[i].toString();
         }
         long currentMillis = System.currentTimeMillis();
         long expiration = currentMillis + sc.EXPIRATION_TIME;
-        String sub = ((EUser)authResult.getPrincipal()).getUsername();
+        String sub = ((EUser)principal).getUsername();
         String jwt = Jwts.builder()
                 .setSubject(sub)
                 .setExpiration(new Date(expiration))
@@ -75,10 +74,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        HashMap<String, String> returnMap = new HashMap<>();
+        HashMap<String, Object> returnMap = new HashMap<>();
         returnMap.put(sc.USERNAME_HOLDER, sub);
         returnMap.put(sc.TOKEN_HOLDER, jwt);
-        returnMap.put(sc.AUTHORITIES_HOLDER, oMapper.writeValueAsString(authoritiesS));
+        returnMap.put(sc.AUTHORITIES_HOLDER, authoritiesS);
         returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
         returnMap.put("header_to_be_sent", sc.HEADER);
         returnMap.put(sc.EXPIRATION_HOLDER, String.valueOf(expiration));
