@@ -32,7 +32,7 @@ public class GmsGeneralException extends Exception {
     }
 
     public Boolean finishedOK () {
-        return this.finishedOK;
+        return finishedOK;
     }
 
 }

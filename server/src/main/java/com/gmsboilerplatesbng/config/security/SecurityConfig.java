@@ -39,13 +39,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String b = this.dc.API_BASE_PATH;
+        String b = dc.API_BASE_PATH;
         String[] freePost = {
-                b + this.sc.SIGN_IN_URL,
-                b + this.sc.SIGN_UP_URL
+                b + sc.SIGN_IN_URL,
+                b + sc.SIGN_UP_URL
         };
         String[] freeGet = {
-                this.dc.API_DOC_PATH
+                dc.API_DOC_PATH
         };
         http
                 .cors().and().csrf().disable().authorizeRequests()
@@ -54,26 +54,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .logout()
-                .logoutUrl(this.sc.SIGN_OUT_URL)
+                .logoutUrl(sc.SIGN_OUT_URL)
                 .and()
                 .formLogin()
-                .loginPage(this.sc.SIGN_IN_URL)
+                .loginPage(sc.SIGN_IN_URL)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(this.sc, authenticationManager(),
-                        (UserService) this.userDetailsService, this.oMapper))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)this.userDetailsService,
-                        this.authFacade, this.sc))
+                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(),
+                        (UserService) userDetailsService, oMapper))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)userDetailsService,
+                        authFacade, sc))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 // 401 instead of 403
                 .exceptionHandling()
-                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(this.sc.HEADER));
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(sc.HEADER));
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Bean

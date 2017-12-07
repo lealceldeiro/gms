@@ -1,7 +1,8 @@
 package com.gmsboilerplatesbng.config;
 
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+@RequiredArgsConstructor
 @Configuration
 public class LocaleConfig extends WebMvcConfigurerAdapter {
 
@@ -23,16 +25,12 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
             "classpath:/i18n/user",
     };
 
-    @Value("${gms.i18n.lang_holder}")
-    private String lang = "lang";
-
-    @Value("${gms.i18n.default}")
-    private String defaultLang = "en";
+    private final DefaultConst dc;
 
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames(this.i18nBaseNames);
+        messageSource.setBasenames(i18nBaseNames);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
@@ -45,14 +43,14 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale(this.defaultLang));
+        slr.setDefaultLocale(new Locale(dc.DEFAULT_LANGUAGE));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName(this.lang);
+        lci.setParamName(dc.LANGUAGE_HOLDER);
         return lci;
     }
 

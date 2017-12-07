@@ -30,17 +30,17 @@ public class RoleService {
 
     //region default role
     public BRole createDefaultRole() {
-        BRole role = new BRole(this.c.ROLE_LABEL);
-        role.setDescription(this.c.ROLE_DESCRIPTION);
-        role.setEnabled(this.c.ROLE_ENABLED);
+        BRole role = new BRole(c.ROLE_LABEL);
+        role.setDescription(c.ROLE_DESCRIPTION);
+        role.setEnabled(c.ROLE_ENABLED);
 
-        final Iterable<BPermission> permissions = this.permissionRepository.findAll();
+        final Iterable<BPermission> permissions = permissionRepository.findAll();
 
         for (BPermission p : permissions) {
             role.addPermission(p);
         }
 
-        return this.repository.save(role);
+        return repository.save(role);
     }
     //endregion
 

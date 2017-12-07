@@ -23,7 +23,7 @@ public class ApiPathConfig {
             @Override
             public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
                 return new RequestMappingHandlerMapping() {
-                    @Value("${spring.data.rest.basePath}")
+                    @Value("${spring.data.rest.basePath:/api}")
                     private String API_BASE_PATH;
 
                     @Override

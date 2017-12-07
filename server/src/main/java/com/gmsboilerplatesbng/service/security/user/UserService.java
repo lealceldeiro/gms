@@ -63,8 +63,8 @@ public class UserService implements UserDetailsService{
 
     //region default user
     public EUser createDefaultUser() {
-        EUser u = new EUser(this.c.USER_USERNAME, this.c.USER_EMAIL, this.c.USER_NAME, this.c.USER_LAST_NAME,
-                this.c.USER_PASSWORD);
+        EUser u = new EUser(c.USER_USERNAME, c.USER_EMAIL, c.USER_NAME, c.USER_LAST_NAME,
+                c.USER_PASSWORD);
         u.setEnabled(true);
         return signUp(u, true);
     }
@@ -72,10 +72,10 @@ public class UserService implements UserDetailsService{
 
     public EUser signUp(EUser u, Boolean emailVerified) {
         EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
-                this.passwordEncoder.encode(u.getPassword()));
+                passwordEncoder.encode(u.getPassword()));
         sU.setEnabled(u.isEnabled());
         sU.setEmailVerified(emailVerified);
-        return this.userRepository.save(sU);
+        return userRepository.save(sU);
     }
 
     public ArrayList<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
@@ -134,7 +134,7 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        EUser u = this.userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        EUser u = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
         if (u == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -145,17 +145,17 @@ public class UserService implements UserDetailsService{
         EUser u = (EUser)loadUserByUsername(usernameOrEmail);
         BAuthorization auth = null;
         if (u != null) { //got user
-            Long entityId = this.configService.getLastAccessedEntityIdByUser(u.getId());
+            Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
             EOwnedEntity e = null;
             if (entityId != null) {
-                e = this.entityRepository.findOne(entityId);
+                e = entityRepository.findOne(entityId);
             }
             if (entityId == null) { //no last accessed entity registered
-                auth = this.authorizationRepository.findFirstByUserAndEntityNotNull(u); //find any of the assigned entities
+                auth = authorizationRepository.findFirstByUserAndEntityNotNull(u); //find any of the assigned entities
             }
             if (entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
                 if (auth == null) { //get authorization if it was not previously gotten
-                    auth = this.authorizationRepository.findFirstByUserAndEntity(u, e);
+                    auth = authorizationRepository.findFirstByUserAndEntity(u, e);
                 }
                 if (auth != null) { //got authorization
                     Set<BPermission> permissions = auth.getRole().getPermissions();

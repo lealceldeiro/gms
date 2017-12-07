@@ -66,7 +66,7 @@ public class SecurityController extends BaseController{
     @ResponseBody
     public PersistentEntityResource signUp(@RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
-        if (this.configuration.isUserUserRegistrationAllowed()) {
+        if (configuration.isUserUserRegistrationAllowed()) {
             return signUpUser(user, false, pra);
         }
         else throw new GmsGeneralException("user.add.not_allowed", false);
@@ -74,7 +74,7 @@ public class SecurityController extends BaseController{
 
     private PersistentEntityResource signUpUser(Resource<EUser> user, Boolean emailVerified, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException{
-        EUser u = this.userService.signUp(user.getContent(), emailVerified);
+        EUser u = userService.signUp(user.getContent(), emailVerified);
         if (u != null) {
             return pra.toResource(u);
         }

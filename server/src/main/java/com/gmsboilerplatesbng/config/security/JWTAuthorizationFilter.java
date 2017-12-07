@@ -38,8 +38,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        String header = req.getHeader(this.sc.HEADER);
-        if (header == null || !header.startsWith(this.sc.TOKEN_TYPE)) {
+        String header = req.getHeader(sc.HEADER);
+        if (header == null || !header.startsWith(sc.TOKEN_TYPE)) {
             chain.doFilter(req, res);
             return;
         }
@@ -50,13 +50,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(HttpServletRequest req) {
-        String token = req.getHeader(this.sc.HEADER);
+        String token = req.getHeader(sc.HEADER);
 
         if (token != null) {
             //parse the token
             String user = Jwts.parser()
-                    .setSigningKey(this.sc.SECRET.getBytes())
-                    .parseClaimsJws(token.replace(this.sc.TOKEN_TYPE, ""))
+                    .setSigningKey(sc.SECRET.getBytes())
+                    .parseClaimsJws(token.replace(sc.TOKEN_TYPE, ""))
                     .getBody()
                     .getSubject();
 
@@ -64,14 +64,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 Collection<? extends GrantedAuthority> authorities = null;
                 String password = "";
                 // get authorities from context if user is already logged in
-                Authentication ctxAuth = this.authFacade.getAuthentication();
+                Authentication ctxAuth = authFacade.getAuthentication();
                 if (((UserDetails)ctxAuth.getPrincipal()).getUsername().equals(user)) {
                     authorities = ctxAuth.getAuthorities();
                     password = String.valueOf(ctxAuth.getCredentials());
                 }
                 // otherwise get authorities from service (user is being logged in)
                 if (authorities == null) {
-                    authorities = this.userService.getUserAuthorities(user);
+                    authorities = userService.getUserAuthorities(user);
                 }
                 return new UsernamePasswordAuthenticationToken(user, password, authorities);
             }

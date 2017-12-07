@@ -57,20 +57,20 @@ public class ConfigurationService {
     }
 
     public Boolean createDefaultConfig() {
-        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), this.c.IS_MULTI_ENTITY.toString()),
-                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), this.c.IS_USER_REGISTRATION_ALLOWED.toString());
+        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), c.IS_MULTI_ENTITY.toString()),
+                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), c.IS_USER_REGISTRATION_ALLOWED.toString());
 
         return
-                this.configurationRepository.save(multiEntity) != null &&
-                        this.configurationRepository.save(userRegistrationAllowed) != null;
+                configurationRepository.save(multiEntity) != null &&
+                        configurationRepository.save(userRegistrationAllowed) != null;
     }
 
     public boolean assignDefaultUserToEntityWithRole() {
-        EUser u = this.userRepository.findFirstByUsernameOrEmail(this.c.USER_USERNAME, this.c.USER_EMAIL);
+        EUser u = userRepository.findFirstByUsernameOrEmail(c.USER_USERNAME, c.USER_EMAIL);
         if (u != null) { //got default user
-            EOwnedEntity e = this.entityRepository.findFirstByUsername(this.c.ENTITY_USERNAME);
+            EOwnedEntity e = entityRepository.findFirstByUsername(c.ENTITY_USERNAME);
             if (e != null) { //got entity
-                BRole role = this.roleRepository.findFirstByLabel(this.c.ROLE_LABEL);
+                BRole role = roleRepository.findFirstByLabel(c.ROLE_LABEL);
                 if (role != null) {
                     com.gmsboilerplatesbng.domain.security.BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
                     pk.setUserId(u.getId());
@@ -83,7 +83,7 @@ public class ConfigurationService {
                     auth.setEntity(e);
                     auth.setRole(role);
 
-                    return this.authRepository.save(auth) != null;
+                    return authRepository.save(auth) != null;
                 }
             }
         }
@@ -97,34 +97,34 @@ public class ConfigurationService {
      */
     private void loadDBConfig() {
         if (configurationExist()) {
-            this.isMultiEntity = Boolean.valueOf(
-                    this.configurationRepository.findFirstByKey(ConfigKey.IS_MULTI_ENTITY_APP.toString()).getValue());
-            this.isUserRegistrationAllowed = Boolean.valueOf(
-                    this.configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
+            isMultiEntity = Boolean.valueOf(
+                    configurationRepository.findFirstByKey(ConfigKey.IS_MULTI_ENTITY_APP.toString()).getValue());
+            isUserRegistrationAllowed = Boolean.valueOf(
+                    configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
         }
         else {
-            this.isMultiEntity = this.c.IS_MULTI_ENTITY;
-            this.isUserRegistrationAllowed = this.c.IS_USER_REGISTRATION_ALLOWED;
+            isMultiEntity = c.IS_MULTI_ENTITY;
+            isUserRegistrationAllowed = c.IS_USER_REGISTRATION_ALLOWED;
         }
     }
 
     public boolean isUserUserRegistrationAllowed() {
-        return this.isUserRegistrationAllowed;
+        return isUserRegistrationAllowed;
     }
 
     public void setUserRegistrationAllowed(Boolean userRegistrationAllowed) {
-        this.isUserRegistrationAllowed = userRegistrationAllowed;
+        isUserRegistrationAllowed = userRegistrationAllowed;
     }
     public boolean isMultiEntity() {
-        return this.isMultiEntity;
+        return isMultiEntity;
     }
 
     public void setIsMultiEntity(Boolean isMultiEntity) {
-        this.isMultiEntity = isMultiEntity;
+        isMultiEntity = isMultiEntity;
     }
 
     public Long getLastAccessedEntityIdByUser(Long userId) {
-        final BConfiguration c = this.configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
+        final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
         if (c != null) {
             return Long.valueOf(c.getValue());
         }

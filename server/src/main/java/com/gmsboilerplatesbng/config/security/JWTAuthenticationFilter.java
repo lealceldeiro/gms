@@ -42,11 +42,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             EUser credentials = new ObjectMapper().readValue(req.getInputStream(), EUser.class);
             String username = credentials.getUsername();
             String email = credentials.getEmail();
-            HashSet<GrantedAuthority> authorities = this.userService.getUserAuthorities(
+            HashSet<GrantedAuthority> authorities = userService.getUserAuthorities(
                     username != null ? username : email
             );
 
-            return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     credentials.getUsername(), credentials.getPassword(), authorities
             ));
 
@@ -62,15 +62,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             authoritiesS[i] = authoritiesO[i].toString();
         }
         long currentMillis = System.currentTimeMillis();
-        long expiration = currentMillis + this.sc.EXPIRATION_TIME;
+        long expiration = currentMillis + sc.EXPIRATION_TIME;
         String sub = ((EUser)authResult.getPrincipal()).getUsername();
         String jwt = Jwts.builder()
                 .setSubject(sub)
                 .setExpiration(new Date(expiration))
                 .setIssuedAt(new Date(currentMillis))
-                .signWith(SignatureAlgorithm.HS512, this.sc.SECRET.getBytes())
-                .claim(this.sc.AUTHORITIES_HOLDER, authoritiesS)
-                .claim(this.sc.EXPIRATION_HOLDER, expiration)
+                .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
+                .claim(sc.AUTHORITIES_HOLDER, authoritiesS)
+                .claim(sc.EXPIRATION_HOLDER, expiration)
                 .compact();
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
