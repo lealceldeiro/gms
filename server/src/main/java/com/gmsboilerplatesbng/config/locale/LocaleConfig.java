@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.config;
+package com.gmsboilerplatesbng.config.locale;
 
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
@@ -42,9 +42,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale(dc.DEFAULT_LANGUAGE));
-        return slr;
+        return new SmartLocaleResolver(dc);
     }
 
     @Bean
