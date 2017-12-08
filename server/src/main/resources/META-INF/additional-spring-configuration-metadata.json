@@ -25,6 +25,12 @@
       "defaultValue": "Authorization"
     },
     {
+      "name": "gms.security.jwt.header_to_be_sent_holder",
+      "type": "java.lang.String",
+      "description": "[Optional | default = header_to_be_sent] Defines the variable where will be put the string indicating which one is the header for receiving the JWT.",
+      "defaultValue": "header_to_be_sent"
+    },
+    {
       "name": "gms.security.jwt.sign_up_url",
       "type": "java.lang.String",
       "description": "[Mandatory | default = /sign-up] Defines the url for signing up the user.",

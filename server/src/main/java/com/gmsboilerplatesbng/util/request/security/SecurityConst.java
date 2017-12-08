@@ -24,6 +24,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.header:Authorization}")
     public String HEADER;
 
+    @Value("${gms.security.jwt.header_to_be_sent_holder:header_to_be_sent}")
+    public String HEADER_TO_BE_SENT_HOLDER;
+
     @Value("${gms.security.jwt.sign_up_url}")
     public String SIGN_UP_URL;
 
@@ -36,6 +39,8 @@ public class SecurityConst {
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     public String AUTHORITIES_HOLDER;
 
+    public String AUTHORITIES_SEPARATOR = ";";
+
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
     public String EXPIRATION_HOLDER;
 
@@ -44,5 +49,7 @@ public class SecurityConst {
 
     @Value("${gms.response.auth.username:username}")
     public String USERNAME_HOLDER;
+
+    public String PASSWORD_HOLDER = "password";
 
 }

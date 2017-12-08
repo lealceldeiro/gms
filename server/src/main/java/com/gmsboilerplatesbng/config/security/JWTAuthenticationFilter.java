@@ -57,8 +57,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         final Object[] authoritiesO = authorities.toArray();
         String [] authoritiesS = new String[authoritiesO.length];
+        StringBuilder authBuilder = new StringBuilder(), auxBuilder;
         for (int i = 0; i < authoritiesO.length; i++) {
             authoritiesS[i] = authoritiesO[i].toString();
+            auxBuilder = new StringBuilder();
+            authBuilder.append(auxBuilder.append(authoritiesO[i].toString()).append(sc.AUTHORITIES_SEPARATOR).toString());
         }
         long currentMillis = System.currentTimeMillis();
         long expiration = currentMillis + sc.EXPIRATION_TIME;
@@ -68,8 +71,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(expiration))
                 .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
-                .claim(sc.AUTHORITIES_HOLDER, authoritiesS)
-                .claim(sc.EXPIRATION_HOLDER, expiration)
+                .claim(sc.AUTHORITIES_HOLDER, authBuilder.toString())
+                .claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
                 .compact();
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -79,7 +82,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         returnMap.put(sc.TOKEN_HOLDER, jwt);
         returnMap.put(sc.AUTHORITIES_HOLDER, authoritiesS);
         returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
-        returnMap.put("header_to_be_sent", sc.HEADER);
+        returnMap.put(sc.HEADER_TO_BE_SENT_HOLDER, sc.HEADER);
         returnMap.put(sc.EXPIRATION_HOLDER, String.valueOf(expiration));
         returnMap.put(sc.ISSUED_TIME_HOLDER, String.valueOf(currentMillis));
 
