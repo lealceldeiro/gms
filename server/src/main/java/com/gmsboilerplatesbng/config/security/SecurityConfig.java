@@ -59,10 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage(sc.SIGN_IN_URL)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(),
-                        (UserService) userDetailsService, oMapper))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), (UserService)userDetailsService,
-                        authFacade, sc))
+                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(), (UserService) userDetailsService, oMapper))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

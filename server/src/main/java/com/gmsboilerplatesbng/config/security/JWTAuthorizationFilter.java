@@ -1,9 +1,8 @@
 package com.gmsboilerplatesbng.config.security;
 
-import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
-import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +21,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final SecurityConst sc;
 
-    private final UserService userService;
-
-    private final IAuthenticationFacade authFacade;
-
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService,
-                                  IAuthenticationFacade authenticationFacade, SecurityConst sc) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc) {
         super(authenticationManager);
-        this.userService = userService;
-        this.authFacade = authenticationFacade;
         this.sc = sc;
     }
 
@@ -52,24 +44,29 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = req.getHeader(sc.HEADER);
 
         if (token != null) {
-            //parse the token
-            Claims claims = Jwts.parser()
-                    .setSigningKey(sc.SECRET.getBytes())
-                    .parseClaimsJws(token.replace(sc.TOKEN_TYPE, ""))
-                    .getBody();
-            String user = claims.getSubject();
-            final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
+            try {
+                //parse the token
+                Claims claims = Jwts.parser()
+                        .setSigningKey(sc.SECRET.getBytes())
+                        .parseClaimsJws(token.replace(sc.TOKEN_TYPE, ""))
+                        .getBody();
+                String user = claims.getSubject();
+                final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
 
-            if (user != null && authoritiesS.length > 0) {
-                HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
-                for (String a : authoritiesS) {
-                    authorities.add(new SimpleGrantedAuthority(a));
+                if (user != null && authoritiesS.length > 0) {
+                    HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
+                    for (String a : authoritiesS) {
+                        authorities.add(new SimpleGrantedAuthority(a));
+                    }
+                    String password = (String) claims.get(sc.PASSWORD_HOLDER);
+
+                    return new UsernamePasswordAuthenticationToken(user, password, authorities);
                 }
-                String password = (String)claims.get(sc.PASSWORD_HOLDER);
-
-                return new UsernamePasswordAuthenticationToken(user, password, authorities);
+                return null;
             }
-            return null;
+            catch (JwtException e) { //any problem with token, do not authenticate
+                return null;
+            }
         }
         return null;
     }
