@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -52,8 +53,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         .getBody();
                 String user = claims.getSubject();
                 final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
+                Date now = new Date(System.currentTimeMillis());
 
-                if (user != null && authoritiesS.length > 0) {
+                if (user != null && authoritiesS.length > 0 && claims.getExpiration().before(now)) {
                     HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                     for (String a : authoritiesS) {
                         authorities.add(new SimpleGrantedAuthority(a));
