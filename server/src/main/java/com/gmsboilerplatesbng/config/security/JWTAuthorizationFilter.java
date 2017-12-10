@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
                 Date now = new Date(System.currentTimeMillis());
 
-                if (user != null && authoritiesS.length > 0 && claims.getExpiration().before(now)) {
+                if (user != null && authoritiesS.length > 0 && claims.getExpiration().after(now)) {
                     HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                     for (String a : authoritiesS) {
                         authorities.add(new SimpleGrantedAuthority(a));
