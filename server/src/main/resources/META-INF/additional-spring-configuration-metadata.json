@@ -9,8 +9,8 @@
     {
       "name": "gms.security.jwt.expiration",
       "type": "java.lang.Long",
-      "description": "[Optional | default = 604800000] Defines the expiration time to be used for generating the JWT.",
-      "defaultValue": 604800000
+      "description": "[Optional | default = 86400] Defines the expiration time to be used for generating the JWT in seconds.",
+      "defaultValue": 86400
     },
     {
       "name": "gms.security.jwt.token_type",

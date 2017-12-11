@@ -55,7 +55,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), sc.AUTHORITIES_SEPARATOR);
 
         long currentMillis = System.currentTimeMillis();
-        long expiration = currentMillis + sc.EXPIRATION_TIME;
+        long expiration = currentMillis + (sc.EXPIRATION_TIME * 1000);
         String sub = ((EUser)principal).getUsername();
         String jwt = Jwts.builder()
                 .setSubject(sub)

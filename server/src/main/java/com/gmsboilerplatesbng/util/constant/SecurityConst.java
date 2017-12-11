@@ -9,7 +9,7 @@ public class SecurityConst {
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
     public String SECRET;
 
-    @Value("${gms.security.jwt.expiration:604800000}")  // 1 week
+    @Value("${gms.security.jwt.expiration:86400}")  // 1 day (in seconds)
     public long EXPIRATION_TIME;
 
     @Value("${gms.security.jwt.token_holder:access_token}")
