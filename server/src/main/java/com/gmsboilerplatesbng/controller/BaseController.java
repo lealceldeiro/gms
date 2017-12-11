@@ -4,7 +4,6 @@ import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

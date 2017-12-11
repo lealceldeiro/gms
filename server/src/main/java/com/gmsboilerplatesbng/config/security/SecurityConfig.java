@@ -1,7 +1,6 @@
 package com.gmsboilerplatesbng.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gmsboilerplatesbng.component.security.IAuthenticationFacade;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.request.security.SecurityConst;
@@ -32,8 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder passwordEncoder;
-
-    private final IAuthenticationFacade authFacade;
 
     private final ObjectMapper oMapper;
 
