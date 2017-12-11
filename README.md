@@ -1,7 +1,7 @@
 ## Overview
 The project consist of two main (independent) modules (api server and front-end resources). These are located in the **server** and **client** folder respectively. You can collaborate on any of them indepentently by modifying only the module you would like to change.
 
-## How to start to develop?
+## How to start developing?
 * Make a local working copy of the project (` git clone https://github.com/lealceldeiro/gms.git`).
 
 ### IntelliJ IDEA
