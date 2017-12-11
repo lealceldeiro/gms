@@ -53,16 +53,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws IOException, ServletException {
 
         Object principal = authResult.getPrincipal();
-        HashSet<GrantedAuthority> authorities = userService.getUserAuthorities(((EUser)principal).getUsername());
+        String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), sc.AUTHORITIES_SEPARATOR);
 
-        final Object[] authoritiesO = authorities.toArray();
-        String [] authoritiesS = new String[authoritiesO.length];
-        StringBuilder authBuilder = new StringBuilder(), auxBuilder;
-        for (int i = 0; i < authoritiesO.length; i++) {
-            authoritiesS[i] = authoritiesO[i].toString();
-            auxBuilder = new StringBuilder();
-            authBuilder.append(auxBuilder.append(authoritiesO[i].toString()).append(sc.AUTHORITIES_SEPARATOR).toString());
-        }
         long currentMillis = System.currentTimeMillis();
         long expiration = currentMillis + sc.EXPIRATION_TIME;
         String sub = ((EUser)principal).getUsername();
@@ -71,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(expiration))
                 .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
-                .claim(sc.AUTHORITIES_HOLDER, authBuilder.toString())
+                .claim(sc.AUTHORITIES_HOLDER, authorities)
                 .claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
                 .compact();
 
@@ -80,11 +72,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         HashMap<String, Object> returnMap = new HashMap<>();
         returnMap.put(sc.USERNAME_HOLDER, sub);
         returnMap.put(sc.TOKEN_HOLDER, jwt);
-        returnMap.put(sc.AUTHORITIES_HOLDER, authoritiesS);
+        returnMap.put(sc.AUTHORITIES_HOLDER, authorities.split(sc.AUTHORITIES_SEPARATOR));
         returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
         returnMap.put(sc.HEADER_TO_BE_SENT_HOLDER, sc.HEADER);
-        returnMap.put(sc.EXPIRATION_HOLDER, String.valueOf(expiration));
-        returnMap.put(sc.ISSUED_TIME_HOLDER, String.valueOf(currentMillis));
+        returnMap.put(sc.EXPIRATION_HOLDER, expiration);
+        returnMap.put(sc.ISSUED_TIME_HOLDER, currentMillis);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }

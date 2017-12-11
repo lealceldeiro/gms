@@ -141,34 +141,33 @@ public class UserService implements UserDetailsService{
         return u;
     }
 
-    public HashSet<GrantedAuthority> getUserAuthorities(String usernameOrEmail) {
+    public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
+        StringBuilder authBuilder = new StringBuilder();
         EUser u = (EUser)loadUserByUsername(usernameOrEmail);
-        BAuthorization auth = null;
-        if (u != null) { //got user
+        if (u != null) { // got user
+            BAuthorization auth = null;
             Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
             EOwnedEntity e = null;
             if (entityId != null) {
                 e = entityRepository.findOne(entityId);
             }
-            if (entityId == null) { //no last accessed entity registered
-                auth = authorizationRepository.findFirstByUserAndEntityNotNull(u); //find any of the assigned entities
+            if (entityId == null) { // no last accessed entity registered
+                auth = authorizationRepository.findFirstByUserAndEntityNotNull(u); // find any of the assigned entities
             }
-            if (entityId != null || auth != null) { //got last accessed entity or first of the assigned one to the user
-                if (auth == null) { //get authorization if it was not previously gotten
+            if (entityId != null || auth != null) { // got last accessed entity or first of the assigned one to the user
+                if (auth == null) { // get authorization if it was not previously gotten
                     auth = authorizationRepository.findFirstByUserAndEntity(u, e);
                 }
-                if (auth != null) { //got authorization
+                if (auth != null) { // got authorization
                     Set<BPermission> permissions = auth.getRole().getPermissions();
-                    HashSet<GrantedAuthority> authorities = new HashSet<>();
+                    StringBuilder auxBuilder;
                     for (BPermission p: permissions) {
-                        authorities.add(new SimpleGrantedAuthority(p.getName()));
+                        auxBuilder = new StringBuilder();
+                        authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
                     }
-                    return authorities;
                 }
-                return new HashSet<>();
             }
-            return new HashSet<>();
         }
-        return new HashSet<>();
+        return authBuilder.toString();
     }
 }
