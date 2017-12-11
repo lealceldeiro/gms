@@ -11,9 +11,6 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
 
 @RequiredArgsConstructor
 @Configuration
@@ -23,6 +20,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
             "classpath:/i18n/entity",
             "classpath:/i18n/label",
             "classpath:/i18n/user",
+            "classpath:/i18n/messages",
     };
 
     private final DefaultConst dc;
@@ -42,7 +40,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        return new SmartLocaleResolver(dc);
+        return new GmsCHLocaleResolver(dc);
     }
 
     @Bean

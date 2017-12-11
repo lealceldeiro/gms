@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 @RequiredArgsConstructor
-public class SmartLocaleResolver extends CookieLocaleResolver {
+public class GmsCHLocaleResolver extends CookieLocaleResolver {
 
     private final DefaultConst dc;
 
