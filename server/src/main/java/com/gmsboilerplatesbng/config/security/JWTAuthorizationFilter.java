@@ -51,22 +51,18 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         .setSigningKey(sc.SECRET.getBytes())
                         .parseClaimsJws(token.replace(sc.TOKEN_TYPE, ""))
                         .getBody();
-                Date now = new Date(System.currentTimeMillis());
-
-                if (claims.getExpiration().after(now)) {
-                    String user = claims.getSubject();
-                    if (user != null) {
-                        // split into an array the string holding the authorities by the defined separator
-                        final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
-                        if (authoritiesS.length > 0) {
-                            HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
-                            for (String a : authoritiesS) {
-                                authorities.add(new SimpleGrantedAuthority(a));
-                            }
-                            String password = (String) claims.get(sc.PASSWORD_HOLDER);  // encoded password
-
-                            return new UsernamePasswordAuthenticationToken(user, password, authorities);
+                String user = claims.getSubject();
+                if (user != null) {
+                    // split into an array the string holding the authorities by the defined separator
+                    final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
+                    if (authoritiesS.length > 0) {
+                        HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
+                        for (String a : authoritiesS) {
+                            authorities.add(new SimpleGrantedAuthority(a));
                         }
+                        String password = (String) claims.get(sc.PASSWORD_HOLDER);  // encoded password
+
+                        return new UsernamePasswordAuthenticationToken(user, password, authorities);
                     }
                 }
             }
