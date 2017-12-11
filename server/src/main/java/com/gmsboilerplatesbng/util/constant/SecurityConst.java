@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.util.request.security;
+package com.gmsboilerplatesbng.util.constant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityConst {
 
-    @Value("${gms.security.jwt.secret:SecretForGeneratingTheJWTs}")
+    @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
     public String SECRET;
 
     @Value("${gms.security.jwt.expiration:604800000}")  // 1 week

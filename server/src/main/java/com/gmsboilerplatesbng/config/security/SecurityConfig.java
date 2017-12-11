@@ -3,7 +3,7 @@ package com.gmsboilerplatesbng.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
-import com.gmsboilerplatesbng.util.request.security.SecurityConst;
+import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;

@@ -3,8 +3,8 @@
     {
       "name": "gms.security.jwt.secret",
       "type": "java.lang.String",
-      "description": "[Optional | default = SecretForGeneratingTheJWTs] Defines the secret to be used for generating the JWT.",
-      "defaultValue": "SecretForGeneratingTheJWTs"
+      "description": "[Optional | default = OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb] Defines the secret to be used for generating the JWT.",
+      "defaultValue": "OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb"
     },
     {
       "name": "gms.security.jwt.expiration",

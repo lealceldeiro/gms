@@ -3,7 +3,7 @@ package com.gmsboilerplatesbng.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
-import com.gmsboilerplatesbng.util.request.security.SecurityConst;
+import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.config.security;
 
-import com.gmsboilerplatesbng.util.request.security.SecurityConst;
+import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
