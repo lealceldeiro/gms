@@ -71,7 +71,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
                 .claim(sc.AUTHORITIES_HOLDER, authorities)
-                .claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
+                //.claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
                 .compact();
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
