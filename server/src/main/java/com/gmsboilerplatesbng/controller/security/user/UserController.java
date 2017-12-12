@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * UserController
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController{

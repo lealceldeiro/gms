@@ -19,6 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * SecurityController
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @BasePathAwareController
 public class SecurityController extends BaseController{
 

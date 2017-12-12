@@ -1,5 +1,13 @@
 package com.gmsboilerplatesbng.util.configuration;
 
+/**
+ * ConfigKey
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 public enum ConfigKey {
     /**
      * App which handles multiple entities (enterprises, businesses,etc)

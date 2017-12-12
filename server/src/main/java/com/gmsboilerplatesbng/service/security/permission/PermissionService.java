@@ -7,6 +7,14 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * PermissionService
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @Service
 @Transactional
 public class PermissionService {

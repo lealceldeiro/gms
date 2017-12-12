@@ -10,6 +10,14 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * BRole
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor

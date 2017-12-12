@@ -13,6 +13,14 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.lang.reflect.Method;
 
+/**
+ * ApiPathConfig
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @PropertySource("classpath:application.properties")
 @Configuration
 public class ApiPathConfig {

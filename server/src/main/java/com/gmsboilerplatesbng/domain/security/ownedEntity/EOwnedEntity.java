@@ -7,6 +7,14 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * EOwnedEntity
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @Data
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor

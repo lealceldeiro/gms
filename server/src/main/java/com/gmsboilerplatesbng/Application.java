@@ -13,6 +13,15 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * Application
+ * Entry point to the application.
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer{
     public static void main(String[] args) {
@@ -38,7 +47,7 @@ public class Application extends SpringBootServletInitializer{
                                                OwnedEntityService oeService, PermissionService permissionService,
                                                RoleService roleService) {
         return strings -> {
-            if(!configurationService.configurationExist()) { //first app start up
+            if (!configurationService.configurationExist()) { //first app start up
                 boolean ok = configurationService.createDefaultConfig();
                 ok = ok && permissionService.createDefaultPermissions();
                 ok = ok && roleService.createDefaultRole() != null;

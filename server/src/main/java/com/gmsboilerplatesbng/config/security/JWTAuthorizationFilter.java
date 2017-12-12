@@ -18,6 +18,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 
+/**
+ * JWTAuthorizationFilter
+ *
+ * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ *
+ * @version 0.1
+ * Dec 12, 2017
+ */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final SecurityConst sc;
