@@ -19,6 +19,7 @@ public class MessageResolver {
         this.messageSource = messageSource;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String getMessage(String code, Object... args) {
         return messageSource.getMessage(code, args,
                 LocaleContextHolder.getLocale());

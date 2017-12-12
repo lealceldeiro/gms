@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService{
     }
 
     private ArrayList<Long> addRemoveRolesToFromUser (Long userId, Long entityId, List<Long> rolesId, Boolean add)
-            throws NotFoundEntityException, GmsGeneralException {
+            throws NotFoundEntityException {
         ArrayList<Long> addedOrRemoved = new ArrayList<>();
 
         BAuthorizationPk pk;

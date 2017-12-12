@@ -87,6 +87,6 @@ public class DefaultConst {
     @Value("${gms.i18n.default:en}")
     public String DEFAULT_LANGUAGE;
 
-    public String DEFAULT_LANGUAGE_HEADER = "Accept-Language";
+    public final String DEFAULT_LANGUAGE_HEADER = "Accept-Language";
     //endregion
 }

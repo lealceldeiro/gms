@@ -47,7 +47,7 @@ public class SecurityConst {
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     public String AUTHORITIES_HOLDER;
 
-    public String AUTHORITIES_SEPARATOR = ";";
+    public final String AUTHORITIES_SEPARATOR = ";";
 
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
     public String EXPIRATION_HOLDER;
@@ -58,6 +58,6 @@ public class SecurityConst {
     @Value("${gms.response.auth.username:username}")
     public String USERNAME_HOLDER;
 
-    public String PASSWORD_HOLDER = "password";
+    public final String PASSWORD_HOLDER = "password";
 
 }

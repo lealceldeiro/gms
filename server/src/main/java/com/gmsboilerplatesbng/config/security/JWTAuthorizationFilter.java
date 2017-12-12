@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashSet;
 
 /**
@@ -30,6 +29,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final SecurityConst sc;
 
+    @SuppressWarnings("WeakerAccess")
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc) {
         super(authenticationManager);
         this.sc = sc;

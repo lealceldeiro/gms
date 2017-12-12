@@ -128,7 +128,7 @@ public class ConfigurationService {
     }
 
     public void setIsMultiEntity(Boolean isMultiEntity) {
-        isMultiEntity = isMultiEntity;
+        this.isMultiEntity = isMultiEntity;
     }
 
     public Long getLastAccessedEntityIdByUser(Long userId) {
