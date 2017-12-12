@@ -71,7 +71,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
                 .claim(sc.AUTHORITIES_HOLDER, authorities)
-                //.claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
+                .claim(sc.EXPIRES_IN_HOLDER, sc.EXPIRATION_TIME * 1000)
                 .compact();
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -83,6 +83,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
         returnMap.put(sc.HEADER_TO_BE_SENT_HOLDER, sc.HEADER);
         returnMap.put(sc.EXPIRATION_HOLDER, expiration);
+        returnMap.put(sc.EXPIRES_IN_HOLDER, sc.EXPIRATION_TIME);
         returnMap.put(sc.ISSUED_TIME_HOLDER, currentMillis);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));

@@ -49,6 +49,12 @@
       "defaultValue": "expiration_time"
     },
     {
+      "name": "gms.security.jwt.expires_in_holder",
+      "type": "java.lang.String",
+      "description": "[Optional | default = expires_in] Defines the holder for the  value of variable sent in the 'login' response indicating the time left before the token expires.",
+      "defaultValue": "expires_in"
+    },
+    {
       "name": "gms.security.jwt.issued_time_holder",
       "type": "java.lang.String",
       "description": "[Optional | default = issued_at] Defines the holder for the issued_at value sent in the 'login' response.",

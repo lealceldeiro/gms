@@ -52,6 +52,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
     public String EXPIRATION_HOLDER;
 
+    @Value("${gms.security.jwt.expires_in_holder:expires_in}")
+    public String EXPIRES_IN_HOLDER;
+
     @Value("${gms.security.jwt.issued_time_holder:issued_at}")
     public String ISSUED_TIME_HOLDER;
 
