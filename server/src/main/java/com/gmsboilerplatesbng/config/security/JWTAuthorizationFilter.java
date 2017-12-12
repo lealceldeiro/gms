@@ -62,7 +62,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 String user = claims.getSubject();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims.getAudience().split(sc.AUTHORITIES_SEPARATOR);
+                    final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
                     if (authoritiesS.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                         for (String a : authoritiesS) {

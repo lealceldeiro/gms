@@ -70,7 +70,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(expiration))
                 .setIssuedAt(new Date(currentMillis))
                 .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
-                .setAudience(authorities)
+                .claim(sc.AUTHORITIES_HOLDER, authorities)
                 //.claim(sc.PASSWORD_HOLDER, ((EUser) principal).getPassword())
                 .compact();
 
