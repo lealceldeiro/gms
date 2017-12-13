@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.component.security;
+package com.gmsboilerplatesbng.component.security.authentication;
 
 import org.springframework.security.core.Authentication;
 

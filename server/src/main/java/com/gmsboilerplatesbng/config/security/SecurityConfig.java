@@ -1,6 +1,7 @@
 package com.gmsboilerplatesbng.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
@@ -42,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper oMapper;
 
+    private final JWTService jwtService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String b = dc.API_BASE_PATH;
@@ -64,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage(sc.SIGN_IN_URL)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(), (UserService) userDetailsService, oMapper))
+                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,11 +1,10 @@
 package com.gmsboilerplatesbng.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -41,6 +39,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final UserService userService;
 
     private final ObjectMapper oMapper;
+
+    private final JWTService jwtService;
 
     @SuppressWarnings("all")
     @Override
@@ -64,16 +64,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), sc.AUTHORITIES_SEPARATOR);
 
         long currentMillis = System.currentTimeMillis();
-        long expiration = currentMillis + (sc.EXPIRATION_TIME * 1000);
         String sub = ((EUser)principal).getUsername();
-        String jwt = Jwts.builder()
-                .setSubject(sub)
-                .setExpiration(new Date(expiration))
-                .setIssuedAt(new Date(currentMillis))
-                .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
-                .claim(sc.AUTHORITIES_HOLDER, authorities)
-                .claim(sc.EXPIRES_IN_HOLDER, sc.EXPIRATION_TIME * 1000)
-                .compact();
+        String jwt = jwtService.createToken(sub, authorities, sc.EXPIRATION_TIME);
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
@@ -83,7 +75,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         returnMap.put(sc.AUTHORITIES_HOLDER, authorities.split(sc.AUTHORITIES_SEPARATOR));
         returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
         returnMap.put(sc.HEADER_TO_BE_SENT_HOLDER, sc.HEADER);
-        returnMap.put(sc.EXPIRATION_HOLDER, expiration);
+        returnMap.put(sc.EXPIRATION_HOLDER, currentMillis + (sc.EXPIRATION_TIME * 1000)); // expiration time should come in seconds
         returnMap.put(sc.EXPIRES_IN_HOLDER, sc.EXPIRATION_TIME);
         returnMap.put(sc.ISSUED_TIME_HOLDER, currentMillis);
 
