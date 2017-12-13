@@ -10,7 +10,7 @@ import com.gmsboilerplatesbng.util.request.mapping.user.RolesForUserOverEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * UserController
@@ -36,14 +36,14 @@ public class UserController extends BaseController{
 
     @PostMapping("roles/add")
     @ResponseBody
-    public ArrayList<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data)
+    public List<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data)
             throws NotFoundEntityException, GmsGeneralException {
         return userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
 
     @DeleteMapping("roles/remove")
     @ResponseBody
-    public ArrayList<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data)
+    public List<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data)
             throws NotFoundEntityException, GmsGeneralException {
         return userService.removeRolesFromUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }

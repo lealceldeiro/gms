@@ -2,12 +2,12 @@ package com.gmsboilerplatesbng.service.configuration;
 
 import com.gmsboilerplatesbng.domain.configuration.BConfiguration;
 import com.gmsboilerplatesbng.domain.security.BAuthorization;
-import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.ownedentity.EOwnedEntity;
 import com.gmsboilerplatesbng.domain.security.role.BRole;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.repository.configuration.BConfigurationRepository;
 import com.gmsboilerplatesbng.repository.security.BAuthorizationRepository;
-import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityRepository;
+import com.gmsboilerplatesbng.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import com.gmsboilerplatesbng.util.configuration.ConfigKey;

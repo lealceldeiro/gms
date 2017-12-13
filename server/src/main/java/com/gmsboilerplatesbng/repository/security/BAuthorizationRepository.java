@@ -1,7 +1,7 @@
 package com.gmsboilerplatesbng.repository.security;
 
 import com.gmsboilerplatesbng.domain.security.BAuthorization;
-import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.ownedentity.EOwnedEntity;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

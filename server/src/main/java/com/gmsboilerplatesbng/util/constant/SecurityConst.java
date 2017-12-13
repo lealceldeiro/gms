@@ -15,52 +15,52 @@ import org.springframework.stereotype.Component;
 public class SecurityConst {
 
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
-    public String SECRET;
+    public String secret;
 
     @Value("${gms.security.jwt.expiration:86400}")  // 1 day (in seconds)
-    public long EXPIRATION_TIME;
+    public long expirationTime;
 
     @Value("${gms.security.jwt.token_holder:access_token}")
-    public String TOKEN_HOLDER;
+    public String tokenHolder;
 
     @Value("${gms.security.jwt.token_type:Bearer}")
-    public String TOKEN_TYPE;
+    public String tokenType;
 
     @Value("${gms.security.jwt.token_type_holder:token_type}")
-    public String TOKEN_TYPE_HOLDER;
+    public String tokenTypeHolder;
 
     @Value("${gms.security.jwt.header:Authorization}")
-    public String HEADER;
+    public String header;
 
     @Value("${gms.security.jwt.header_to_be_sent_holder:header_to_be_sent}")
-    public String HEADER_TO_BE_SENT_HOLDER;
+    public String headerToBeSentHolder;
 
     @Value("${gms.security.jwt.sign_up_url}")
-    public String SIGN_UP_URL;
+    public String signUpUrl;
 
     @Value("${gms.security.jwt.sign_in_url:/login}")
-    public String SIGN_IN_URL;
+    public String signInUrl;
 
     @Value("${gms.security.jwt.sign_out_url:/logout}")
-    public String SIGN_OUT_URL;
+    public String signOutUrl;
 
     @Value("${gms.security.jwt.authorities_holder:authorities}")
-    public String AUTHORITIES_HOLDER;
+    public String authoritiesHolder;
 
-    public final String AUTHORITIES_SEPARATOR = ";";
+    public static final String AUTHORITIES_SEPARATOR = ";";
 
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
-    public String EXPIRATION_HOLDER;
+    public String expirationHolder;
 
     @Value("${gms.security.jwt.expires_in_holder:expires_in}")
-    public String EXPIRES_IN_HOLDER;
+    public String expiresInHolder;
 
     @Value("${gms.security.jwt.issued_time_holder:issued_at}")
-    public String ISSUED_TIME_HOLDER;
+    public String issuedTimeHolder;
 
     @Value("${gms.response.auth.username:username}")
-    public String USERNAME_HOLDER;
+    public String usernameHolder;
 
-    public final String PASSWORD_HOLDER = "password";
+    public static final String PASS_HOLDER = "password";
 
 }

@@ -91,7 +91,7 @@ public class JWTService {
     public Map getClaims(String claimsJwt, String... key) {
         Map<Object, Object> r = new HashMap<>();
         Claims claims = Jwts.parser()
-                .setSigningKey(sc.SECRET.getBytes())
+                .setSigningKey(sc.secret.getBytes())
                 .parseClaimsJws(claimsJwt)
                 .getBody();
         for (String k : key) {
@@ -117,7 +117,7 @@ public class JWTService {
     public Map getClaimsExtended(String claimsJwt, String... key) {
         Map<Object, Object> r = new HashMap<>();
         Claims claims = Jwts.parser()
-                .setSigningKey(sc.SECRET.getBytes())
+                .setSigningKey(sc.secret.getBytes())
                 .parseClaimsJws(claimsJwt)
                 .getBody();
         for (String k : key) {
@@ -145,7 +145,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject, String authorities, long expiresIn) {
-        return getBuilder(subject, expiresIn).claim(sc.AUTHORITIES_HOLDER, authorities);
+        return getBuilder(subject, expiresIn).claim(sc.authoritiesHolder, authorities);
     }
 
     /**
@@ -156,7 +156,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject, String authorities) {
-        return getBuilder(subject).claim(sc.AUTHORITIES_HOLDER, authorities);
+        return getBuilder(subject).claim(sc.authoritiesHolder, authorities);
     }
 
     /**
@@ -166,7 +166,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject) {
-        long expiresIn = sc.EXPIRATION_TIME * 1000; // expiration time should come in seconds
+        long expiresIn = sc.expirationTime * 1000; // expiration time should come in seconds
         return getBuilder(subject, expiresIn);
     }
 
@@ -184,7 +184,7 @@ public class JWTService {
                 .setSubject(subject)
                 .setExpiration(new Date(currentMillis + expiresIn))
                 .setIssuedAt(new Date(currentMillis))
-                .signWith(SignatureAlgorithm.HS512, sc.SECRET.getBytes())
-                .claim(sc.EXPIRES_IN_HOLDER, expiresIn);
+                .signWith(SignatureAlgorithm.HS512, sc.secret.getBytes())
+                .claim(sc.expiresInHolder, expiresIn);
     }
 }

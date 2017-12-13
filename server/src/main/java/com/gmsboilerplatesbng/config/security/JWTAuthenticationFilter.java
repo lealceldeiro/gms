@@ -61,23 +61,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws IOException, ServletException {
 
         Object principal = authResult.getPrincipal();
-        String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), sc.AUTHORITIES_SEPARATOR);
+        String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), SecurityConst.AUTHORITIES_SEPARATOR);
 
         long currentMillis = System.currentTimeMillis();
         String sub = ((EUser)principal).getUsername();
-        String jwt = jwtService.createToken(sub, authorities, sc.EXPIRATION_TIME);
+        String jwt = jwtService.createToken(sub, authorities, sc.expirationTime);
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         HashMap<String, Object> returnMap = new HashMap<>();
-        returnMap.put(sc.USERNAME_HOLDER, sub);
-        returnMap.put(sc.TOKEN_HOLDER, jwt);
-        returnMap.put(sc.AUTHORITIES_HOLDER, authorities.split(sc.AUTHORITIES_SEPARATOR));
-        returnMap.put(sc.TOKEN_TYPE_HOLDER, sc.TOKEN_TYPE);
-        returnMap.put(sc.HEADER_TO_BE_SENT_HOLDER, sc.HEADER);
-        returnMap.put(sc.EXPIRATION_HOLDER, currentMillis + (sc.EXPIRATION_TIME * 1000)); // expiration time should come in seconds
-        returnMap.put(sc.EXPIRES_IN_HOLDER, sc.EXPIRATION_TIME);
-        returnMap.put(sc.ISSUED_TIME_HOLDER, currentMillis);
+        returnMap.put(sc.usernameHolder, sub);
+        returnMap.put(sc.tokenHolder, jwt);
+        returnMap.put(sc.authoritiesHolder, authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.tokenTypeHolder, sc.tokenType);
+        returnMap.put(sc.headerToBeSentHolder, sc.header);
+        returnMap.put(sc.expirationHolder, currentMillis + (sc.expirationTime * 1000)); // expiration time should come in seconds
+        returnMap.put(sc.expiresInHolder, sc.expirationTime);
+        returnMap.put(sc.issuedTimeHolder, currentMillis);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }

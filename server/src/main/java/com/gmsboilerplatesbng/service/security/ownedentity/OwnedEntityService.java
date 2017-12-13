@@ -1,7 +1,7 @@
 package com.gmsboilerplatesbng.service.security.ownedentity;
 
-import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
-import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityRepository;
+import com.gmsboilerplatesbng.domain.security.ownedentity.EOwnedEntity;
+import com.gmsboilerplatesbng.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

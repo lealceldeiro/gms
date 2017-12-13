@@ -41,8 +41,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        String header = req.getHeader(sc.HEADER);
-        if (header == null || !header.startsWith(sc.TOKEN_TYPE)) {
+        String header = req.getHeader(sc.header);
+        if (header == null || !header.startsWith(sc.tokenType)) {
             chain.doFilter(req, res);
             return;
         }
@@ -53,24 +53,24 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(HttpServletRequest req) {
-        String token = req.getHeader(sc.HEADER);
+        String token = req.getHeader(sc.header);
 
         if (token != null) {
             try {
                 //parse the token
                 Map claims = jwtService.getClaimsExtended(
-                        token.replace(sc.TOKEN_TYPE, ""), sc.AUTHORITIES_HOLDER, sc.PASSWORD_HOLDER
+                        token.replace(sc.tokenType, ""), sc.authoritiesHolder, SecurityConst.PASS_HOLDER
                 );
                 String user = claims.get(JWTService.SUBJECT).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
+                    final String[] authoritiesS = claims.get(sc.authoritiesHolder).toString().split(SecurityConst.AUTHORITIES_SEPARATOR);
                     if (authoritiesS.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                         for (String a : authoritiesS) {
                             authorities.add(new SimpleGrantedAuthority(a));
                         }
-                        String password = (String) claims.get(sc.PASSWORD_HOLDER);  // encoded password
+                        String password = (String) claims.get(SecurityConst.PASS_HOLDER);  // encoded password
 
                         return new UsernamePasswordAuthenticationToken(user, password, authorities);
                     }

@@ -42,5 +42,5 @@ public class BPermission extends GmsEntity {
     private final String label;
 
     @ManyToMany(mappedBy = "permissions")
-    Set<BRole> roles = new HashSet<>();
+    private Set<BRole> roles = new HashSet<>();
 }

@@ -1,6 +1,6 @@
 package com.gmsboilerplatesbng.domain.security;
 
-import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.ownedentity.EOwnedEntity;
 import com.gmsboilerplatesbng.domain.security.role.BRole;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import lombok.*;
@@ -38,7 +38,7 @@ public class BAuthorization implements Serializable{
     }
 
     @EmbeddedId
-    private BAuthorizationPk BAuthorizationPk;
+    private BAuthorizationPk bAuthorizationPk;
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)

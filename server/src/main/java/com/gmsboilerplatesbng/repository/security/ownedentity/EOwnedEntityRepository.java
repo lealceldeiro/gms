@@ -1,6 +1,6 @@
-package com.gmsboilerplatesbng.repository.security.ownedEntity;
+package com.gmsboilerplatesbng.repository.security.ownedentity;
 
-import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
+import com.gmsboilerplatesbng.domain.security.ownedentity.EOwnedEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

@@ -32,13 +32,13 @@ public class ApiPathConfig {
             public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
                 return new RequestMappingHandlerMapping() {
                     @Value("${spring.data.rest.basePath:/api}")
-                    private String API_BASE_PATH;
+                    private String apiBasePath;
 
                     @Override
                     protected void registerHandlerMethod(Object handler, Method method, RequestMappingInfo mapping) {
                         Class<?> beanType = method.getDeclaringClass();
                         if (AnnotationUtils.findAnnotation(beanType, RestController.class) != null) {
-                            PatternsRequestCondition apiPattern = new PatternsRequestCondition(API_BASE_PATH)
+                            PatternsRequestCondition apiPattern = new PatternsRequestCondition(apiBasePath)
                                     .combine(mapping.getPatternsCondition());
 
                             mapping = new RequestMappingInfo(mapping.getName(), apiPattern,
