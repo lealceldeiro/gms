@@ -46,9 +46,9 @@ public class SecurityController extends BaseController{
 
     /**
      * Registers a new {@link EUser} setting it as active with properties such as emailVerified and enabled to `true`.
-     * This method overrides the default "user" url in the EUserRepository by setting it path to 'user' (like in the
-     * `EUserRepository` interface, by produces = 'application/hal+json' and by putting in within a controller
-     * annotated as `@BasePathAwareController`.
+     * This method overrides the default "user" url in the {@link com.gmsboilerplatesbng.repository.security.user.EUserRepository}
+     * by setting it path to 'user' (like in the `EUserRepository` interface, by doing `produces = 'application/hal+json'`
+     * and by putting in within a controller annotated as `@BasePathAwareController`.
      * @param user {@link EUser} data to be created.
      * @param pra Injected automatically by Spring.
      * @return A {@link EUser} mapped into a @{@link ResponseBody}.
