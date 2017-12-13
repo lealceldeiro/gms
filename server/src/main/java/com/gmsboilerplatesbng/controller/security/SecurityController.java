@@ -80,6 +80,8 @@ public class SecurityController extends BaseController{
         else throw new GmsGeneralException("user.add.not_allowed", false);
     }
 
+
+
     private PersistentEntityResource signUpUser(Resource<EUser> user, Boolean emailVerified, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException{
         EUser u = userService.signUp(user.getContent(), emailVerified);

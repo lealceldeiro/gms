@@ -3,7 +3,6 @@ package com.gmsboilerplatesbng.controller.security.user;
 import com.gmsboilerplatesbng.controller.BaseController;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
-import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import com.gmsboilerplatesbng.util.request.mapping.user.RolesForUserOverEntity;
@@ -36,15 +35,13 @@ public class UserController extends BaseController{
 
     @PostMapping("roles/add")
     @ResponseBody
-    public List<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data)
-            throws NotFoundEntityException, GmsGeneralException {
+    public List<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
         return userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
 
     @DeleteMapping("roles/remove")
     @ResponseBody
-    public List<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data)
-            throws NotFoundEntityException, GmsGeneralException {
+    public List<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
         return userService.removeRolesFromUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
 }

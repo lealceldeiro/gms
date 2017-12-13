@@ -65,19 +65,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         long currentMillis = System.currentTimeMillis();
         String sub = ((EUser)principal).getUsername();
-        String jwt = jwtService.createToken(sub, authorities, sc.expirationTime);
+        String jwt = jwtService.createToken(sub, authorities, sc.getExpirationTime());
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         HashMap<String, Object> returnMap = new HashMap<>();
-        returnMap.put(sc.usernameHolder, sub);
-        returnMap.put(sc.tokenHolder, jwt);
-        returnMap.put(sc.authoritiesHolder, authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
-        returnMap.put(sc.tokenTypeHolder, sc.tokenType);
-        returnMap.put(sc.headerToBeSentHolder, sc.header);
-        returnMap.put(sc.expirationHolder, currentMillis + (sc.expirationTime * 1000)); // expiration time should come in seconds
-        returnMap.put(sc.expiresInHolder, sc.expirationTime);
-        returnMap.put(sc.issuedTimeHolder, currentMillis);
+        returnMap.put(sc.getUsernameHolder(), sub);
+        returnMap.put(sc.getTokenHolder(), jwt);
+        returnMap.put(sc.getAuthoritiesHolder(), authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.getTokenTypeHolder(), sc.getTokenType());
+        returnMap.put(sc.getHeaderToBeSentHolder(), sc.getHeader());
+        returnMap.put(sc.getExpirationHolder(), currentMillis + (sc.getExpirationTime() * 1000)); // expiration time should come in seconds
+        returnMap.put(sc.getExpiresInHolder(), sc.getExpirationTime());
+        returnMap.put(sc.getIssuedTimeHolder(), currentMillis);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }

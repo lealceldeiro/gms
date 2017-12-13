@@ -1,5 +1,6 @@
 package com.gmsboilerplatesbng.util.constant;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,54 +13,55 @@ import org.springframework.stereotype.Component;
  * Dec 12, 2017
  */
 @Component
+@Getter
 public class SecurityConst {
 
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
-    public String secret;
+    private String secret;
 
     @Value("${gms.security.jwt.expiration:86400}")  // 1 day (in seconds)
-    public long expirationTime;
+    private long expirationTime;
 
     @Value("${gms.security.jwt.token_holder:access_token}")
-    public String tokenHolder;
+    private String tokenHolder;
 
     @Value("${gms.security.jwt.token_type:Bearer}")
-    public String tokenType;
+    private String tokenType;
 
     @Value("${gms.security.jwt.token_type_holder:token_type}")
-    public String tokenTypeHolder;
+    private String tokenTypeHolder;
 
     @Value("${gms.security.jwt.header:Authorization}")
-    public String header;
+    private String header;
 
     @Value("${gms.security.jwt.header_to_be_sent_holder:header_to_be_sent}")
-    public String headerToBeSentHolder;
+    private String headerToBeSentHolder;
 
     @Value("${gms.security.jwt.sign_up_url}")
-    public String signUpUrl;
+    private String signUpUrl;
 
     @Value("${gms.security.jwt.sign_in_url:/login}")
-    public String signInUrl;
+    private String signInUrl;
 
     @Value("${gms.security.jwt.sign_out_url:/logout}")
-    public String signOutUrl;
+    private String signOutUrl;
 
     @Value("${gms.security.jwt.authorities_holder:authorities}")
-    public String authoritiesHolder;
+    private String authoritiesHolder;
 
     public static final String AUTHORITIES_SEPARATOR = ";";
 
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
-    public String expirationHolder;
+    private String expirationHolder;
 
     @Value("${gms.security.jwt.expires_in_holder:expires_in}")
-    public String expiresInHolder;
+    private String expiresInHolder;
 
     @Value("${gms.security.jwt.issued_time_holder:issued_at}")
-    public String issuedTimeHolder;
+    private String issuedTimeHolder;
 
     @Value("${gms.response.auth.username:username}")
-    public String usernameHolder;
+    private String usernameHolder;
 
     public static final String PASS_HOLDER = "password";
 

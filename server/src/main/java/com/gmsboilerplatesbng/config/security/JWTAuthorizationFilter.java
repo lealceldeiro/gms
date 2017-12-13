@@ -41,8 +41,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        String header = req.getHeader(sc.header);
-        if (header == null || !header.startsWith(sc.tokenType)) {
+        String header = req.getHeader(sc.getHeader());
+        if (header == null || !header.startsWith(sc.getTokenType())) {
             chain.doFilter(req, res);
             return;
         }
@@ -53,18 +53,18 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(HttpServletRequest req) {
-        String token = req.getHeader(sc.header);
+        String token = req.getHeader(sc.getHeader());
 
         if (token != null) {
             try {
                 //parse the token
                 Map claims = jwtService.getClaimsExtended(
-                        token.replace(sc.tokenType, ""), sc.authoritiesHolder, SecurityConst.PASS_HOLDER
+                        token.replace(sc.getTokenType(), ""), sc.getAuthoritiesHolder(), SecurityConst.PASS_HOLDER
                 );
                 String user = claims.get(JWTService.SUBJECT).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims.get(sc.authoritiesHolder).toString().split(SecurityConst.AUTHORITIES_SEPARATOR);
+                    final String[] authoritiesS = claims.get(sc.getAuthoritiesHolder()).toString().split(SecurityConst.AUTHORITIES_SEPARATOR);
                     if (authoritiesS.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                         for (String a : authoritiesS) {

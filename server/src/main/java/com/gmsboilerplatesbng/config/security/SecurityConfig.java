@@ -49,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         String b = dc.apiBasePath;
         String[] freePost = {
-                b + sc.signInUrl,
-                b + sc.signUpUrl
+                b + sc.getSignInUrl(),
+                b + sc.getSignUpUrl()
         };
         String[] freeGet = {
                 dc.apiDocPath
@@ -62,10 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .logout()
-                .logoutUrl(sc.signOutUrl)
+                .logoutUrl(sc.getSignOutUrl())
                 .and()
                 .formLogin()
-                .loginPage(sc.signInUrl)
+                .loginPage(sc.getSignInUrl())
                 .and()
                 .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService))
@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 401 instead of 403
                 .exceptionHandling()
-                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(sc.header));
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(sc.getHeader()));
     }
 
     @Override
