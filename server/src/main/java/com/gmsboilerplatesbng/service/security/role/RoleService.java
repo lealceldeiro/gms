@@ -38,9 +38,9 @@ public class RoleService {
 
     //region default role
     public BRole createDefaultRole() {
-        BRole role = new BRole(c.ROLE_LABEL);
-        role.setDescription(c.ROLE_DESCRIPTION);
-        role.setEnabled(c.ROLE_ENABLED);
+        BRole role = new BRole(c.roleAdminDefaultLabel);
+        role.setDescription(c.roleAdminDefaultDescription);
+        role.setEnabled(c.roleAdminDefaultEnabled);
 
         final Iterable<BPermission> permissions = permissionRepository.findAll();
 

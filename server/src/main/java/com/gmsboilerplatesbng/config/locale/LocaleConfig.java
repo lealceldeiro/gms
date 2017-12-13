@@ -24,7 +24,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Configuration
 public class LocaleConfig extends WebMvcConfigurerAdapter {
 
-    private final String [] i18nBaseNames = {
+    private static final String [] i18NBaseNames = {
             "classpath:/i18n/entity",
             "classpath:/i18n/label",
             "classpath:/i18n/user",
@@ -36,7 +36,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames(i18nBaseNames);
+        messageSource.setBasenames(i18NBaseNames);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
@@ -48,13 +48,13 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        return new GmsCHLocaleResolver(dc);
+        return new GmsCHLocaleResolver();
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName(dc.LANGUAGE_HOLDER);
+        lci.setParamName(dc.languageHolder);
         return lci;
     }
 

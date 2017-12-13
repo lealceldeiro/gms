@@ -29,7 +29,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class ConfigurationService {
 
-    private final DefaultConst c;
+    private final DefaultConst dc;
 
     private Boolean isMultiEntity;
 
@@ -54,7 +54,7 @@ public class ConfigurationService {
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authRepository = authRepository;
-        this.c = defaultConst;
+        this.dc = defaultConst;
 
         loadDBConfig();
     }
@@ -65,8 +65,10 @@ public class ConfigurationService {
     }
 
     public Boolean createDefaultConfig() {
-        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(), c.IS_MULTI_ENTITY.toString()),
-                userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(), c.IS_USER_REGISTRATION_ALLOWED.toString());
+        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(),
+                dc.isMultiEntity.toString());
+        BConfiguration userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(),
+                dc.isUserRegistrationAllowed.toString());
 
         return
                 configurationRepository.save(multiEntity) != null &&
@@ -74,11 +76,11 @@ public class ConfigurationService {
     }
 
     public boolean assignDefaultUserToEntityWithRole() {
-        EUser u = userRepository.findFirstByUsernameOrEmail(c.USER_USERNAME, c.USER_EMAIL);
+        EUser u = userRepository.findFirstByUsernameOrEmail(dc.userAdminDefaultName, dc.userAdminDefaultEmail);
         if (u != null) { //got default user
-            EOwnedEntity e = entityRepository.findFirstByUsername(c.ENTITY_USERNAME);
+            EOwnedEntity e = entityRepository.findFirstByUsername(dc.entityDefaultUsername);
             if (e != null) { //got entity
-                BRole role = roleRepository.findFirstByLabel(c.ROLE_LABEL);
+                BRole role = roleRepository.findFirstByLabel(dc.roleAdminDefaultLabel);
                 if (role != null) {
                     com.gmsboilerplatesbng.domain.security.BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
                     pk.setUserId(u.getId());
@@ -111,8 +113,8 @@ public class ConfigurationService {
                     configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
         }
         else {
-            isMultiEntity = c.IS_MULTI_ENTITY;
-            isUserRegistrationAllowed = c.IS_USER_REGISTRATION_ALLOWED;
+            isMultiEntity = dc.isMultiEntity;
+            isUserRegistrationAllowed = dc.isUserRegistrationAllowed;
         }
     }
 

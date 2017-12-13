@@ -1,4 +1,4 @@
-package com.gmsboilerplatesbng.service.security.ownedEntity;
+package com.gmsboilerplatesbng.service.security.ownedentity;
 
 import com.gmsboilerplatesbng.domain.security.ownedEntity.EOwnedEntity;
 import com.gmsboilerplatesbng.repository.security.ownedEntity.EOwnedEntityRepository;
@@ -34,7 +34,7 @@ public class OwnedEntityService {
     //region default entity
     public EOwnedEntity createDefaultEntity() {
         return entityRepository.save(
-                new EOwnedEntity(c.ENTITY_NAME, c.ENTITY_USERNAME, c.ENTITY_DESCRIPTION)
+                new EOwnedEntity(c.entityDefaultName, c.entityDefaultUsername, c.entityDefaultDescription)
         );
     }
     //endregion

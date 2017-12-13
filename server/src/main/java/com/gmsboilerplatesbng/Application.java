@@ -4,7 +4,7 @@ import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
 import com.gmsboilerplatesbng.service.security.permission.PermissionService;
 import com.gmsboilerplatesbng.service.security.role.RoleService;
 import com.gmsboilerplatesbng.service.security.user.UserService;
-import com.gmsboilerplatesbng.service.security.ownedEntity.OwnedEntityService;
+import com.gmsboilerplatesbng.service.security.ownedentity.OwnedEntityService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

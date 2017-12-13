@@ -30,6 +30,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     protected MessageResolver msg;
 
+    @SuppressWarnings("WeakerAccess")
     protected final DefaultConst dc;
 
     public BaseController(DefaultConst defaultConst) {
@@ -69,7 +70,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     private Object createResponseBodyAsMap(Object o) {
         HashMap<String, Object> r = new HashMap<>();
-        r.put(dc.RES_MESSAGE_HOLDER, o);
+        r.put(dc.resMessageHolder, o);
         return r;
     }
 }

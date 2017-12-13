@@ -12,12 +12,10 @@ import com.gmsboilerplatesbng.repository.security.role.BRoleRepository;
 import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
-import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,8 +66,8 @@ public class UserService implements UserDetailsService{
 
     //region default user
     public EUser createDefaultUser() {
-        EUser u = new EUser(c.USER_USERNAME, c.USER_EMAIL, c.USER_NAME, c.USER_LAST_NAME,
-                c.USER_PASSWORD);
+        EUser u = new EUser(c.userAdminDefaultName, c.userAdminDefaultEmail, c.userAdminDefaultUsername, c.userAdminDefaultLastName,
+                c.userAdminDefaultPassword);
         u.setEnabled(true);
         return signUp(u, true);
     }
@@ -83,13 +81,11 @@ public class UserService implements UserDetailsService{
         return userRepository.save(sU);
     }
 
-    public ArrayList<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
-            GmsGeneralException {
+    public List<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
     }
 
-    public ArrayList<Long> removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException,
-            GmsGeneralException {
+    public List<Long> removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
     }
 
@@ -138,41 +134,30 @@ public class UserService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        EUser u = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        if (u == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return u;
+    public UserDetails loadUserByUsername(String usernameOrEmail) {
+        return userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
     }
 
     public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
         StringBuilder authBuilder = new StringBuilder();
         EUser u = (EUser)loadUserByUsername(usernameOrEmail);
         if (u != null) { // got user
-            BAuthorization auth = null;
-            Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
-            EOwnedEntity e = null;
-            if (entityId != null) {
-                e = entityRepository.findOne(entityId);
-            }
-            if (entityId == null) { // no last accessed entity registered
-                auth = authorizationRepository.findFirstByUserAndEntityNotNull(u); // find any of the assigned entities
-            }
-            if (entityId != null || auth != null) { // got last accessed entity or first of the assigned one to the user
-                if (auth == null) { // get authorization if it was not previously gotten
-                    auth = authorizationRepository.findFirstByUserAndEntity(u, e);
-                }
-                if (auth != null) { // got authorization
-                    Set<BPermission> permissions = auth.getRole().getPermissions();
-                    StringBuilder auxBuilder;
-                    for (BPermission p: permissions) {
-                        auxBuilder = new StringBuilder();
-                        authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
-                    }
+            BAuthorization auth = getUserAuth(u);
+            if (auth != null) { // got authorization
+                Set<BPermission> permissions = auth.getRole().getPermissions();
+                StringBuilder auxBuilder;
+                for (BPermission p: permissions) {
+                    auxBuilder = new StringBuilder();
+                    authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
                 }
             }
         }
         return authBuilder.toString();
+    }
+
+    private BAuthorization getUserAuth(EUser u) {
+        Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
+        EOwnedEntity entity = entityId != null ? entityRepository.findOne(entityId) : null;
+        return entity == null ? authorizationRepository.findFirstByUserAndEntityNotNull(u) : null;
     }
 }
