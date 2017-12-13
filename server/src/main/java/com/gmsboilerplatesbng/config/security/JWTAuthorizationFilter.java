@@ -1,9 +1,8 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * JWTAuthorizationFilter
@@ -29,10 +29,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final SecurityConst sc;
 
+    private final JWTService jwtService;
+
     @SuppressWarnings("WeakerAccess")
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService) {
         super(authenticationManager);
         this.sc = sc;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -55,11 +58,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         if (token != null) {
             try {
                 //parse the token
-                Claims claims = Jwts.parser()
-                        .setSigningKey(sc.SECRET.getBytes())
-                        .parseClaimsJws(token.replace(sc.TOKEN_TYPE, ""))
-                        .getBody();
-                String user = claims.getSubject();
+                Map claims = jwtService.getClaimsExtended(
+                        token.replace(sc.TOKEN_TYPE, ""), sc.AUTHORITIES_HOLDER, sc.PASSWORD_HOLDER
+                );
+                String user = claims.get(JWTService.SUBJECT).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
                     final String[] authoritiesS = claims.get(sc.AUTHORITIES_HOLDER).toString().split(sc.AUTHORITIES_SEPARATOR);
