@@ -34,7 +34,7 @@ public class OwnedEntityService {
     //region default entity
     public EOwnedEntity createDefaultEntity() {
         return entityRepository.save(
-                new EOwnedEntity(c.entityDefaultName, c.entityDefaultUsername, c.entityDefaultDescription)
+                new EOwnedEntity(c.getEntityDefaultName(), c.getEntityDefaultUsername(), c.getEntityDefaultDescription())
         );
     }
     //endregion

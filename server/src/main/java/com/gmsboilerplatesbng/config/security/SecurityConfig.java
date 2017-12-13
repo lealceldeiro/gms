@@ -47,13 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String b = dc.apiBasePath;
+        String b = dc.getApiBasePath();
         String[] freePost = {
                 b + sc.getSignInUrl(),
                 b + sc.getSignUpUrl()
         };
         String[] freeGet = {
-                dc.apiDocPath
+                dc.getApiDocPath()
         };
         http
                 .cors().and().csrf().disable().authorizeRequests()

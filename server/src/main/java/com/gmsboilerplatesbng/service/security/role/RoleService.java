@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class RoleService {
 
-    private final DefaultConst c;
+    private final DefaultConst dc;
 
     private final BRoleRepository repository;
 
@@ -33,14 +33,14 @@ public class RoleService {
     public RoleService(BRoleRepository repository, BPermissionRepository permissionRepository, DefaultConst defaultConst) {
         this.repository = repository;
         this.permissionRepository = permissionRepository;
-        this.c = defaultConst;
+        this.dc = defaultConst;
     }
 
     //region default role
     public BRole createDefaultRole() {
-        BRole role = new BRole(c.roleAdminDefaultLabel);
-        role.setDescription(c.roleAdminDefaultDescription);
-        role.setEnabled(c.roleAdminDefaultEnabled);
+        BRole role = new BRole(dc.getRoleAdminDefaultLabel());
+        role.setDescription(dc.getRoleAdminDefaultDescription());
+        role.setEnabled(dc.isRoleAdminDefaultEnabled());
 
         final Iterable<BPermission> permissions = permissionRepository.findAll();
 

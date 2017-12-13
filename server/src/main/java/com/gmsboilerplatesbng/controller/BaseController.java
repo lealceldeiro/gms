@@ -70,7 +70,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     private Object createResponseBodyAsMap(Object o) {
         HashMap<String, Object> r = new HashMap<>();
-        r.put(dc.resMessageHolder, o);
+        r.put(dc.getResMessageHolder(), o);
         return r;
     }
 }

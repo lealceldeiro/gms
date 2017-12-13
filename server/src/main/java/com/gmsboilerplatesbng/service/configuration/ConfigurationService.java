@@ -66,9 +66,9 @@ public class ConfigurationService {
 
     public Boolean createDefaultConfig() {
         BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(),
-                dc.isMultiEntity.toString());
+                dc.getIsMultiEntity().toString());
         BConfiguration userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(),
-                dc.isUserRegistrationAllowed.toString());
+                dc.getIsUserRegistrationAllowed().toString());
 
         return
                 configurationRepository.save(multiEntity) != null &&
@@ -76,11 +76,11 @@ public class ConfigurationService {
     }
 
     public boolean assignDefaultUserToEntityWithRole() {
-        EUser u = userRepository.findFirstByUsernameOrEmail(dc.userAdminDefaultName, dc.userAdminDefaultEmail);
+        EUser u = userRepository.findFirstByUsernameOrEmail(dc.getUserAdminDefaultName(), dc.getUserAdminDefaultEmail());
         if (u != null) { //got default user
-            EOwnedEntity e = entityRepository.findFirstByUsername(dc.entityDefaultUsername);
+            EOwnedEntity e = entityRepository.findFirstByUsername(dc.getEntityDefaultUsername());
             if (e != null) { //got entity
-                BRole role = roleRepository.findFirstByLabel(dc.roleAdminDefaultLabel);
+                BRole role = roleRepository.findFirstByLabel(dc.getRoleAdminDefaultLabel());
                 if (role != null) {
                     com.gmsboilerplatesbng.domain.security.BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
                     pk.setUserId(u.getId());
@@ -113,8 +113,8 @@ public class ConfigurationService {
                     configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
         }
         else {
-            isMultiEntity = dc.isMultiEntity;
-            isUserRegistrationAllowed = dc.isUserRegistrationAllowed;
+            isMultiEntity = dc.getIsMultiEntity();
+            isUserRegistrationAllowed = dc.getIsUserRegistrationAllowed();
         }
     }
 

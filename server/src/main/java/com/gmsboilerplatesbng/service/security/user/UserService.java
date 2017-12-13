@@ -66,8 +66,8 @@ public class UserService implements UserDetailsService{
 
     //region default user
     public EUser createDefaultUser() {
-        EUser u = new EUser(c.userAdminDefaultName, c.userAdminDefaultEmail, c.userAdminDefaultUsername, c.userAdminDefaultLastName,
-                c.userAdminDefaultPassword);
+        EUser u = new EUser(c.getUserAdminDefaultName(), c.getUserAdminDefaultEmail(), c.getUserAdminDefaultUsername(),
+                c.getUserAdminDefaultLastName(), c.getUserAdminDefaultPassword());
         u.setEnabled(true);
         return signUp(u, true);
     }
