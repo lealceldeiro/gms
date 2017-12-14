@@ -96,6 +96,7 @@ public class JWTService {
         Map<Object, Object> r = new HashMap<>();
         Claims claims = Jwts.parser()
                 .setSigningKey(sc.getSecret().getBytes())
+                .requireIssuer(sc.getIssuer())
                 .parseClaimsJws(claimsJwt)
                 .getBody();
         for (String k : key) {
@@ -188,6 +189,7 @@ public class JWTService {
                 .setSubject(subject)
                 .setExpiration(new Date(currentMillis + expiresIn))
                 .setIssuedAt(new Date(currentMillis))
+                .setIssuer(sc.getIssuer())
                 .signWith(SignatureAlgorithm.HS512, sc.getSecret().getBytes())
                 .claim(sc.getExpiresInHolder(), expiresIn);
     }

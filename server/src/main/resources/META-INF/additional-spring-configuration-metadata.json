@@ -43,6 +43,12 @@
       "defaultValue": "authorities"
     },
     {
+      "name": "gms.security.jwt.issuer",
+      "type": "java.lang.String",
+      "description": "[Optional | default = www.gms.com] Who provides the token.",
+      "defaultValue": "www.gms.com"
+    },
+    {
       "name": "gms.security.jwt.refresh_expiration_time_holder",
       "type": "java.lang.String",
       "description": "[Optional | default = expiration_time] Defines the holder for the expiration_time value sent in the 'login' response.",

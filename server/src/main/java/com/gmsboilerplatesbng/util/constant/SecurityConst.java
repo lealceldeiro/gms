@@ -88,6 +88,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     private String authoritiesHolder;
 
+    @Value("${gms.security.jwt.issuer:www.gms.com}")
+    private String issuer;
+
     public static final String AUTHORITIES_SEPARATOR = ";";
 
     @Value("${gms.response.auth.username:username}")
