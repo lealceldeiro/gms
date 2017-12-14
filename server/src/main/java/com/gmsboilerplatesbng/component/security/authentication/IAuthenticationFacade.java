@@ -14,4 +14,5 @@ public interface IAuthenticationFacade {
 
     Authentication getAuthentication();
 
+    void setAuthentication(Authentication authentication);
 }

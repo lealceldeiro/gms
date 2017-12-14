@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -74,16 +73,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        HashMap<String, Object> returnMap = new HashMap<>();
-        returnMap.put(sc.getUsernameHolder(), sub);
-        returnMap.put(sc.getATokenHolder(), accessToken);
-        returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
-        returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
-        returnMap.put(sc.getExpirationHolder(), iat.getTime() + jwtService.getATokenExpirationTime());
-        returnMap.put(sc.getExpiresInHolder(), jwtService.getATokenExpirationTime());
-        returnMap.put(sc.getIssuedTimeHolder(), iat);
-        returnMap.put(sc.getAuthoritiesHolder(), authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
-        returnMap.put(sc.getRTokenHolder(), refreshToken);
+        Map returnMap = jwtService.createLoginData(sub, accessToken, iat, authorities, refreshToken);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }

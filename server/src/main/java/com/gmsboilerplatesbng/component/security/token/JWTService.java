@@ -141,6 +141,32 @@ public class JWTService {
     }
 
     /**
+     * This is a convenience method for generating the map returned when the user logs in or request a new access token.
+     * @param subject The subject set on the jwt.
+     * @param accessToken The access token generated.
+     * @param issuedAt Date when the token was issued.
+     * @param authoritiesString The principal authorities in the format of "AUTHORITY_NAME<separator>AUTHORITY_NAME" where
+     * <separator> is defined in {@link SecurityConst#AUTHORITIES_SEPARATOR}.
+     * @param refreshToken Refresh token generated in this request.
+     * @return Map with all this information set under the key defined in {@link SecurityConst} intended for that.
+     */
+    public Map createLoginData(String subject, String accessToken, Date issuedAt,
+                               String authoritiesString, String refreshToken) {
+        HashMap<String, Object> returnMap = new HashMap<>();
+        returnMap.put(sc.getUsernameHolder(), subject);
+        returnMap.put(sc.getATokenHolder(), accessToken);
+        returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
+        returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
+        returnMap.put(sc.getExpirationHolder(), issuedAt.getTime() + getATokenExpirationTime());
+        returnMap.put(sc.getExpiresInHolder(), getATokenExpirationTime());
+        returnMap.put(sc.getIssuedTimeHolder(), issuedAt);
+        returnMap.put(sc.getAuthoritiesHolder(), authoritiesString.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.getRTokenHolder(), refreshToken);
+
+        return returnMap;
+    }
+
+    /**
      * Returns a {@link Map} which contains, for every key provided (as a <code>key</code> param), an entry with the
      * claim value. In order to get the value of the claims, the body provided as <code>claimsJwt</code> param, is parsed.
      * The value of every claim is retrieved from the claims using the same key in the <code>key</code> param. Also extra data
@@ -155,6 +181,7 @@ public class JWTService {
         Map<Object, Object> r = new HashMap<>();
         Claims claims = Jwts.parser()
                 .setSigningKey(sc.getSecret().getBytes())
+                .requireIssuer(sc.getIssuer())
                 .parseClaimsJws(claimsJwt)
                 .getBody();
         for (String k : key) {
