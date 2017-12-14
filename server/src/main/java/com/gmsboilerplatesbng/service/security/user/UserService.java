@@ -13,9 +13,11 @@ import com.gmsboilerplatesbng.repository.security.user.EUserRepository;
 import com.gmsboilerplatesbng.service.configuration.ConfigurationService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gmsboilerplatesbng.util.i18n.MessageResolver;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,35 +36,17 @@ import java.util.Set;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService{
 
-    private final DefaultConst c;
-
     private final EUserRepository userRepository;
-
     private final EOwnedEntityRepository entityRepository;
-
     private final BRoleRepository roleRepository;
-
     private final BAuthorizationRepository authorizationRepository;
-
     private final BCryptPasswordEncoder passwordEncoder;
-
     private final ConfigurationService configService;
-
-    @Autowired
-    public UserService(EUserRepository userRepository, EOwnedEntityRepository entityRepository,
-                       BRoleRepository roleRepository, BAuthorizationRepository authorizationRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder, ConfigurationService configService,
-                       DefaultConst defaultConst) {
-        this.userRepository = userRepository;
-        this.entityRepository = entityRepository;
-        this.roleRepository = roleRepository;
-        this.authorizationRepository = authorizationRepository;
-        this.passwordEncoder = bCryptPasswordEncoder;
-        this.configService = configService;
-        this.c = defaultConst;
-    }
+    private final DefaultConst c;
+    private final MessageResolver msg;
 
     //region default user
     public EUser createDefaultUser() {
@@ -135,7 +119,11 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
-        return userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        EUser u = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        if(u != null) {
+            return u;
+        }
+        throw new UsernameNotFoundException(msg.getMessage("user.not.found"));
     }
 
     public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
