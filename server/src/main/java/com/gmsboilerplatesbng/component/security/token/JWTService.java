@@ -1,7 +1,10 @@
 package com.gmsboilerplatesbng.component.security.token;
 
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -118,7 +121,6 @@ public class JWTService {
      * @return Map with all the required information.
      * @see Claims
      */
-
     public Map getClaimsExtended(String claimsJwt, String... key) {
         Map<Object, Object> r = new HashMap<>();
         Claims claims = Jwts.parser()
