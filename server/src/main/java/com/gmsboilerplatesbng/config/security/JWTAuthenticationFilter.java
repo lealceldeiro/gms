@@ -79,7 +79,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         returnMap.put(sc.getATokenHolder(), accessToken);
         returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
-        returnMap.put(sc.getExpirationHolder(), iat.getTime() + jwtService.getATokenExpirationTime()); // expiration time should come in seconds
+        returnMap.put(sc.getExpirationHolder(), iat.getTime() + jwtService.getATokenExpirationTime());
         returnMap.put(sc.getExpiresInHolder(), jwtService.getATokenExpirationTime());
         returnMap.put(sc.getIssuedTimeHolder(), iat);
         returnMap.put(sc.getAuthoritiesHolder(), authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
