@@ -32,6 +32,10 @@ public class JWTService {
 
     private final SecurityConst sc;
 
+    public long getATokenExpirationTime() {
+        return sc.getATokenExpirationTime() > 0 ? sc.getATokenExpirationTime() : 86400; // set 1 day if an invalid value was provided
+    }
+
     /**
      * Returns json web token with a subject, an expiration time by default, an "issued_at" property,
      * a claim with an "expires_in" property signed with a {@link SignatureAlgorithm} (HS512).
@@ -166,7 +170,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject) {
-        long expiresIn = sc.getATokenExpirationTime() * 1000; // expiration time should come in seconds
+        long expiresIn = getATokenExpirationTime() * 1000; // expiration time should come in seconds
         return getBuilder(subject, expiresIn);
     }
 
