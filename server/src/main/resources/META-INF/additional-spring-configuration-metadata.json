@@ -7,7 +7,7 @@
       "defaultValue": "OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb"
     },
     {
-      "name": "gms.security.jwt.expiration",
+      "name": "gms.security.jwt.token_expiration",
       "type": "java.lang.Long",
       "description": "[Optional | default = 86400] Defines the expiration time to be used for generating the JWT in seconds.",
       "defaultValue": 86400
@@ -19,19 +19,19 @@
       "defaultValue": "Bearer"
     },
     {
-      "name": "gms.security.jwt.header",
+      "name": "gms.security.jwt.token_header",
       "type": "java.lang.String",
       "description": "[Optional | default = Authorization] Defines the header for receiving the JWT.",
       "defaultValue": "Authorization"
     },
     {
-      "name": "gms.security.jwt.header_to_be_sent_holder",
+      "name": "gms.security.jwt.token_header_to_be_sent_holder",
       "type": "java.lang.String",
       "description": "[Optional | default = header_to_be_sent] Defines the variable where will be put the string indicating which one is the header for receiving the JWT.",
       "defaultValue": "header_to_be_sent"
     },
     {
-      "name": "gms.security.jwt.sign_up_url",
+      "name": "gms.security.sign_up_url",
       "type": "java.lang.String",
       "description": "[Mandatory | default = /sign-up] Defines the url for signing up the user.",
       "defaultValue": "/sign-up"
@@ -43,7 +43,7 @@
       "defaultValue": "authorities"
     },
     {
-      "name": "gms.security.jwt.expiration_time_holder",
+      "name": "gms.security.jwt.refresh_expiration_time_holder",
       "type": "java.lang.String",
       "description": "[Optional | default = expiration_time] Defines the holder for the expiration_time value sent in the 'login' response.",
       "defaultValue": "expiration_time"
@@ -61,13 +61,13 @@
       "defaultValue": "issued_at"
     },
     {
-      "name": "gms.security.jwt.sign_in_url",
+      "name": "gms.security.sign_in_url",
       "type": "java.lang.String",
       "description": "[Optional | default = /login] Defines the url for logging in the user.",
       "defaultValue": "/login"
     },
     {
-      "name": "gms.security.jwt.sign_out_url",
+      "name": "gms.security.sign_out_url",
       "type": "java.lang.String",
       "description": "[Optional | default = /logout] Defines the url for logging out the user.",
       "defaultValue": "/logout"

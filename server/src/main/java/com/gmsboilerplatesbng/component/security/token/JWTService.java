@@ -166,7 +166,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject) {
-        long expiresIn = sc.getExpirationTime() * 1000; // expiration time should come in seconds
+        long expiresIn = sc.getATokenExpirationTime() * 1000; // expiration time should come in seconds
         return getBuilder(subject, expiresIn);
     }
 

@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 401 instead of 403
                 .exceptionHandling()
-                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(sc.getHeader()));
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint(sc.getATokenHeader()));
     }
 
     @Override

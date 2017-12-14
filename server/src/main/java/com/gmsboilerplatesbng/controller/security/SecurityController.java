@@ -68,7 +68,7 @@ public class SecurityController extends BaseController{
      * @return A {@link EUser} mapped into a @{@link ResponseBody}
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
-    @PostMapping("${gms.security.jwt.sign_up_url}")
+    @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("permitAll()")
     @ResponseBody
