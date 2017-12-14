@@ -58,6 +58,17 @@ public class SecurityConst {
     private String aTokenHeaderToBeSentHolder;
     //endregion
 
+    //region refresh token
+    @Value("${gms.security.jwt.refresh_token_expiration:2592000}")
+    private long rTokenExpirationTime;
+
+    /**
+     * Variable in which the access token will be sent in the response in the login information to the client.
+     */
+    @Value("${gms.security.jwt.refresh_token_holder:refresh_token}")
+    private String rTokenHolder;
+    //endregion
+
     /**
      * Variable in which the time of validity of the token will be sent in the response in the login information to the client.
      */
@@ -72,6 +83,10 @@ public class SecurityConst {
 
     @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
     private String expirationHolder;
+
+    @Value("${gms.security.jwt.issuer:www.gms.com}")
+    private String issuer;
+
     //endregion
 
     //region sign in/out URLs
@@ -87,9 +102,6 @@ public class SecurityConst {
 
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     private String authoritiesHolder;
-
-    @Value("${gms.security.jwt.issuer:www.gms.com}")
-    private String issuer;
 
     public static final String AUTHORITIES_SEPARATOR = ";";
 

@@ -18,8 +18,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * JWTAuthenticationFilter
@@ -62,22 +64,26 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Object principal = authResult.getPrincipal();
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), SecurityConst.AUTHORITIES_SEPARATOR);
-
-        long currentMillis = System.currentTimeMillis();
         String sub = ((EUser)principal).getUsername();
-        String jwt = jwtService.createToken(sub, authorities);
+
+        String accessToken = jwtService.createToken(sub, authorities);
+        Map claims = jwtService.getClaimsExtended(accessToken);
+        Date iat = (Date)claims.get(JWTService.ISSUED_AT);
+
+        String refreshToken = jwtService.createRefreshToken(sub, authorities);
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         HashMap<String, Object> returnMap = new HashMap<>();
         returnMap.put(sc.getUsernameHolder(), sub);
-        returnMap.put(sc.getATokenHolder(), jwt);
-        returnMap.put(sc.getAuthoritiesHolder(), authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.getATokenHolder(), accessToken);
         returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
-        returnMap.put(sc.getExpirationHolder(), currentMillis + (jwtService.getATokenExpirationTime() * 1000)); // expiration time should come in seconds
+        returnMap.put(sc.getExpirationHolder(), iat.getTime() + jwtService.getATokenExpirationTime()); // expiration time should come in seconds
         returnMap.put(sc.getExpiresInHolder(), jwtService.getATokenExpirationTime());
-        returnMap.put(sc.getIssuedTimeHolder(), currentMillis);
+        returnMap.put(sc.getIssuedTimeHolder(), iat);
+        returnMap.put(sc.getAuthoritiesHolder(), authorities.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.getRTokenHolder(), refreshToken);
 
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }

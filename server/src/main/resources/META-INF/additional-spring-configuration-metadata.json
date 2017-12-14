@@ -9,8 +9,14 @@
     {
       "name": "gms.security.jwt.token_expiration",
       "type": "java.lang.Long",
-      "description": "[Optional | default = 86400] Defines the expiration time to be used for generating the JWT in seconds.",
+      "description": "[Optional | default = 86400] Defines the expiration time to be used for generating the JWT (access token) in seconds.",
       "defaultValue": 86400
+    },
+    {
+      "name": "gms.security.jwt.refresh_token_expiration",
+      "type": "java.lang.Long",
+      "description": "[Optional | default = 2592000] Defines the expiration time to be used for generating the JWT (refresh token) in seconds.",
+      "defaultValue": 2592000
     },
     {
       "name": "gms.security.jwt.token_type",
@@ -87,8 +93,14 @@
     {
       "name": "gms.security.jwt.token_holder",
       "type": "java.lang.String",
-      "description": "[Optional | default = access_token] Defines the token holder for retrieving the JWT which should be used in further requests.",
+      "description": "[Optional | default = access_token] Defines the token holder for retrieving the JWT(access token) which should be used in further requests.",
       "defaultValue": "access_token"
+    },
+    {
+      "name": "gms.security.jwt.refresh_token_holder",
+      "type": "java.lang.String",
+      "description": "[Optional | default = refresh_token] Defines the token holder for retrieving the JWT(refresh token) which should be used in further requests.",
+      "defaultValue": "refresh_token"
     },
     {
       "name": "gms.application.env",

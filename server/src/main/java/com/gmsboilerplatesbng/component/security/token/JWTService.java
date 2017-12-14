@@ -35,8 +35,24 @@ public class JWTService {
 
     private final SecurityConst sc;
 
+    /**
+     * Return the expiration time defined for the access token. If an invalid value was provided, the default one (86400s)
+     * is used instead.
+     * @return long expiration time.
+     */
     public long getATokenExpirationTime() {
-        return sc.getATokenExpirationTime() > 0 ? sc.getATokenExpirationTime() : 86400; // set 1 day if an invalid value was provided
+        // expiration time should come in seconds, that's why the * 1000 and extra-zeros for 86400 seconds
+        return sc.getATokenExpirationTime() > 0 ? (sc.getATokenExpirationTime() * 1000) : 86400000L; // set 1 day if an invalid value was provided
+    }
+
+    /**
+     * Return the expiration time defined for the refresh token. If an invalid value was provided, the default one (2592000s)
+     * is used instead.
+     * @return long expiration time.
+     */
+    public long getRTokenExpirationTime() {
+        // expiration time should come in seconds, that's why the * 1000 and extra-zeros for 2592000 seconds
+        return sc.getRTokenExpirationTime() > 0 ? (sc.getRTokenExpirationTime() * 1000) : 2592000000L; // set 30 days if an invalid value was provided
     }
 
     /**
@@ -70,6 +86,20 @@ public class JWTService {
      */
     public String createToken(String subject, String authorities) {
         JwtBuilder builder = getBuilder(subject, authorities);
+        return builder.compact();
+    }
+
+    /**
+     * Returns json web token with a subject, an authorities, an expiration time by default, an "issued_at" property,
+     * a claim with an "expires_in" property signed with a {@link SignatureAlgorithm} (HS512).
+     * This is a convenience method for using instead of generating token using {@link JWTService#createToken(String, String, long)}
+     * and setting the default expiration time for the refresh token.
+     * @param subject Token subject.
+     * @param authorities Token authorities.
+     * @return {@link String} The token with the information received as parameters.
+     */
+    public String createRefreshToken(String subject, String authorities) {
+        JwtBuilder builder = getBuilder(subject, authorities, getRTokenExpirationTime());
         return builder.compact();
     }
 
@@ -173,8 +203,7 @@ public class JWTService {
      * @return The {@link JwtBuilder} with the token information received as parameters.
      */
     private JwtBuilder getBuilder(String subject) {
-        long expiresIn = getATokenExpirationTime() * 1000; // expiration time should come in seconds
-        return getBuilder(subject, expiresIn);
+        return getBuilder(subject, getATokenExpirationTime());
     }
 
     /**
