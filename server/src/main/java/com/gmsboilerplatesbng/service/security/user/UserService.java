@@ -120,7 +120,7 @@ public class UserService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
         EUser u = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        if(u != null) {
+        if (u != null) {
             return u;
         }
         throw new UsernameNotFoundException(msg.getMessage("user.not.found"));

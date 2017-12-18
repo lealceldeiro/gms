@@ -34,13 +34,11 @@ public class UserController extends BaseController{
     }
 
     @PostMapping("roles/add")
-    @ResponseBody
     public List<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
         return userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
 
     @DeleteMapping("roles/remove")
-    @ResponseBody
     public List<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
         return userService.removeRolesFromUser(data.getUserId(), data.getEntityId(), data.getRolesId());
     }
