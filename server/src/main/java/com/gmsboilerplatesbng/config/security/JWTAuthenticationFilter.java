@@ -33,8 +33,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final SecurityConst sc;
-
     private final AuthenticationManager authenticationManager;
 
     private final UserService userService;

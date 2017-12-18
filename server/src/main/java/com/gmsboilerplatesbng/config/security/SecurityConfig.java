@@ -56,13 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(getFreeAny()).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .logout()
-                .logoutUrl(sc.getSignOutUrl())
-                .and()
-                .formLogin()
-                .loginPage(sc.getSignInUrl())
-                .and()
-                .addFilter(new JWTAuthenticationFilter(sc, authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -92,8 +86,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         freePost.add(b + sc.getSignInUrl());
         freePost.add(b + sc.getSignUpUrl());
 
-        for(String s: freePostSC) {
-            if(s != null && !s.equals("")) {
+        for (String s: freePostSC) {
+            if (s != null && !s.equals("")) {
                 freePost.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
             }
         }
@@ -108,8 +102,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ArrayList<String> freeGet = new ArrayList<>(freeGetSC.length + 1);
         freeGet.add(dc.getApiDocPath());
 
-        for(String s: freeGetSC) {
-            if(s != null && !s.equals("")) {
+        for (String s: freeGetSC) {
+            if (s != null && !s.equals("")) {
                 freeGet.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
             }
         }
@@ -124,8 +118,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ArrayList<String> freeAny = new ArrayList<>(freeAnySC.length + 1);
         freeAny.add(b + sc.getSignOutUrl());
 
-        for(String s: freeAnySC) {
-            if(s != null && !s.equals("")) {
+        for (String s: freeAnySC) {
+            if (s != null && !s.equals("")) {
                 freeAny.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
             }
         }
