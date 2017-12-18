@@ -159,7 +159,7 @@ public class JWTService {
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
         returnMap.put(sc.getExpirationHolder(), issuedAt.getTime() + getATokenExpirationTime());
         returnMap.put(sc.getExpiresInHolder(), getATokenExpirationTime());
-        returnMap.put(sc.getIssuedTimeHolder(), issuedAt);
+        returnMap.put(sc.getIssuedTimeHolder(), issuedAt.getTime());
         returnMap.put(sc.getAuthoritiesHolder(), authoritiesString.split(SecurityConst.AUTHORITIES_SEPARATOR));
         returnMap.put(sc.getRTokenHolder(), refreshToken);
 

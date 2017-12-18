@@ -10,9 +10,8 @@ import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
+import com.gmsboilerplatesbng.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
@@ -109,34 +108,28 @@ public class SecurityController extends BaseController{
     @PostMapping("access_token")
     @PreAuthorize("permitAll()")
     @ResponseBody
-    public Map refreshToken(@RequestBody String body) throws GmsGeneralException{
-        String oldRefreshToken = getOldToken(body);
-        try {
-            String [] keys = {sc.getAuthoritiesHolder()};
-            Map claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
-            String sub = claims.get(JWTService.SUBJECT).toString();
-            String authorities = claims.get(keys[0]).toString();
-            Date iat = (Date)claims.get(JWTService.ISSUED_AT);
+    public Map refreshToken(@RequestBody RefreshTokenPayload payload) {
+        String oldRefreshToken = payload.getRefreshToken();
+        if (oldRefreshToken != null) {
+            try {
+                String[] keys = {sc.getAuthoritiesHolder()};
+                Map claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
+                String sub = claims.get(JWTService.SUBJECT).toString();
+                String authorities = claims.get(keys[0]).toString();
+                Date iat = (Date) claims.get(JWTService.ISSUED_AT);
 
-            String newAccessToken = jwtService.createToken(sub, authorities);
-            String newRefreshToken = jwtService.createRefreshToken(sub, authorities);
+                String newAccessToken = jwtService.createToken(sub, authorities);
+                String newRefreshToken = jwtService.createRefreshToken(sub, authorities);
 
-            return jwtService.createLoginData(sub, newAccessToken, iat, authorities, newRefreshToken);
+                return jwtService.createLoginData(sub, newAccessToken, iat, authorities, newRefreshToken);
+            } catch (JwtException e) {
+                //return 401
+                authenticationFacade.setAuthentication(null);
+                return new HashMap();
+            }
         }
-        catch (JwtException e ) {
-            //return 401
-            authenticationFacade.setAuthentication(null);
-            return new HashMap();
-        }
-    }
-
-    private String getOldToken(String body) throws GmsGeneralException {
-        try {
-            JSONObject data = new JSONObject(body);
-            return data.getString(sc.getRTokenHolder());
-        } catch (JSONException e) {
-            throw new GmsGeneralException(msg.getMessage("request.data.incorrect.format"));
-        }
+        authenticationFacade.setAuthentication(null);
+        return new HashMap();
     }
 
     private PersistentEntityResource signUpUser(Resource<EUser> user, Boolean emailVerified, PersistentEntityResourceAssembler pra)
