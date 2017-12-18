@@ -1,25 +1,28 @@
-package com.gmsboilerplatesbng.security.bpermission;
+package com.gmsboilerplatesbng.repository.security.permission;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.Application;
 import com.gmsboilerplatesbng.domain.security.permission.BPermission;
-import com.gmsboilerplatesbng.repository.security.permission.BPermissionRepository;
+import com.gmsboilerplatesbng.service.AppService;
 import com.gmsboilerplatesbng.util.GMSRandom;
+import com.gmsboilerplatesbng.util.constant.DefaultConst;
+import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import com.gmsboilerplatesbng.util.validation.ConstrainedFields;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -29,58 +32,92 @@ import java.util.Map;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestPropertySource("classpath:application.properties")
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class RepositoryTest {
+public class BPermissionRepositoryTest {
 
     @Rule
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
     @Autowired private WebApplicationContext context;
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Autowired private ObjectMapper objectMapper;
+
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
+
     @Autowired private BPermissionRepository repository;
 
-    @Autowired private ObjectMapper objectMapper;
+    @Autowired private DefaultConst dc;
+    @Autowired private SecurityConst sc;
+
+    @Autowired private AppService appService;
 
     private MockMvc mvc;
 
     private RestDocumentationResultHandler restDocResHandler;
 
-    @Value("${page.size}")
-    private int pageSize;
-
-    @Value("${page.sizeAttr}")
-    private String pageSizeAttr;
-
-    @Value("${spring.data.rest.basePath}")
+    //region vars
     private String apiPrefix;
 
-    private final String rn = "RandomName-";
-    private final String rl = "RandomLabel-";
+    private String pageSizeAttr;
+
+    private int pageSize;
+
+    private String authHeader;
+
+    private String tokenType;
+
+    private String accessToken;
+
+    private final static String RANDOM_NAME = "RandomName-";
+    private final static String RANDOM_LABEL = "RandomLabel-";
+    //endregion
 
     private final GMSRandom random = new GMSRandom();
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
                 .alwaysDo(this.restDocResHandler)
+                .addFilter(this.springSecurityFilterChain)
+                .alwaysExpect(forwardedUrl(null))
                 .build();
+
+        this.apiPrefix = dc.getApiBasePath();
+        this.pageSizeAttr = dc.getPageSizeHolder();
+        this.pageSize = dc.getPageSize();
+
+        this.authHeader = sc.getATokenHeader();
+        this.tokenType = sc.getATokenType();
+
+        assert this.appService.isInitialLoadOK();
+
+        setUpAuthData();
     }
-/*
+
+    private void setUpAuthData() throws Exception {
+        Map<String, String> loginData = new HashMap<>();
+        loginData.put("username", dc.getUserAdminDefaultUsername());
+        loginData.put("password", dc.getUserAdminDefaultPassword());
+
+        MvcResult resultD = mvc.perform(
+                post(sc.getSignInUrl()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginData))
+        ).andExpect(status().isOk())
+                .andReturn();
+
+        JSONObject rawData = new JSONObject(resultD.getResponse().getContentAsString());
+        this.accessToken = rawData.getString(sc.getATokenHolder());
+    }
 
     //C
     @Test
@@ -88,17 +125,18 @@ public class RepositoryTest {
         String reqString = "permission";
 
         Map<String, String> newPermission = new HashMap<>();
-        newPermission.put("name", this.rn + this.random.nextString());
-        newPermission.put("label", this.rl + this.random.nextString());
+        newPermission.put("name", RANDOM_NAME + random.nextString());
+        newPermission.put("label", RANDOM_LABEL + random.nextString());
 
         ConstrainedFields fields = new ConstrainedFields(BPermission.class);
 
-        this.mvc.perform(
-                post(this.apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(newPermission))
+        mvc.perform(
+                post(apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(newPermission))
         ).andExpect(status().isCreated())
                 .andDo(
-                        this.restDocResHandler.document(
+                        restDocResHandler.document(
                                 requestFields(
                                         fields.withPath("name").description("Name to be used for authenticating"),
                                         fields.withPath("label").description("Label to be shown to the final user")
@@ -113,15 +151,15 @@ public class RepositoryTest {
     public void listPermissions() throws Exception {
         String reqString = "permission";
 
-        */
-/*setUpPermissions();*//*
+/*setUpPermissions();*/
 
 
-        this.mvc.perform(
-                get(this.apiPrefix + "/" + reqString + "?" + this.pageSizeAttr + "=" + this.pageSize)
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
+                        .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andDo(
-                this.restDocResHandler.document(
+                restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("_embedded." + reqString).description("Array of permissions"),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to permissions"),
@@ -137,10 +175,12 @@ public class RepositoryTest {
 
         BPermission p = createPermissionUsingRepository();
 
-        this.mvc.perform(
-                get(this.apiPrefix + "/" + reqString + "/" + p.getId()).accept(MediaType.APPLICATION_JSON)
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "/" + p.getId())
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andDo(
-                this.restDocResHandler.document(
+                restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("name").description("Name to be used for authenticating"),
                                 fieldWithPath("label").description("Label to be shown to the final user"),
@@ -157,13 +197,14 @@ public class RepositoryTest {
 
         BPermission p = createPermissionUsingRepository();
 
-        this.mvc.perform(
-                get(this.apiPrefix + "/" + reqString + "/" + p.getId() + "/roles")
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "/" + p.getId() + "/roles")
+                        .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andDo(
-                        this.restDocResHandler.document(
+                        restDocResHandler.document(
                                 responseFields(
                                         fieldWithPath("_embedded.role").description("Array of roles in which the permission is included"),
                                         fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission's roles")
@@ -180,18 +221,19 @@ public class RepositoryTest {
 
         BPermission oldPermission = createPermissionUsingRepository();
         Map<String, String> newPermission = new HashMap<>();
-        newPermission.put("name", this.rn + this.random.nextString());
-        newPermission.put("label", this.rl + this.random.nextString());
+        newPermission.put("name", RANDOM_NAME + random.nextString());
+        newPermission.put("label", RANDOM_LABEL + random.nextString());
 
         ConstrainedFields fields = new ConstrainedFields(BPermission.class);
 
-        this.mvc.perform(
-                patch(this.apiPrefix + "/" + reqString + "/" + oldPermission.getId())
+        mvc.perform(
+                patch(apiPrefix + "/" + reqString + "/" + oldPermission.getId())
+                        .header(authHeader, tokenType + " " + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(newPermission))
+                        .content(objectMapper.writeValueAsString(newPermission))
         ).andExpect(status().isNoContent())
                 .andDo(
-                        this.restDocResHandler.document(
+                        restDocResHandler.document(
                                 requestFields(
                                         fields.withPath("name").description("Name to be used for authenticating"),
                                         fields.withPath("label").description("Label to be shown to the final user")
@@ -208,8 +250,10 @@ public class RepositoryTest {
 
         BPermission p = createPermissionUsingRepository();
 
-        this.mvc.perform(
-                delete(this.apiPrefix + "/" + reqString + "/" + p.getId()).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(
+                delete(apiPrefix + "/" + reqString + "/" + p.getId())
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNoContent());
 
     }
@@ -220,11 +264,10 @@ public class RepositoryTest {
     }
 
     private BPermission createPermissionUsingRepository() {
-        return createPermissionUsingRepository(this.rn + this.random.nextString(), this.rl + this.random.nextString());
+        return createPermissionUsingRepository(RANDOM_NAME + random.nextString(), RANDOM_LABEL + random.nextString());
     }
     private BPermission createPermissionUsingRepository(String name, String label) {
-        return this.repository.save(new BPermission(name, label));
+        return repository.save(new BPermission(name, label));
     }
-*/
 
 }
