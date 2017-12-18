@@ -103,6 +103,12 @@
       "defaultValue": "refresh_token"
     },
     {
+      "name": "gms.security.free_url_any",
+      "type": "java.lang.String",
+      "description": "[Optional | default = access_token] Defines the URLs which are not under the security control system.",
+      "defaultValue": "access_token"
+    },
+    {
       "name": "gms.application.env",
       "type": "java.lang.String",
       "description": "[Optional | default = Development] Defines the environment in which the application is running.",
