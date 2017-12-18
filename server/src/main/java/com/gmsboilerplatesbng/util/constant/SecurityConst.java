@@ -89,7 +89,7 @@ public class SecurityConst {
 
     //endregion
 
-    //region sign in/out URLs
+    //region sign in/up/out URLs
     @Value("${gms.security.sign_up_url}")
     private String signUpUrl;
 
@@ -103,11 +103,32 @@ public class SecurityConst {
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     private String authoritiesHolder;
 
+    @Value("${gms.security.free_url_any:access_token}")
+    private String freeURLsAnyRequest;
+
+    @Value("${gms.security.free_url_post:}")
+    private String freeURLsPostRequest;
+
+    @Value("${gms.security.free_url_get:}")
+    private String freeURLsGetRequest;
+
     public static final String AUTHORITIES_SEPARATOR = ";";
 
     @Value("${gms.response.auth.username:username}")
     private String usernameHolder;
 
     public static final String PASS_HOLDER = "password";
+
+    public String [] getFreeURLsAnyRequest() {
+        return freeURLsAnyRequest.split(";");
+    }
+
+    public String [] getFreeURLsGetRequest() {
+        return freeURLsGetRequest.split(";");
+    }
+
+    public String [] getFreeURLsPostRequest() {
+        return freeURLsPostRequest.split(";");
+    }
 
 }
