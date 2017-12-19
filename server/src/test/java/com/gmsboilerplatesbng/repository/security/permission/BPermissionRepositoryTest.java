@@ -49,8 +49,7 @@ public class BPermissionRepositoryTest {
 
     @Autowired private ObjectMapper objectMapper;
 
-    @Autowired
-    private FilterChainProxy springSecurityFilterChain;
+    @Autowired private FilterChainProxy springSecurityFilterChain;
 
     @Autowired private BPermissionRepository repository;
 
