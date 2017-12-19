@@ -193,12 +193,6 @@
       "defaultValue": true
     },
     {
-      "name": "gms.config.api-docs.basePath",
-      "type": "java.lang.String",
-      "description": "[Optional | default = true] Defines the base path for the api documentation resources.",
-      "defaultValue": true
-    },
-    {
       "name": "gms.config.page.size",
       "type": "java.lang.Integer",
       "description": "[Optional | default = 1] Defines the number of pages to chow when doing request to resources lists.",

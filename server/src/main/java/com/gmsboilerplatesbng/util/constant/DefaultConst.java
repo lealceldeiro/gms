@@ -67,8 +67,7 @@ public class DefaultConst {
     @Value("${spring.data.rest.basePath:/api}")
     private String apiBasePath;
 
-    @Value("${gms.config.api-docs.basePath:/apidocs}")
-    private String apiDocPath;
+    public static final String API_DOC_PATH = "apidocs";
     //endregion
 
     //region vars

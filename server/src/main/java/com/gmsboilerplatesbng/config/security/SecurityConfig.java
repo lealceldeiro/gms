@@ -54,7 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(dc.getApiBasePath()).authenticated()
+                .antMatchers(dc.getApiBasePath() + "/**").authenticated()
+                .antMatchers("/").permitAll()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService))
@@ -79,52 +81,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private String[] getFreePost() {
-        String b = dc.getApiBasePath();
-        String [] freePostSC = sc.getFreeURLsPostRequest();
-
-        ArrayList<String> freePost = new ArrayList<>(freePostSC.length + 2);
-        freePost.add(b + sc.getSignInUrl());
-        freePost.add(b + sc.getSignUpUrl());
-
-        for (String s: freePostSC) {
-            if (s != null && !s.equals("")) {
-                freePost.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
-            }
-        }
-
-        return freePost.toArray(new String[freePost.size()]);
+        return getFreeUrl(sc.getFreeURLsPostRequest(), sc.getSignUpUrl());
     }
 
     private String[] getFreeGet() {
-        String b = dc.getApiBasePath();
-        String [] freeGetSC = sc.getFreeURLsGetRequest();
-
-        ArrayList<String> freeGet = new ArrayList<>(freeGetSC.length + 1);
-        freeGet.add(dc.getApiDocPath());
-
-        for (String s: freeGetSC) {
-            if (s != null && !s.equals("")) {
-                freeGet.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
-            }
-        }
-
-        return freeGet.toArray(new String[freeGet.size()]);
+        return getFreeUrl(sc.getFreeURLsGetRequest());
     }
 
     private String[] getFreeAny() {
+        return getFreeUrl(sc.getFreeURLsAnyRequest(), sc.getSignOutUrl());
+    }
+
+    private String[] getFreeUrl(String[] urls, String ... additionalUrls) {
         String b = dc.getApiBasePath();
-        String [] freeAnySC = sc.getFreeURLsAnyRequest();
-
-        ArrayList<String> freeAny = new ArrayList<>(freeAnySC.length + 1);
-        freeAny.add(b + sc.getSignOutUrl());
-
-        for (String s: freeAnySC) {
+        ArrayList<String> free = new ArrayList<>(urls.length);
+        for (String s: urls) {
             if (s != null && !s.equals("")) {
-                freeAny.add(s.startsWith("/") ? s.substring(1) : b + "/" + s);
+                free.add(b + (s.startsWith("/") ? s : "/" + s));
+            }
+        }
+        for (String s: additionalUrls) {
+            if (s != null && !s.equals("")) {
+                free.add(b + (s.startsWith("/") ? s : "/" + s));
             }
         }
 
-        return freeAny.toArray(new String[freeAny.size()]);
+        return free.toArray(new String[free.size()]);
     }
 
 }
