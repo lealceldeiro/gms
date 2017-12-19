@@ -151,8 +151,7 @@ public class BPermissionRepositoryTest {
     public void listPermissions() throws Exception {
         String reqString = "permission";
 
-/*setUpPermissions();*/
-
+        setUpPermissions();
 
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
