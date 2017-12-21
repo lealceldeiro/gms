@@ -48,6 +48,7 @@ public class BPermissionRepositoryTest {
 
     @Autowired private ObjectMapper objectMapper;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
 
     @Autowired private BPermissionRepository repository;
@@ -82,6 +83,8 @@ public class BPermissionRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
+        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
+
         restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
@@ -97,12 +100,8 @@ public class BPermissionRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
-
         accessToken = GmsSecurityUtil.createAuthToken(dc, sc, mvc, objectMapper);
     }
-
-
 
     //C
     @Test
@@ -226,7 +225,6 @@ public class BPermissionRepositoryTest {
                 );
     }
 
-
     //D
     @Test
     public void deletePermission() throws Exception {
@@ -241,7 +239,6 @@ public class BPermissionRepositoryTest {
         ).andExpect(status().isNoContent());
 
     }
-
 
     private void setUpPermissions() {
         createPermissionUsingRepository();

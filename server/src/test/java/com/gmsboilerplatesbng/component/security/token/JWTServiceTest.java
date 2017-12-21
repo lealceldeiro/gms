@@ -104,7 +104,7 @@ public class JWTServiceTest {
         assertTrue("Expiration time is not an instance of Date", tokenClaims.get(JWTService.EXPIRATION) instanceof Date);
         assertTrue("Expiration time is not an instance of Date", rTokenClaims.get(JWTService.EXPIRATION) instanceof Date);
 
-        if(tokenClaims.get(JWTService.EXPIRATION) instanceof Date && rTokenClaims.get(JWTService.EXPIRATION) instanceof Date) {
+        if (tokenClaims.get(JWTService.EXPIRATION) instanceof Date && rTokenClaims.get(JWTService.EXPIRATION) instanceof Date) {
             assertTrue("Expiration time for refresh token must be greater than expiration time for access token when default values are used",
                     ((Date)rTokenClaims.get(JWTService.EXPIRATION)).getTime() > ((Date)tokenClaims.get(JWTService.EXPIRATION)).getTime());
         }
