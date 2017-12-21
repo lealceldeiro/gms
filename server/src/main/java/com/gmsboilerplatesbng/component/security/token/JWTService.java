@@ -115,8 +115,7 @@ public class JWTService {
      * @return {@link String} The token with the information received as parameters.
      */
     public String createToken(String subject, String authorities, long expiresIn) {
-        JwtBuilder builder = getBuilder(subject, authorities, expiresIn);
-        return builder.compact();
+        return getBuilder(subject, authorities, expiresIn).compact();
     }
 
     /**
