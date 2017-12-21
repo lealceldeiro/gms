@@ -19,7 +19,7 @@ The project consist of two main (independent) modules (api server and front-end 
 * _Next_.
 * _Finish_ (this will search for the [Angular CLI][2] framework) installed through the [angular-cli node package][3].
 * This will create another module on the project (_client_).
-#### At this point the project should contains two modules (_server_ and _client_)
+#### At this point the project should contain two modules (_server_ and _client_)
 
 [1]: https://gradle.org/
 [2]: https://cli.angular.io/
