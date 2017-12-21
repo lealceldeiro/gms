@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class GmsSecurityUtil {
 
-    public static String createAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper) throws Exception {
+    public static String createSuperAdminAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper) throws Exception {
         Map<String, String> loginData = new HashMap<>();
         loginData.put("username", dc.getUserAdminDefaultUsername());
         loginData.put("password", dc.getUserAdminDefaultPassword());

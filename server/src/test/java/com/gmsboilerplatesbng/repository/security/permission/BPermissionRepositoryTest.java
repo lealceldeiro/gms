@@ -100,7 +100,7 @@ public class BPermissionRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        accessToken = GmsSecurityUtil.createAuthToken(dc, sc, mvc, objectMapper);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper);
     }
 
     //C

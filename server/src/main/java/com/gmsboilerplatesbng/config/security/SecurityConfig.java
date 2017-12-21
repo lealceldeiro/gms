@@ -84,15 +84,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private String[] getFreePost() {
-        return getFreeUrl(sc.getFreeURLsPostRequest(), sc.getSignUpUrl());
+        return getFreeUrl(sc.getFreeURLsPostRequest(), getAdditionalFreePostUrls());
     }
 
     private String[] getFreeGet() {
-        return getFreeUrl(sc.getFreeURLsGetRequest());
+        return getFreeUrl(sc.getFreeURLsGetRequest(), getAdditionalFreeGetUrls());
     }
 
     private String[] getFreeAny() {
-        return getFreeUrl(sc.getFreeURLsAnyRequest(), sc.getSignOutUrl());
+        return getFreeUrl(sc.getFreeURLsAnyRequest(), getAdditionalFreeAnyUrls());
     }
 
     private String[] getFreeUrl(String[] urls, String ... additionalUrls) {
@@ -110,6 +110,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         return free.toArray(new String[free.size()]);
+    }
+
+    private String[] getAdditionalFreePostUrls() {
+        return new String[]{
+                sc.getSignUpUrl()
+        };
+    }
+    private String[] getAdditionalFreeGetUrls() {
+        return new String[]{
+        };
+    }
+
+    private String[] getAdditionalFreeAnyUrls() {
+        return new String[]{
+                sc.getSignOutUrl()
+        };
     }
 
 }
