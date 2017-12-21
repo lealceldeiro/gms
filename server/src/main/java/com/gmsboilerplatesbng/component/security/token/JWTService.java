@@ -33,6 +33,9 @@ public class JWTService {
     public static final String NOT_BEFORE = Claims.NOT_BEFORE;
     public static final String SUBJECT = Claims.SUBJECT;
 
+    public static final long DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME = 86400000L;
+    public static final long DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME = 2592000000L;
+
     private final SecurityConst sc;
 
     /**
@@ -42,7 +45,7 @@ public class JWTService {
      */
     public long getATokenExpirationTime() {
         // expiration time should come in seconds, that's why the * 1000 and extra-zeros for 86400 seconds
-        return sc.getATokenExpirationTime() > 0 ? (sc.getATokenExpirationTime() * 1000) : 86400000L; // set 1 day if an invalid value was provided
+        return sc.getATokenExpirationTime() > 0 ? (sc.getATokenExpirationTime() * 1000) : DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME; // set 1 day if an invalid value was provided
     }
 
     /**
@@ -52,7 +55,7 @@ public class JWTService {
      */
     public long getRTokenExpirationTime() {
         // expiration time should come in seconds, that's why the * 1000 and extra-zeros for 2592000 seconds
-        return sc.getRTokenExpirationTime() > 0 ? (sc.getRTokenExpirationTime() * 1000) : 2592000000L; // set 30 days if an invalid value was provided
+        return sc.getRTokenExpirationTime() > 0 ? (sc.getRTokenExpirationTime() * 1000) : DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME; // set 30 days if an invalid value was provided
     }
 
     /**
@@ -244,6 +247,7 @@ public class JWTService {
         long currentMillis = System.currentTimeMillis();
 
         return Jwts.builder()
+                .setId(String.valueOf(System.currentTimeMillis()))
                 .setSubject(subject)
                 .setExpiration(new Date(currentMillis + expiresIn))
                 .setIssuedAt(new Date(currentMillis))

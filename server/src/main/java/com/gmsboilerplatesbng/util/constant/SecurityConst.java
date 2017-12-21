@@ -22,7 +22,7 @@ public class SecurityConst {
 
     //region access token
     /**
-     * Expiration of the access token. Time in which the token will not longer be valid.
+     * Expiration of the access token. Time in which the token will not longer be valid in seconds.
      */
     @Value("${gms.security.jwt.token_expiration:86400}")  // 1 day (in seconds)
     private long aTokenExpirationTime;
@@ -59,6 +59,9 @@ public class SecurityConst {
     //endregion
 
     //region refresh token
+    /**
+     * Expiration of the refresh token. Time in which the token will not longer be valid in seconds.
+     */
     @Value("${gms.security.jwt.refresh_token_expiration:2592000}")
     private long rTokenExpirationTime;
 
