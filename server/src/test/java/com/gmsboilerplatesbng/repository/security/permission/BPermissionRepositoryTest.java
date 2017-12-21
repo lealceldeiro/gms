@@ -5,10 +5,10 @@ import com.gmsboilerplatesbng.Application;
 import com.gmsboilerplatesbng.domain.security.permission.BPermission;
 import com.gmsboilerplatesbng.service.AppService;
 import com.gmsboilerplatesbng.util.GMSRandom;
+import com.gmsboilerplatesbng.util.GmsSecurityUtil;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import com.gmsboilerplatesbng.util.validation.ConstrainedFields;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +22,6 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -83,40 +82,27 @@ public class BPermissionRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        this.restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply(documentationConfiguration(this.restDocumentation))
+        restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+        mvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(this.restDocResHandler)
                 .addFilter(this.springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();
 
-        this.apiPrefix = dc.getApiBasePath();
-        this.pageSizeAttr = dc.getPageSizeHolder();
-        this.pageSize = dc.getPageSize();
+        apiPrefix = dc.getApiBasePath();
+        pageSizeAttr = dc.getPageSizeHolder();
+        pageSize = dc.getPageSize();
 
-        this.authHeader = sc.getATokenHeader();
-        this.tokenType = sc.getATokenType();
+        authHeader = sc.getATokenHeader();
+        tokenType = sc.getATokenType();
 
-        assert this.appService.isInitialLoadOK();
+        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        setUpAuthData();
+        accessToken = GmsSecurityUtil.createAuthToken(dc, sc, mvc, objectMapper);
     }
 
-    private void setUpAuthData() throws Exception {
-        Map<String, String> loginData = new HashMap<>();
-        loginData.put("username", dc.getUserAdminDefaultUsername());
-        loginData.put("password", dc.getUserAdminDefaultPassword());
 
-        MvcResult resultD = mvc.perform(
-                post(sc.getSignInUrl()).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginData))
-        ).andExpect(status().isOk())
-                .andReturn();
-
-        JSONObject rawData = new JSONObject(resultD.getResponse().getContentAsString());
-        this.accessToken = rawData.getString(sc.getATokenHolder());
-    }
 
     //C
     @Test
