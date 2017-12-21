@@ -2,6 +2,7 @@ package com.gmsboilerplatesbng.controller;
 
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
+import com.gmsboilerplatesbng.util.exception.GmsSecurityException;
 import com.gmsboilerplatesbng.util.exception.domain.NotFoundEntityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import org.springframework.http.HttpHeaders;
@@ -53,6 +54,24 @@ public class BaseController extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * Handles all custom security exceptions.
+     * @param ex {@link com.gmsboilerplatesbng.util.exception.GmsSecurityException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(GmsSecurityException.class)
+    protected ResponseEntity<Object> handleGmsSecurityException(GmsSecurityException ex, WebRequest req) {
+        HashMap<String, Object> additionalData = new HashMap<>();
+        additionalData.put("timestamp", System.currentTimeMillis());
+        additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
+        additionalData.put("error", msg.getMessage("security.unauthorized"));
+        additionalData.put("path", dc.getApiBasePath() + "/" + ex.getPath());
+        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()), additionalData);
+        return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNAUTHORIZED, req);
+    }
+
+    /**
      * Handles all exceptions which where not specifically treated.
      * @param ex {@link GmsGeneralException} exception.
      * @param req {@link WebRequest} request.
@@ -68,9 +87,16 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     //endregion
 
-    private Object createResponseBodyAsMap(Object o) {
+    private HashMap<String, Object> createResponseBodyAsMap(Object o) {
         HashMap<String, Object> r = new HashMap<>();
         r.put(dc.getResMessageHolder(), o);
         return r;
+    }
+
+    private HashMap<String, Object> createResponseBodyAsMap(Object o, HashMap<String, Object> additionalDataMap) {
+        HashMap<String, Object> base = createResponseBodyAsMap(o);
+        base.putAll(additionalDataMap);
+
+        return base;
     }
 }

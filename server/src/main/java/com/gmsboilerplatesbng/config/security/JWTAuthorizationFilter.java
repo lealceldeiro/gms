@@ -1,12 +1,12 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.gmsboilerplatesbng.component.security.authentication.IAuthenticationFacade;
 import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -31,11 +31,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JWTService jwtService;
 
+    private final IAuthenticationFacade authFacade;
+
     @SuppressWarnings("WeakerAccess")
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService,
+                                  IAuthenticationFacade authenticationFacade) {
         super(authenticationManager);
         this.sc = sc;
         this.jwtService = jwtService;
+        this.authFacade = authenticationFacade;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         UsernamePasswordAuthenticationToken authToken = getAuthToken(req);
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+        authFacade.setAuthentication(authToken);
         chain.doFilter(req, res);
     }
 

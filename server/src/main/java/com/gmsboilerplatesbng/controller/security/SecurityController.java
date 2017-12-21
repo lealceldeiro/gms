@@ -9,6 +9,7 @@ import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import com.gmsboilerplatesbng.util.exception.GmsGeneralException;
+import com.gmsboilerplatesbng.util.exception.GmsSecurityException;
 import com.gmsboilerplatesbng.util.i18n.MessageResolver;
 import com.gmsboilerplatesbng.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
@@ -29,7 +30,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -125,11 +125,11 @@ public class SecurityController extends BaseController{
             } catch (JwtException e) {
                 //return 401
                 authenticationFacade.setAuthentication(null);
-                return new HashMap();
+                throw new GmsSecurityException("access_token");
             }
         }
         authenticationFacade.setAuthentication(null);
-        return new HashMap();
+        throw new GmsSecurityException("access_token");
     }
 
     private PersistentEntityResource signUpUser(Resource<EUser> user, Boolean emailVerified, PersistentEntityResourceAssembler pra)
