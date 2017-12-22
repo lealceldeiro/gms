@@ -17,6 +17,9 @@ import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,11 +28,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -46,15 +50,15 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 public class SecurityConfigTest {
 
-    private String possibleFailedUrl;
+    private String lastTestededUrl;
 
     @Rule
     public TestWatcher testWatcher = new TestWatcher() {
         @Override
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
-            if (possibleFailedUrl != null) {
-                System.out.println("Failed URL: " + possibleFailedUrl);
+            if (lastTestededUrl != null) {
+                System.out.println("Failed URL: " + lastTestededUrl);
             }
         }
     };
@@ -194,25 +198,60 @@ public class SecurityConfigTest {
 
     @Test
     public void checkAccessToFreeGetUrls() throws Exception {
-        checkAccessToFreeXUrls(METHOD_GET_FREE_GET);
+        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_GET, null, null);
     }
 
     @Test
     public void checkAccessToFreeAnyUrls() throws Exception {
-        checkAccessToFreeXUrls(METHOD_GET_FREE_ANY);
+        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_ANY, null, null);
     }
 
-    private void checkAccessToFreeXUrls(String methodName) throws Exception {
-        SecurityConfig securityConfig = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+    @Test
+    public void checkAccessToFreePostUrls() throws Exception {
+        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        Object args = ReflectionTestUtils.invokeGetterMethod(sConf, "getListOfParametersForFreePostUrl");
+        assertTrue("The list of parameters for free post url must be an array of HashMap", args instanceof HashMap[]);
+        checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_POST, HttpMethod.POST, (HashMap[]) args);
+    }
+
+    private void checkAccessToFreeXUrls(SecurityConfig securityConfig, String methodName, HttpMethod method, HashMap<String, String>[] listOfArguments) throws Exception {
         final Object freeUrl = ReflectionTestUtils.invokeMethod(securityConfig, methodName);
         assertNotNull(freeUrl);
         assertTrue(freeUrl instanceof String[]);
-        for (String url : (String[])freeUrl) {
-            possibleFailedUrl = url;
-            mvc.perform(get(url)).andExpect(status().isOk());
+        if (listOfArguments != null) {
+            assertTrue("The list of argument provided must has the length as the list of free URLs is being testes",
+                    listOfArguments.length == ((String[]) freeUrl).length);
+        }
+        MvcResult r;
+        MockHttpServletRequestBuilder request;
+        for (int i = 0; i < ((String[])freeUrl).length; i++) {
+            lastTestededUrl = ((String[])freeUrl)[i];
+            if (method == null) {
+                mvc.perform(get(lastTestededUrl)).andExpect(status().isOk());
+            }
+            else {
+                request = null;
+                switch (method) {
+                    case POST:
+                        request = post(lastTestededUrl);
+                        break;
+                }
+                if (request != null) {
+                    if (listOfArguments != null) {
+                        request.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(listOfArguments[i]));
+                    }
+                    r = mvc.perform(request).andReturn();
+                    assertTrue(lastTestededUrl + " did not finish as expected. Response status is " + r.getResponse().getStatus(),
+                            r.getResponse().getStatus() != HttpStatus.UNAUTHORIZED.value());
+                    assertTrue(lastTestededUrl + "did not finish as expected. Response status is " + r.getResponse().getStatus(),
+                            r.getResponse().getStatus() != HttpStatus.FORBIDDEN.value());
+                }
+            }
         }
 
-        possibleFailedUrl = null;
+        lastTestededUrl = null;
     }
 
 }

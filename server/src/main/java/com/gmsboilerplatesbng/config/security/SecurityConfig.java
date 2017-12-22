@@ -3,9 +3,11 @@ package com.gmsboilerplatesbng.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.component.security.authentication.IAuthenticationFacade;
 import com.gmsboilerplatesbng.component.security.token.JWTService;
+import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.DefaultConst;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
+import com.gmsboilerplatesbng.util.request.mapping.security.RefreshTokenPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * SecurityConfig
@@ -118,6 +122,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 SecurityConst.ACCESS_TOKEN_URL
         };
     }
+
+    /**
+     * For JUnit Tests purposes
+     * @return Array of {@link HashMap}. Each HashMap contains the required parameters for executing the post request.
+     */
+    @SuppressWarnings("unused")
+    private HashMap<String, String>[] getListOfParametersForFreePostUrl() {
+        HashMap<String, String>[] r = new HashMap[2];
+        Field[] fields;
+
+        //sign-up
+        r[0] = new HashMap<>();
+        final Class<EUser> eUserClass = EUser.class;
+        fields = eUserClass.getDeclaredFields();
+        for (Field f : fields) {
+            r[0].put(f.getName(), "1");
+        }
+
+        //access token
+        r[1] = new HashMap<>();
+        final Class<RefreshTokenPayload> rTPayloadClass = RefreshTokenPayload.class;
+        fields = rTPayloadClass.getDeclaredFields();
+        for (Field f : fields) {
+            if (f.getName().equals("refreshToken")) {
+                r[1].put(f.getName(), jwtService.createRefreshToken("sub", "auth"));
+            }
+            else {
+                r[1].put(f.getName(), "1");
+            }
+        }
+
+        return r;
+    }
+
     private String[] getAdditionalFreeGetUrls() {
         return new String[]{
         };
