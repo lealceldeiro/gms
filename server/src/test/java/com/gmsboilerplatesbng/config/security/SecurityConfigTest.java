@@ -50,15 +50,15 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 public class SecurityConfigTest {
 
-    private String lastTestededUrl;
+    private String lastTestedUrl;
 
     @Rule
     public TestWatcher testWatcher = new TestWatcher() {
         @Override
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
-            if (lastTestededUrl != null) {
-                System.out.println("Failed URL: " + lastTestededUrl);
+            if (lastTestedUrl != null) {
+                System.out.println("Failed URL: " + lastTestedUrl);
             }
         }
     };
@@ -227,15 +227,15 @@ public class SecurityConfigTest {
         MvcResult r;
         MockHttpServletRequestBuilder request;
         for (int i = 0; i < ((String[])freeUrl).length; i++) {
-            lastTestededUrl = ((String[])freeUrl)[i];
+            lastTestedUrl = ((String[])freeUrl)[i];
             if (method == null) {
-                mvc.perform(get(lastTestededUrl)).andExpect(status().isOk());
+                mvc.perform(get(lastTestedUrl)).andExpect(status().isOk());
             }
             else {
                 request = null;
                 switch (method) {
                     case POST:
-                        request = post(lastTestededUrl);
+                        request = post(lastTestedUrl);
                         break;
                 }
                 if (request != null) {
@@ -243,15 +243,15 @@ public class SecurityConfigTest {
                         request.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(listOfArguments[i]));
                     }
                     r = mvc.perform(request).andReturn();
-                    assertTrue(lastTestededUrl + " did not finish as expected. Response status is " + r.getResponse().getStatus(),
+                    assertTrue(lastTestedUrl + " did not finish as expected. Response status is " + r.getResponse().getStatus(),
                             r.getResponse().getStatus() != HttpStatus.UNAUTHORIZED.value());
-                    assertTrue(lastTestededUrl + "did not finish as expected. Response status is " + r.getResponse().getStatus(),
+                    assertTrue(lastTestedUrl + "did not finish as expected. Response status is " + r.getResponse().getStatus(),
                             r.getResponse().getStatus() != HttpStatus.FORBIDDEN.value());
                 }
             }
         }
 
-        lastTestededUrl = null;
+        lastTestedUrl = null;
     }
 
 }
