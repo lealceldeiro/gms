@@ -79,12 +79,6 @@
       "defaultValue": "/login"
     },
     {
-      "name": "gms.security.sign_out_url",
-      "type": "java.lang.String",
-      "description": "[Optional | default = /logout] Defines the url for logging out the user.",
-      "defaultValue": "/logout"
-    },
-    {
       "name": "gms.security.jwt.token_type_holder",
       "type": "java.lang.String",
       "description": "[Optional | default = token_type] Defines the holder for the security.gms.jwt.token_type.",
@@ -105,8 +99,20 @@
     {
       "name": "gms.security.free_url_any",
       "type": "java.lang.String",
-      "description": "[Optional | default = access_token] Defines the URLs which are not under the security control system.",
-      "defaultValue": "access_token"
+      "description": "[Optional | default = ] Defines the URLs which are not under the security control system.",
+      "defaultValue": ""
+    },
+    {
+      "name": "gms.security.free_url_post",
+      "type": "java.lang.String",
+      "description": "[Optional | default = ] Defines the URLs which are not under the security control system through HTTP POST method.",
+      "defaultValue": ""
+    },
+    {
+      "name": "gms.security.free_url_get",
+      "type": "java.lang.String",
+      "description": "[Optional | default = ] Defines the URLs which are not under the security control system through HTTP GET method.",
+      "defaultValue": ""
     },
     {
       "name": "gms.application.env",

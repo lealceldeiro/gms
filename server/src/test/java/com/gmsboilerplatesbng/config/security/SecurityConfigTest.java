@@ -12,6 +12,8 @@ import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +45,19 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class SecurityConfigTest {
+
+    private String possibleFailedUrl;
+
+    @Rule
+    public TestWatcher testWatcher = new TestWatcher() {
+        @Override
+        protected void failed(Throwable e, Description description) {
+            super.failed(e, description);
+            if (possibleFailedUrl != null) {
+                System.out.println("Failed URL: " + possibleFailedUrl);
+            }
+        }
+    };
 
     @Rule
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
@@ -97,7 +112,7 @@ public class SecurityConfigTest {
 
     @Test
     public void baseUrlPermitAll() throws Exception {
-        mvc.perform( get("/")).andExpect(status().isOk());
+        mvc.perform(get("/")).andExpect(status().isOk());
     }
 
     @Test
@@ -175,6 +190,29 @@ public class SecurityConfigTest {
         assertTrue("The " + method + " method should return an array", actualFreeUrl instanceof String[]);
         assertTrue("The size of the array returned by the " + method + " method does not math the size of the free post url specified by the SecurityConst component",
                 realFreeUrl.size() == ((String[]) actualFreeUrl).length);
+    }
+
+    @Test
+    public void checkAccessToFreeGetUrls() throws Exception {
+        checkAccessToFreeXUrls(METHOD_GET_FREE_GET);
+    }
+
+    @Test
+    public void checkAccessToFreeAnyUrls() throws Exception {
+        checkAccessToFreeXUrls(METHOD_GET_FREE_ANY);
+    }
+
+    private void checkAccessToFreeXUrls(String methodName) throws Exception {
+        SecurityConfig securityConfig = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        final Object freeUrl = ReflectionTestUtils.invokeMethod(securityConfig, methodName);
+        assertNotNull(freeUrl);
+        assertTrue(freeUrl instanceof String[]);
+        for (String url : (String[])freeUrl) {
+            possibleFailedUrl = url;
+            mvc.perform(get(url)).andExpect(status().isOk());
+        }
+
+        possibleFailedUrl = null;
     }
 
 }

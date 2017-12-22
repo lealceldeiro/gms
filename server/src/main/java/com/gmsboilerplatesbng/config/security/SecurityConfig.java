@@ -114,7 +114,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] getAdditionalFreePostUrls() {
         return new String[]{
-                sc.getSignUpUrl()
+                sc.getSignUpUrl(),
+                SecurityConst.ACCESS_TOKEN_URL
         };
     }
     private String[] getAdditionalFreeGetUrls() {
@@ -124,7 +125,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] getAdditionalFreeAnyUrls() {
         return new String[]{
-                sc.getSignOutUrl()
         };
     }
 

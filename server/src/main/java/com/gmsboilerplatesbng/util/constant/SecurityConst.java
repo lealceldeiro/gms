@@ -98,15 +98,12 @@ public class SecurityConst {
 
     @Value("${gms.security.sign_in_url:/login}")
     private String signInUrl;
-
-    @Value("${gms.security.sign_out_url:/logout}")
-    private String signOutUrl;
     //endregion
 
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     private String authoritiesHolder;
 
-    @Value("${gms.security.free_url_any:access_token}")
+    @Value("${gms.security.free_url_any:}")
     private String freeURLsAnyRequest;
 
     @Value("${gms.security.free_url_post:}")
@@ -116,6 +113,11 @@ public class SecurityConst {
     private String freeURLsGetRequest;
 
     public static final String AUTHORITIES_SEPARATOR = ";";
+
+    /**
+     * URL (relative to base api path) for getting a new access token from a previously gotten refresh token.
+     */
+    public static final String ACCESS_TOKEN_URL = "access_token";
 
     @Value("${gms.response.auth.username:username}")
     private String usernameHolder;
