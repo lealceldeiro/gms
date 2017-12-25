@@ -56,7 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(authenticationManager(), (UserService) userDetailsService, oMapper, jwtService);
+        final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(
+                authenticationManager(), (UserService) userDetailsService, oMapper, jwtService, sc
+        );
         authFilter.setAllowSessionCreation(false);
         authFilter.setFilterProcessesUrl(dc.getApiBasePath() + sc.getSignInUrl());
         authFilter.setPostOnly(true);

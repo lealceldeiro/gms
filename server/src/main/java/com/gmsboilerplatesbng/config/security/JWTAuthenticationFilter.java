@@ -1,11 +1,11 @@
 package com.gmsboilerplatesbng.config.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
-import com.gmsboilerplatesbng.util.request.mapping.security.LoginPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -41,16 +42,29 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final JWTService jwtService;
 
+    private final SecurityConst sc;
+
     @SuppressWarnings("all")
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
         try {
 
-            LoginPayload credentials = new ObjectMapper().readValue(req.getInputStream(), LoginPayload.class);
+            final Iterator<Map.Entry<String, JsonNode>> fields = oMapper.reader().readTree(req.getInputStream()).fields();
+            String login = null;
+            String password = null;
+            Map.Entry<String, JsonNode> next;
 
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                   credentials.getLogin() , credentials.getPassword(), new HashSet<>()
-            ));
+            while (fields.hasNext()) {
+                next = fields.next();
+                if (next.getKey().equals(sc.getReqUsernameHolder())) {
+                    login = next.getValue().asText();
+                }
+                else if (next.getKey().equals(sc.getReqPasswordHolder())) {
+                    password = next.getValue().asText();
+                }
+            }
+
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login ,password, new HashSet<>()));
 
         } catch (IOException e) { throw new RuntimeException(e); }
     }

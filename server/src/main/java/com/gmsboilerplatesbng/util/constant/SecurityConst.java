@@ -16,6 +16,14 @@ import org.springframework.stereotype.Component;
 @Getter
 public class SecurityConst {
 
+    //region auth request
+    @Value("${gms.request.auth.username:username}")
+    private String reqUsernameHolder;
+
+    @Value("${gms.request.auth.password:password}")
+    private String reqPasswordHolder;
+    //endregion
+
     //region token
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
     private String secret;
