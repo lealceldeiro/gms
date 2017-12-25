@@ -5,6 +5,7 @@ import com.gmsboilerplatesbng.component.security.token.JWTService;
 import com.gmsboilerplatesbng.domain.security.user.EUser;
 import com.gmsboilerplatesbng.service.security.user.UserService;
 import com.gmsboilerplatesbng.util.constant.SecurityConst;
+import com.gmsboilerplatesbng.util.request.mapping.security.LoginPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +15,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -46,12 +46,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
         try {
 
-            EUser credentials = new ObjectMapper().readValue(req.getInputStream(), EUser.class);
-
-            String login = credentials.getUsername() != null ? credentials.getUsername() : credentials.getEmail();
+            LoginPayload credentials = new ObjectMapper().readValue(req.getInputStream(), LoginPayload.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                   login , credentials.getPassword(), new HashSet<>()
+                   credentials.getLogin() , credentials.getPassword(), new HashSet<>()
             ));
 
         } catch (IOException e) { throw new RuntimeException(e); }
@@ -59,7 +57,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
+            throws IOException {
 
         Object principal = authResult.getPrincipal();
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), SecurityConst.AUTHORITIES_SEPARATOR);
