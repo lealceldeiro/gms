@@ -56,8 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(authenticationManager(), (UserService) userDetailsService, oMapper, jwtService);
+        authFilter.setAllowSessionCreation(false);
+        authFilter.setFilterProcessesUrl(dc.getApiBasePath() + sc.getSignInUrl());
+        authFilter.setPostOnly(true);
         http
-                .cors().and().csrf().disable().authorizeRequests()
+                .cors().and().formLogin().disable().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
@@ -65,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(dc.getApiBasePath() + "/**").authenticated()
                 .antMatchers("/").permitAll()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), (UserService) userDetailsService, oMapper, jwtService))
+                .addFilter(authFilter)
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService, authFacade))
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -119,17 +123,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String[] getAdditionalFreePostUrls() {
         return new String[]{
                 sc.getSignUpUrl(),
-                SecurityConst.ACCESS_TOKEN_URL
+                SecurityConst.ACCESS_TOKEN_URL,
+                sc.getSignInUrl()
+                //every time this list is updated, so it must be updated the method getListOfParametersForFreePostUrl
         };
     }
 
     /**
-     * For JUnit Tests purposes
+     * For JUnit Tests purposes only!
      * @return Array of {@link HashMap}. Each HashMap contains the required parameters for executing the post request.
      */
     @SuppressWarnings("unused")
     private HashMap<String, String>[] getListOfParametersForFreePostUrl() {
-        HashMap<String, String>[] r = new HashMap[2];
+        HashMap<String, String>[] r = new HashMap[3];
         Field[] fields;
 
         //sign-up
@@ -152,6 +158,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 r[1].put(f.getName(), "1");
             }
         }
+
+        //sign-in
+        r[2] = r[0]; //login data is the same (nevertheless, not all of them, as sign up)
 
         return r;
     }
