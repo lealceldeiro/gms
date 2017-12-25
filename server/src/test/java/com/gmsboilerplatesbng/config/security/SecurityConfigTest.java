@@ -232,7 +232,7 @@ public class SecurityConfigTest {
                     r = mvc.perform(request).andReturn();
                     assertTrue(lastTestedUrl + " did not finish as expected. Response status is " + r.getResponse().getStatus(),
                             r.getResponse().getStatus() != HttpStatus.UNAUTHORIZED.value());
-                    assertTrue(lastTestedUrl + "did not finish as expected. Response status is " + r.getResponse().getStatus(),
+                    assertTrue(lastTestedUrl + " did not finish as expected. Response status is " + r.getResponse().getStatus(),
                             r.getResponse().getStatus() != HttpStatus.FORBIDDEN.value());
                 }
             }
