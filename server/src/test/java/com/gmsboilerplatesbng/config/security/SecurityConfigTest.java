@@ -12,8 +12,6 @@ import com.gmsboilerplatesbng.util.constant.SecurityConst;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,35 +31,23 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class SecurityConfigTest {
-
-    private String lastTestedUrl;
-
-    @Rule
-    public TestWatcher testWatcher = new TestWatcher() {
-        @Override
-        protected void failed(Throwable e, Description description) {
-            super.failed(e, description);
-            if (lastTestedUrl != null) {
-                System.out.println("Failed URL: " + lastTestedUrl);
-            }
-        }
-    };
 
     @Rule
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
@@ -226,6 +212,7 @@ public class SecurityConfigTest {
         }
         MvcResult r;
         MockHttpServletRequestBuilder request;
+        String lastTestedUrl;
         for (int i = 0; i < ((String[])freeUrl).length; i++) {
             lastTestedUrl = ((String[])freeUrl)[i];
             if (method == null) {
@@ -250,8 +237,6 @@ public class SecurityConfigTest {
                 }
             }
         }
-
-        lastTestedUrl = null;
     }
 
 }

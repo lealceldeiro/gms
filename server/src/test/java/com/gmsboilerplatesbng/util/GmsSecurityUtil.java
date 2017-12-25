@@ -25,11 +25,11 @@ public class GmsSecurityUtil {
 
     public static String createSuperAdminAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper) throws Exception {
         Map<String, String> loginData = new HashMap<>();
-        loginData.put("username", dc.getUserAdminDefaultUsername());
-        loginData.put("password", dc.getUserAdminDefaultPassword());
+        loginData.put(sc.getReqUsernameHolder(), dc.getUserAdminDefaultUsername());
+        loginData.put(sc.getReqPasswordHolder(), dc.getUserAdminDefaultPassword());
 
         MvcResult resultD = mvc.perform(
-                post(sc.getSignInUrl()).contentType(MediaType.APPLICATION_JSON)
+                post(dc.getApiBasePath() + sc.getSignInUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginData))
         ).andExpect(status().isOk())
                 .andReturn();

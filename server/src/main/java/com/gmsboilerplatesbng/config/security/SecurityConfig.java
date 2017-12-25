@@ -162,7 +162,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         //sign-in
-        r[2] = r[0]; //login data is the same (nevertheless, not all of them, as sign up)
+        r[2] = new HashMap<>();
+        r[2].put(sc.getReqUsernameHolder(), dc.getUserAdminDefaultUsername());
+        r[2].put(sc.getReqPasswordHolder(), dc.getUserAdminDefaultPassword());
 
         return r;
     }
