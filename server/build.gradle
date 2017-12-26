@@ -41,7 +41,7 @@ apply plugin: 'war'
 apply plugin: 'com.moowork.node'
 apply plugin: 'org.asciidoctor.convert'
 
-group = 'com.gmsboilerplatesbng'
+group = 'com.gms'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
