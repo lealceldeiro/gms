@@ -57,12 +57,19 @@ public class UserService implements UserDetailsService{
     }
     //endregion
 
-    public EUser signUp(EUser u, Boolean emailVerified) {
-        EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
-                passwordEncoder.encode(u.getPassword()));
-        sU.setEnabled(u.isEnabled());
-        sU.setEmailVerified(emailVerified);
-        return userRepository.save(sU);
+    public EUser signUp(EUser u, boolean emailVerified) {
+        return signUp(u, emailVerified, false);
+    }
+
+    public EUser signUp(EUser u, boolean emailVerified, boolean isSuperRegistration) {
+        if (isSuperRegistration || configService.isUserUserRegistrationAllowed()) {
+            EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(),
+                    passwordEncoder.encode(u.getPassword()));
+            sU.setEnabled(u.isEnabled());
+            sU.setEmailVerified(emailVerified);
+            return userRepository.save(sU);
+        }
+        return null;
     }
 
     public List<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
