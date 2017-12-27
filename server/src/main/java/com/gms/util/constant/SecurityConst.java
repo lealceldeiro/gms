@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * SecurityConst
  *
- * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  *
  * @version 0.1
  * Dec 12, 2017
@@ -74,14 +74,14 @@ public class SecurityConst {
     private long rTokenExpirationTime;
 
     /**
-     * Variable in which the access token will be sent in the response in the login information to the client.
+     * Variable in which the refresh token will be sent in the response in the login information to the client.
      */
     @Value("${gms.security.jwt.refresh_token_holder:refresh_token}")
     private String rTokenHolder;
     //endregion
 
     /**
-     * Variable in which the time of validity of the token will be sent in the response in the login information to the client.
+     * Variable in which the time of validity of the access token will be sent in the response in the login information to the client.
      */
     @Value("${gms.security.jwt.expires_in_holder:expires_in}")
     private String expiresInHolder;
@@ -131,6 +131,8 @@ public class SecurityConst {
     private String usernameHolder;
 
     public static final String PASS_HOLDER = "password";
+
+    public static final String USERNAME_HOLDER = "username";
 
     public String [] getFreeURLsAnyRequest() {
         return freeURLsAnyRequest.split(";");

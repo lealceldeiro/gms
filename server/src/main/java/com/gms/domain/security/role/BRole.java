@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * BRole
  *
- * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  *
  * @version 0.1
  * Dec 12, 2017

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * BAuthorization
  * Describes the authorization which has a user over some specific entity(ies) with some role(s).
  *
- * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  *
  * @version 0.1
  * Dec 12, 2017

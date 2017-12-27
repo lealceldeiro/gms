@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 /**
  * BRoleRepository
  *
- * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  *
  * @version 0.1
  * Dec 12, 2017

@@ -16,7 +16,7 @@ import java.util.Map;
  * JWTService
  * Utility service for generating jwt.
  *
- * @author Asiel Leal Celdeiro <lealceldeiro@gmail.com>
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  * Dec 13, 2017
  */
@@ -155,7 +155,7 @@ public class JWTService {
     public Map createLoginData(String subject, String accessToken, Date issuedAt,
                                String authoritiesString, String refreshToken) {
         HashMap<String, Object> returnMap = new HashMap<>();
-        returnMap.put(sc.getUsernameHolder(), subject);
+        returnMap.put(SecurityConst.USERNAME_HOLDER, subject);
         returnMap.put(sc.getATokenHolder(), accessToken);
         returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
