@@ -70,8 +70,6 @@ public class SecurityConfigTest {
 
     private MockMvc mvc;
 
-    private RestDocumentationResultHandler restDocResHandler;
-
     private String authHeader;
     private String tokenType;
     private String accessToken;
@@ -87,22 +85,24 @@ public class SecurityConfigTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+        RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
-                .alwaysDo(this.restDocResHandler)
+                .alwaysDo(restDocResHandler)
                 .addFilter(this.springSecurityFilterChain)
                 .build();
 
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler);
     }
 
     @Test
     public void baseUrlPermitAll() throws Exception {
-        mvc.perform(get("/")).andExpect(status().isOk());
+        int s = mvc.perform(get("/")).andReturn().getResponse().getStatus();
+        assert s != HttpStatus.FORBIDDEN.value();
+        assert s != HttpStatus.UNAUTHORIZED.value();
     }
 
     @Test
