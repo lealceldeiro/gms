@@ -1,0 +1,11 @@
+[[resource-permission-get]]
+=== Getting a permission's info
+A `GET` request lists a permission's information.
+
+include::{snippets}/get-permission/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/get-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/get-permission/http-response.adoc[]

@@ -1,0 +1,11 @@
+[[resource-permission-get-roles]]
+=== Getting roles
+A `GET` request lists all roles where a permission is used.
+
+include::{snippets}/get-roles-permission/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/get-roles-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/get-roles-permission/http-response.adoc[]

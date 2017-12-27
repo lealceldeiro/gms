@@ -1,0 +1,21 @@
+[[overview-http-verbs]]
+== HTTP-verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `PUT`
+| Used to update an existing resource, full updates only
+
+| `DELETE`
+| Used to delete an existing resource
+|===

@@ -1,0 +1,15 @@
+[[resources-permission]]
+== Permission
+The Permission resource is used to create, modify and list the user's permissions.
+
+include::create.adoc[]
+
+include::list.adoc[]
+
+include::get.adoc[]
+
+include::get-roles.adoc[]
+
+include::update-partial.adoc[]
+
+include::delete.adoc[]

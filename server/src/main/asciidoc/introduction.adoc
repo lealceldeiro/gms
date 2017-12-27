@@ -1,0 +1,3 @@
+[introduction]
+= _Introduction_
+  GMS (api) is an API for providing access to the GMS webservices to those developers who want to interact with the system in order to develop their own apps .

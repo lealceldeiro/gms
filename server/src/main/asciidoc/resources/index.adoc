@@ -1,0 +1,4 @@
+[[resources]]
+= Resources
+
+include::permission/index.adoc[]

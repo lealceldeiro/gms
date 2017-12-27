@@ -1,0 +1,9 @@
+[[resource-permission-delete]]
+=== Deleting a permission
+A `DELETE` request deletes an existing permission.
+
+==== Example request
+include::{snippets}/delete-permission/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/delete-permission/http-response.adoc[]
