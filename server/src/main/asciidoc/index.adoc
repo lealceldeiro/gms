@@ -11,4 +11,6 @@ include::introduction.adoc[]
 
 include::overview/index.adoc[]
 
+include::security/index.adoc[]
+
 include::resources/index.adoc[]

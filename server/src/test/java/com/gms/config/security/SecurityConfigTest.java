@@ -69,6 +69,7 @@ public class SecurityConfigTest {
     @Autowired IAuthenticationFacade authFacade;
 
     private MockMvc mvc;
+    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
 
     private String authHeader;
     private String tokenType;
@@ -85,7 +86,6 @@ public class SecurityConfigTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
                 .alwaysDo(restDocResHandler)
@@ -95,7 +95,17 @@ public class SecurityConfigTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler, false);
+    }
+
+    @Test
+    public void loginOK() throws Exception { // for documentation purposes
+        GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler, false);
+    }
+
+    @Test
+    public void loginKO() throws Exception { // for documentation purposes
+        GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler, true);
     }
 
     @Test

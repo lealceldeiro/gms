@@ -21,33 +21,33 @@ public class GMSRandom {
         return new String(buf).concat(System.currentTimeMillis() + "");
     }
 
-    public static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static final String lower = upper.toLowerCase(Locale.ROOT);
+    public static final String LOWER = UPPER.toLowerCase(Locale.ROOT);
 
-    public static final String digits = "0123456789";
+    public static final String DIGITS = "0123456789";
 
-    public static final String alphanum = upper + lower + digits;
+    public static final String ALPHANUMERIC = UPPER + LOWER + DIGITS;
 
-    private static Random random;
+    private Random random;
 
-    private static char[] symbols;
+    private char[] symbols;
 
-    private static char[] buf;
+    private char[] buf;
 
     public GMSRandom(int length, Random random, String symbols) {
         if (length < 1) throw new IllegalArgumentException();
         if (symbols.length() < 2) throw new IllegalArgumentException();
-        GMSRandom.random = Objects.requireNonNull(random);
-        GMSRandom.symbols = symbols.toCharArray();
-        GMSRandom.buf = new char[length];
+        this.random = Objects.requireNonNull(random);
+        this.symbols = symbols.toCharArray();
+        this.buf = new char[length];
     }
 
     /**
      * Create an alphanumeric string generator.
      */
     public GMSRandom(int length, Random random) {
-        this(length, random, alphanum);
+        this(length, random, ALPHANUMERIC);
     }
 
     /**

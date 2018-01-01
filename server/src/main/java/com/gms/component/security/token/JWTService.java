@@ -1,5 +1,6 @@
 package com.gms.component.security.token;
 
+import com.gms.util.GMSRandom;
 import com.gms.util.constant.SecurityConst;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.String.valueOf;
 
 /**
  * JWTService
@@ -37,6 +40,8 @@ public class JWTService {
     public static final long DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME = 2592000000L;
 
     private final SecurityConst sc;
+
+    private final GMSRandom random = new GMSRandom(10);
 
     /**
      * Return the expiration time defined for the access token. If an invalid value was provided, the default one (86400s)
@@ -246,7 +251,7 @@ public class JWTService {
         long currentMillis = System.currentTimeMillis();
 
         return Jwts.builder()
-                .setId(String.valueOf(System.currentTimeMillis()))
+                .setId(random.nextString() + "_" + valueOf(System.currentTimeMillis()))
                 .setSubject(subject)
                 .setExpiration(new Date(currentMillis + expiresIn))
                 .setIssuedAt(new Date(currentMillis))
