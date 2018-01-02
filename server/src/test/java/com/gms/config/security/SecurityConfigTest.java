@@ -204,6 +204,7 @@ public class SecurityConfigTest {
         checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_ANY, null, null);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void checkAccessToFreePostUrls() throws Exception {
         SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
