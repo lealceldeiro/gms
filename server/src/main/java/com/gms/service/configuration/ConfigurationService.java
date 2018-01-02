@@ -122,18 +122,18 @@ public class ConfigurationService {
         return isUserRegistrationAllowed;
     }
 
-    public void setUserRegistrationAllowed(Boolean userRegistrationAllowed) {
+    public void setUserRegistrationAllowed(boolean userRegistrationAllowed) {
         isUserRegistrationAllowed = userRegistrationAllowed;
     }
     public boolean isMultiEntity() {
         return isMultiEntity;
     }
 
-    public void setIsMultiEntity(Boolean isMultiEntity) {
+    public void setIsMultiEntity(boolean isMultiEntity) {
         this.isMultiEntity = isMultiEntity;
     }
 
-    public Long getLastAccessedEntityIdByUser(Long userId) {
+    public Long getLastAccessedEntityIdByUser(long userId) {
         final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
         if (c != null) {
             return Long.valueOf(c.getValue());

@@ -80,8 +80,8 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsGeneralException.class)
     protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
-        String prefixCode = ex.finishedOK() ? "request.finished.OK" : "request.finished.KO";
-        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(prefixCode));
+        String suffixCode = ex.finishedOK() ? "request.finished.OK" : "request.finished.KO";
+        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(suffixCode));
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED, req);
     }
 
