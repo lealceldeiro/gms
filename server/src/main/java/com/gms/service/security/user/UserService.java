@@ -88,7 +88,7 @@ public class UserService implements UserDetailsService{
         BAuthorization newUserAuth;
 
         EUser u = userRepository.findOne(userId);
-        if(u == null) throw new NotFoundEntityException("user.not.found");
+        if (u == null) throw new NotFoundEntityException("user.not.found");
 
         EOwnedEntity e = entityRepository.findOne(entityId);
         if (e == null) throw new NotFoundEntityException("entity.not.found");

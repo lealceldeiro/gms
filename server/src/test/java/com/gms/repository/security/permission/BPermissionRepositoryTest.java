@@ -51,30 +51,22 @@ public class BPermissionRepositoryTest {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired private BPermissionRepository repository;
-
     @Autowired private DefaultConst dc;
     @Autowired private SecurityConst sc;
 
     @Autowired private AppService appService;
+    @Autowired private BPermissionRepository repository;
 
     private MockMvc mvc;
-
     private RestDocumentationResultHandler restDocResHandler;
 
     //region vars
     private String apiPrefix;
-
     private String pageSizeAttr;
-
     private int pageSize;
-
     private String authHeader;
-
     private String tokenType;
-
     private String accessToken;
-
     private final static String RANDOM_NAME = "RandomName-";
     private final static String RANDOM_LABEL = "RandomLabel-";
     //endregion
