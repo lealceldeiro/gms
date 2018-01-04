@@ -132,7 +132,7 @@ public class BaseControllerTest {
         final String response = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
-        ).andExpect(status().isExpectationFailed()).andReturn().getResponse().getContentAsString();
+        ).andReturn().getResponse().getContentAsString();
         JSONObject resObj = new JSONObject(response);
 
         String suffix = msg.getMessage("request.finished.KO"); // request is not supposed to finish ok in this scenario

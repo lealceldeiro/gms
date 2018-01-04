@@ -72,7 +72,7 @@ public class SecurityController extends BaseController{
         if (u != null) {
             return pra.toResource(u);
         }
-        else throw new GmsGeneralException("user.add.error", false);
+        else throw new GmsGeneralException("user.add.error", false, HttpStatus.CONFLICT);
     }
 
     /**
