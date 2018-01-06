@@ -86,8 +86,8 @@ public class SecurityConfigTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply(documentationConfiguration(this.restDocumentation))
+        mvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
                 .addFilter(this.springSecurityFilterChain)
                 .build();

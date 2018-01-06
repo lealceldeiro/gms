@@ -1,6 +1,4 @@
 
 
-${spring.application.name} ${gms.application.version} ${AnsiStyle.ITALIC}(${gms.application.env})${AnsiStyle.NORMAL}
------------------------------------------------------
-Running with ${AnsiColor.YELLOW}Spring Boot${spring-boot.formatted-version}${AnsiStyle.NORMAL} and ${AnsiColor.RED}Angular ${gms.angular.version}${AnsiStyle.NORMAL}
+Running ${spring.application.name} ${gms.application.version} ${AnsiStyle.ITALIC}(${gms.application.env} mode)${AnsiStyle.NORMAL} with ${AnsiColor.YELLOW}Spring Boot${spring-boot.formatted-version}${AnsiStyle.NORMAL} ...
 

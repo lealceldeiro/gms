@@ -58,7 +58,7 @@ public class GmsSecurityUtil {
                 );
 
         if (!shouldIFail) {
-            resultActions .andDo(
+            resultActions.andDo(
                     restDocResHandler.document(
                             responseFields(
                                     fieldWithPath(sc.getATokenHolder())

@@ -80,8 +80,8 @@ public class BPermissionRepositoryTest {
         restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(this.restDocResHandler)
-                .addFilter(this.springSecurityFilterChain)
+                .alwaysDo(restDocResHandler)
+                .addFilter(springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();
 

@@ -135,7 +135,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * For JUnit Tests purposes only!
      * @return Array of {@link HashMap}. Each HashMap contains the required parameters for executing the post request.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "unchecked"})
     private HashMap<String, String>[] getListOfParametersForFreePostUrl() {
         HashMap<String, String>[] r = new HashMap[3];
         Field[] fields;

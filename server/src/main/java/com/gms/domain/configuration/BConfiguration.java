@@ -33,5 +33,5 @@ public class BConfiguration extends GmsEntity{
     @NotBlank
     private final String value;
 
-    private Long userId;
+    private long userId;
 }

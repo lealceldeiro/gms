@@ -50,18 +50,18 @@ public class EUser extends GmsEntity implements UserDetails {
     private final String password;
 
     @Getter(AccessLevel.NONE)
-    private Boolean enabled = false;
+    private boolean enabled = false;
 
-    private Boolean emailVerified = false;
-
-    @Getter(AccessLevel.NONE)
-    private Boolean accountExpired = false;
+    private boolean emailVerified = false;
 
     @Getter(AccessLevel.NONE)
-    private Boolean accountLocked = false;
+    private boolean accountExpired = false;
 
     @Getter(AccessLevel.NONE)
-    private Boolean passwordExpired = false;
+    private boolean accountLocked = false;
+
+    @Getter(AccessLevel.NONE)
+    private boolean passwordExpired = false;
 
     @Getter(AccessLevel.NONE)
     private HashSet<GrantedAuthority> authorities;

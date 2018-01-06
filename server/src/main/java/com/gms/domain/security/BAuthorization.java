@@ -30,13 +30,13 @@ public class BAuthorization implements Serializable{
     @Embeddable
     public static class BAuthorizationPk implements Serializable {
         @Column(nullable = false, updatable = false)
-        private Long userId;
+        private long userId;
 
         @Column(nullable = false, updatable = false)
-        private Long entityId;
+        private long entityId;
 
         @Column(nullable = false, updatable = false)
-        private Long roleId;
+        private long roleId;
     }
 
     @EmbeddedId

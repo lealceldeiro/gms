@@ -46,15 +46,15 @@ public class BaseControllerTest {
 
     @Autowired private ObjectMapper objectMapper;
 
-    @Autowired private AppService appService;
-
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired private DefaultConst dc;
     @Autowired private SecurityConst sc;
-    @Autowired private MessageResolver msg;
+    @Autowired private DefaultConst dc;
+
+    @Autowired private AppService appService;
     @Autowired private ConfigurationService configService;
+    @Autowired private MessageResolver msg;
 
     private MockMvc mvc;
 
@@ -127,7 +127,7 @@ public class BaseControllerTest {
         }
 
         String fd = random.nextString();
-        EUser u = new EUser(fd, "a" + fd + "@test.com", fd, fd, fd);
+        EUser u = new EUser(fd, "bcTest" + fd + "@test.com", fd, fd, fd);
         Resource<EUser> resource = new Resource<>(u);
         final String response = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)

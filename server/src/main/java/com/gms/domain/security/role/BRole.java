@@ -36,7 +36,7 @@ public class BRole extends GmsEntity{
     @Column(length = 10000)
     private String description;
 
-    private Boolean enabled = false;
+    private boolean enabled = false;
 
     @ManyToMany
     @JoinTable(
