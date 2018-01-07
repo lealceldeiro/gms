@@ -31,7 +31,7 @@ import java.util.Set;
 public class BPermission extends GmsEntity {
 
     /**
-     * Name to be used for authenticating the user
+     * Name to be used for authenticating the user.
      */
     @NotNull
     @NotBlank
@@ -39,13 +39,16 @@ public class BPermission extends GmsEntity {
     private final String name;
 
     /**
-     * Label to be shown to the final user
+     * Label to be shown to the final user.
      */
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)
     private final String label;
 
+    /**
+     * Roles in which the permission is being used.
+     */
     @ManyToMany(mappedBy = "permissions")
     private Set<BRole> roles = new HashSet<>();
 }

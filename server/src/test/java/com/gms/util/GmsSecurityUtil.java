@@ -5,6 +5,7 @@ import com.gms.config.security.LoginPayloadSample;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -32,8 +33,14 @@ public class GmsSecurityUtil {
                                                    boolean shouldIFail) throws Exception {
         final MvcResult mvcResult = createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapper, shouldIFail).andReturn();
 
-        JSONObject rawData = new JSONObject(mvcResult.getResponse().getContentAsString());
-        return rawData.getString(sc.getATokenHolder());
+        return getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
+    }
+
+    public static String createSuperAdminRefreshToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper,
+                                                   boolean shouldIFail) throws Exception {
+        final MvcResult mvcResult = createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapper, shouldIFail).andReturn();
+
+        return getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
     }
 
     public static String createSuperAdminAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper,
@@ -107,5 +114,7 @@ public class GmsSecurityUtil {
                         .content(objectMapper.writeValueAsString(loginData))
         ).andExpect(shouldIFail ? status().isUnauthorized() : status().isOk());
     }
-
+    private static String getValueInJSON(String source, String key) throws JSONException {
+        return (source != null && !source.equals("")) ? new JSONObject(source).getString(key) : "";
+    }
 }

@@ -104,8 +104,8 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void loginKO() throws Exception { // for documentation purposes
-        GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler, true);
+    public void loginKO() throws Exception {
+        GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, true);
     }
 
     @Test

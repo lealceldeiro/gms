@@ -28,16 +28,29 @@ import java.util.Set;
 @Entity
 public class BRole extends GmsEntity{
 
+    /**
+     * Label to which the role can be referred to.
+     */
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)
     private final String label;
 
+    /**
+     * A description of what is this role for.
+     */
     @Column(length = 10000)
     private String description;
 
+    /**
+     * Whether the role is enabled or not. If a role associated to a user is not enabled, the user will no be granted the
+     * associated permissions to this role.
+     */
     private boolean enabled = false;
 
+    /**
+     * Permissions associated to this role.
+     */
     @ManyToMany
     @JoinTable(
             name = "brole_bpermission",

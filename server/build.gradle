@@ -219,7 +219,7 @@ test {
 
 war {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
-    baseName = 'GMSBoilerplate_SB-NG'
+    baseName = getSpringAppPropertyInBuild("spring.application.name")
 }
 
 compileJava.dependsOn(processResources)

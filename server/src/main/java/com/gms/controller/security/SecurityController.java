@@ -101,10 +101,10 @@ public class SecurityController extends BaseController{
             } catch (JwtException e) {
                 //return 401
                 authenticationFacade.setAuthentication(null);
-                throw new GmsSecurityException("access_token");
+                throw new GmsSecurityException("access_token", "security.token.refresh.invalid");
             }
         }
         authenticationFacade.setAuthentication(null);
-        throw new GmsSecurityException("access_token");
+        throw new GmsSecurityException("access_token", "security.token.refresh.required");
     }
 }

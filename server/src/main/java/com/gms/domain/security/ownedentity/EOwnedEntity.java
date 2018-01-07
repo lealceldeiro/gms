@@ -26,15 +26,24 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class EOwnedEntity extends GmsEntity{
 
+    /**
+     * Natural name which is used commonly for referring to the entity.
+     */
     @NotNull
     @NotBlank
     private final String name;
 
+    /**
+     * A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}.
+     */
     @NotNull
     @NotBlank
     @Column(unique = true, nullable = false)
     private final String username;
 
+    /**
+     * A brief description of the entity.
+     */
     @NotNull
     @NotBlank
     @Column(length = 10000)

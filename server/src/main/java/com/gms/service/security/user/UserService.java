@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService{
     }
 
     public EUser signUp(EUser u, boolean emailVerified, boolean isSuperRegistration) {
-        if (isSuperRegistration || configService.isUserUserRegistrationAllowed()) {
+        if (isSuperRegistration || configService.isUserRegistrationAllowed()) {
             EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(), passwordEncoder.encode(u.getPassword()));
             sU.setEnabled(u.isEnabled());
             sU.setEmailVerified(emailVerified);
@@ -71,15 +71,15 @@ public class UserService implements UserDetailsService{
         return null;
     }
 
-    public List<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
+    public List<Long> addRolesToUser(long userId, long entityId, List<Long> rolesId) throws NotFoundEntityException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
     }
 
-    public List<Long> removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
+    public List<Long> removeRolesFromUser(long userId, long entityId, List<Long> rolesId) throws NotFoundEntityException {
         return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
     }
 
-    private ArrayList<Long> addRemoveRolesToFromUser (Long userId, Long entityId, List<Long> rolesId, Boolean add)
+    private ArrayList<Long> addRemoveRolesToFromUser (long userId,long entityId, List<Long> rolesId, Boolean add)
             throws NotFoundEntityException {
         ArrayList<Long> addedOrRemoved = new ArrayList<>();
 
@@ -134,24 +134,36 @@ public class UserService implements UserDetailsService{
 
     public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
         StringBuilder authBuilder = new StringBuilder();
-        EUser u = (EUser)loadUserByUsername(usernameOrEmail);
+        EUser u = (EUser)loadUserByUsername(usernameOrEmail); // todo: replace from here with HQL for a better performance
         if (u != null) { // got user
-            BAuthorization auth = getUserAuth(u);
-            if (auth != null) { // got authorization
-                Set<BPermission> permissions = auth.getRole().getPermissions();
+            List<BAuthorization> auth = getUserAuth(u);
+            if (auth != null) { // got authorization(s)
+                Set<BPermission> permissions;
                 StringBuilder auxBuilder;
-                for (BPermission p: permissions) {
-                    auxBuilder = new StringBuilder();
-                    authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
+                for (BAuthorization iAuth : auth) {
+                    permissions = iAuth.getRole().getPermissions();
+                    for (BPermission p : permissions) {
+                        auxBuilder = new StringBuilder();
+                        authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
+                    }
                 }
             }
         }
         return authBuilder.toString();
     }
 
-    private BAuthorization getUserAuth(EUser u) {
+    private List<BAuthorization> getUserAuth(EUser u) {
         Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
         EOwnedEntity entity = entityId != null ? entityRepository.findOne(entityId) : null;
-        return entity == null ? authorizationRepository.findFirstByUserAndEntityNotNull(u) : null;
+        if (entity == null) {
+            BAuthorization auth = authorizationRepository.findFirstByUserAndEntityNotNull(u);
+            if (auth != null) {
+                entity = auth.getEntity();
+            }
+        }
+        if (entity != null) {
+            // todo: set last accessed ownedentity
+        }
+        return entity != null ? authorizationRepository.findAllByUserAndAndEntityAndRoleIsNotNull(u, entity) : null;
     }
 }
