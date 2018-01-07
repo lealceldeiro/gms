@@ -10,8 +10,10 @@ import com.gms.repository.security.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
+import com.gms.service.db.QueryService;
 import com.gms.util.configuration.ConfigKey;
 import com.gms.util.constant.DefaultConst;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +33,11 @@ public class ConfigurationService {
 
     private final DefaultConst dc;
 
-    private Boolean isMultiEntity;
+    @Getter
+    private boolean multiEntity;
 
-    private Boolean isUserRegistrationAllowed;
+    @Getter
+    private boolean userRegistrationAllowed;
 
     private final BConfigurationRepository configurationRepository;
 
@@ -45,16 +49,19 @@ public class ConfigurationService {
 
     private final BAuthorizationRepository authRepository;
 
+    private final QueryService queryService;
+
     @Autowired
     public ConfigurationService(BConfigurationRepository configurationRepository, EUserRepository userRepository,
                                 EOwnedEntityRepository entityRepository, BRoleRepository roleRepository,
-                                BAuthorizationRepository authRepository, DefaultConst defaultConst) {
+                                BAuthorizationRepository authRepository, DefaultConst defaultConst, QueryService queryService) {
         this.configurationRepository = configurationRepository;
         this.userRepository = userRepository;
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authRepository = authRepository;
         this.dc = defaultConst;
+        this.queryService = queryService;
 
         loadDBConfig();
     }
@@ -64,15 +71,15 @@ public class ConfigurationService {
         return configurationRepository.count() > 0;
     }
 
-    public Boolean createDefaultConfig() {
-        BConfiguration multiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(),
+    public boolean createDefaultConfig() {
+        BConfiguration isMultiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP.toString(),
                 dc.getIsMultiEntity().toString());
-        BConfiguration userRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(),
+        BConfiguration isUserRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString(),
                 dc.getIsUserRegistrationAllowed().toString());
 
         return
-                configurationRepository.save(multiEntity) != null &&
-                        configurationRepository.save(userRegistrationAllowed) != null;
+                configurationRepository.save(isMultiEntity) != null &&
+                        configurationRepository.save(isUserRegistrationAllowed) != null;
     }
 
     public boolean assignDefaultUserToEntityWithRole() {
@@ -107,36 +114,58 @@ public class ConfigurationService {
      */
     private void loadDBConfig() {
         if (configurationExist()) {
-            isMultiEntity = Boolean.valueOf(
+            multiEntity = Boolean.parseBoolean(
                     configurationRepository.findFirstByKey(ConfigKey.IS_MULTI_ENTITY_APP.toString()).getValue());
-            isUserRegistrationAllowed = Boolean.valueOf(
+            userRegistrationAllowed = Boolean.parseBoolean(
                     configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED.toString()).getValue());
         }
         else {
-            isMultiEntity = dc.getIsMultiEntity();
-            isUserRegistrationAllowed = dc.getIsUserRegistrationAllowed();
+            multiEntity = dc.getIsMultiEntity();
+            userRegistrationAllowed = dc.getIsUserRegistrationAllowed();
         }
     }
 
-    public boolean isUserUserRegistrationAllowed() {
-        return isUserRegistrationAllowed;
+    /**
+     * Sets whether the user registration via sign-up is allowed or not.
+     * @param userRegistrationAllowed Indicates whether the user registration via sign-up is allowed or not.
+     * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
+     */
+    public boolean setUserRegistrationAllowed(boolean userRegistrationAllowed) {
+        String hql = "update BConfiguration set value = " + userRegistrationAllowed +
+                " where key = '" + ConfigKey.IS_MULTI_ENTITY_APP + "'";
+        int ar = queryService.createQuery(hql).executeUpdate();
+        if (ar > 0) {
+            this.userRegistrationAllowed = userRegistrationAllowed;
+            return true;
+        }
+        return false;
     }
 
-    public void setUserRegistrationAllowed(boolean userRegistrationAllowed) {
-        isUserRegistrationAllowed = userRegistrationAllowed;
-    }
-    public boolean isMultiEntity() {
-        return isMultiEntity;
+    /**
+     * Sets whether the application will handle multiple entities or not.
+     * @param isMultiEntity Indicates whether the application will handle multiple entities or not.
+     * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
+     */
+    public boolean setIsMultiEntity(boolean isMultiEntity) {
+        String hql = "update BConfiguration set value = " + isMultiEntity +
+                " where key = '" + ConfigKey.IS_USER_REGISTRATION_ALLOWED + "'";
+        int ar = queryService.createQuery(hql).executeUpdate();
+        if (ar > 0) {
+            this.multiEntity = isMultiEntity;
+            return true;
+        }
+        return false;
     }
 
-    public void setIsMultiEntity(boolean isMultiEntity) {
-        this.isMultiEntity = isMultiEntity;
-    }
-
+    /**
+     * Returns the identifier of the las accessed entity by a given user.
+     * @param userId Identifier of the user who the last accessed entity is being looked for.
+     * @return The identifier of the last accessed entity or <code>null</code> if not found any.
+     */
     public Long getLastAccessedEntityIdByUser(long userId) {
         final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
         if (c != null) {
-            return Long.valueOf(c.getValue());
+            return Long.parseLong(c.getValue());
         }
         return null;
     }

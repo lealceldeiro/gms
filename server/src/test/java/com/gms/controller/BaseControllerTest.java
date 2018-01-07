@@ -120,7 +120,7 @@ public class BaseControllerTest {
 
     @Test
     public void handleGmsGeneralException() throws Exception {
-        boolean initial = configService.isUserUserRegistrationAllowed();
+        boolean initial = configService.isUserRegistrationAllowed();
         // do not allow new user registration
         if (initial) {
             configService.setUserRegistrationAllowed(false);
@@ -140,7 +140,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (initial) {
-            configService.setUserRegistrationAllowed(true);
+            assertTrue(configService.setUserRegistrationAllowed(true));
         }
     }
 }

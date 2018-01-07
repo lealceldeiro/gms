@@ -1,6 +1,7 @@
 package com.gms;
 
 import com.gms.service.AppService;
+import org.hibernate.SessionFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +9,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.persistence.EntityManagerFactory;
+
 
 /**
  * Application
@@ -51,6 +55,15 @@ public class Application extends SpringBootServletInitializer{
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SessionFactory getSessionFactory(EntityManagerFactory factory) {
+        final SessionFactory sf = factory.unwrap(SessionFactory.class);
+        if (sf == null) {
+            throw new NullPointerException("Factory is not an hibernate factory");
+        }
+        return sf;
     }
 
     //endregion
