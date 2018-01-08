@@ -57,6 +57,7 @@ public class Application extends SpringBootServletInitializer{
         return new BCryptPasswordEncoder();
     }
 
+    //Provides a SessionFactory (hibernate session) in case is needed
     @Bean
     public HibernateJpaSessionFactoryBean getSessionFactory(EntityManagerFactory factory) {
         HibernateJpaSessionFactoryBean fact = new HibernateJpaSessionFactoryBean();

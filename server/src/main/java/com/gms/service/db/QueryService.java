@@ -3,11 +3,10 @@ package com.gms.service.db;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 /**
@@ -23,10 +22,9 @@ import javax.transaction.Transactional;
 public class QueryService {
 
     @Getter(AccessLevel.NONE)
-    private final SessionFactory sessionFactory;
+    private final EntityManager entityManager;
 
     public Query createQuery(String hql) {
-        Session s = sessionFactory.getCurrentSession();
-        return s != null ? s.createQuery(hql) : null;
+        return entityManager.createQuery(hql);
     }
 }
