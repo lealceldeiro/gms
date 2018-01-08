@@ -24,7 +24,15 @@ public class QueryService {
     @Getter(AccessLevel.NONE)
     private final EntityManager entityManager;
 
-    public Query createQuery(String hql) {
-        return entityManager.createQuery(hql);
+    public Query createQuery(String qls) {
+        return entityManager.createQuery(qls);
+    }
+
+    public Query createNativeQuery(String sql) {
+        return entityManager.createNativeQuery(sql);
+    }
+
+    public Query createNativeQuery(String sql, Class clazz) {
+        return entityManager.createNativeQuery(sql, clazz);
     }
 }

@@ -1,11 +1,15 @@
 package com.gms.service.security.permission;
 
+import com.gms.domain.security.permission.BPermission;
 import com.gms.repository.security.permission.BPermissionRepository;
+import com.gms.service.db.QueryService;
 import com.gms.util.constant.BPermissionConst;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * PermissionService
@@ -17,15 +21,12 @@ import javax.transaction.Transactional;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PermissionService {
 
     private final BPermissionRepository repository;
 
-
-    @Autowired
-    public PermissionService(BPermissionRepository repository) {
-        this.repository = repository;
-    }
+    private final QueryService queryService;
 
     //region default permissions
     public Boolean createDefaultPermissions() {
@@ -42,4 +43,24 @@ public class PermissionService {
     }
     //endregion
 
+    @SuppressWarnings("unchecked")
+    public List<BPermission> findPermissionsByUserIdAndEntityId(long userId, long entityId) {
+        String sql = "" +
+                "SELECT p.* " +
+                "from" +
+                "  bauthorization auth" +
+                "  INNER JOIN euser u ON auth.user_id = u.id" +
+                "  INNER JOIN eowned_entity e ON auth.entity_id = e.id" +
+                "  INNER JOIN brole r ON auth.role_id = r.id" +
+                "  INNER JOIN brole_bpermission rp ON r.id = rp.brole_id" +
+                "  INNER JOIN bpermission p ON rp.bpermission_id = p.id " +
+                "WHERE" +
+                "  auth.entity_id = :entityId" +
+                "  AND auth.user_id = :userId";
+
+        final Query query = queryService.createNativeQuery(sql, BPermission.class);
+        query.setParameter("userId", userId).setParameter("entityId", entityId);
+
+        return query.getResultList();
+    }
 }

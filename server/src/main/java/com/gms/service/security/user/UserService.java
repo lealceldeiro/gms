@@ -11,6 +11,7 @@ import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.configuration.ConfigurationService;
+import com.gms.service.security.permission.PermissionService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
@@ -24,7 +25,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * UserService
@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService{
     private final ConfigurationService configService;
     private final DefaultConst c;
     private final MessageResolver msg;
+    private final PermissionService permissionService;
 
     //region default user
     public EUser createDefaultUser() {
@@ -134,36 +135,33 @@ public class UserService implements UserDetailsService{
 
     public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
         StringBuilder authBuilder = new StringBuilder();
-        EUser u = (EUser)loadUserByUsername(usernameOrEmail); // todo: replace from here with HQL for a better performance
+        EUser u = (EUser)loadUserByUsername(usernameOrEmail);
+
         if (u != null) { // got user
-            List<BAuthorization> auth = getUserAuth(u);
-            if (auth != null) { // got authorization(s)
-                Set<BPermission> permissions;
-                StringBuilder auxBuilder;
-                for (BAuthorization iAuth : auth) {
-                    permissions = iAuth.getRole().getPermissions();
-                    for (BPermission p : permissions) {
-                        auxBuilder = new StringBuilder();
-                        authBuilder.append(auxBuilder.append(p.getName()).append(separator).toString());
-                    }
-                }
+            Long entityId = getEntityIdByUser(u);
+
+            if (entityId == null) { return ""; }    // has not any role over any entity
+
+            List<BPermission> pFromDB = permissionService.findPermissionsByUserIdAndEntityId(u.getId(), entityId);
+
+            for (BPermission p : pFromDB) {
+                authBuilder.append(p.getName()).append(separator);
             }
         }
+
         return authBuilder.toString();
     }
 
-    private List<BAuthorization> getUserAuth(EUser u) {
+    private Long getEntityIdByUser(EUser u) {
         Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
-        EOwnedEntity entity = entityId != null ? entityRepository.findOne(entityId) : null;
-        if (entity == null) {
-            BAuthorization auth = authorizationRepository.findFirstByUserAndEntityNotNull(u);
-            if (auth != null) {
-                entity = auth.getEntity();
+        if (entityId == null) {
+            BAuthorization anAuth = authorizationRepository.findFirstByUserAndEntityNotNull(u);
+            if (anAuth == null) {   // this user has no assigned roles
+                return null;
             }
+            entityId = anAuth.getEntity().getId();
+            // todo: set last accessed owned entity
         }
-        if (entity != null) {
-            // todo: set last accessed ownedentity
-        }
-        return entity != null ? authorizationRepository.findAllByUserAndAndEntityAndRoleIsNotNull(u, entity) : null;
+        return entityId;
     }
 }
