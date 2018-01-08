@@ -165,6 +165,7 @@ public class ConfigurationService {
         return insertOrUpdateValue(ConfigKey.LAST_ACCESSED_ENTITY, entityId, userId);
     }
 
+    //region private stuff
     private boolean updateValue(String key, String value) {
         return queryService.createQuery("update BConfiguration set value = :value where key = :key")
                 .setParameter("key", key)
@@ -208,8 +209,7 @@ public class ConfigurationService {
     private boolean insertOrUpdateValue(String key, String value, long userId) {
         BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key, userId);
         if (c == null) {
-            c = new BConfiguration(key, value);
-            c.setUserId(userId);
+            c = new BConfiguration(key, value, userId);
         }
         else {
             c.setValue(value);
@@ -240,4 +240,5 @@ public class ConfigurationService {
         }
         return null;
     }
+    //endregion
 }

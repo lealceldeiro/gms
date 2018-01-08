@@ -1,8 +1,6 @@
 package com.gms.service.db;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -16,12 +14,11 @@ import javax.transaction.Transactional;
  * @version 0.1
  * Jan 06, 2018
  */
-@Data
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class QueryService {
 
-    @Getter(AccessLevel.NONE)
     private final EntityManager entityManager;
 
     public Query createQuery(String qls) {

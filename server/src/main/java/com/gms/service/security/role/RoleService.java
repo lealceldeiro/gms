@@ -5,7 +5,7 @@ import com.gms.domain.security.role.BRole;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.util.constant.DefaultConst;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,21 +20,12 @@ import javax.transaction.Transactional;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RoleService {
 
-    private final DefaultConst dc;
-
     private final BRoleRepository repository;
-
     private final BPermissionRepository permissionRepository;
-
-
-    @Autowired
-    public RoleService(BRoleRepository repository, BPermissionRepository permissionRepository, DefaultConst defaultConst) {
-        this.repository = repository;
-        this.permissionRepository = permissionRepository;
-        this.dc = defaultConst;
-    }
+    private final DefaultConst dc;
 
     //region default role
     public BRole createDefaultRole() {

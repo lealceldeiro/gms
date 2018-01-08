@@ -167,7 +167,7 @@ public class UserService implements UserDetailsService{
                 return null;
             }
             entityId = anAuth.getEntity().getId();
-            configService.setLastAccessedEntityIdByUser(u.getId(), entityId);
+            configService.setLastAccessedEntityIdByUser(u.getId(), entityId); // todo: log if the config couldn't be saved
         }
         return entityId;
     }

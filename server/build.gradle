@@ -217,6 +217,8 @@ test {
     outputs.dir snippetsDir
 }
 
+testClasses.dependsOn(setTestingConfig)
+
 war {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
     baseName = getSpringAppPropertyInBuild("spring.application.name")

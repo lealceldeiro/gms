@@ -16,7 +16,8 @@ import javax.transaction.Transactional;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  * Dec 18, 2017
- */@Service
+ */
+@Service
 @Transactional
 @RequiredArgsConstructor
 public class AppService {
