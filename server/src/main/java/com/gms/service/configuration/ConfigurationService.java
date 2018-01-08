@@ -131,10 +131,7 @@ public class ConfigurationService {
      * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
      */
     public boolean setUserRegistrationAllowed(boolean userRegistrationAllowed) {
-        String hql = "update BConfiguration set value = " + userRegistrationAllowed +
-                " where key = '" + ConfigKey.IS_MULTI_ENTITY_APP + "'";
-        int ar = queryService.createQuery(hql).executeUpdate();
-        if (ar > 0) {
+        if (updateValue(ConfigKey.IS_MULTI_ENTITY_APP, userRegistrationAllowed)) {
             this.userRegistrationAllowed = userRegistrationAllowed;
             return true;
         }
@@ -147,10 +144,7 @@ public class ConfigurationService {
      * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
      */
     public boolean setIsMultiEntity(boolean isMultiEntity) {
-        String hql = "update BConfiguration set value = " + isMultiEntity +
-                " where key = '" + ConfigKey.IS_USER_REGISTRATION_ALLOWED + "'";
-        int ar = queryService.createQuery(hql).executeUpdate();
-        if (ar > 0) {
+        if (updateValue(ConfigKey.IS_USER_REGISTRATION_ALLOWED, isMultiEntity)) {
             this.multiEntity = isMultiEntity;
             return true;
         }
@@ -163,22 +157,87 @@ public class ConfigurationService {
      * @return The identifier of the last accessed entity or <code>null</code> if not found any.
      */
     public Long getLastAccessedEntityIdByUser(long userId) {
-        final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
-        if (c != null) {
-            return Long.parseLong(c.getValue());
-        }
-        return null;
+        String v = getValueByUser(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
+        return v != null ? Long.parseLong(v) : null;
     }
 
     public boolean setLastAccessedEntityIdByUser(long userId, long entityId) {
-        BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
+        return insertOrUpdateValue(ConfigKey.LAST_ACCESSED_ENTITY, entityId, userId);
+    }
+
+    private boolean updateValue(String key, String value) {
+        return queryService.createQuery("update BConfiguration set value = :value where key = :key")
+                .setParameter("key", key)
+                .setParameter("value", value)
+                .executeUpdate() > 0;
+    }
+
+    private boolean updateValue(String key, String value, long userId) {
+        return queryService.createQuery("update BConfiguration set value = :value where key = :key and userId = :userId")
+                .setParameter("key", key)
+                .setParameter("value", value)
+                .setParameter("userId", userId)
+                .executeUpdate() > 0;
+    }
+
+    private boolean updateValue(ConfigKey key, String value) {
+        return updateValue(String.valueOf(key), value);
+    }
+
+    private boolean updateValue(ConfigKey key, String value, long userId) {
+        return updateValue(String.valueOf(key), value, userId);
+    }
+
+    private boolean updateValue(ConfigKey key, Object value) {
+        return updateValue(String.valueOf(key), String.valueOf(value));
+    }
+
+    private boolean updateValue(ConfigKey key, Object value, long userId) {
+        return updateValue(String.valueOf(key), String.valueOf(value), userId);
+    }
+
+
+    private boolean insertOrUpdateValue(String key, String value) {
+        BConfiguration c = configurationRepository.findFirstByKey(key);
         if (c == null) {
-            c = new BConfiguration(ConfigKey.LAST_ACCESSED_ENTITY.toString(), String.valueOf(entityId));
+            c = new BConfiguration(key, value);
+        }
+        return configurationRepository.save(c) != null;
+    }
+
+    private boolean insertOrUpdateValue(String key, String value, long userId) {
+        BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key, userId);
+        if (c == null) {
+            c = new BConfiguration(key, value);
             c.setUserId(userId);
         }
         else {
-            c.setValue(String.valueOf(entityId));
+            c.setValue(value);
         }
         return configurationRepository.save(c) != null;
+    }
+
+    private boolean insertOrUpdateValue(ConfigKey key, String value) {
+        return insertOrUpdateValue(key.toString(), value);
+    }
+
+    private boolean insertOrUpdateValue(ConfigKey key, String value, long userId) {
+        return insertOrUpdateValue(key.toString(), value, userId);
+    }
+
+    private boolean insertOrUpdateValue(ConfigKey key, Object value) {
+        return insertOrUpdateValue(key, String.valueOf(value));
+    }
+
+    private boolean insertOrUpdateValue(ConfigKey key, Object value, long userId) {
+        return insertOrUpdateValue(key, String.valueOf(value), userId);
+    }
+
+    private String getValueByUser(String key, long userId) {
+        final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key, userId);
+        if (c != null) {
+            return c.getValue();
+        }
+        return null;
     }
 }
