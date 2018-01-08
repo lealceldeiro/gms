@@ -97,11 +97,7 @@ public class UserService implements UserDetailsService{
         for (Long iRoleId : rolesId) {
             r = roleRepository.findOne(iRoleId);
             if (r != null) {
-                pk = new BAuthorizationPk();
-                pk.setEntityId(e.getId());
-                pk.setUserId(u.getId());
-                pk.setRoleId(r.getId());
-
+                pk = new BAuthorizationPk(u.getId(), e.getId(), r.getId());
                 newUserAuth = new BAuthorization();
                 newUserAuth.setBAuthorizationPk(pk);
                 newUserAuth.setUser(u);

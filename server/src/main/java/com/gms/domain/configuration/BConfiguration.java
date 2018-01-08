@@ -42,7 +42,7 @@ public class BConfiguration extends GmsEntity{
     /**
      * User's identifier. Some configurations are user-specific. In those cases the identifier of the user is saved too.
      */
-    @Getter @Setter private long userId;
+    @Getter @Setter private Long userId;
 
     public BConfiguration() {}
 
