@@ -1,10 +1,10 @@
 package com.gms.domain.configuration;
 
 import com.gms.domain.GmsEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
@@ -20,10 +20,8 @@ import javax.validation.constraints.NotNull;
  * @version 0.1
  * Dec 12, 2017
  */
-@Data
-@NoArgsConstructor(force = true)
-@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString
 @Entity
 public class BConfiguration extends GmsEntity{
 
@@ -32,17 +30,32 @@ public class BConfiguration extends GmsEntity{
      */
     @NotNull
     @NotBlank
-    private final String key;
+    @Getter @Setter private String key;
 
     /**
      * String representation of the configuration value.
      */
     @NotNull
     @NotBlank
-    private final String value;
+    @Getter @Setter private String value;
 
     /**
-     * [Optional] Some configurations are user-specific. In those cases the identifier of the user is saved too.
+     * User's identifier. Some configurations are user-specific. In those cases the identifier of the user is saved too.
      */
-    private long userId;
+    @Getter @Setter private long userId;
+
+    public BConfiguration() {}
+
+    public BConfiguration(String key, String value) {
+        super();
+        this.key = key;
+        this.value = value;
+    }
+
+    public BConfiguration(String key, String value, long userId) {
+        super();
+        this.key = key;
+        this.value = value;
+        this.userId = userId;
+    }
 }

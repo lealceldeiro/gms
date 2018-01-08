@@ -152,6 +152,13 @@ public class UserService implements UserDetailsService{
         return authBuilder.toString();
     }
 
+    /**
+     * Returns the id of the last accessed entity by a user. If the user has never accessed a entity then a search will
+     * be performed in order to know which entities the user has access to. The id of the first of theses found will be
+     * returned. If no entities is found, then <code>null</code> is returned.
+     * @param u {@link EUser} which is being trying to find the association to.
+     * @return The identifier of the entity or <code>null</code> if none is found.
+     */
     private Long getEntityIdByUser(EUser u) {
         Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
         if (entityId == null) {
@@ -160,7 +167,7 @@ public class UserService implements UserDetailsService{
                 return null;
             }
             entityId = anAuth.getEntity().getId();
-            // todo: set last accessed owned entity
+            configService.setLastAccessedEntityIdByUser(u.getId(), entityId);
         }
         return entityId;
     }

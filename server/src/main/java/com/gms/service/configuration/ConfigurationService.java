@@ -169,4 +169,16 @@ public class ConfigurationService {
         }
         return null;
     }
+
+    public boolean setLastAccessedEntityIdByUser(long userId, long entityId) {
+        BConfiguration c = configurationRepository.findFirstByKeyAndUserId(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
+        if (c == null) {
+            c = new BConfiguration(ConfigKey.LAST_ACCESSED_ENTITY.toString(), String.valueOf(entityId));
+            c.setUserId(userId);
+        }
+        else {
+            c.setValue(String.valueOf(entityId));
+        }
+        return configurationRepository.save(c) != null;
+    }
 }
