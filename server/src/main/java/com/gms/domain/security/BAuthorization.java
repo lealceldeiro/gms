@@ -31,13 +31,13 @@ public class BAuthorization implements Serializable{
     @AllArgsConstructor
     @Embeddable
     public static class BAuthorizationPk implements Serializable {
-        @Column(nullable = false, updatable = false)
+        @Column(nullable = false, updatable = false, name = "user_id")
         private long userId;
 
-        @Column(nullable = false, updatable = false)
+        @Column(nullable = false, updatable = false, name = "entity_id")
         private long entityId;
 
-        @Column(nullable = false, updatable = false)
+        @Column(nullable = false, updatable = false, name = "role_id")
         private long roleId;
     }
 
@@ -45,14 +45,14 @@ public class BAuthorization implements Serializable{
     private BAuthorizationPk bAuthorizationPk;
 
     @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private EUser user;
 
     @ManyToOne
-    @JoinColumn(name = "entityId", insertable = false, updatable = false)
+    @JoinColumn(name = "entity_id", insertable = false, updatable = false)
     private EOwnedEntity entity;
 
     @ManyToOne
-    @JoinColumn(name = "roleId", insertable = false, updatable = false)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private BRole role;
 }
