@@ -7,11 +7,11 @@ include::{snippets}/refresh-token-o-k/request-fields.adoc[]
 ==== Example request (successful)
 include::{snippets}/refresh-token-o-k/curl-request.adoc[]
 
-==== Example response for a successful authentication
+==== Example of a successful response for getting a new access token
 include::{snippets}/refresh-token-o-k/http-response.adoc[]
 
 ==== Example request (unsuccessful)
 include::{snippets}/refresh-token-invalid/curl-request.adoc[]
 
-==== Example response for an unsuccessful authentication
+==== Example of an unsuccessful response for getting a new access token
 include::{snippets}/refresh-token-invalid/http-response.adoc[]

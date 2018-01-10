@@ -180,7 +180,7 @@ public class SecurityControllerTest {
                         restDocResHandler.document(
                                 requestFields(
                                         fields.withPath("refreshToken")
-                                                .description("The request token provided when login was previously performed")
+                                                .description("The refresh token provided when login was previously performed")
                                 )
                         )
                 );
