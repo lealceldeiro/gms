@@ -1,0 +1,3 @@
+[[security-refresh-token]]
+=== Refresh token
+A `POST` request which gets a new refresh token and other necessary data for getting access to protected resources.

@@ -45,14 +45,14 @@ public class UserService implements UserDetailsService{
     private final BAuthorizationRepository authorizationRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ConfigurationService configService;
-    private final DefaultConst c;
+    private final DefaultConst dc;
     private final MessageResolver msg;
     private final PermissionService permissionService;
 
     //region default user
     public EUser createDefaultUser() {
-        EUser u = new EUser(c.getUserAdminDefaultUsername(), c.getUserAdminDefaultEmail(), c.getUserAdminDefaultName(),
-                c.getUserAdminDefaultLastName(), c.getUserAdminDefaultPassword());
+        EUser u = new EUser(dc.getUserAdminDefaultUsername(), dc.getUserAdminDefaultEmail(), dc.getUserAdminDefaultName(),
+                dc.getUserAdminDefaultLastName(), dc.getUserAdminDefaultPassword());
         u.setEnabled(true);
         return signUp(u, true);
     }
@@ -149,7 +149,7 @@ public class UserService implements UserDetailsService{
     }
 
     /**
-     * Returns the id of the last accessed entity by a user. If the user has never accessed a entity then a search will
+     * Returns the id of the last accessed entity by a user. If the user has never accessed an entity before then a search will
      * be performed in order to know which entities the user has access to. The id of the first of theses found will be
      * returned. If no entities is found, then <code>null</code> is returned.
      * @param u {@link EUser} which is being trying to find the association to.
