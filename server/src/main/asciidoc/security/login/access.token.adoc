@@ -1,3 +1,17 @@
 [[security-refresh-token]]
 === Refresh token
 A `POST` request which gets a new refresh token and other necessary data for getting access to protected resources.
+
+include::{snippets}/refresh-token-o-k/request-fields.adoc[]
+
+==== Example request (successful)
+include::{snippets}/refresh-token-o-k/curl-request.adoc[]
+
+==== Example response for a successful authentication
+include::{snippets}/refresh-token-o-k/http-response.adoc[]
+
+==== Example request (unsuccessful)
+include::{snippets}/refresh-token-invalid/curl-request.adoc[]
+
+==== Example response for an unsuccessful authentication
+include::{snippets}/refresh-token-invalid/http-response.adoc[]
