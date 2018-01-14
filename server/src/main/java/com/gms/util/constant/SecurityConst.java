@@ -28,12 +28,19 @@ public class SecurityConst {
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
     private String secret;
 
-    //region access token
     /**
-     * Expiration of the access token. Time in which the token will not longer be valid in seconds.
+     * Variable in which the time where the token was issued will be sent in the response in the login information to the client.
      */
-    @Value("${gms.security.jwt.token_expiration:86400}")  // 1 day (in seconds)
-    private long aTokenExpirationTime;
+    @Value("${gms.security.jwt.issued_time_holder:issued_at}")
+    private String issuedTimeHolder;
+
+    @Value("${gms.security.jwt.authorities_holder:authorities}")
+    private String authoritiesHolder;
+
+    @Value("${gms.security.jwt.issuer:www.gms.com}")
+    private String issuer;
+
+    //region access token
 
     /**
      * Variable in which the access token will be sent in the response in the login information to the client.
@@ -64,39 +71,45 @@ public class SecurityConst {
      */
     @Value("${gms.security.jwt.token_header_to_be_sent_holder:header_to_be_sent}")
     private String aTokenHeaderToBeSentHolder;
+
+    /**
+     * Expiration of the access token. Time in which the token will not longer be valid in seconds.
+     */
+    @Value("${gms.security.jwt.token_expiration:86400}")  // 1 day (in seconds)
+    private long aTokenExpirationTime;
+
+    @Value("${gms.security.jwt.token_expiration_time_holder:token_expiration_time}")
+    private String aTokenExpirationTimeHolder;
+
+    /**
+     * Variable in which the time of validity of the access token will be sent in the response in the login information to the client.
+     */
+    @Value("${gms.security.jwt.token_expires_in_holder:token_expires_in}")
+    private String aTokenExpiresInHolder;
     //endregion
 
     //region refresh token
-    /**
-     * Expiration of the refresh token. Time in which the token will not longer be valid in seconds.
-     */
-    @Value("${gms.security.jwt.refresh_token_expiration:2592000}")
-    private long rTokenExpirationTime;
-
     /**
      * Variable in which the refresh token will be sent in the response in the login information to the client.
      */
     @Value("${gms.security.jwt.refresh_token_holder:refresh_token}")
     private String rTokenHolder;
-    //endregion
+
+    /**
+     * Expiration of the refresh token. Time in which the token will not longer be valid in seconds.
+     */
+    @Value("${gms.security.jwt.refresh_token_expiration:2592000}") // 30 days in seconds
+    private long rTokenExpirationTime;
+
+    @Value("${gms.security.jwt.refresh_token_expiration_time_holder:refresh_token_expiration_time}")
+    private String rTokenExpirationTimeHolder;
 
     /**
      * Variable in which the time of validity of the access token will be sent in the response in the login information to the client.
      */
-    @Value("${gms.security.jwt.expires_in_holder:expires_in}")
-    private String expiresInHolder;
-
-    /**
-     * Variable in which the time where the token was issued will be sent in the response in the login information to the client.
-     */
-    @Value("${gms.security.jwt.issued_time_holder:issued_at}")
-    private String issuedTimeHolder;
-
-    @Value("${gms.security.jwt.expiration_time_holder:expiration_time}")
-    private String expirationHolder;
-
-    @Value("${gms.security.jwt.issuer:www.gms.com}")
-    private String issuer;
+    @Value("${gms.security.jwt.refresh_token_expires_in_holder:refresh_token_expires_in}")
+    private String rTokenExpiresInHolder;
+    //endregion
 
     //endregion
 
@@ -107,9 +120,6 @@ public class SecurityConst {
     @Value("${gms.security.sign_in_url:/login}")
     private String signInUrl;
     //endregion
-
-    @Value("${gms.security.jwt.authorities_holder:authorities}")
-    private String authoritiesHolder;
 
     @Value("${gms.security.free_url_any:}")
     private String freeURLsAnyRequest;

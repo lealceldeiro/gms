@@ -164,11 +164,13 @@ public class JWTService {
         returnMap.put(sc.getATokenHolder(), accessToken);
         returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
-        returnMap.put(sc.getExpirationHolder(), issuedAt.getTime() + getATokenExpirationTime());
-        returnMap.put(sc.getExpiresInHolder(), getATokenExpirationTime());
+        returnMap.put(sc.getATokenExpirationTimeHolder(), issuedAt.getTime() + getATokenExpirationTime());
+        returnMap.put(sc.getATokenExpiresInHolder(), getATokenExpirationTime());
         returnMap.put(sc.getIssuedTimeHolder(), issuedAt.getTime());
         returnMap.put(sc.getAuthoritiesHolder(), authoritiesString.split(SecurityConst.AUTHORITIES_SEPARATOR));
         returnMap.put(sc.getRTokenHolder(), refreshToken);
+        returnMap.put(sc.getRTokenExpirationTimeHolder(), issuedAt.getTime() + getRTokenExpirationTime());
+        returnMap.put(sc.getRTokenExpiresInHolder(), getRTokenExpirationTime());
 
         return returnMap;
     }
@@ -257,6 +259,6 @@ public class JWTService {
                 .setIssuedAt(new Date(currentMillis))
                 .setIssuer(sc.getIssuer())
                 .signWith(SignatureAlgorithm.HS512, sc.getSecret().getBytes())
-                .claim(sc.getExpiresInHolder(), expiresIn);
+                .claim(sc.getATokenExpiresInHolder(), expiresIn);
     }
 }

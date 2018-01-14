@@ -68,24 +68,33 @@ public class GmsSecurityUtil {
             resultActions.andDo(
                     restDocResHandler.document(
                             responseFields(
+                                    //common
+                                    fieldWithPath(sc.getIssuedTimeHolder())
+                                            .description("Time where the access and refresh tokens were issued at."),
+                                    fieldWithPath(sc.getAuthoritiesHolder())
+                                            .description("User's authorities."),
+                                    fieldWithPath(SecurityConst.USERNAME_HOLDER)
+                                            .description("User's username."),
+
+                                    // access token
                                     fieldWithPath(sc.getATokenHolder())
-                                            .description("Variable in which the access token will be sent in the response in the login information."),
-                                    fieldWithPath(sc.getRTokenHolder())
-                                            .description("Variable in which the refresh token will be sent in the response in the login information."),
-                                    fieldWithPath(sc.getATokenHeaderToBeSentHolder())
-                                            .description("Variable which indicates the name of the header you have to use for sending the access token in every subsequent request."),
-                                    fieldWithPath(sc.getExpirationHolder())
-                                            .description("Time (expressed in milliseconds) in which the access token will expire."),
+                                            .description("Access token."),
                                     fieldWithPath(sc.getATokenTypeHolder())
                                             .description("Token scheme to be used."),
-                                    fieldWithPath(sc.getExpiresInHolder())
-                                            .description("Variable in which the time of validity of the access token will be sent in the response in the login information."),
-                                    fieldWithPath(sc.getIssuedTimeHolder())
-                                            .description("Variable in which the time where the token was issued will be sent in the response in the login information."),
-                                    fieldWithPath(sc.getAuthoritiesHolder())
-                                            .description("Variable in which the user's authorities will be specified in an Array of String."),
-                                    fieldWithPath(SecurityConst.USERNAME_HOLDER)
-                                            .description("Variable in which the user's username will be specified.")
+                                    fieldWithPath(sc.getATokenHeaderToBeSentHolder())
+                                            .description("Name of the header you have to use for sending the access token in every subsequent request."),
+                                    fieldWithPath(sc.getATokenExpirationTimeHolder())
+                                            .description("Time (expressed in milliseconds) in which the access token will expire."),
+                                    fieldWithPath(sc.getATokenExpiresInHolder())
+                                            .description("Time of validity of the access token."),
+
+                                    //refresh token
+                                    fieldWithPath(sc.getRTokenHolder())
+                                            .description("Refresh token."),
+                                    fieldWithPath(sc.getRTokenExpirationTimeHolder())
+                                            .description("Time (expressed in milliseconds) in which the refresh token will expire."),
+                                    fieldWithPath(sc.getRTokenExpiresInHolder())
+                                            .description("Time of validity of the refresh token.")
                             )
                     )
             );
