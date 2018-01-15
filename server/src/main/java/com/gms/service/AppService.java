@@ -27,17 +27,21 @@ public class AppService {
      private final RoleService roleService;
      private final UserService userService;
      private final OwnedEntityService oeService;
+     private Boolean initialLoadOK = null;
 
      public boolean isInitialLoadOK() {
-         boolean ok = true;
-         if (!configurationService.configurationExist()) { //first app start up
-             ok = configurationService.createDefaultConfig();
-             ok = ok && permissionService.createDefaultPermissions();
-             ok = ok && roleService.createDefaultRole() != null;
-             ok = ok && userService.createDefaultUser() != null;
-             ok = ok && oeService.createDefaultEntity() != null;
-             ok = ok && configurationService.assignDefaultUserToEntityWithRole();
+         if (initialLoadOK == null) {
+             boolean ok = true;
+             if (!configurationService.configurationExist()) { //first app start up
+                 ok = configurationService.createDefaultConfig();
+                 ok = ok && permissionService.createDefaultPermissions();
+                 ok = ok && roleService.createDefaultRole() != null;
+                 ok = ok && userService.createDefaultUser() != null;
+                 ok = ok && oeService.createDefaultEntity() != null;
+                 ok = ok && configurationService.assignDefaultUserToEntityWithRole();
+             }
+             initialLoadOK = ok;
          }
-         return ok;
+         return initialLoadOK;
      }
 }
