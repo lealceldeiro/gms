@@ -1,0 +1,11 @@
+[[resource-user-remove-roles]]
+=== Removing roles
+A `DELETE` request removes some roles for a user from an owned entity.
+
+include::{snippets}/remove-roles-from-user-user-o-k/response-fields.adoc[]
+
+==== Example request
+include::{snippets}/remove-roles-from-user-user-o-k/curl-request.adoc[]
+
+==== Example response
+include::{snippets}/remove-roles-from-user-user-o-k/http-response.adoc[]

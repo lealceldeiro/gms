@@ -87,6 +87,7 @@ public class UserControllerTest {
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
+                .alwaysDo(restDocResHandler)
                 .addFilter(springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();

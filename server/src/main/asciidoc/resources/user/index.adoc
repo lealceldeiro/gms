@@ -1,0 +1,19 @@
+[[resources-user]]
+== User
+The User resource is used to list the users' information.
+
+include::create.adoc[]
+
+include::list.adoc[]
+
+include::get.adoc[]
+
+include::update.adoc[]
+
+include::delete.adoc[]
+
+include::get-roles.adoc[]
+
+include::add-roles.adoc[]
+
+include::remove-roles.adoc[]
