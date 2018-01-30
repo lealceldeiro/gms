@@ -2,22 +2,42 @@
 === Registering a new user
 A `POST` request adds a new user. This service is only available to users with administrative permissions to register new users directly without going through the signing up process. When using this service the user is created by default with the option `emailVerfied` to true which means she/he won't have to go through the verification email process in order to activate the account.
 
-include::{snippets}/register/response-fields.adoc[]
+==== Request
+include::../../util/H-REQUEST-FIELDS.adoc[]
 
-==== Example request
+include::{snippets}/register/request-fields.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
 include::{snippets}/register/curl-request.adoc[]
 
-==== Example response
+==== Response
+include::../../util/H-RESPONSE-FIELD.adoc[]
+
+include::{snippets}/register/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
 include::{snippets}/register/http-response.adoc[]
 
 [[resource-user-signup]]
 === Sign up a new user
 A `POST` request adds a new user. This service is only available if the system is configured to accept new users via signing up process.
 
-include::{snippets}/sign-up-user-o-k/response-fields.adoc[]
+==== Request
+include::../../util/H-REQUEST-FIELDS.adoc[]
 
-==== Example request
+include::{snippets}/sign-up-user-o-k/request-fields.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
 include::{snippets}/sign-up-user-o-k/curl-request.adoc[]
 
-==== Example response
+==== Response
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/sign-up-user-o-k/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
 include::{snippets}/sign-up-user-o-k/http-response.adoc[]

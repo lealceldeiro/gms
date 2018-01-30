@@ -112,7 +112,7 @@ public class RestUserControllerTest {
                                         fields.withPath("name").description("User's name"),
                                         fields.withPath("lastName").description("User's last name"),
                                         fields.withPath("password").description("User's password"),
-                                        fields.withPath("enabled").ignored(),
+                                        fields.withPath("enabled").description("Whether the user will be enabled or not"),
                                         fields.withPath("id").ignored(),
                                         fields.withPath("version").ignored(),
                                         fields.withPath("emailVerified").ignored(),
@@ -138,9 +138,9 @@ public class RestUserControllerTest {
                                         fieldWithPath("_links")
                                                 .description("Available links for requesting other webservices related to user"),
                                         fieldWithPath("authorities").ignored(),
-                                        fieldWithPath("credentialsNonExpired").ignored(),
-                                        fieldWithPath("accountNonLocked").ignored(),
-                                        fieldWithPath("accountNonExpired").ignored()
+                                        fields.withPath("accountNonExpired").description("Whether the account has not expired yet or it already expired"),
+                                        fields.withPath("accountNonLocked").description("Whether the account is not locked or it has been locked"),
+                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired")
                                 )
                         )
                 ).andReturn();

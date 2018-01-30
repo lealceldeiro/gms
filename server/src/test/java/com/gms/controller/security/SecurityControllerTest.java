@@ -92,7 +92,7 @@ public class SecurityControllerTest {
         }
         String rd = random.nextString() + "scTest";
         EUser u = new EUser(rd, "scTest" + rd + "esc@test.com", rd, rd, rd);
-        u.setEnabled(true);
+        u.setEnabled(false);
         Resource<EUser> resource = new Resource<>(u);
 
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);
@@ -135,9 +135,9 @@ public class SecurityControllerTest {
                                         fieldWithPath("_links")
                                                 .description("Available links for requesting other webservices related to user"),
                                         fieldWithPath("authorities").ignored(),
-                                        fieldWithPath("credentialsNonExpired").ignored(),
-                                        fieldWithPath("accountNonLocked").ignored(),
-                                        fieldWithPath("accountNonExpired").ignored()
+                                        fields.withPath("accountNonExpired").description("Whether the account has not expired yet or it already expired"),
+                                        fields.withPath("accountNonLocked").description("Whether the account is not locked or it has been locked"),
+                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired")
                                 )
                         )
                 );

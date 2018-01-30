@@ -2,10 +2,20 @@
 === Removing roles
 A `DELETE` request removes some roles for a user from an owned entity.
 
-include::{snippets}/remove-roles-from-user-user-o-k/response-fields.adoc[]
+==== Request
+include::../../util/H-REQUEST-FIELDS.adoc[]
 
-==== Example request
+include::{snippets}/remove-roles-from-user-user-o-k/request-fields.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
 include::{snippets}/remove-roles-from-user-user-o-k/curl-request.adoc[]
 
-==== Example response
+==== Response
+include::../../util/H-RESPONSE-FIELD.adoc[]
+
+include::{snippets}/remove-roles-from-user-user-o-k/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
 include::{snippets}/remove-roles-from-user-user-o-k/http-response.adoc[]
