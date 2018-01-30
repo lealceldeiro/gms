@@ -79,6 +79,6 @@ public class RestUserController extends ResponseEntityExceptionHandler {
         HashMap<String, Object> r = new HashMap<>();
         r.put(dc.getResMessageHolder(), (msg.getMessage(ex.getMessage()) + ". "
                 + msg.getMessage(ex.finishedOK() ? "request.finished.OK" : "request.finished.KO")));
-        return handleExceptionInternal(ex, r, new HttpHeaders(), HttpStatus.EXPECTATION_FAILED, req);
+        return handleExceptionInternal(ex, r, new HttpHeaders(), ex.getHttpStatus(), req);
     }
 }

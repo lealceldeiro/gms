@@ -50,18 +50,19 @@ public class EUser extends GmsEntity implements UserDetails {
     private final String password;
 
     @Getter(AccessLevel.NONE)
-    private boolean enabled = false;
-
-    private boolean emailVerified = false;
+    private Boolean enabled;
 
     @Getter(AccessLevel.NONE)
-    private boolean accountExpired = false;
+    private Boolean emailVerified;
 
     @Getter(AccessLevel.NONE)
-    private boolean accountLocked = false;
+    private Boolean accountExpired;
 
     @Getter(AccessLevel.NONE)
-    private boolean passwordExpired = false;
+    private Boolean accountLocked;
+
+    @Getter(AccessLevel.NONE)
+    private Boolean passwordExpired;
 
     @SuppressWarnings("JpaAttributeTypeInspection")
     @Getter(AccessLevel.NONE)
@@ -74,21 +75,28 @@ public class EUser extends GmsEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !this.accountExpired;
+        // by default: true
+        return this.accountExpired == null || !this.accountExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return !this.accountLocked;
+        // by default: true
+        return this.accountLocked == null || !this.accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !this.passwordExpired;
+        // by default: true
+        return this.passwordExpired == null || !this.passwordExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return this.enabled != null && this.enabled;
+    }
+
+    public boolean isEmailVerified() {
+        return this.emailVerified != null && this.emailVerified;
     }
 }

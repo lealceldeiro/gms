@@ -46,7 +46,7 @@ public class BRole extends GmsEntity{
      * Whether the role is enabled or not. If a role associated to a user is not enabled, the user will no be granted the
      * associated permissions to this role.
      */
-    private boolean enabled = false;
+    private Boolean enabled = false;
 
     /**
      * Permissions associated to this role.

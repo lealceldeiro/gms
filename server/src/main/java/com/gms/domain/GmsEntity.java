@@ -22,8 +22,8 @@ public class GmsEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    protected long id;
+    protected Long id;
 
     @Version
-    protected int version;
+    protected Integer version;
 }
