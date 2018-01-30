@@ -2,10 +2,16 @@
 === Getting a permission's info
 A `GET` request lists a permission's information.
 
-include::{snippets}/get-permission/response-fields.adoc[]
+==== Request
+include::../../util/H-EXAMPLE.adoc[]
 
-==== Example request
 include::{snippets}/get-permission/curl-request.adoc[]
 
-==== Example response
+==== Response
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/get-permission/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
 include::{snippets}/get-permission/http-response.adoc[]

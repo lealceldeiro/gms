@@ -12,7 +12,7 @@ include::../../util/H-EXAMPLE.adoc[]
 include::{snippets}/remove-roles-from-user-user-o-k/curl-request.adoc[]
 
 ==== Response
-include::../../util/H-RESPONSE-FIELD.adoc[]
+include::../../util/H-RESPONSE-FIELDS.adoc[]
 
 include::{snippets}/remove-roles-from-user-user-o-k/response-fields.adoc[]
 

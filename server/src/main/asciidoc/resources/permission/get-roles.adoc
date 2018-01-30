@@ -2,10 +2,18 @@
 === Getting roles
 A `GET` request lists all roles where a permission is used.
 
-include::{snippets}/get-roles-permission/response-fields.adoc[]
+==== Request
+include::../../util/H-EXAMPLE.adoc[]
 
-==== Example request
 include::{snippets}/get-roles-permission/curl-request.adoc[]
 
-==== Example response
+==== Response
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/get-roles-permission/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
 include::{snippets}/get-roles-permission/http-response.adoc[]
+
+include::{snippets}/get-roles-permission/response-fields.adoc[]
