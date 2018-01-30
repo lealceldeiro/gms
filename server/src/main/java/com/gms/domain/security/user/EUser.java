@@ -63,6 +63,7 @@ public class EUser extends GmsEntity implements UserDetails {
     @Getter(AccessLevel.NONE)
     private boolean passwordExpired = false;
 
+    @SuppressWarnings("JpaAttributeTypeInspection")
     @Getter(AccessLevel.NONE)
     private HashSet<GrantedAuthority> authorities;
 
