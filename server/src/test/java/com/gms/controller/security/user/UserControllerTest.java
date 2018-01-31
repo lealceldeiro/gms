@@ -1,6 +1,5 @@
 package com.gms.controller.security.user;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
@@ -57,7 +56,7 @@ public class UserControllerTest {
 
     @Autowired
     private WebApplicationContext context;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -85,7 +84,6 @@ public class UserControllerTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)

@@ -1,6 +1,5 @@
 package com.gms.controller.security;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
@@ -27,6 +26,7 @@ import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -48,7 +48,7 @@ public class SecurityControllerTest {
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
     @Autowired private WebApplicationContext context;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -72,7 +72,6 @@ public class SecurityControllerTest {
     public void setUp() throws Exception{
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
@@ -94,9 +93,12 @@ public class SecurityControllerTest {
         String rd = random.nextString() + "scTest";
         EUser u = new EUser(rd, "scTest" + rd + "esc@test.com", rd, rd, rd);
         u.setEnabled(false);
+//        ReflectionTestUtils.setField(u, "authorities", null);
         Resource<EUser> resource = new Resource<>(u);
+        ReflectionTestUtils.setField(resource, "links", null);
 
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);
+
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
@@ -109,8 +111,8 @@ public class SecurityControllerTest {
                                         fields.withPath("name").description("User's name"),
                                         fields.withPath("lastName").description("User's last name"),
                                         fields.withPath("password").description("User's password"),
-                                        fields.withPath("enabled").optional()
-                                                .description("Whether the user should be enabled or not [default is false]"),
+                                        fields.withPath("enabled").optional().description("Whether the user should be enabled or not [default is `false`]"),
+                                        fields.withPath("authorities").optional().ignored(),
                                         fields.withPath("emailVerified").optional().ignored(),
                                         fields.withPath("accountNonExpired").optional().ignored(),
                                         fields.withPath("accountNonLocked").optional().ignored(),
@@ -130,12 +132,12 @@ public class SecurityControllerTest {
                                         fieldWithPath("enabled").description("Whether the just created user is enabled or not"),
                                         fieldWithPath("emailVerified")
                                                 .description("Indicates whether the user has verified his/her email or not"),
-                                        fieldWithPath("_links")
-                                                .description("Available links for requesting other webservices related to user"),
-                                        fieldWithPath("authorities").ignored(),
+                                        fields.withPath("authorities").optional().ignored(),
                                         fields.withPath("accountNonExpired").description("Whether the account has not expired yet or it already expired"),
                                         fields.withPath("accountNonLocked").description("Whether the account is not locked or it has been locked"),
-                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired")
+                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired"),
+                                        fieldWithPath("_links")
+                                                .description("Available links for requesting other webservices related to user")
                                 )
                         )
                 );

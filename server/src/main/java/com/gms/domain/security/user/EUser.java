@@ -56,47 +56,49 @@ public class EUser extends GmsEntity implements UserDetails {
     private Boolean emailVerified;
 
     @Getter(AccessLevel.NONE)
-    private Boolean accountExpired;
+    private Boolean accountNonExpired;
 
     @Getter(AccessLevel.NONE)
-    private Boolean accountLocked;
+    private Boolean accountNonLocked;
 
     @Getter(AccessLevel.NONE)
-    private Boolean passwordExpired;
+    private Boolean credentialsNonExpired;
 
+    // user authorities are handled via jjwt, this attribute is kept for compatibility with Spring Security
     @SuppressWarnings("JpaAttributeTypeInspection")
     @Getter(AccessLevel.NONE)
-    private HashSet<GrantedAuthority> authorities;
+    private HashSet<GrantedAuthority> authorities = null;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return authorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
         // by default: true
-        return this.accountExpired == null || !this.accountExpired;
+        return accountNonExpired == null || accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
         // by default: true
-        return this.accountLocked == null || !this.accountLocked;
+        return accountNonLocked == null || accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
         // by default: true
-        return this.passwordExpired == null || !this.passwordExpired;
+        return credentialsNonExpired == null || credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.enabled != null && this.enabled;
+        // by default: false
+        return enabled != null && enabled;
     }
 
     public boolean isEmailVerified() {
-        return this.emailVerified != null && this.emailVerified;
+        return emailVerified != null && emailVerified;
     }
 }

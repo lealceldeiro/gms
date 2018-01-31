@@ -1,5 +1,7 @@
 package com.gms.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.config.security.LoginPayloadSample;
 import com.gms.util.constant.DefaultConst;
@@ -28,6 +30,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Dec 21, 2017
  */
 public class GmsSecurityUtil {
+
+    private final static ObjectMapper objectMapper = new ObjectMapper()
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    public static ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
 
     public static String createSuperAdminAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper,
                                                    boolean shouldIFail) throws Exception {

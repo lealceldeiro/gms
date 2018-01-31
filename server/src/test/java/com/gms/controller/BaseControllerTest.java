@@ -1,6 +1,5 @@
 package com.gms.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
@@ -42,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BaseControllerTest {
 
     @Autowired private WebApplicationContext context;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -67,7 +66,6 @@ public class BaseControllerTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilter(this.springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
