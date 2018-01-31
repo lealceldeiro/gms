@@ -20,11 +20,15 @@ public class MessageResolver {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public String getMessage(String code, Object... args) {
-        return messageSource.getMessage(code, args, code, LocaleContextHolder.getLocale());
+    public String getMessage(String code, String... args) {
+        String[] realArgs = new String[args.length];
+        for (int i = 0; i < args.length; i++) {
+            realArgs[i] = getMessage(args[i]);
+        }
+        return messageSource.getMessage(code, realArgs, code, LocaleContextHolder.getLocale());
     }
 
     public String getMessage(String code) {
-        return getMessage(code, new Object[0]);
+        return getMessage(code, new String[0]);
     }
 }
