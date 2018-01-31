@@ -27,26 +27,26 @@ import java.util.HashSet;
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     @Column(unique = true)
     private final String username;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     @Column(unique = true)
     private final String email;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     private final String name;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     private final String lastName;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     private final String password;
 
     @Getter(AccessLevel.NONE)

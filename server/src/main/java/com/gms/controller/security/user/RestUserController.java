@@ -3,9 +3,11 @@ package com.gms.controller.security.user;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.i18n.MessageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
@@ -13,11 +15,12 @@ import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 
 /**
  * RestUserController
@@ -58,7 +61,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
     @PostMapping(path = "user", produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public PersistentEntityResource register(@RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public PersistentEntityResource register(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), true, true);
         if (u != null) {
@@ -76,9 +79,42 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsGeneralException.class)
     protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
-        HashMap<String, Object> r = new HashMap<>();
-        r.put(dc.getResMessageHolder(), (msg.getMessage(ex.getMessage()) + ". "
-                + msg.getMessage(ex.finishedOK() ? "request.finished.OK" : "request.finished.KO")));
-        return handleExceptionInternal(ex, r, new HttpHeaders(), ex.getHttpStatus(), req);
+        Object resBody = ExceptionUtil.getResponseBodyForGmsGeneralException(ex, msg, dc);
+        return handleExceptionInternal(ex, resBody, new HttpHeaders(), ex.getHttpStatus(), req);
     }
+
+
+    /**
+     * Handles all ConstraintViolationException exceptions thrown through the {@link TransactionSystemException} exception.
+     *
+     * @param ex  {@link TransactionSystemException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(TransactionSystemException.class)
+    protected ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex, WebRequest req) {
+        return handleConstraintViolationException(ex, req);
+    }
+
+    /**
+     * Handles all ConstraintViolationException exceptions thrown through the {@link DataIntegrityViolationException} exception.
+     *
+     * @param ex  {@link DataIntegrityViolationException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest req) {
+        return handleConstraintViolationException(ex, req);
+    }
+
+    //endregion
+
+    private ResponseEntity<Object> handleConstraintViolationException(Exception ex, WebRequest req) {
+        Object resBody = ExceptionUtil.getResponseBodyForConstraintViolationException(ex, msg, dc);
+        return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, req);
+    }
+
 }

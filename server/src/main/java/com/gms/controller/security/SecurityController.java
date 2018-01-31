@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public class SecurityController extends BaseController{
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("permitAll()")
     @ResponseBody
-    public PersistentEntityResource signUpUser(@RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public PersistentEntityResource signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), false);
         if (u != null) {
@@ -84,7 +85,7 @@ public class SecurityController extends BaseController{
     @PostMapping("access_token")
     @PreAuthorize("permitAll()")
     @ResponseBody
-    public Map refreshToken(@RequestBody RefreshTokenPayload payload) {
+    public Map refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
         String oldRefreshToken = payload.getRefreshToken();
         if (oldRefreshToken != null) {
             try {

@@ -1,20 +1,21 @@
 package com.gms.controller;
 
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.HashMap;
 
 /**
  * BaseController
@@ -49,7 +50,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(NotFoundEntityException.class)
     protected ResponseEntity<Object> handleNotFoundEntityException(NotFoundEntityException ex, WebRequest req) {
-        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()));
+        Object resBody = ExceptionUtil.createResponseBodyAsMap(msg.getMessage(ex.getMessage()), dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
     }
 
@@ -62,12 +63,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsSecurityException.class)
     protected ResponseEntity<Object> handleGmsSecurityException(GmsSecurityException ex, WebRequest req) {
-        HashMap<String, Object> additionalData = new HashMap<>();
-        additionalData.put("timestamp", System.currentTimeMillis());
-        additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
-        additionalData.put("error", msg.getMessage("security.unauthorized"));
-        additionalData.put("path", dc.getApiBasePath() + "/" + ex.getPath());
-        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()), additionalData);
+        Object resBody = ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNAUTHORIZED, req);
     }
 
@@ -80,23 +76,42 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsGeneralException.class)
     protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
-        String suffixCode = ex.finishedOK() ? "request.finished.OK" : "request.finished.KO";
-        Object resBody = createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(suffixCode));
+        Object resBody = ExceptionUtil.getResponseBodyForGmsGeneralException(ex, msg, dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), ex.getHttpStatus(), req);
+    }
+
+
+    /**
+     * Handles all ConstraintViolationException exceptions thrown through the {@link TransactionSystemException} exception.
+     *
+     * @param ex  {@link TransactionSystemException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(TransactionSystemException.class)
+    protected ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex, WebRequest req) {
+        return handleConstraintViolationException(ex, req);
+    }
+
+    /**
+     * Handles all ConstraintViolationException exceptions thrown through the {@link DataIntegrityViolationException} exception.
+     *
+     * @param ex  {@link DataIntegrityViolationException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest req) {
+        return handleConstraintViolationException(ex, req);
     }
 
     //endregion
 
-    private HashMap<String, Object> createResponseBodyAsMap(Object o) {
-        HashMap<String, Object> r = new HashMap<>();
-        r.put(dc.getResMessageHolder(), o);
-        return r;
+    private ResponseEntity<Object> handleConstraintViolationException(Exception ex, WebRequest req) {
+        Object resBody = ExceptionUtil.getResponseBodyForConstraintViolationException(ex, msg, dc);
+        return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, req);
     }
 
-    private HashMap<String, Object> createResponseBodyAsMap(Object o, HashMap<String, Object> additionalDataMap) {
-        HashMap<String, Object> base = createResponseBodyAsMap(o);
-        base.putAll(additionalDataMap);
-
-        return base;
-    }
 }
