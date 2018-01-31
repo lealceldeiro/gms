@@ -1,5 +1,6 @@
 package com.gms.controller.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
@@ -47,8 +48,7 @@ public class SecurityControllerTest {
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
     @Autowired private WebApplicationContext context;
-
-    @Autowired private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -72,6 +72,7 @@ public class SecurityControllerTest {
     public void setUp() throws Exception{
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
@@ -110,14 +111,11 @@ public class SecurityControllerTest {
                                         fields.withPath("password").description("User's password"),
                                         fields.withPath("enabled").optional()
                                                 .description("Whether the user should be enabled or not [default is false]"),
-                                        fields.withPath("id").ignored(),
-                                        fields.withPath("version").ignored(),
-                                        fields.withPath("emailVerified").ignored(),
-                                        fields.withPath("authorities").ignored(),
-                                        fields.withPath("accountNonExpired").ignored(),
-                                        fields.withPath("accountNonLocked").ignored(),
-                                        fields.withPath("credentialsNonExpired").ignored(),
-                                        fields.withPath("links").ignored()
+                                        fields.withPath("emailVerified").optional().ignored(),
+                                        fields.withPath("accountNonExpired").optional().ignored(),
+                                        fields.withPath("accountNonLocked").optional().ignored(),
+                                        fields.withPath("credentialsNonExpired").optional().ignored(),
+                                        fields.withPath("links").optional().ignored()
                                 )
                         )
                 )

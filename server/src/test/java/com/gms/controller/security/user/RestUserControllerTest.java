@@ -1,5 +1,6 @@
 package com.gms.controller.security.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
@@ -51,9 +52,7 @@ public class RestUserControllerTest {
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -76,6 +75,7 @@ public class RestUserControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
@@ -113,14 +113,11 @@ public class RestUserControllerTest {
                                         fields.withPath("lastName").description("User's last name"),
                                         fields.withPath("password").description("User's password"),
                                         fields.withPath("enabled").description("Whether the user will be enabled or not"),
-                                        fields.withPath("id").ignored(),
-                                        fields.withPath("version").ignored(),
-                                        fields.withPath("emailVerified").ignored(),
-                                        fields.withPath("authorities").ignored(),
-                                        fields.withPath("accountNonExpired").ignored(),
-                                        fields.withPath("accountNonLocked").ignored(),
-                                        fields.withPath("credentialsNonExpired").ignored(),
-                                        fields.withPath("links").ignored()
+                                        fields.withPath("emailVerified").ignored().optional(),
+                                        fields.withPath("accountNonExpired").ignored().optional(),
+                                        fields.withPath("accountNonLocked").ignored().optional(),
+                                        fields.withPath("credentialsNonExpired").ignored().optional(),
+                                        fields.withPath("links").ignored().optional()
                                 )
                         )
                 )

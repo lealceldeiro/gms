@@ -1,5 +1,6 @@
 package com.gms.repository.security.permission;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
@@ -43,8 +44,7 @@ public class BPermissionRepositoryTest {
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
     @Autowired private WebApplicationContext context;
-
-    @Autowired private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -75,6 +75,7 @@ public class BPermissionRepositoryTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))

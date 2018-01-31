@@ -1,5 +1,6 @@
 package com.gms.config.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.component.security.authentication.IAuthenticationFacade;
@@ -51,8 +52,7 @@ public class SecurityConfigTest {
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
     @Autowired private WebApplicationContext context;
-
-    @Autowired private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
@@ -84,6 +84,7 @@ public class SecurityConfigTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
