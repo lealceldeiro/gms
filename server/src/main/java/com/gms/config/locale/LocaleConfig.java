@@ -30,6 +30,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
             "classpath:/i18n/user",
             "classpath:/i18n/messages",
             "classpath:/i18n/frameworkoverride",
+            "classpath:/i18n/validations",
     };
 
     private final DefaultConst dc;
