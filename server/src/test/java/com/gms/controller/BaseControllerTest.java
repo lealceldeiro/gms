@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -126,14 +127,17 @@ public class BaseControllerTest {
         String fd = random.nextString();
         EUser u = new EUser(fd, "bcTest" + fd + "@test.com", fd, fd, fd);
         Resource<EUser> resource = new Resource<>(u);
-        final String response = mvc.perform(
+        final MockHttpServletResponse result = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
-        ).andReturn().getResponse().getContentAsString();
-        JSONObject resObj = new JSONObject(response);
+        ).andReturn().getResponse();
+
+        assertTrue("Status expected: not <404> but was:<404>", result.getStatus() != HttpStatus.NOT_FOUND.value());
+
+        JSONObject resObj = new JSONObject(result.getContentAsString());
 
         String suffix = msg.getMessage("request.finished.KO"); // request is not supposed to finish ok in this scenario
-        assertTrue("", resObj.getString(dc.getResMessageHolder()).endsWith(suffix));
+        assertTrue("Request is supposed to finish KO in this scenario", resObj.getString(dc.getResMessageHolder()).endsWith(suffix));
 
         // restart initial config
         if (initial) {

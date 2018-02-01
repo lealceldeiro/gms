@@ -3,10 +3,13 @@ package com.gms.controller.security.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
+import com.gms.service.AppService;
+import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.i18n.MessageResolver;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,6 +66,13 @@ public class RestUserControllerTest {
     @Autowired
     private DefaultConst dc;
 
+    @Autowired
+    private AppService appService;
+    @Autowired
+    private ConfigurationService configService;
+    @Autowired
+    private MessageResolver msg;
+
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
 
@@ -91,7 +101,7 @@ public class RestUserControllerTest {
 
 
     @Test
-    public void register() throws Exception{
+    public void register() throws Exception {
         EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com",
                 "un" + random.nextString(), "ul" + random.nextString(), "pass");
         u.setEnabled(true);
@@ -146,5 +156,37 @@ public class RestUserControllerTest {
 
         assertNotNull("User object is null", u);
         assertTrue("When registering a user, his/her email must be verified by default", u.isEmailVerified());
+    }
+
+    @Test
+    public void handleTransactionSystemException() throws Exception {
+        String fd = random.nextString();
+        EUser u = new EUser(null, "rucTest" + fd + "@test.com", fd, fd, fd);
+        Resource<EUser> resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + "/user").contentType(MediaType.APPLICATION_JSON)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void handleDataIntegrityViolationException() throws Exception {
+        String fd = random.nextString();
+        String email = "rucTest" + fd + "@test.com";
+        EUser u = new EUser(fd, email, fd, fd, fd);
+        Resource<EUser> resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + "/user").contentType(MediaType.APPLICATION_JSON)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isCreated());
+
+        u = new EUser(u.getUsername() + fd, email, u.getName() + fd, u.getLastName() + fd, u.getPassword() + fd);
+        resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
     }
 }
