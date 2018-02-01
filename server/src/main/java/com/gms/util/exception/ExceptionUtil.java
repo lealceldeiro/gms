@@ -9,7 +9,10 @@ import org.springframework.transaction.TransactionSystemException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * ExceptionUtil
@@ -53,24 +56,24 @@ public class ExceptionUtil {
         }
 
         if (cause != null) {
-            String[] errors = new String[0];
+            GmsError gmsError = new GmsError();
             if (cause instanceof ConstraintViolationException) {
-                errors = getErrorsWhenConstraintViolationException(cause, msg);
+                gmsError = getErrorsWhenConstraintViolationException(cause, msg);
             } else if (cause instanceof SQLException) {
-                errors = getErrorsWhenSQLException(cause, msg);
+                gmsError = getErrorsWhenSQLException(cause, msg);
             }
             HashMap<String, Object> additionalData = new HashMap<>();
-            additionalData.put("errors", errors);
+            additionalData.put("errors", gmsError.getErrors());
             resBody = createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc, additionalData);
         }
         return resBody;
     }
 
 
-    private static String[] getErrorsWhenSQLException(Throwable cause, MessageResolver msg) {
+    private static GmsError getErrorsWhenSQLException(Throwable cause, MessageResolver msg) {
         final int state = Integer.parseInt(((SQLException) cause).getSQLState());
         final Iterator<Throwable> th = ((SQLException) cause).iterator();
-        ArrayList<String> errList = new ArrayList<>();
+        GmsError gmsError = new GmsError();
         Throwable t;
         String[] pair;
         String field;
@@ -81,24 +84,22 @@ public class ExceptionUtil {
             pair = t.getMessage().split("Detail:")[1].split("=");
             field = pair[0];
             value = pair[1];
-            field = field.substring(field.indexOf('('), field.lastIndexOf(')') + 1);
-            value = value.substring(0, value.lastIndexOf(')') + 1);
+            field = field.substring(field.indexOf('(') + 1, field.lastIndexOf(')'));
+            value = value.substring(1, value.lastIndexOf(')'));
             if (state == SQLSTATE_DUPLICATED_VALUES) {
-                errList.add(msg.getMessage("validation.field.unique", field, value));
+                gmsError.addError(field, msg.getMessage("validation.field.unique", value, field));
             }
         }
-        String[] errors = new String[errList.size()];
-        return errList.toArray(errors);
+        return gmsError;
     }
 
-    private static String[] getErrorsWhenConstraintViolationException(Throwable cause, MessageResolver msg) {
+    private static GmsError getErrorsWhenConstraintViolationException(Throwable cause, MessageResolver msg) {
         final Set<ConstraintViolation<?>> v = ((ConstraintViolationException) cause).getConstraintViolations();
-        String[] errors = new String[v.size()];
-        int i = 0;
+        GmsError gmsError = new GmsError();
         for (ConstraintViolation<?> cv : v) {
-            errors[i++] = msg.getMessage(cv.getMessage(), cv.getPropertyPath().toString());
+            gmsError.addError(cv.getPropertyPath().toString(), msg.getMessage(cv.getMessage(), cv.getPropertyPath().toString()));
         }
-        return errors;
+        return gmsError;
     }
 
     public static Map<String, Object> createResponseBodyAsMap(Object o, DefaultConst dc) {
