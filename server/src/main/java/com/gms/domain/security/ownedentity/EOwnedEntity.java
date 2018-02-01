@@ -32,7 +32,8 @@ public class EOwnedEntity extends GmsEntity{
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(nullable = false, length = 255)
     private final String name;
 
     /**

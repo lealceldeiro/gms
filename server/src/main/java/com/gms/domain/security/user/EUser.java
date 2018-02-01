@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -33,25 +34,35 @@ public class EUser extends GmsEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private final String username;
 
+    /**
+     * For emails, max length  as here:
+     * http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
+     * explained here:
+     * https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address/574698#574698
+     */
+    @Size(max = 254, message = "validation.field.size")
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
     @Email(message = "validation.field.not.well-formed")
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 254)
     private final String email;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(nullable = false, length = 255)
     private final String name;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(nullable = false, length = 255)
     private final String lastName;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(nullable = false, length = 255)
     private final String password;
 
     @Getter(AccessLevel.NONE)

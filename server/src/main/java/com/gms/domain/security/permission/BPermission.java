@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +36,8 @@ public class BPermission extends GmsEntity {
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true, nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(unique = true, nullable = false, length = 255)
     private final String name;
 
     /**
@@ -43,7 +45,8 @@ public class BPermission extends GmsEntity {
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true, nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(unique = true, nullable = false, length = 255)
     private final String label;
 
     /**

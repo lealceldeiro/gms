@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * BConfiguration
@@ -31,6 +32,7 @@ public class BConfiguration extends GmsEntity{
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
+    @Size(max = 255, message = "validation.field.size")
     @Column(nullable = false)
     @Getter @Setter private String key;
 
@@ -39,7 +41,8 @@ public class BConfiguration extends GmsEntity{
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(nullable = false, length = 255)
     @Getter @Setter private String value;
 
     /**

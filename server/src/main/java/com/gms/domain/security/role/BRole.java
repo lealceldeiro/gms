@@ -34,14 +34,15 @@ public class BRole extends GmsEntity{
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true, nullable = false)
+    @Size(max = 255, message = "validation.field.size")
+    @Column(unique = true, nullable = false, length = 255)
     private final String label;
 
     /**
      * A description of what is this role for.
      */
     @Size(max = 10485760, message = "validation.field.size")
-    @Column(length = 10485760, nullable = false)
+    @Column(length = 10485760)
     private String description;
 
     /**
