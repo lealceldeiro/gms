@@ -9,7 +9,6 @@ import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
-import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +46,10 @@ public class SecurityController extends BaseController{
     private final IAuthenticationFacade authenticationFacade;
 
     @Autowired
-    public SecurityController(UserService userService, MessageResolver messageResolver, DefaultConst defaultConst,
+    public SecurityController(UserService userService, DefaultConst defaultConst,
                               SecurityConst sc, JWTService jwtService, IAuthenticationFacade authenticationFacade) {
         super(defaultConst);
         this.userService = userService;
-        this.msg = messageResolver;
         this.sc = sc;
         this.jwtService = jwtService;
         this.authenticationFacade = authenticationFacade;

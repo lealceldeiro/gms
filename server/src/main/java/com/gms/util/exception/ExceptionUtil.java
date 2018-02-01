@@ -1,6 +1,7 @@
 package com.gms.util.exception;
 
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.SQLExceptionCode;
 import com.gms.util.i18n.MessageResolver;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -9,10 +10,7 @@ import org.springframework.transaction.TransactionSystemException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ExceptionUtil
@@ -22,11 +20,6 @@ import java.util.Set;
  * Jan 31, 2018
  */
 public class ExceptionUtil {
-
-    /**
-     * According to https://www.postgresql.org/docs/9.2/static/errcodes-appendix.html
-     */
-    private static final int SQLSTATE_DUPLICATED_VALUES = 23505;
 
     private ExceptionUtil() {
 
@@ -71,7 +64,7 @@ public class ExceptionUtil {
 
 
     private static GmsError getErrorsWhenSQLException(Throwable cause, MessageResolver msg) {
-        final int state = Integer.parseInt(((SQLException) cause).getSQLState());
+        final String state = ((SQLException) cause).getSQLState();
         final Iterator<Throwable> th = ((SQLException) cause).iterator();
         GmsError gmsError = new GmsError();
         Throwable t;
@@ -81,13 +74,22 @@ public class ExceptionUtil {
 
         while (th.hasNext()) {
             t = th.next();
-            pair = t.getMessage().split("Detail:")[1].split("=");
-            field = pair[0];
-            value = pair[1];
-            field = field.substring(field.indexOf('(') + 1, field.lastIndexOf(')'));
-            value = value.substring(1, value.lastIndexOf(')'));
-            if (state == SQLSTATE_DUPLICATED_VALUES) {
-                gmsError.addError(field, msg.getMessage("validation.field.unique", value, field));
+            switch (state) {
+                case SQLExceptionCode.UNIQUE_VIOLATION:
+                    pair = t.getMessage().split("Detail:")[1].split("=");
+                    field = pair[0];
+                    value = pair[1];
+                    field = field.substring(field.indexOf('(') + 1, field.lastIndexOf(')'));
+                    value = value.substring(1, value.lastIndexOf(')'));
+                    gmsError.addError(field, msg.getMessage("validation.field.unique", value, field));
+                    break;
+                case SQLExceptionCode.STRING_DATA_RIGHT_TRUNCATION:
+                    gmsError.addError(t.getLocalizedMessage());
+                    break;
+                default:
+                    // for now, just add the error
+                    gmsError.addError(t.getLocalizedMessage());
+                    break;
             }
         }
         return gmsError;
@@ -96,8 +98,22 @@ public class ExceptionUtil {
     private static GmsError getErrorsWhenConstraintViolationException(Throwable cause, MessageResolver msg) {
         final Set<ConstraintViolation<?>> v = ((ConstraintViolationException) cause).getConstraintViolations();
         GmsError gmsError = new GmsError();
+        Object aux1;
+        Object aux2;
+        ArrayList<String> args;
         for (ConstraintViolation<?> cv : v) {
-            gmsError.addError(cv.getPropertyPath().toString(), msg.getMessage(cv.getMessage(), cv.getPropertyPath().toString()));
+            args = new ArrayList<>();
+            args.add(cv.getPropertyPath().toString());
+            aux1 = cv.getConstraintDescriptor().getAttributes().get("min");
+            if (aux1 != null) {
+                args.add(aux1.toString());
+            }
+            aux2 = cv.getConstraintDescriptor().getAttributes().get("max");
+            if (aux2 != null) {
+                args.add(aux2.toString());
+            }
+
+            gmsError.addError(cv.getPropertyPath().toString(), msg.getMessage(cv.getMessage(), args.toArray(new String[args.size()])));
         }
         return gmsError;
     }

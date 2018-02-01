@@ -23,8 +23,11 @@ public class GmsError {
     @Setter
     private Map<String, List<String>> errors;
 
+    private static final String OTHERS = "others";
+
     GmsError() {
         this.errors = new HashMap<>();
+        this.errors.put(OTHERS, new ArrayList<>());
     }
 
     public void addError(String field, String message) {
@@ -35,6 +38,10 @@ public class GmsError {
         } else {
             errors.get(field).add(message);
         }
+    }
+
+    public void addError(String message) {
+        errors.get(OTHERS).add(message);
     }
 
     public void removeError(String field) {

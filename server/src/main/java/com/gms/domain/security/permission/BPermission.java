@@ -33,16 +33,16 @@ public class BPermission extends GmsEntity {
     /**
      * Name to be used for authenticating the user.
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     @Column(unique = true, nullable = false)
     private final String name;
 
     /**
      * Label to be shown to the final user.
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     @Column(unique = true, nullable = false)
     private final String label;
 

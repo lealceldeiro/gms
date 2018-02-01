@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
@@ -28,15 +29,17 @@ public class BConfiguration extends GmsEntity{
     /**
      * Key under the configuration is saved.
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
+    @Column(nullable = false)
     @Getter @Setter private String key;
 
     /**
      * String representation of the configuration value.
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
+    @Column(nullable = false)
     @Getter @Setter private String value;
 
     /**

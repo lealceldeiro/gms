@@ -6,6 +6,7 @@ import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class BaseController extends ResponseEntityExceptionHandler {
 
+    @Autowired
     protected MessageResolver msg;
 
     @SuppressWarnings("WeakerAccess")

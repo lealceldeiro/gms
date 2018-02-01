@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,15 +32,16 @@ public class BRole extends GmsEntity{
     /**
      * Label to which the role can be referred to.
      */
-    @NotNull
-    @NotBlank
+    @NotNull(message = "validation.field.notNull")
+    @NotBlank(message = "validation.field.notBlank")
     @Column(unique = true, nullable = false)
     private final String label;
 
     /**
      * A description of what is this role for.
      */
-    @Column(length = 10000)
+    @Size(max = 10485760, message = "validation.field.size")
+    @Column(length = 10485760, nullable = false)
     private String description;
 
     /**

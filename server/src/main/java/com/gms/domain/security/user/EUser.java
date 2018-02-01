@@ -2,6 +2,7 @@ package com.gms.domain.security.user;
 
 import com.gms.domain.GmsEntity;
 import lombok.*;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,24 +30,28 @@ public class EUser extends GmsEntity implements UserDetails {
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private final String username;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true)
+    @Email(message = "validation.field.not.well-formed")
+    @Column(unique = true, nullable = false)
     private final String email;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
+    @Column(nullable = false)
     private final String name;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
+    @Column(nullable = false)
     private final String lastName;
 
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
+    @Column(nullable = false)
     private final String password;
 
     @Getter(AccessLevel.NONE)
@@ -99,6 +104,7 @@ public class EUser extends GmsEntity implements UserDetails {
     }
 
     public boolean isEmailVerified() {
+        // by default: false
         return emailVerified != null && emailVerified;
     }
 }
