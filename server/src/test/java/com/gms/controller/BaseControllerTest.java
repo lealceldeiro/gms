@@ -103,7 +103,7 @@ public class BaseControllerTest {
 
     private void checkResult(MvcResult mvcResult) throws UnsupportedEncodingException, JSONException {
         JSONObject res = new JSONObject(mvcResult.getResponse().getContentAsString());
-        assertTrue("HttpStatus do not match.", res.getInt("status") == HttpStatus.UNAUTHORIZED.value());
+        assertTrue("HttpStatuses do not match.", res.getInt("status") == HttpStatus.UNAUTHORIZED.value());
         assertTrue("Error messages do not match.", res.getString("error").equals(msg.getMessage("security.unauthorized")));
         assertTrue("Paths do not match.", res.getString("path").equals(dc.getApiBasePath() + "/access_token"));
     }
@@ -139,5 +139,35 @@ public class BaseControllerTest {
         if (initial) {
             assertTrue(configService.setUserRegistrationAllowed(true));
         }
+    }
+
+    @Test
+    public void handleTransactionSystemException() throws Exception {
+        String fd = random.nextString();
+        EUser u = new EUser(null, "bcTest" + fd + "@test.com", fd, fd, fd);
+        Resource<EUser> resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void handleDataIntegrityViolationException() throws Exception {
+        String fd = random.nextString();
+        String email = "bcTest" + fd + "@test.com";
+        EUser u = new EUser(fd, email, fd, fd, fd);
+        Resource<EUser> resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isCreated());
+
+        u = new EUser(u.getUsername() + fd, email, u.getName() + fd, u.getLastName() + fd, u.getPassword() + fd);
+        resource = new Resource<>(u);
+        mvc.perform(
+                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
     }
 }
