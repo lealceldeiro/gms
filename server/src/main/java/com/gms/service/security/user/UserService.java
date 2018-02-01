@@ -64,7 +64,8 @@ public class UserService implements UserDetailsService{
 
     public EUser signUp(EUser u, boolean emailVerified, boolean isSuperRegistration) {
         if (isSuperRegistration || configService.isUserRegistrationAllowed()) {
-            EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(), passwordEncoder.encode(u.getPassword()));
+            String pass = u.getPassword() != null ? passwordEncoder.encode(u.getPassword()) : "";
+            EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(), pass);
             sU.setEnabled(u.isEnabled());
             sU.setEmailVerified(emailVerified);
             return userRepository.save(sU);
