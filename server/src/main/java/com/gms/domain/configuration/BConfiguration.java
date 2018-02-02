@@ -33,7 +33,7 @@ public class BConfiguration extends GmsEntity{
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
     @Size(max = 255, message = "validation.field.size")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     @Getter @Setter private String key;
 
     /**

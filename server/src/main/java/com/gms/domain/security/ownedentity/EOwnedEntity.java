@@ -41,7 +41,7 @@ public class EOwnedEntity extends GmsEntity{
      */
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 255)
     private final String username;
 
     /**
@@ -50,7 +50,7 @@ public class EOwnedEntity extends GmsEntity{
     @NotNull(message = "validation.field.notNull")
     @NotBlank(message = "validation.field.notBlank")
     @Size(max = 10485760, message = "validation.field.size")
-    @Column(length = 10485760, nullable = false)
+    @Column(nullable = false, length = 10485760)
     private final String description;
 
 }
