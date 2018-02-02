@@ -1,6 +1,7 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.domain.GmsEntity;
+import com.gms.util.i18n.CodeI18N;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,26 +31,27 @@ public class EOwnedEntity extends GmsEntity{
     /**
      * Natural name which is used commonly for referring to the entity.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     private final String name;
 
     /**
      * A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(unique = true, nullable = false, length = 255)
     private final String username;
 
     /**
      * A brief description of the entity.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 10485760, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 10485760, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 10485760)
     private final String description;
 

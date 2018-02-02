@@ -2,6 +2,7 @@ package com.gms.domain.security.permission;
 
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.role.BRole;
+import com.gms.util.i18n.CodeI18N;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -34,18 +35,18 @@ public class BPermission extends GmsEntity {
     /**
      * Name to be used for authenticating the user.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(unique = true, nullable = false, length = 255)
     private final String name;
 
     /**
      * Label to be shown to the final user.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(unique = true, nullable = false, length = 255)
     private final String label;
 

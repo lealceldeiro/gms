@@ -2,6 +2,7 @@ package com.gms.domain.security.role;
 
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.permission.BPermission;
+import com.gms.util.i18n.CodeI18N;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -32,16 +33,16 @@ public class BRole extends GmsEntity{
     /**
      * Label to which the role can be referred to.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(unique = true, nullable = false, length = 255)
     private final String label;
 
     /**
      * A description of what is this role for.
      */
-    @Size(max = 10485760, message = "validation.field.size")
+    @Size(max = 10485760, message = CodeI18N.FIELD_SIZE)
     @Column(length = 10485760)
     private String description;
 

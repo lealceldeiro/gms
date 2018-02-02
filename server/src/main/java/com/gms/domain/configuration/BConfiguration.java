@@ -1,6 +1,7 @@
 package com.gms.domain.configuration;
 
 import com.gms.domain.GmsEntity;
+import com.gms.util.i18n.CodeI18N;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,18 +31,18 @@ public class BConfiguration extends GmsEntity{
     /**
      * Key under the configuration is saved.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     @Getter @Setter private String key;
 
     /**
      * String representation of the configuration value.
      */
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     @Getter @Setter private String value;
 

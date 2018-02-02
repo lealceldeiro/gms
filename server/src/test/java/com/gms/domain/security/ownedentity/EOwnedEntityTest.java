@@ -1,0 +1,169 @@
+package com.gms.domain.security.ownedentity;
+
+import com.gms.Application;
+import com.gms.util.i18n.CodeI18N;
+import com.gms.util.validation.PersistenceValidation;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * BConfigurationTest
+ *
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
+ * Jan 31, 2018
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+public class EOwnedEntityTest {
+
+    private final String name = "sampleN";
+    private final String username = "sampleU";
+    private final String description = "sampleD";
+    private final int MAX_RANGE_255 = 255;
+    private final int MAX_RANGE_10485760 = 10485760;
+    private EOwnedEntity entity;
+    private EOwnedEntity entity3;
+
+    //region persistence constraints validations
+    @Test
+    public void nameIsNotBlank() {
+        propertyIsNot("", username, description, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
+    }
+
+    @Test
+    public void nameIsNotNull() {
+        propertyIsNot(null, username, description, CodeI18N.FIELD_NOT_NULL, "name property must not be null");
+    }
+
+    @Test
+    public void nameIsNotOutOfRange() {
+        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("a");
+        for (int i = 0; i < MAX_RANGE_255; i++) {
+            testKeyMoreThanAllowedChars.append(String.valueOf(i));
+        }
+        propertyIsNot(testKeyMoreThanAllowedChars.toString(), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size less than 0 and more than 255 characters");
+    }
+
+    @Test
+    public void usernameIsNotBlank() {
+        propertyIsNot(name, "", description, CodeI18N.FIELD_NOT_BLANK, "username property must not be blank");
+    }
+
+    @Test
+    public void usernameIsNotNull() {
+        propertyIsNot(name, null, description, CodeI18N.FIELD_NOT_NULL, "username property must not be null");
+    }
+
+    @Test
+    public void usernameIsNotOutOfRange() {
+        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("a");
+        for (int i = 0; i < MAX_RANGE_255; i++) {
+            testKeyMoreThanAllowedChars.append(String.valueOf(i));
+        }
+        propertyIsNot(name, testKeyMoreThanAllowedChars.toString(), description, CodeI18N.FIELD_SIZE, "username property must not be of size less than 0 and more than 255 characters");
+    }
+
+    @Test
+    public void descriptionIsNotBlank() {
+        propertyIsNot(name, username, "", CodeI18N.FIELD_NOT_BLANK, "description property must not be blank");
+    }
+
+    @Test
+    public void descriptionIsNotNull() {
+        propertyIsNot(name, username, null, CodeI18N.FIELD_NOT_NULL, "description property must not be null");
+    }
+
+    @Test
+    public void descriptionIsNotOutOfRange() {
+        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("a");
+        for (int i = 0; i < MAX_RANGE_10485760; i++) {
+            testKeyMoreThanAllowedChars.append(String.valueOf(i));
+        }
+        propertyIsNot(name, username, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "description property must not be of size less than 0 and more than 255 characters");
+    }
+
+    public void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {
+        EOwnedEntity e = new EOwnedEntity(name, username, description);
+        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
+    }
+    //endregion
+
+    @Test
+    public void getName() {
+        cleanEntity();
+
+        ReflectionTestUtils.setField(entity, "name", name);
+        assertTrue(entity.getName().equals(name));
+    }
+
+    @Test
+    public void getUsername() {
+        cleanEntity();
+
+        ReflectionTestUtils.setField(entity, "username", username);
+        assertTrue(entity.getUsername().equals(username));
+    }
+
+    @Test
+    public void getDescription() {
+        cleanEntity();
+
+        ReflectionTestUtils.setField(entity, "description", description);
+        assertTrue(entity.getDescription().equals(description));
+    }
+
+    @Test
+    public void hashCodeTest() {
+        prepareEntitiesForEqualityTest();
+
+        assertTrue(entity.hashCode() == entity3.hashCode());
+    }
+
+    @Test
+    public void equalsTest() {
+        prepareEntitiesForEqualityTest();
+
+        assertTrue(entity.equals(entity3));
+    }
+
+    @Test
+    public void toStringTest() {
+        prepareEntitiesForEqualityTest();
+
+        assertTrue(entity.toString().equals(entity3.toString()));
+    }
+
+    private void cleanEntity() {
+        entity = new EOwnedEntity();
+        assertNull(ReflectionTestUtils.getField(entity, "name"));
+        assertNull(ReflectionTestUtils.getField(entity, "username"));
+        assertNull(ReflectionTestUtils.getField(entity, "description"));
+    }
+
+    private void cleanEntity3() {
+        entity3 = new EOwnedEntity();
+        assertNull(ReflectionTestUtils.getField(entity3, "name"));
+        assertNull(ReflectionTestUtils.getField(entity3, "username"));
+        assertNull(ReflectionTestUtils.getField(entity3, "description"));
+    }
+
+
+    private void prepareEntitiesForEqualityTest() {
+        cleanEntity();
+        cleanEntity3();
+
+        ReflectionTestUtils.setField(entity, "name", name);
+        ReflectionTestUtils.setField(entity, "username", username);
+        ReflectionTestUtils.setField(entity, "description", description);
+        ReflectionTestUtils.setField(entity3, "name", name);
+        ReflectionTestUtils.setField(entity3, "username", username);
+        ReflectionTestUtils.setField(entity3, "description", description);
+    }
+}

@@ -1,6 +1,7 @@
 package com.gms.domain.security.user;
 
 import com.gms.domain.GmsEntity;
+import com.gms.util.i18n.CodeI18N;
 import lombok.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -29,8 +30,8 @@ import java.util.HashSet;
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
 
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Column(unique = true, nullable = false)
     private final String username;
 
@@ -40,28 +41,28 @@ public class EUser extends GmsEntity implements UserDetails {
      * explained here:
      * https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address/574698#574698
      */
-    @Size(max = 254, message = "validation.field.size")
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Email(message = "validation.field.not.well-formed")
+    @Size(max = 254, message = CodeI18N.FIELD_SIZE)
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Email(message = CodeI18N.FIELD_NOT_WELL_FORMED)
     @Column(unique = true, nullable = false, length = 254)
     private final String email;
 
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     private final String name;
 
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     private final String lastName;
 
-    @NotNull(message = "validation.field.notNull")
-    @NotBlank(message = "validation.field.notBlank")
-    @Size(max = 255, message = "validation.field.size")
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
+    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
     private final String password;
 

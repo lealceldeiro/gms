@@ -1,6 +1,7 @@
 package com.gms.domain.configuration;
 
 import com.gms.Application;
+import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +33,12 @@ public class BConfigurationTest {
     //region persistence constraints validations
     @Test
     public void keyIsNotBlank() {
-        propertyIsNot("", v, "validation.field.notBlank", "key property must not be blank");
+        propertyIsNot("", v, CodeI18N.FIELD_NOT_BLANK, "key property must not be blank");
     }
 
     @Test
     public void keyIsNotNull() {
-        propertyIsNot(null, v, "validation.field.notNull", "key property must not be null");
+        propertyIsNot(null, v, CodeI18N.FIELD_NOT_NULL, "key property must not be null");
     }
 
     @Test
@@ -46,18 +47,17 @@ public class BConfigurationTest {
         for (int i = 0; i < MAX_RANGE_255; i++) {
             testKeyMoreThanAllowedChars.append(String.valueOf(i));
         }
-        propertyIsNot(testKeyMoreThanAllowedChars.toString(), v, "validation.field.size",
-                "key property must not be of size less than 0 and more than 255 characters");
+        propertyIsNot(testKeyMoreThanAllowedChars.toString(), v, CodeI18N.FIELD_SIZE, "key property must not be of size less than 0 and more than 255 characters");
     }
 
     @Test
     public void valueIsNotBlank() {
-        propertyIsNot(k, "", "validation.field.notBlank", "value property must not be blank");
+        propertyIsNot(k, "", CodeI18N.FIELD_NOT_BLANK, "value property must not be blank");
     }
 
     @Test
     public void valueIsNotNull() {
-        propertyIsNot(k, null, "validation.field.notNull", "value property must not be null");
+        propertyIsNot(k, null, CodeI18N.FIELD_NOT_NULL, "value property must not be null");
     }
 
     @Test
@@ -66,13 +66,12 @@ public class BConfigurationTest {
         for (int i = 0; i < MAX_RANGE_255; i++) {
             testKeyMoreThanAllowedChars.append(String.valueOf(i));
         }
-        propertyIsNot(k, testKeyMoreThanAllowedChars.toString(), "validation.field.size",
-                "value property must not be of size less than 0 and more than 255 characters");
+        propertyIsNot(k, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "value property must not be of size less than 0 and more than 255 characters");
     }
 
-    public void propertyIsNot(String keyVal, String valueVal, String messageTests, String assertMessage) {
+    public void propertyIsNot(String keyVal, String valueVal, String messageTest, String assertMessage) {
         BConfiguration c = new BConfiguration(keyVal, valueVal);
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(c, messageTests));
+        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(c, messageTest));
     }
     //endregion
 
