@@ -14,7 +14,8 @@ import java.util.Set;
  * Feb 02, 2018
  */
 public class PersistenceValidation {
-    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+    private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     /**
      * Test the validity of an object against the error messages the validator provides.

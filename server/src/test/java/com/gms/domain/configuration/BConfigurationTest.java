@@ -43,11 +43,11 @@ public class BConfigurationTest {
 
     @Test
     public void keyIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("a");
-        for (int i = 0; i < MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf(i));
+        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
+        for (int i = 0; i <= MAX_RANGE_255; i++) {
+            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
         }
-        propertyIsNot(testKeyMoreThanAllowedChars.toString(), v, CodeI18N.FIELD_SIZE, "key property must not be of size less than 0 and more than 255 characters");
+        propertyIsNot(testKeyMoreThanAllowedChars.toString(), v, CodeI18N.FIELD_SIZE, "key property must not be of size lesser than 0 and more than 255 characters");
     }
 
     @Test
@@ -62,11 +62,11 @@ public class BConfigurationTest {
 
     @Test
     public void valueIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("a");
-        for (int i = 0; i < MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf(i));
+        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
+        for (int i = 0; i <= MAX_RANGE_255; i++) {
+            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
         }
-        propertyIsNot(k, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "value property must not be of size less than 0 and more than 255 characters");
+        propertyIsNot(k, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "value property must not be of size lesser than 0 and more than 255 characters");
     }
 
     public void propertyIsNot(String keyVal, String valueVal, String messageTest, String assertMessage) {
