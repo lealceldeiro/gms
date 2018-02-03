@@ -48,7 +48,6 @@ public class EOwnedEntityTest {
         for (int i = 0; i <= MAX_RANGE_255; i++) {
             testKeyMoreThanAllowedChars.append(String.valueOf("j"));
         }
-        System.out.println("length is : " + testKeyMoreThanAllowedChars.toString().length());
         propertyIsNot(testKeyMoreThanAllowedChars.toString(), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and more than 255 characters");
     }
 
