@@ -33,12 +33,12 @@ public class JWTServiceTest {
 
     @Test
     public void getATokenExpirationTime() {
-        assert jwtService.getATokenExpirationTime() > 0 : "Expiration time for access token must be grater than zero";
+        assert jwtService.getATokenExpirationTime() > 0 : "Expiration time for access token must be greater than zero";
     }
 
     @Test
     public void getRTokenExpirationTime() {
-        assert jwtService.getRTokenExpirationTime() > 0 : "Expiration time for refresh token must be grater than zero";
+        assert jwtService.getRTokenExpirationTime() > 0 : "Expiration time for refresh token must be greater than zero";
     }
 
     @Test
@@ -158,7 +158,7 @@ public class JWTServiceTest {
         assertNotNull("Expiration time is null", claims.get(JWTService.EXPIRATION));
         assertTrue("Expiration time is not an instance of Date", claims.get(JWTService.EXPIRATION) instanceof Date);
         if (claims.get(JWTService.EXPIRATION) != null && claims.get(JWTService.EXPIRATION) instanceof Date) {
-            assertTrue("Expiration time is not grater than the creation time of the token",
+            assertTrue("Expiration time is not greater than the creation time of the token",
                     ((Date)claims.get(JWTService.EXPIRATION)).getTime() > expiresIn);
         }
     }
