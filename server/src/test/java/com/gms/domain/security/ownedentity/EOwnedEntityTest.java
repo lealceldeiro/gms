@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -33,6 +36,15 @@ public class EOwnedEntityTest {
     private EOwnedEntity entity3;
 
     //region persistence constraints validations
+
+    @Test
+    public void checkValidEntity() {
+        cleanEntity();
+        entity = new EOwnedEntity(name, username, description);
+        final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity);
+        assertTrue(cv.isEmpty());
+    }
+
     @Test
     public void nameIsNotBlank() {
         propertyIsNot("", username, description, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
@@ -45,7 +57,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void nameIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     @Test
@@ -60,7 +72,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void usernameIsNotOutOfRange() {
-        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), description, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), description, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     @Test
@@ -75,7 +87,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void descriptionIsNotOutOfRange() {
-        propertyIsNot(name, username, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than 10485760 characters");
+        propertyIsNot(name, username, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
     }
 
     public void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {

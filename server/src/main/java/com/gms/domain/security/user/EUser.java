@@ -30,9 +30,10 @@ import java.util.HashSet;
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
 
+    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 255)
     private final String username;
 
     /**
@@ -62,7 +63,8 @@ public class EUser extends GmsEntity implements UserDetails {
 
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
+    @Size(max = 10485760, message = CodeI18N.FIELD_SIZE)
+    // the bean can actually have a LOT of chars, in db it will be stored hashed (a LOT LESSER characters)
     @Column(nullable = false, length = 255)
     private final String password;
 

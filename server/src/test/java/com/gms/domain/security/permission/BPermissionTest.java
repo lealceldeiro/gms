@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.validation.ConstraintViolation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,6 +44,14 @@ public class BPermissionTest {
 
     //region persistence constraints validations
     @Test
+    public void checkValidEntity() {
+        cleanEntity0();
+        entity0 = new BPermission(name, label);
+        final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity0);
+        assertTrue(cv.isEmpty());
+    }
+
+    @Test
     public void nameIsNotBlank() {
         propertyIsNot("", label, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
     }
@@ -64,12 +73,12 @@ public class BPermissionTest {
 
     @Test
     public void nameIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), label, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), label, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     @Test
     public void labelIsNotOutOfRange() {
-        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     public void propertyIsNot(String name, String label, String messageTest, String assertMessage) {

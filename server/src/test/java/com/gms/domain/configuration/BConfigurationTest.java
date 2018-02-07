@@ -44,7 +44,7 @@ public class BConfigurationTest {
 
     @Test
     public void keyIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), v, CodeI18N.FIELD_SIZE, "key property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), v, CodeI18N.FIELD_SIZE, "key property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BConfigurationTest {
 
     @Test
     public void valueIsNotOutOfRange() {
-        propertyIsNot(k, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "value property must not be of size lesser than 0 and larger than 255 characters");
+        propertyIsNot(k, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "value property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
     }
 
     public void propertyIsNot(String keyVal, String valueVal, String messageTest, String assertMessage) {
