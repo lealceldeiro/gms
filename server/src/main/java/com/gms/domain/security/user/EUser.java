@@ -65,7 +65,7 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = 10485760, message = CodeI18N.FIELD_SIZE)
     // the bean can actually have a LOT of chars, in db it will be stored hashed (a LOT LESSER characters)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 10485760)
     private final String password;
 
     @Getter(AccessLevel.NONE)
