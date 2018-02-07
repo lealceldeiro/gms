@@ -1,6 +1,7 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.Application;
+import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
 import org.junit.Test;
@@ -44,11 +45,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void nameIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
-        for (int i = 0; i <= MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
-        }
-        propertyIsNot(testKeyMoreThanAllowedChars.toString(), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and more than 255 characters");
+        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than 255 characters");
     }
 
     @Test
@@ -63,11 +60,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void usernameIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
-        for (int i = 0; i <= MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
-        }
-        propertyIsNot(name, testKeyMoreThanAllowedChars.toString(), description, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and more than 255 characters");
+        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), description, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and larger than 255 characters");
     }
 
     @Test
@@ -82,11 +75,7 @@ public class EOwnedEntityTest {
 
     @Test
     public void descriptionIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
-        for (int i = 0; i <= MAX_RANGE_10485760; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
-        }
-        propertyIsNot(name, username, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and more than 255 characters");
+        propertyIsNot(name, username, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than 10485760 characters");
     }
 
     public void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {

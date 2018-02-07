@@ -2,6 +2,7 @@ package com.gms.domain.security.permission;
 
 import com.gms.Application;
 import com.gms.domain.security.role.BRole;
+import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
 import org.junit.Before;
@@ -63,20 +64,12 @@ public class BPermissionTest {
 
     @Test
     public void nameIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
-        for (int i = 0; i <= MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
-        }
-        propertyIsNot(testKeyMoreThanAllowedChars.toString(), label, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and more than 255 characters");
+        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), label, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than 255 characters");
     }
 
     @Test
     public void labelIsNotOutOfRange() {
-        StringBuilder testKeyMoreThanAllowedChars = new StringBuilder("");
-        for (int i = 0; i <= MAX_RANGE_255; i++) {
-            testKeyMoreThanAllowedChars.append(String.valueOf("j"));
-        }
-        propertyIsNot(name, testKeyMoreThanAllowedChars.toString(), CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and more than 255 characters");
+        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and larger than 255 characters");
     }
 
     public void propertyIsNot(String name, String label, String messageTest, String assertMessage) {
