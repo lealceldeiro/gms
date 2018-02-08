@@ -6,6 +6,7 @@ import com.gms.domain.security.permission.BPermission;
 import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
+import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.Resource;
 import com.gms.util.constant.SecurityConst;
@@ -38,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BPermissionRepositoryTest {
 
     @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();

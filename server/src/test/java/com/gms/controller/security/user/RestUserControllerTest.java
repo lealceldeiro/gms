@@ -7,6 +7,7 @@ import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
+import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
@@ -51,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RestUserControllerTest {
 
     @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired
     private WebApplicationContext context;

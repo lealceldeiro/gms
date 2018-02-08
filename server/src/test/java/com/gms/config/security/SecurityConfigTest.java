@@ -7,6 +7,7 @@ import com.gms.component.security.token.JWTService;
 import com.gms.service.AppService;
 import com.gms.service.security.user.UserService;
 import com.gms.util.GmsSecurityUtil;
+import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
@@ -48,7 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SecurityConfigTest {
 
     @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
