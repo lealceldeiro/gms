@@ -9,7 +9,6 @@ import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.Resource;
 import com.gms.util.constant.SecurityConst;
-import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,14 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,31 +91,6 @@ public class BPermissionRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //C
-    @Test
-    public void createPermission() throws Exception {
-        Map<String, String> newPermission = new HashMap<>();
-        newPermission.put("name", RANDOM_NAME + random.nextString());
-        newPermission.put("label", RANDOM_LABEL + random.nextString());
-
-        ConstrainedFields fields = new ConstrainedFields(BPermission.class);
-
-        mvc.perform(
-                post(apiPrefix + "/" + reqString).contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(newPermission))
-        ).andExpect(status().isCreated())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("name").description("Name to be used for authenticating"),
-                                        fields.withPath("label").description("Label to be shown to the final user")
-                                )
-                        )
-                );
-
-    }
-
     //R
     @Test
     public void listPermissions() throws Exception {
@@ -177,45 +149,6 @@ public class BPermissionRepositoryTest {
                                 )
                         )
                 );
-
-    }
-
-    //U (partial)
-    @Test
-    public void partialUpdatePermission() throws Exception {
-        BPermission oldPermission = createPermissionUsingRepository();
-        Map<String, String> newPermission = new HashMap<>();
-        newPermission.put("name", RANDOM_NAME + random.nextString());
-        newPermission.put("label", RANDOM_LABEL + random.nextString());
-
-        ConstrainedFields fields = new ConstrainedFields(BPermission.class);
-
-        mvc.perform(
-                patch(apiPrefix + "/" + reqString + "/" + oldPermission.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newPermission))
-        ).andExpect(status().isNoContent())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("name").description("Name to be used for authenticating"),
-                                        fields.withPath("label").description("Label to be shown to the final user")
-                                )
-                        )
-                );
-    }
-
-    //D
-    @Test
-    public void deletePermission() throws Exception {
-        BPermission p = createPermissionUsingRepository();
-
-        mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + p.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNoContent());
 
     }
 
