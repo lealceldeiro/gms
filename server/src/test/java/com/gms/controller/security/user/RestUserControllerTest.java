@@ -139,7 +139,7 @@ public class RestUserControllerTest {
                                         fieldWithPath("email").description("Just created user's email"),
                                         fieldWithPath("name").description("Just created user's name"),
                                         fieldWithPath("lastName").description("Just created user's last name"),
-                                        fieldWithPath("password").description("Just created user's password"),
+                                        fieldWithPath("password").optional().ignored().description("Just created user's hashed password"),
                                         fieldWithPath("enabled").description("Whether the just created user is enabled or not"),
                                         fieldWithPath("emailVerified")
                                                 .description("Indicates whether the user has verified his/her email or not"),
