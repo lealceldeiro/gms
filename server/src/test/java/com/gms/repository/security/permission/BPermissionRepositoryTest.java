@@ -7,6 +7,7 @@ import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.Resource;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
@@ -64,8 +65,9 @@ public class BPermissionRepositoryTest {
     private String authHeader;
     private String tokenType;
     private String accessToken;
-    private final static String RANDOM_NAME = "RandomName-";
-    private final static String RANDOM_LABEL = "RandomLabel-";
+    private static final String RANDOM_NAME = "RandomName-";
+    private static final String RANDOM_LABEL = "RandomLabel-";
+    private static final String reqString = Resource.PERMISSION_PATH;
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -95,8 +97,6 @@ public class BPermissionRepositoryTest {
     //C
     @Test
     public void createPermission() throws Exception {
-        String reqString = "permission";
-
         Map<String, String> newPermission = new HashMap<>();
         newPermission.put("name", RANDOM_NAME + random.nextString());
         newPermission.put("label", RANDOM_LABEL + random.nextString());
@@ -122,8 +122,6 @@ public class BPermissionRepositoryTest {
     //R
     @Test
     public void listPermissions() throws Exception {
-        String reqString = "permission";
-
         setUpPermissions();
 
         mvc.perform(
@@ -143,8 +141,6 @@ public class BPermissionRepositoryTest {
 
     @Test
     public void getPermission() throws Exception {
-        String reqString = "permission";
-
         BPermission p = createPermissionUsingRepository();
 
         mvc.perform(
@@ -165,8 +161,6 @@ public class BPermissionRepositoryTest {
 
     @Test
     public void getRolesPermission() throws Exception {
-        String reqString = "permission";
-
         BPermission p = createPermissionUsingRepository();
 
         mvc.perform(
@@ -189,8 +183,6 @@ public class BPermissionRepositoryTest {
     //U (partial)
     @Test
     public void partialUpdatePermission() throws Exception {
-        String reqString = "permission";
-
         BPermission oldPermission = createPermissionUsingRepository();
         Map<String, String> newPermission = new HashMap<>();
         newPermission.put("name", RANDOM_NAME + random.nextString());
@@ -217,8 +209,6 @@ public class BPermissionRepositoryTest {
     //D
     @Test
     public void deletePermission() throws Exception {
-        String reqString = "permission";
-
         BPermission p = createPermissionUsingRepository();
 
         mvc.perform(

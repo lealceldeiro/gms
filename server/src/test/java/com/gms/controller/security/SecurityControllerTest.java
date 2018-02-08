@@ -93,7 +93,7 @@ public class SecurityControllerTest {
         String rd = random.nextString() + "scTest";
         EUser u = new EUser(rd, "scTest" + rd + "esc@test.com", rd, rd, rd);
         u.setEnabled(false);
-//        ReflectionTestUtils.setField(u, "authorities", null);
+
         Resource<EUser> resource = new Resource<>(u);
         ReflectionTestUtils.setField(resource, "links", null);
 
@@ -159,7 +159,7 @@ public class SecurityControllerTest {
         EUser u = new EUser(rd, "escTest" + rd + "esc@test.com", rd, rd, rd);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
-                post(dc.getApiBasePath() + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isConflict());
 

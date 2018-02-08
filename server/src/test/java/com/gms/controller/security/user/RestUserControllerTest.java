@@ -110,7 +110,7 @@ public class RestUserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/user").contentType(MediaType.APPLICATION_JSON)
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated())
@@ -164,7 +164,7 @@ public class RestUserControllerTest {
         EUser u = new EUser(null, "rucTest" + fd + "@test.com", fd, fd, fd);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
-                post(apiPrefix + "/user").contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
@@ -177,7 +177,7 @@ public class RestUserControllerTest {
         EUser u = new EUser(fd, email, fd, fd, fd);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
-                post(apiPrefix + "/user").contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());

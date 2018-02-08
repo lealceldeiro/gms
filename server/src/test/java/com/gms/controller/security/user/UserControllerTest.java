@@ -14,6 +14,7 @@ import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.Resource;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import com.gms.util.validation.ConstrainedFields;
@@ -139,7 +140,7 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(post(apiPrefix + "/user/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
@@ -200,7 +201,7 @@ public class UserControllerTest {
         payload.setRolesId(rolesId);
 
         //entity not found
-        mvc.perform(post(apiPrefix + "/user/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -208,7 +209,7 @@ public class UserControllerTest {
         //user not found
         payload.setEntityId(e.getId());
         payload.setUserId(INVALID_ID);
-        mvc.perform(post(apiPrefix + "/user/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -219,7 +220,7 @@ public class UserControllerTest {
 
         payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
-        mvc.perform(post(apiPrefix + "/user/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -264,7 +265,7 @@ public class UserControllerTest {
         payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/user/roles/add").contentType(MediaType.APPLICATION_JSON)
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andReturn();
@@ -274,7 +275,7 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(delete(apiPrefix + "/user/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
@@ -335,7 +336,7 @@ public class UserControllerTest {
         payload.setRolesId(rolesId);
 
         //entity not found
-        mvc.perform(delete(apiPrefix + "/user/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -343,7 +344,7 @@ public class UserControllerTest {
         //user not found
         payload.setEntityId(e.getId());
         payload.setUserId(INVALID_ID);
-        mvc.perform(delete(apiPrefix + "/user/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -354,7 +355,7 @@ public class UserControllerTest {
 
         payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
-        mvc.perform(delete(apiPrefix + "/user/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());

@@ -3,6 +3,7 @@ package com.gms.controller.security.user;
 import com.gms.controller.BaseController;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.Resource;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
  * Dec 12, 2017
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping(Resource.USER_PATH)
 public class UserController extends BaseController{
 
     private final UserService userService;

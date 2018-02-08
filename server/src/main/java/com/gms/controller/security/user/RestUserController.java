@@ -58,7 +58,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      * @return A {@link EUser} mapped into a @{@link ResponseBody}.
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
-    @PostMapping(path = "user", produces = "application/hal+json")
+    @PostMapping(path = com.gms.util.constant.Resource.USER_PATH, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public PersistentEntityResource register(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
