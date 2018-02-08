@@ -5,6 +5,7 @@ import com.gms.util.i18n.CodeI18N;
 import lombok.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -66,6 +67,7 @@ public class EUser extends GmsEntity implements UserDetails {
     @Size(max = 10485760, message = CodeI18N.FIELD_SIZE)
     // the bean can actually have a LOT of chars, in db it will be stored hashed (a LOT LESSER characters)
     @Column(nullable = false, length = 10485760)
+    @RestResource(exported = false)
     private final String password;
 
     @Getter(AccessLevel.NONE)
