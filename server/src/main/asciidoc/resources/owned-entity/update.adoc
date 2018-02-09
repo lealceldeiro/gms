@@ -1,6 +1,6 @@
 [[resource-owned-entity-update]]
-==== Updating a owned entity's info
-A `PUT` (full update) or `PATCH` (partial update) request updates a owned entity's information.
+==== Updating an owned entity's info
+A `PUT` (full update) or `PATCH` (partial update) request updates an owned entity's information.
 
 *Request*
 

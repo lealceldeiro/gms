@@ -1,0 +1,19 @@
+[[resource-role-get]]
+==== Getting a role's info
+A `GET` request lists a role's information.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-role/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/get-role/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-role/http-response.adoc[]

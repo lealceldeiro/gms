@@ -1,0 +1,19 @@
+[[resource-role-create]]
+==== Registering a new role
+A `POST` request adds a new role. This service is only available to users with administrative permissions to register new roles.
+
+*Request*
+
+include::../../util/H-REQUEST-FIELDS.adoc[]
+
+include::{snippets}/create-role/request-fields.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/create-role/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/create-role/http-response.adoc[]

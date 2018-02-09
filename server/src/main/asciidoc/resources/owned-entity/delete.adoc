@@ -1,6 +1,6 @@
 [[resource-owned-entity-delete]]
-==== Deleting a owned entity's info
-A `DELETE` request deletes a owned entity's information.
+==== Deleting an owned entity's info
+A `DELETE` request deletes an owned entity's information.
 
 *Request*
 
