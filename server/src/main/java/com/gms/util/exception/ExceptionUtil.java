@@ -30,12 +30,12 @@ public class ExceptionUtil {
         return createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(suffixCode), dc);
     }
 
-    public static Object getResponseBodyForGmsSecurityException(GmsSecurityException ex, MessageResolver msg, DefaultConst dc) {
+    public static Map getResponseBodyForGmsSecurityException(GmsSecurityException ex, MessageResolver msg, DefaultConst dc) {
         HashMap<String, Object> additionalData = new HashMap<>();
         additionalData.put("timestamp", System.currentTimeMillis());
         additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
         additionalData.put("error", msg.getMessage("security.unauthorized"));
-        additionalData.put("path", dc.getApiBasePath() + "/" + ex.getPath());
+        additionalData.put("path", (dc.getApiBasePath() + "/" + ex.getPath()).replaceAll("//", "/"));
         return createResponseBodyAsMap(msg.getMessage(ex.getMessage()), dc, additionalData);
     }
 

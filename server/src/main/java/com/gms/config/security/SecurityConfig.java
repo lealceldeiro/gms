@@ -7,6 +7,7 @@ import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
@@ -43,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityConst sc;
     private final DefaultConst dc;
+    private final MessageResolver msg;
 
     private final UserDetailsService userDetailsService;
 
@@ -57,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(
-                authenticationManager(), (UserService) userDetailsService, oMapper, jwtService, sc
+                authenticationManager(), (UserService) userDetailsService, oMapper, jwtService, sc, dc, msg
         );
         authFilter.setAllowSessionCreation(false);
         authFilter.setFilterProcessesUrl(dc.getApiBasePath() + sc.getSignInUrl());

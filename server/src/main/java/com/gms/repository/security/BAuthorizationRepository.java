@@ -9,5 +9,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = Resource.AUTHORIZATION_PATH, path = Resource.AUTHORIZATION_PATH)
 public interface BAuthorizationRepository extends CrudRepository<BAuthorization, BAuthorization.BAuthorizationPk> {
 
-    BAuthorization findFirstByUserAndEntityNotNull(EUser user);
+    BAuthorization findFirstByUserAndEntityNotNullAndRoleEnabled(EUser user, Boolean enabled);
 }

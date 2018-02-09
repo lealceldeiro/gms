@@ -5,8 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.component.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
+import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.exception.ExceptionUtil;
+import com.gms.util.exception.GmsSecurityException;
+import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,14 +40,12 @@ import java.util.Map;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-
     private final UserService userService;
-
     private final ObjectMapper oMapper;
-
     private final JWTService jwtService;
-
     private final SecurityConst sc;
+    private final DefaultConst dc;
+    private final MessageResolver msg;
 
     @SuppressWarnings("all")
     @Override
@@ -75,18 +78,25 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Object principal = authResult.getPrincipal();
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), SecurityConst.AUTHORITIES_SEPARATOR);
-        String sub = ((EUser)principal).getUsername();
 
-        String accessToken = jwtService.createToken(sub, authorities);
-        Map claims = jwtService.getClaimsExtended(accessToken);
-        Date iat = (Date)claims.get(JWTService.ISSUED_AT);
-
-        String refreshToken = jwtService.createRefreshToken(sub, authorities);
-
+        Map returnMap;
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        if (authorities.length() > 0) { // user login was correct
+            String sub = ((EUser) principal).getUsername();
 
-        Map returnMap = jwtService.createLoginData(sub, accessToken, iat, authorities, refreshToken);
+            String accessToken = jwtService.createToken(sub, authorities);
+            Map claims = jwtService.getClaimsExtended(accessToken);
+            Date iat = (Date) claims.get(JWTService.ISSUED_AT);
 
+            String refreshToken = jwtService.createRefreshToken(sub, authorities);
+
+            returnMap = jwtService.createLoginData(sub, accessToken, iat, authorities, refreshToken);
+        }
+        else {
+            res.setStatus(HttpStatus.UNAUTHORIZED.value());
+            returnMap = ExceptionUtil.getResponseBodyForGmsSecurityException(new GmsSecurityException(sc.getSignUpUrl(),
+                    "security.unauthorized"), msg, dc);
+        }
         res.getOutputStream().println(oMapper.writeValueAsString(returnMap));
     }
 }

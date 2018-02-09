@@ -1,5 +1,6 @@
 package com.gms.controller;
 
+import com.gms.component.security.authentication.IAuthenticationFacade;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;
@@ -31,8 +32,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class BaseController extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    protected MessageResolver msg;
+    @Autowired protected MessageResolver msg;
+    @Autowired private IAuthenticationFacade authenticationFacade;
 
     @SuppressWarnings("WeakerAccess")
     protected final DefaultConst dc;
@@ -65,6 +66,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsSecurityException.class)
     protected ResponseEntity<Object> handleGmsSecurityException(GmsSecurityException ex, WebRequest req) {
+        authenticationFacade.setAuthentication(null);
         Object resBody = ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNAUTHORIZED, req);
     }

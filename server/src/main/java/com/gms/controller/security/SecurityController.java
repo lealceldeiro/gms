@@ -43,7 +43,6 @@ public class SecurityController extends BaseController{
     private final UserService userService;
     private final SecurityConst sc;
     private final JWTService jwtService;
-    private final IAuthenticationFacade authenticationFacade;
 
     @Autowired
     public SecurityController(UserService userService, DefaultConst defaultConst,
@@ -52,7 +51,6 @@ public class SecurityController extends BaseController{
         this.userService = userService;
         this.sc = sc;
         this.jwtService = jwtService;
-        this.authenticationFacade = authenticationFacade;
     }
 
     /**
@@ -99,11 +97,9 @@ public class SecurityController extends BaseController{
                 return jwtService.createLoginData(sub, newAccessToken, iat, authorities, newRefreshToken);
             } catch (JwtException e) {
                 //return 401
-                authenticationFacade.setAuthentication(null);
                 throw new GmsSecurityException("access_token", "security.token.refresh.invalid");
             }
         }
-        authenticationFacade.setAuthentication(null);
         throw new GmsSecurityException("access_token", "security.token.refresh.required");
     }
 }
