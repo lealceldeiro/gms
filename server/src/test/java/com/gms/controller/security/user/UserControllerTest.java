@@ -53,11 +53,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class UserControllerTest {
 
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
-    @Autowired
-    private WebApplicationContext context;
+    @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

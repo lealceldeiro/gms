@@ -10,6 +10,7 @@ import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.i18n.MessageResolver;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,8 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class SecurityConfigTest {
 
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
@@ -60,11 +60,12 @@ public class SecurityConfigTest {
     @Autowired private SecurityConst sc;
     @Autowired private DefaultConst dc;
 
-    @Autowired AppService appService;
-    @Autowired UserService userService;
-    @Autowired BCryptPasswordEncoder encoder;
-    @Autowired JWTService jwtService;
-    @Autowired IAuthenticationFacade authFacade;
+    @Autowired private AppService appService;
+    @Autowired private UserService userService;
+    @Autowired private BCryptPasswordEncoder encoder;
+    @Autowired private JWTService jwtService;
+    @Autowired private IAuthenticationFacade authFacade;
+    @Autowired private MessageResolver msg;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
@@ -177,7 +178,7 @@ public class SecurityConfigTest {
             }
         }
 
-        SecurityConfig securityConfig = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        SecurityConfig securityConfig = new SecurityConfig(sc, dc, msg, userService, encoder, objectMapper, jwtService, authFacade);
 
         //add additional urls statically defined in SecurityConfig class
         final Object additionalUrl = ReflectionTestUtils.invokeMethod(securityConfig, methodAdditionalUrl);
@@ -192,20 +193,20 @@ public class SecurityConfigTest {
 
     @Test
     public void checkAccessToFreeGetUrls() throws Exception {
-        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        SecurityConfig sConf = new SecurityConfig(sc, dc, msg, userService, encoder, objectMapper, jwtService, authFacade);
         checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_GET, null, null);
     }
 
     @Test
     public void checkAccessToFreeAnyUrls() throws Exception {
-        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        SecurityConfig sConf = new SecurityConfig(sc, dc, msg, userService, encoder, objectMapper, jwtService, authFacade);
         checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_ANY, null, null);
     }
 
     @SuppressWarnings("unchecked")
     @Test
     public void checkAccessToFreePostUrls() throws Exception {
-        SecurityConfig sConf = new SecurityConfig(sc, dc, userService, encoder, objectMapper, jwtService, authFacade);
+        SecurityConfig sConf = new SecurityConfig(sc, dc, msg, userService, encoder, objectMapper, jwtService, authFacade);
         Object args = ReflectionTestUtils.invokeGetterMethod(sConf, "getListOfParametersForFreePostUrl");
         assertTrue("The list of parameters for free post url must be an array of HashMap", args instanceof HashMap[]);
         checkAccessToFreeXUrls(sConf, METHOD_GET_FREE_POST, HttpMethod.POST, (HashMap[]) args);

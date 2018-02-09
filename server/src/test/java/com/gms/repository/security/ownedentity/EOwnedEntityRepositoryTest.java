@@ -150,7 +150,7 @@ public class EOwnedEntityRepositoryTest {
                 restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                fieldWithPath("username").description(" unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
+                                fieldWithPath("username").description("A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
                                 fieldWithPath("description").description("A brief description of the entity"),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned owned entity")
                         )

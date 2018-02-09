@@ -47,8 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class RestUserControllerTest {
 
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired
     private WebApplicationContext context;
@@ -58,13 +57,10 @@ public class RestUserControllerTest {
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired
-    private SecurityConst sc;
-    @Autowired
-    private DefaultConst dc;
+    @Autowired private SecurityConst sc;
+    @Autowired private DefaultConst dc;
 
-    @Autowired
-    private AppService appService;
+    @Autowired private AppService appService;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
