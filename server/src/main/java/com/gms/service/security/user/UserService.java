@@ -159,8 +159,8 @@ public class UserService implements UserDetailsService{
     private Long getEntityIdByUser(EUser u) {
         Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
         if (entityId == null) {
-            BAuthorization anAuth = authorizationRepository.findFirstByUserAndEntityNotNull(u);
-            if (anAuth == null) {   // this user has no assigned roles
+            BAuthorization anAuth = authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(u);
+            if (anAuth == null) {   // this user has no assigned roles or they are not enabled
                 return null;
             }
             entityId = anAuth.getEntity().getId();
