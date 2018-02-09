@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -119,26 +119,6 @@ public class SecurityControllerTest {
                                         fields.withPath("accountNonLocked").optional().ignored(),
                                         fields.withPath("credentialsNonExpired").optional().ignored(),
                                         fields.withPath("links").optional().ignored()
-                                )
-                        )
-                )
-                .andDo(
-                        restDocResHandler.document(
-                                responseFields(
-                                        fieldWithPath("username").description("Just created user's username"),
-                                        fieldWithPath("email").description("Just created user's email"),
-                                        fieldWithPath("name").description("Just created user's name"),
-                                        fieldWithPath("lastName").description("Just created user's last name"),
-                                        fieldWithPath("password").optional().ignored().description("Just created user's hashed password"),
-                                        fieldWithPath("enabled").description("Whether the just created user is enabled or not"),
-                                        fieldWithPath("emailVerified")
-                                                .description("Indicates whether the user has verified his/her email or not"),
-                                        fields.withPath("authorities").optional().ignored(),
-                                        fields.withPath("accountNonExpired").description("Whether the account has not expired yet or it already expired"),
-                                        fields.withPath("accountNonLocked").description("Whether the account is not locked or it has been locked"),
-                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired"),
-                                        fieldWithPath("_links")
-                                                .description("Available links for requesting other webservices related to user")
                                 )
                         )
                 );

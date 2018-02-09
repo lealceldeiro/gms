@@ -9,7 +9,6 @@ import com.gms.util.i18n.MessageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpHeaders;
@@ -61,11 +60,11 @@ public class RestUserController extends ResponseEntityExceptionHandler {
     @PostMapping(path = com.gms.util.constant.Resource.USER_PATH, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public PersistentEntityResource register(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public ResponseEntity register(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), true, true);
         if (u != null) {
-            return pra.toResource(u);
+            return new ResponseEntity(HttpStatus.CREATED);
         }
         else throw new GmsGeneralException("user.add.error", false);
     }

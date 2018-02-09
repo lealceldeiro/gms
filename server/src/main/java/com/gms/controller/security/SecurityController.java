@@ -13,10 +13,10 @@ import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -65,11 +65,11 @@ public class SecurityController extends BaseController{
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("permitAll()")
     @ResponseBody
-    public PersistentEntityResource signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public ResponseEntity signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), false);
         if (u != null) {
-            return pra.toResource(u);
+            return new ResponseEntity(HttpStatus.CREATED);
         }
         else throw new GmsGeneralException("user.add.error", false, HttpStatus.CONFLICT);
     }

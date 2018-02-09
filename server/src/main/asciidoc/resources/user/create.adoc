@@ -12,10 +12,6 @@ include::../../util/H-EXAMPLE.adoc[]
 include::{snippets}/register/curl-request.adoc[]
 
 ==== Response
-include::../../util/H-RESPONSE-FIELDS.adoc[]
-
-include::{snippets}/register/response-fields.adoc[]
-
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
 include::{snippets}/register/http-response.adoc[]
@@ -34,10 +30,6 @@ include::../../util/H-EXAMPLE.adoc[]
 include::{snippets}/sign-up-user-o-k/curl-request.adoc[]
 
 ==== Response
-include::../../util/H-RESPONSE-FIELDS.adoc[]
-
-include::{snippets}/sign-up-user-o-k/response-fields.adoc[]
-
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
 include::{snippets}/sign-up-user-o-k/http-response.adoc[]

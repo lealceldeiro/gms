@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.AppService;
-import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
-import com.gms.util.i18n.MessageResolver;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,16 +24,14 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,10 +65,6 @@ public class RestUserControllerTest {
 
     @Autowired
     private AppService appService;
-    @Autowired
-    private ConfigurationService configService;
-    @Autowired
-    private MessageResolver msg;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
@@ -86,6 +78,8 @@ public class RestUserControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        assertTrue("Application initial configuration failed!", appService.isInitialLoadOK());
+
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)
@@ -111,7 +105,7 @@ public class RestUserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated())
@@ -132,31 +126,7 @@ public class RestUserControllerTest {
                                         fields.withPath("links").optional().ignored()
                                 )
                         )
-                )
-                .andDo(
-                        restDocResHandler.document(
-                                responseFields(
-                                        fieldWithPath("username").description("Just created user's username"),
-                                        fieldWithPath("email").description("Just created user's email"),
-                                        fieldWithPath("name").description("Just created user's name"),
-                                        fieldWithPath("lastName").description("Just created user's last name"),
-                                        fieldWithPath("password").optional().ignored().description("Just created user's hashed password"),
-                                        fieldWithPath("enabled").description("Whether the just created user is enabled or not"),
-                                        fieldWithPath("emailVerified")
-                                                .description("Indicates whether the user has verified his/her email or not"),
-                                        fields.withPath("authorities").optional().ignored(),
-                                        fields.withPath("accountNonExpired").description("Whether the account has not expired yet or it already expired"),
-                                        fields.withPath("accountNonLocked").description("Whether the account is not locked or it has been locked"),
-                                        fields.withPath("credentialsNonExpired").description("Whether the credentials has not expired yet or they already expired"),
-                                        fieldWithPath("_links")
-                                                .description("Available links for requesting other webservices related to user")
-                                )
-                        )
-                ).andReturn();
-        u = objectMapper.reader().forType(EUser.class).readValue(mvcResult.getResponse().getContentAsString());
-
-        assertNotNull("User object is null", u);
-        assertTrue("When registering a user, his/her email must be verified by default", u.isEmailVerified());
+                );
     }
 
     @Test
