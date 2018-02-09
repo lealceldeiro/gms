@@ -38,8 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class BPermissionRepositoryTest {
 
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
@@ -58,14 +57,14 @@ public class BPermissionRepositoryTest {
 
     //region vars
     private String apiPrefix;
-    private String pageSizeAttr;
-    private int pageSize;
     private String authHeader;
     private String tokenType;
     private String accessToken;
-    private static final String RANDOM_NAME = "RandomName-";
-    private static final String RANDOM_LABEL = "RandomLabel-";
+    private String pageSizeAttr;
+    private int pageSize;
     private static final String reqString = Resource.PERMISSION_PATH;
+    private static final String name = "SampleName-";
+    private static final String label = "SampleLabel-";
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -82,11 +81,11 @@ public class BPermissionRepositoryTest {
                 .build();
 
         apiPrefix = dc.getApiBasePath();
-        pageSizeAttr = dc.getPageSizeHolder();
-        pageSize = dc.getPageSize();
-
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
+
+        pageSizeAttr = dc.getPageSizeHolder();
+        pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
@@ -157,7 +156,7 @@ public class BPermissionRepositoryTest {
     }
 
     private BPermission createPermissionUsingRepository() {
-        return createPermissionUsingRepository(RANDOM_NAME + random.nextString(), RANDOM_LABEL + random.nextString());
+        return createPermissionUsingRepository(name + random.nextString(), label + random.nextString());
     }
     private BPermission createPermissionUsingRepository(String name, String label) {
         return repository.save(new BPermission(name, label));

@@ -46,35 +46,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class EOwnedEntityRepositoryTest {
 
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+
+    @Autowired private WebApplicationContext context;
+    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired private FilterChainProxy springSecurityFilterChain;
+
+    @Autowired private SecurityConst sc;
+    @Autowired private DefaultConst dc;
+
+    @Autowired private AppService appService;
+    @Autowired private EOwnedEntityRepository repository;
+
+    private MockMvc mvc;
+    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+
+    //region vars
+    private String apiPrefix;
+    private String authHeader;
+    private String tokenType;
+    private String accessToken;
+    private String pageSizeAttr;
+    private int pageSize;
     private static final String reqString = Resource.OWNED_ENTITY_PATH;
     private static final String name = "SampleName-";
     private static final String username = "SampleUsername-";
     private static final String description = "SampleDescription-";
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    //endregion
+
     private final GMSRandom random = new GMSRandom();
-    @Autowired
-    EOwnedEntityRepository repository;
-    @Autowired
-    private WebApplicationContext context;
-    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    private FilterChainProxy springSecurityFilterChain;
-    @Autowired
-    private SecurityConst sc;
-    @Autowired
-    private DefaultConst dc;
-    @Autowired
-    private AppService appService;
-    private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
-    private String authHeader;
-    private String tokenType;
-    private String accessToken;
-    private String apiPrefix;
-    private String pageSizeAttr;
-    private int pageSize;
 
     @Before
     public void setUp() throws Exception {
@@ -86,6 +88,7 @@ public class EOwnedEntityRepositoryTest {
                 .addFilter(springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();
+
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
