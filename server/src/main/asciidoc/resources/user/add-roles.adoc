@@ -1,8 +1,9 @@
 [[resource-user-add-roles]]
-=== Adding roles
+==== Adding roles
 A `POST` request adds new roles for a user over an owned entity.
 
-==== Request
+*Request*
+
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
 include::{snippets}/add-roles-to-user-o-k/request-fields.adoc[]
@@ -11,7 +12,8 @@ include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/add-roles-to-user-o-k/curl-request.adoc[]
 
-==== Response
+*Response*
+
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
 include::{snippets}/add-roles-to-user-o-k/response-fields.adoc[]

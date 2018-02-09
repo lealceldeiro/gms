@@ -1,0 +1,13 @@
+[[resources-owned-entity]]
+=== Owned Entity
+The Owned Entity resource is used to create, update, get and delete information related to the concept "Owned Entity". This concept can represent any entity over which the user has some specific roles (Enterprise, Property, etc)
+
+include::create.adoc[]
+
+include::update.adoc[]
+
+include::list.adoc[]
+
+include::get.adoc[]
+
+include::delete.adoc[]

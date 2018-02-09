@@ -1,5 +1,5 @@
 [[overview-http-verbs]]
-== HTTP-verbs
+=== HTTP-verbs
 
 |===
 | Verb | Usage

@@ -4,14 +4,18 @@ A `POST` request which gets a new refresh token and other necessary data for get
 
 include::{snippets}/refresh-token-o-k/request-fields.adoc[]
 
-==== Example request (successful)
+*Example request (successful)*
+
 include::{snippets}/refresh-token-o-k/curl-request.adoc[]
 
-==== Example of a successful response for getting a new access token
+*Example of a successful response for getting a new access token*
+
 include::{snippets}/refresh-token-o-k/http-response.adoc[]
 
-==== Example request (unsuccessful)
+*Example request (unsuccessful)*
+
 include::{snippets}/refresh-token-invalid/curl-request.adoc[]
 
-==== Example of an unsuccessful response for getting a new access token
+*Example of an unsuccessful response for getting a new access token*
+
 include::{snippets}/refresh-token-invalid/http-response.adoc[]

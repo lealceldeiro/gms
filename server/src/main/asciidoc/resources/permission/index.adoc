@@ -1,5 +1,5 @@
 [[resources-permission]]
-== Permission
+=== Permission
 The Permission resource is used to list the user's permissions. The permission and user resources are not related directly,
 but through a third entity called Role. It means a user has some role(s) and a role has some permission(s).
 

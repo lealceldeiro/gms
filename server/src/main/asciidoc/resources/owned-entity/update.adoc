@@ -1,0 +1,19 @@
+[[resource-owned-entity-update]]
+==== Updating a owned entity's info
+A `PUT` (full update) or `PATCH` (partial update) request updates a owned entity's information.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/update-owned-entity/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/update-owned-entity/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/update-owned-entity/http-response.adoc[]

@@ -1,0 +1,19 @@
+[[resource-owned-entity-list]]
+==== Listing owned entities
+A `GET` request lists owned entities.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/list-owned-entity/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/list-owned-entity/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/list-owned-entity/http-response.adoc[]

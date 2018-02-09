@@ -1,8 +1,9 @@
 [[resource-user-register]]
-=== Registering a new user
+==== Registering a new user
 A `POST` request adds a new user. This service is only available to users with administrative permissions to register new users directly without going through the signing up process. When using this service the user is created by default with the option `emailVerfied` to true which means she/he won't have to go through the verification email process in order to activate the account.
 
-==== Request
+*Request*
+
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
 include::{snippets}/register/request-fields.adoc[]
@@ -11,16 +12,18 @@ include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/register/curl-request.adoc[]
 
-==== Response
+*Response*
+
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
 include::{snippets}/register/http-response.adoc[]
 
 [[resource-user-signup]]
-=== Sign up a new user
+==== Sign up a new user
 A `POST` request adds a new user. This service is only available if the system is configured to accept new users via signing up process.
 
-==== Request
+*Request*
+
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
 include::{snippets}/sign-up-user-o-k/request-fields.adoc[]
@@ -29,7 +32,8 @@ include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/sign-up-user-o-k/curl-request.adoc[]
 
-==== Response
+*Response*
+
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
 include::{snippets}/sign-up-user-o-k/http-response.adoc[]

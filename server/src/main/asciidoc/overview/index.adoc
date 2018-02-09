@@ -1,5 +1,5 @@
 [[overview]]
-= Overview
+== Overview
 
 include::http-verbs.adoc[]
 

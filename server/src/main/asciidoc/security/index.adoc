@@ -1,5 +1,5 @@
 [[security]]
-= Security
+== Security
 In order to get access to the api resources a login must be performed before, by providing a valid login data.
 Each resource can be accessed under specific(s) role(s). Depending on the user's role, some resources may be available
 or not.

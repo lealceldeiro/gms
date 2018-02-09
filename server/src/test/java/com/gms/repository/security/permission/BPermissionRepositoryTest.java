@@ -54,7 +54,7 @@ public class BPermissionRepositoryTest {
     @Autowired private BPermissionRepository repository;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler;
+    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
 
     //region vars
     private String apiPrefix;
@@ -74,7 +74,6 @@ public class BPermissionRepositoryTest {
     public void setUp() throws Exception {
         org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
                 .alwaysDo(restDocResHandler)

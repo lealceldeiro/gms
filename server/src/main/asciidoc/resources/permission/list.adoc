@@ -1,13 +1,15 @@
 [[resource-permission-list]]
-=== Listing permissions
+==== Listing permissions
 A `GET` request lists all permissions.
 
-==== Request
+*Request*
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::A GET reques{snippets}/list-permissions/curl-request.adoc[]
+include::{snippets}/list-permissions/curl-request.adoc[]
 
-==== Response
+*Response*
+
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
 include::{snippets}/list-permissions/response-fields.adoc[]

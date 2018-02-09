@@ -1,6 +1,8 @@
 [[resources]]
-= Resources
+== Resources
 
 include::permission/index.adoc[]
+
+include::owned-entity/index.adoc[]
 
 include::user/index.adoc[]

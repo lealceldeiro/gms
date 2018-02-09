@@ -1,13 +1,15 @@
 [[resource-permission-get]]
-=== Getting a permission's info
+==== Getting a permission's info
 A `GET` request lists a permission's information.
 
-==== Request
+*Request*
+
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/get-permission/curl-request.adoc[]
 
-==== Response
+*Response*
+
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
 include::{snippets}/get-permission/response-fields.adoc[]

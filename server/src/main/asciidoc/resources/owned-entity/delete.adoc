@@ -1,0 +1,15 @@
+[[resource-owned-entity-delete]]
+==== Deleting a owned entity's info
+A `DELETE` request deletes a owned entity's information.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/delete-owned-entity/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/delete-owned-entity/http-response.adoc[]
