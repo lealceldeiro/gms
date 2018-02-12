@@ -2,6 +2,7 @@ package com.gms.controller.security.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.security.BAuthorizationMeta;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
@@ -146,9 +147,9 @@ public class UserControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("userId").description("User's identifier (id)"),
-                                        fields.withPath("entityId").description("Entity's identifier (id) over which the user will have the roles"),
-                                        fields.withPath("rolesId").description("List of identifiers (id) of every role the user will have over the entity")
+                                        fields.withPath("userId").description(BAuthorizationMeta.userId),
+                                        fields.withPath("entityId").description(BAuthorizationMeta.entityId),
+                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
                                 )
                         )
                 )
@@ -269,7 +270,7 @@ public class UserControllerTest {
                 .content(objectMapper.writeValueAsString(payload))
         ).andReturn();
 
-        assertTrue("Tes relationship among user, entity and role(s) could not be saved",
+        assertTrue("The relationship among user, entity and role(s) could not be saved",
                 mvcResult.getResponse().getStatus() == HttpStatus.OK.value());
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
@@ -281,9 +282,9 @@ public class UserControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("userId").description("User's identifier (id)"),
-                                        fields.withPath("entityId").description("Entity's identifier (id) over which the user will have the roles removed from"),
-                                        fields.withPath("rolesId").description("List of identifiers (id) of every role the user will have removed from the entity")
+                                        fields.withPath("userId").description(BAuthorizationMeta.userId),
+                                        fields.withPath("entityId").description(BAuthorizationMeta.entityId),
+                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
                                 )
                         )
                 )

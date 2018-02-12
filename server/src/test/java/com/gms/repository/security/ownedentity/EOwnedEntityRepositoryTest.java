@@ -3,6 +3,7 @@ package com.gms.repository.security.ownedentity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
+import com.gms.domain.security.ownedentity.EOwnedEntityMeta;
 import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
@@ -149,9 +150,9 @@ public class EOwnedEntityRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                fieldWithPath("username").description("A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
-                                fieldWithPath("description").description("A brief description of the entity"),
+                                fieldWithPath("name").description(EOwnedEntityMeta.name),
+                                fieldWithPath("username").description(EOwnedEntityMeta.username),
+                                fieldWithPath("description").description(EOwnedEntityMeta.description),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned owned entity")
                         )
                 )
@@ -171,9 +172,9 @@ public class EOwnedEntityRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                fieldWithPath("username").description(" unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
-                                fieldWithPath("description").description("A brief description of the entity"),
+                                fieldWithPath("name").description(EOwnedEntityMeta.name),
+                                fieldWithPath("username").description(EOwnedEntityMeta.username),
+                                fieldWithPath("description").description(EOwnedEntityMeta.description),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned owned entity")
                         )
                 )

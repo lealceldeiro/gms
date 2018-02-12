@@ -3,6 +3,7 @@ package com.gms.repository.security.permission;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
+import com.gms.domain.security.permission.BPermissionMeta;
 import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
@@ -121,8 +122,8 @@ public class BPermissionRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("name").description("Name to be used for authenticating"),
-                                fieldWithPath("label").description("Label to be shown to the final user"),
+                                fieldWithPath("name").description(BPermissionMeta.name),
+                                fieldWithPath("label").description(BPermissionMeta.label),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission")
                         )
                 )

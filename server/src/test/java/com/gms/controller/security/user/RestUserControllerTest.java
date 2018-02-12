@@ -3,6 +3,7 @@ package com.gms.controller.security.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.user.EUser;
+import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
@@ -108,12 +109,12 @@ public class RestUserControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("username").description("User's username"),
-                                        fields.withPath("email").description("User's email"),
-                                        fields.withPath("name").description("User's name"),
-                                        fields.withPath("lastName").description("User's last name"),
-                                        fields.withPath("password").description("User's password"),
-                                        fields.withPath("enabled").optional().description("Whether the user will be enabled or not"),
+                                        fields.withPath("username").description(EUserMeta.username),
+                                        fields.withPath("email").description(EUserMeta.email),
+                                        fields.withPath("name").description(EUserMeta.name),
+                                        fields.withPath("lastName").description(EUserMeta.lastName),
+                                        fields.withPath("password").description(EUserMeta.password),
+                                        fields.withPath("enabled").optional().description(EUserMeta.enabled),
                                         fields.withPath("authorities").optional().ignored(),
                                         fields.withPath("emailVerified").optional().ignored(),
                                         fields.withPath("accountNonExpired").optional().ignored(),

@@ -3,6 +3,7 @@ package com.gms.repository.security.role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.role.BRole;
+import com.gms.domain.security.role.BRoleMeta;
 import com.gms.service.AppService;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
@@ -115,12 +116,10 @@ public class BRoleRepositoryTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("label").description("Label to which the role can be referred to"),
-                                        fields.withPath("description").optional().description("A description of what is this role for"),
-                                        fields.withPath("permissions").optional().description("Permissions which this role will be associated to. These must be links to the permission resource"),
-                                        fields.withPath("enabled").optional().description("Whether the role is enabled or not." +
-                                                " If a role associated to a user is not enabled, the user will no be granted the" +
-                                                " associated permissions to this role.")
+                                        fields.withPath("label").description(BRoleMeta.label),
+                                        fields.withPath("description").optional().description(BRoleMeta.description),
+                                        fields.withPath("permissions").optional().description(BRoleMeta.permissions),
+                                        fields.withPath("enabled").optional().description(BRoleMeta.enabled)
                                 )
                         )
                 );
@@ -153,11 +152,9 @@ public class BRoleRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("label").description("Label to which the role can be referred to"),
-                                fieldWithPath("description").optional().description("A description of what is this role for"),
-                                fieldWithPath("enabled").optional().description("Whether the role is enabled or not." +
-                                        " If a role associated to a user is not enabled, the user will no be granted the" +
-                                        " associated permissions to this role."),
+                                fieldWithPath("label").description(BRoleMeta.label),
+                                fieldWithPath("description").optional().description(BRoleMeta.description),
+                                fieldWithPath("enabled").optional().description(BRoleMeta.enabled),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned role")
                         )
                 )
@@ -178,11 +175,9 @@ public class BRoleRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("label").description("Label to which the role can be referred to"),
-                                fieldWithPath("description").description("A description of what is this role for"),
-                                fieldWithPath("enabled").description("Whether the role is enabled or not." +
-                                        " If a role associated to a user is not enabled, the user will no be granted the" +
-                                        " associated permissions to this role."),
+                                fieldWithPath("label").description(BRoleMeta.label),
+                                fieldWithPath("description").description(BRoleMeta.description),
+                                fieldWithPath("enabled").description(BRoleMeta.enabled),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned role")
                         )
                 )
