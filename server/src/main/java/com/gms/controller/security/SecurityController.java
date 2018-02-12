@@ -1,6 +1,6 @@
 package com.gms.controller.security;
 
-import com.gms.component.security.authentication.IAuthenticationFacade;
+import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.controller.BaseController;
 import com.gms.domain.security.user.EUser;
@@ -46,7 +46,7 @@ public class SecurityController extends BaseController{
 
     @Autowired
     public SecurityController(UserService userService, DefaultConst defaultConst,
-                              SecurityConst sc, JWTService jwtService, IAuthenticationFacade authenticationFacade) {
+                              SecurityConst sc, JWTService jwtService, AuthenticationFacade authenticationFacade) {
         super(defaultConst);
         this.userService = userService;
         this.sc = sc;

@@ -1,6 +1,6 @@
 package com.gms.config.security;
 
-import com.gms.component.security.authentication.IAuthenticationFacade;
+import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.util.constant.SecurityConst;
 import io.jsonwebtoken.JwtException;
@@ -31,11 +31,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JWTService jwtService;
 
-    private final IAuthenticationFacade authFacade;
+    private final AuthenticationFacade authFacade;
 
     @SuppressWarnings("WeakerAccess")
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService,
-                                  IAuthenticationFacade authenticationFacade) {
+                                  AuthenticationFacade authenticationFacade) {
         super(authenticationManager);
         this.sc = sc;
         this.jwtService = jwtService;

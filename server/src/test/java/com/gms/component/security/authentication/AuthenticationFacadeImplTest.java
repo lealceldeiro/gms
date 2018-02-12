@@ -18,9 +18,10 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class AuthenticationFacadeTest {
+public class AuthenticationFacadeImplTest {
 
-    @Autowired IAuthenticationFacade authFacade;
+    @Autowired
+    AuthenticationFacade authFacade;
 
     private final ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
     private UsernamePasswordAuthenticationToken auth;

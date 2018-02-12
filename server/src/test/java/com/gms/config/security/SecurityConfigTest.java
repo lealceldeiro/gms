@@ -2,7 +2,7 @@ package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
-import com.gms.component.security.authentication.IAuthenticationFacade;
+import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.service.AppService;
 import com.gms.service.security.user.UserService;
@@ -64,7 +64,7 @@ public class SecurityConfigTest {
     @Autowired private UserService userService;
     @Autowired private BCryptPasswordEncoder encoder;
     @Autowired private JWTService jwtService;
-    @Autowired private IAuthenticationFacade authFacade;
+    @Autowired private AuthenticationFacade authFacade;
     @Autowired private MessageResolver msg;
 
     private MockMvc mvc;

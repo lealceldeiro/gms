@@ -1,7 +1,7 @@
 package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.component.security.authentication.IAuthenticationFacade;
+import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTService jwtService;
 
-    private final IAuthenticationFacade authFacade;
+    private final AuthenticationFacade authFacade;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
