@@ -53,7 +53,7 @@ public class BPermissionRepositoryTest {
     @Autowired private BPermissionRepository repository;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
 
     //region vars
     private String apiPrefix;

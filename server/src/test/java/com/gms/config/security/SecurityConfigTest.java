@@ -68,7 +68,7 @@ public class SecurityConfigTest {
     @Autowired private MessageResolver msg;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
 
     private String authHeader;
     private String tokenType;

@@ -10,6 +10,8 @@ package com.gms.util;
 public class RestDoc {
     public static final String APIDOC_LOCATION = "build/generated-snippets";
 
+    public static final String IDENTIFIER = "{method-name}";
+
     private RestDoc() {
     }
 }
