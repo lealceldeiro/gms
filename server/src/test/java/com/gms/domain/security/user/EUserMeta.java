@@ -17,4 +17,8 @@ public class EUserMeta {
     public static final String password = "User's password";
     public static final String passwordHashed = "Hashed user's password";
     public static final String enabled = "Whether the user is enabled or not.";
+    public static final String emailVerified = "Whether the user has verified the associated email or not.";
+    public static final String accountNonExpired = "Whether the user's account has expired or not.";
+    public static final String accountNonLocked = "Whether the user's account has been locked or not.";
+    public static final String credentialsNonExpired = "Whether the user's credentials has expired or not.";
 }
