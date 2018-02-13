@@ -14,7 +14,13 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * Dec 12, 2017
  */
 @RepositoryRestResource(collectionResourceRel = Resource.USER_PATH, path = Resource.USER_PATH)
-public interface EUserRepository extends PagingAndSortingRepository<EUser, Long> {
+public interface EUserRepository extends EUserRepositoryCustom, PagingAndSortingRepository<EUser, Long> {
 
     EUser findFirstByUsernameOrEmail(String username, String email);
+
+    @Override
+    <S extends EUser> S save(S s);
+
+    @Override
+    <S extends EUser> Iterable<S> save(Iterable<S> it);
 }

@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,7 +42,6 @@ public class UserService implements UserDetailsService{
     private final EOwnedEntityRepository entityRepository;
     private final BRoleRepository roleRepository;
     private final BAuthorizationRepository authorizationRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final ConfigurationService configService;
     private final DefaultConst dc;
     private final MessageResolver msg;
@@ -64,11 +62,8 @@ public class UserService implements UserDetailsService{
 
     public EUser signUp(EUser u, boolean emailVerified, boolean isSuperRegistration) {
         if (isSuperRegistration || configService.isUserRegistrationAllowed()) {
-            String pass = u.getPassword() != null ? passwordEncoder.encode(u.getPassword()) : "";
-            EUser sU = new EUser(u.getUsername(), u.getEmail(), u.getName(), u.getLastName(), pass);
-            sU.setEnabled(u.isEnabled());
-            sU.setEmailVerified(emailVerified);
-            return userRepository.save(sU);
+            u.setEmailVerified(emailVerified);
+            return userRepository.save(u);
         }
         return null;
     }

@@ -26,7 +26,7 @@ import java.util.HashSet;
  */
 @Data
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
@@ -68,7 +68,7 @@ public class EUser extends GmsEntity implements UserDetails {
     // the bean can actually have a LOT of chars, in db it will be stored hashed (a LOT LESSER characters)
     @Column(nullable = false, length = 10485760)
     @RestResource(exported = false)
-    private final String password;
+    private String password;
 
     @Getter(AccessLevel.NONE)
     private Boolean enabled;
@@ -123,4 +123,13 @@ public class EUser extends GmsEntity implements UserDetails {
         // by default: false
         return emailVerified != null && emailVerified;
     }
+
+    public EUser(String username, String email, String name, String lastName, String password) {
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
 }
