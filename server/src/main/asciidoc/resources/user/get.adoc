@@ -1,0 +1,19 @@
+[[resource-user-get]]
+==== Getting a user's info
+A `GET` request lists a user's information.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-user/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/get-user/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-user/http-response.adoc[]

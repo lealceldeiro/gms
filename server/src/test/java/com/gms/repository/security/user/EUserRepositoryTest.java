@@ -103,7 +103,7 @@ public class EUserRepositoryTest {
     }
 
     @Test
-    public void listUsers() throws Exception {
+    public void listUser() throws Exception {
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
                         .header(authHeader, tokenType + " " + accessToken)

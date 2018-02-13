@@ -1,5 +1,5 @@
 [[resource-role-list]]
-==== Listing owned entities
+==== Listing roles
 A `GET` request lists roles.
 
 *Request*

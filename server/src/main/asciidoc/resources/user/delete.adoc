@@ -1,0 +1,15 @@
+[[resource-user-delete]]
+==== Deleting a user's info
+A `DELETE` request deletes a user's information.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/delete-user/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/delete-user/http-response.adoc[]

@@ -1,0 +1,19 @@
+[[resource-user-list]]
+==== Listing users
+A `GET` request lists users.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/list-user/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/list-user/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/list-user/http-response.adoc[]
