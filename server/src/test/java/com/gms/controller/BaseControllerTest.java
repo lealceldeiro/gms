@@ -81,12 +81,10 @@ public class BaseControllerTest {
 
     @Test
     public void handleNotFoundEntityException() throws Exception {
-        long testId = -11141851135L;
+        final String testUsername = "testId-" + random.nextString();
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setUserId(testId);
-        payload.setEntityId(testId);
         mvc.perform(
-                post(apiPrefix + "/roles/add")
+                post(apiPrefix + "/roles/" + testUsername + "/" + testUsername)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(payload))

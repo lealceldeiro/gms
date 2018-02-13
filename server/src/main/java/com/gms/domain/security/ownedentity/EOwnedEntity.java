@@ -2,10 +2,7 @@ package com.gms.domain.security.ownedentity;
 
 import com.gms.domain.GmsEntity;
 import com.gms.util.i18n.CodeI18N;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
@@ -25,6 +22,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = "description")
 @Entity
 public class EOwnedEntity extends GmsEntity{
 

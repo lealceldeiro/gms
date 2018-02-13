@@ -134,21 +134,18 @@ public class UserControllerTest {
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setEntityId(e.getId());
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("userId").description(BAuthorizationMeta.userId),
-                                        fields.withPath("entityId").description(BAuthorizationMeta.entityId),
                                         fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
                                 )
                         )
@@ -164,6 +161,7 @@ public class UserControllerTest {
     public void addRolesToUser404() throws Exception {
         //region var-initialisation
         final long INVALID_ID = -999999999L;
+        final String INVALID_USERNAME = "invalidUsername-" + random.nextString();
         BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
         p = permissionRepository.save(p);
         p = permissionRepository.findOne(p.getId());
@@ -196,20 +194,18 @@ public class UserControllerTest {
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setEntityId(INVALID_ID);
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
 
         //entity not found
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + INVALID_USERNAME)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //user not found
-        payload.setEntityId(e.getId());
-        payload.setUserId(INVALID_ID);
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -218,9 +214,9 @@ public class UserControllerTest {
         rolesId.clear();
         rolesId.add(INVALID_ID);
 
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -261,11 +257,10 @@ public class UserControllerTest {
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setEntityId(e.getId());
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/add").contentType(MediaType.APPLICATION_JSON)
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andReturn();
@@ -275,15 +270,14 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("userId").description(BAuthorizationMeta.userId),
-                                        fields.withPath("entityId").description(BAuthorizationMeta.entityId),
                                         fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
                                 )
                         )
@@ -299,6 +293,7 @@ public class UserControllerTest {
     public void removeRolesFromUser404() throws Exception {
         //region var-initialisation
         final long INVALID_ID = -999999999L;
+        final String INVALID_USERNAME = "invalidUsername-" + random.nextString();
         BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
         p = permissionRepository.save(p);
         p = permissionRepository.findOne(p.getId());
@@ -331,20 +326,16 @@ public class UserControllerTest {
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setEntityId(INVALID_ID);
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
 
         //entity not found
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + INVALID_USERNAME).contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //user not found
-        payload.setEntityId(e.getId());
-        payload.setUserId(INVALID_ID);
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + e.getUsername()).contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
@@ -353,12 +344,21 @@ public class UserControllerTest {
         rolesId.clear();
         rolesId.add(INVALID_ID);
 
-        payload.setUserId(u.getId());
         payload.setRolesId(rolesId);
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/remove").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getRolesForUser() {
+
+    }
+    @Test
+    public void getRolesForUserByEntity() {
+
     }
 
 }

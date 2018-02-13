@@ -1,6 +1,7 @@
 package com.gms.controller.security.user;
 
 import com.gms.controller.BaseController;
+import com.gms.domain.security.role.BRole;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.Resource;
@@ -9,7 +10,9 @@ import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UserController
@@ -32,13 +35,20 @@ public class UserController extends BaseController{
         this.userService = userService;
     }
 
-    @PostMapping("roles/add")
-    public List<Long> addRolesToUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
-        return userService.addRolesToUser(data.getUserId(), data.getEntityId(), data.getRolesId());
+    @GetMapping("roles/{userUsername}")
+    public Map<String, List<BRole>> getRolesForUser(@PathVariable String userUsername) throws NotFoundEntityException {
+        return userService.getRolesForUser(userUsername);
     }
 
-    @DeleteMapping("roles/remove")
-    public List<Long> removeRolesFromUser(@RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
-        return userService.removeRolesFromUser(data.getUserId(), data.getEntityId(), data.getRolesId());
+    @PostMapping("roles/{userUsername}/{entityUsername}")
+    public List<Long> addRolesToUser(@PathVariable String userUsername, @PathVariable String entityUsername,
+                                     @Valid @RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
+        return userService.addRolesToUser(userUsername, entityUsername, data.getRolesId());
+    }
+
+    @DeleteMapping("roles/{userUsername}/{entityUsername}")
+    public List<Long> removeRolesFromUser(@PathVariable String userUsername, @PathVariable String entityUsername,
+                                          @Valid @RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {
+        return userService.removeRolesFromUser(userUsername, entityUsername, data.getRolesId());
     }
 }

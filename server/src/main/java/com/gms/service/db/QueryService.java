@@ -25,6 +25,10 @@ public class QueryService {
         return entityManager.createQuery(qls);
     }
 
+    public Query createQuery(String qls, Class<?> resultClass) {
+        return entityManager.createQuery(qls, resultClass);
+    }
+
     public Query createNativeQuery(String sql) {
         return entityManager.createNativeQuery(sql);
     }

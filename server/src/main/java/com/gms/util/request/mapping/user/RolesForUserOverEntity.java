@@ -1,7 +1,9 @@
 package com.gms.util.request.mapping.user;
 
+import com.gms.util.i18n.CodeI18N;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -16,7 +18,6 @@ import java.util.List;
  */
 @Data
 public class RolesForUserOverEntity {
-    Long userId;
-    Long entityId;
+    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     List<Long> rolesId;
 }

@@ -6,7 +6,7 @@ import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
-import com.gms.repository.security.BAuthorizationRepository;
+import com.gms.repository.security.authorization.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UserService
@@ -47,6 +48,8 @@ public class UserService implements UserDetailsService{
     private final MessageResolver msg;
     private final PermissionService permissionService;
 
+    private static final String USER_NOT_FOUND = "user.not.found";
+
     //region default user
     public EUser createDefaultUser() {
         EUser u = new EUser(dc.getUserAdminDefaultUsername(), dc.getUserAdminDefaultEmail(), dc.getUserAdminDefaultName(),
@@ -68,25 +71,25 @@ public class UserService implements UserDetailsService{
         return null;
     }
 
-    public List<Long> addRolesToUser(long userId, long entityId, List<Long> rolesId) throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
+    public List<Long> addRolesToUser(String userUsername, String entityUsername, List<Long> rolesId) throws NotFoundEntityException {
+        return addRemoveRolesToFromUser(userUsername, entityUsername, rolesId, true);
     }
 
-    public List<Long> removeRolesFromUser(long userId, long entityId, List<Long> rolesId) throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
+    public List<Long> removeRolesFromUser(String userUsername, String entityUsername, List<Long> rolesId) throws NotFoundEntityException {
+        return addRemoveRolesToFromUser(userUsername, entityUsername, rolesId, false);
     }
 
-    private ArrayList<Long> addRemoveRolesToFromUser (long userId,long entityId, List<Long> rolesId, Boolean add)
+    private ArrayList<Long> addRemoveRolesToFromUser (String userUsername, String entityUsername, List<Long> rolesId, Boolean add)
             throws NotFoundEntityException {
         ArrayList<Long> addedOrRemoved = new ArrayList<>();
 
         BAuthorizationPk pk;
         BAuthorization newUserAuth;
 
-        EUser u = userRepository.findOne(userId);
-        if (u == null) throw new NotFoundEntityException("user.not.found");
+        EUser u = userRepository.findFirstByUsername(userUsername);
+        if (u == null) throw new NotFoundEntityException(USER_NOT_FOUND);
 
-        EOwnedEntity e = entityRepository.findOne(entityId);
+        EOwnedEntity e = entityRepository.findFirstByUsername(entityUsername);
         if (e == null) throw new NotFoundEntityException("entity.not.found");
         BRole r;
 
@@ -122,7 +125,7 @@ public class UserService implements UserDetailsService{
         if (u != null) {
             return u;
         }
-        throw new UsernameNotFoundException(msg.getMessage("user.not.found"));
+        throw new UsernameNotFoundException(msg.getMessage(USER_NOT_FOUND));
     }
 
     public String getUserAuthoritiesForToken(String usernameOrEmail, String separator) {
@@ -142,6 +145,14 @@ public class UserService implements UserDetailsService{
         }
 
         return authBuilder.toString();
+    }
+
+    public Map<String, List<BRole>> getRolesForUser(String userUsername) throws NotFoundEntityException {
+        EUser u = userRepository.findFirstByUsername(userUsername);
+        if (u == null) {
+            throw new NotFoundEntityException(USER_NOT_FOUND);
+        }
+        return authorizationRepository.getRolesForUserOverAllEntities(u.getId());
     }
 
     /**

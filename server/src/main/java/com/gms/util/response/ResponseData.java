@@ -1,6 +1,8 @@
 package com.gms.util.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ResponseData
@@ -11,7 +13,9 @@ import lombok.Data;
  * Dec 12, 2017
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseData<T> {
-    private final String key;
-    private final T value;
+    private String key;
+    private T value;
 }

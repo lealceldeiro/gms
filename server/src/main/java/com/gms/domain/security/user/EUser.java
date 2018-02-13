@@ -28,6 +28,7 @@ import java.util.HashSet;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
+@ToString(callSuper = true, exclude = {"password", "authorities"})
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
 

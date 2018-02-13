@@ -18,6 +18,8 @@ public interface EUserRepository extends EUserRepositoryCustom, PagingAndSorting
 
     EUser findFirstByUsernameOrEmail(String username, String email);
 
+    EUser findFirstByUsername(String username);
+
     @Override
     <S extends EUser> S save(S s);
 

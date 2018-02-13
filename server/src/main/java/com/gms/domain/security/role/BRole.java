@@ -3,10 +3,7 @@ package com.gms.domain.security.role;
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.util.i18n.CodeI18N;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -27,6 +24,7 @@ import java.util.Set;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "permissions")
+@ToString(callSuper = true, exclude = {"description", "permissions"})
 @Entity
 public class BRole extends GmsEntity{
 

@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
  * Dec 12, 2017
  */
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 @Entity
 public class BConfiguration extends GmsEntity{
 

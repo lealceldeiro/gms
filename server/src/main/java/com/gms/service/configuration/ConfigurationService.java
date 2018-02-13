@@ -6,7 +6,7 @@ import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
 import com.gms.repository.configuration.BConfigurationRepository;
-import com.gms.repository.security.BAuthorizationRepository;
+import com.gms.repository.security.authorization.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
