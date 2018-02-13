@@ -205,7 +205,7 @@ public class BRoleTest {
         assertNull(ReflectionTestUtils.getField(entity, "label"));
         assertNull(ReflectionTestUtils.getField(entity, "description"));
         assertFalse(Boolean.parseBoolean(ReflectionTestUtils.getField(entity, "enabled").toString()));
-        assertTrue(ReflectionTestUtils.getField(entity, "permissions").equals(new HashSet<BPermission>()));
+        assertNull(ReflectionTestUtils.getField(entity, "permissions"));
     }
 
     private void prepareEntityForEqualityTest(BRole entity) {

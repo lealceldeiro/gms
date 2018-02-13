@@ -118,7 +118,7 @@ public class BRoleRepositoryTest {
                                 requestFields(
                                         fields.withPath("label").description(BRoleMeta.label),
                                         fields.withPath("description").optional().description(BRoleMeta.description),
-                                        fields.withPath("permissions").optional().description(BRoleMeta.permissions),
+                                        fields.withPath("permissions").optional().ignored().description(BRoleMeta.permissions),
                                         fields.withPath("enabled").optional().description(BRoleMeta.enabled)
                                 )
                         )

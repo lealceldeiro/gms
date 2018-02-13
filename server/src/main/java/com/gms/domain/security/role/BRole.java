@@ -59,14 +59,15 @@ public class BRole extends GmsEntity{
             joinColumns = @JoinColumn(name = "brole_id"),
             inverseJoinColumns = @JoinColumn(name = "bpermission_id")
     )
-    private Set<BPermission> permissions = new HashSet<>();
+    private Set<BPermission> permissions;
 
     /**
      * Adds a permission p to a role.
      * @param p Permission to be added.
      */
     public void addPermission(BPermission p) {
-        this.permissions.add(p);
+        if (permissions == null) permissions = new HashSet<>();
+        permissions.add(p);
     }
 
     /**
@@ -74,6 +75,6 @@ public class BRole extends GmsEntity{
      * @param p Permission to be removed.
      */
     public void removePermission(BPermission p) {
-        this.permissions.remove(p);
+        if (permissions != null) permissions.remove(p);
     }
 }

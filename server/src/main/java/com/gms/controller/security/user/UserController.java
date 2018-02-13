@@ -40,6 +40,12 @@ public class UserController extends BaseController{
         return userService.getRolesForUser(userUsername);
     }
 
+    @GetMapping("roles/{userUsername}/{entityUsername}")
+    public List<BRole> getRolesForUserOverEntity(@PathVariable String userUsername, @PathVariable String entityUsername)
+            throws NotFoundEntityException {
+        return userService.getRolesForUserOverEntity(userUsername, entityUsername);
+    }
+
     @PostMapping("roles/{userUsername}/{entityUsername}")
     public List<Long> addRolesToUser(@PathVariable String userUsername, @PathVariable String entityUsername,
                                      @Valid @RequestBody RolesForUserOverEntity data) throws NotFoundEntityException {

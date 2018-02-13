@@ -45,8 +45,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -79,6 +78,13 @@ public class UserControllerTest {
     private String accessToken;
     private String apiPrefix;
 
+    private BPermission permission;
+    private BRole role;
+    private BRole role2;
+    private EOwnedEntity entity;
+    private EUser user;
+    private ArrayList<Long> rIds;
+
     private final GMSRandom random = new GMSRandom();
 
     @Before
@@ -101,44 +107,14 @@ public class UserControllerTest {
 
     @Test
     public void addRolesToUserOK() throws Exception {
-        //region var-initialisation
-        BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
-        p = permissionRepository.save(p);
-        p = permissionRepository.findOne(p.getId());
-        assertNotNull("Test permission could not be saved", p);
-
-        BRole r = new BRole("rl" + random.nextString());
-        r = roleRepository.save(r);
-        r = roleRepository.findOne(r.getId());
-        assertNotNull("Test role could not be saved", r);
-
-        BRole r2 = new BRole("r2l" + random.nextString());
-        r2 = roleRepository.save(r2);
-        r2 = roleRepository.findOne(r2.getId());
-        assertNotNull("Test role 2 could not be saved", r2);
-
-        EOwnedEntity e = new EOwnedEntity("en" + random.nextString(), "eu" + random.nextString(), "Test description");
-        e = entityRepository.save(e);
-        e = entityRepository.findOne(e.getId());
-        assertNotNull("Test entity could not be saved", e);
-
-        EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com", "name" + random.nextString(),
-                "lastname" + random.nextString(), "pass");
-        u = userRepository.save(u);
-        u = userRepository.findOne(u.getId());
-        assertNotNull("Test user could not be saved", u);
-
-        ArrayList<Long> rolesId = new ArrayList<>(1);
-        rolesId.add(r.getId());
-        rolesId.add(r2.getId());
-        //endregion
+        initializeVars();
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rolesId);
+        payload.setRolesId(rIds);
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -162,60 +138,32 @@ public class UserControllerTest {
         //region var-initialisation
         final long INVALID_ID = -999999999L;
         final String INVALID_USERNAME = "invalidUsername-" + random.nextString();
-        BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
-        p = permissionRepository.save(p);
-        p = permissionRepository.findOne(p.getId());
-        assertNotNull("Test permission could not be saved", p);
-
-        BRole r = new BRole("rl" + random.nextString());
-        r = roleRepository.save(r);
-        r = roleRepository.findOne(r.getId());
-        assertNotNull("Test role could not be saved", r);
-
-        BRole r2 = new BRole("r2l" + random.nextString());
-        r2 = roleRepository.save(r2);
-        r2 = roleRepository.findOne(r2.getId());
-        assertNotNull("Test role 2 could not be saved", r2);
-
-        EOwnedEntity e = new EOwnedEntity("en" + random.nextString(), "eu" + random.nextString(), "Test description");
-        e = entityRepository.save(e);
-        e = entityRepository.findOne(e.getId());
-        assertNotNull("Test entity could not be saved", e);
-
-        EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com", "name" + random.nextString(),
-                "lastname" + random.nextString(), "pass");
-        u = userRepository.save(u);
-        u = userRepository.findOne(u.getId());
-        assertNotNull("Test user could not be saved", u);
-
-        ArrayList<Long> rolesId = new ArrayList<>(1);
-        rolesId.add(r.getId());
-        rolesId.add(r2.getId());
+        initializeVars();
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rolesId);
+        payload.setRolesId(rIds);
 
         //entity not found
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + INVALID_USERNAME)
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //user not found
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + e.getUsername())
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //none of the roles was found
-        rolesId.clear();
-        rolesId.add(INVALID_ID);
+        rIds.clear();
+        rIds.add(INVALID_ID);
 
-        payload.setRolesId(rolesId);
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+        payload.setRolesId(rIds);
+        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -225,41 +173,13 @@ public class UserControllerTest {
     @Test
     public void removeRolesFromUserUserOK() throws Exception {
         //region var-initialisation
-        BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
-        p = permissionRepository.save(p);
-        p = permissionRepository.findOne(p.getId());
-        assertNotNull("Test permission could not be saved", p);
-
-        BRole r = new BRole("rl" + random.nextString());
-        r = roleRepository.save(r);
-        r = roleRepository.findOne(r.getId());
-        assertNotNull("Test role could not be saved", r);
-
-        BRole r2 = new BRole("r2l" + random.nextString());
-        r2 = roleRepository.save(r2);
-        r2 = roleRepository.findOne(r2.getId());
-        assertNotNull("Test role 2 could not be saved", r2);
-
-        EOwnedEntity e = new EOwnedEntity("en" + random.nextString(), "eu" + random.nextString(), "Test description");
-        e = entityRepository.save(e);
-        e = entityRepository.findOne(e.getId());
-        assertNotNull("Test entity could not be saved", e);
-
-        EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com", "name" + random.nextString(),
-                "lastname" + random.nextString(), "pass");
-        u = userRepository.save(u);
-        u = userRepository.findOne(u.getId());
-        assertNotNull("Test user could not be saved", u);
-
-        ArrayList<Long> rolesId = new ArrayList<>(1);
-        rolesId.add(r.getId());
-        rolesId.add(r2.getId());
+        initializeVars();
         //endregion
 
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rolesId);
+        payload.setRolesId(rIds);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -270,7 +190,7 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -294,6 +214,57 @@ public class UserControllerTest {
         //region var-initialisation
         final long INVALID_ID = -999999999L;
         final String INVALID_USERNAME = "invalidUsername-" + random.nextString();
+        initializeVars();
+        //endregion
+
+        RolesForUserOverEntity payload = new RolesForUserOverEntity();
+        payload.setRolesId(rIds);
+
+        //entity not found
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(payload))
+        ).andExpect(status().isNotFound());
+
+        //user not found
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(payload))
+        ).andExpect(status().isNotFound());
+
+        //none of the roles was found
+        rIds.clear();
+        rIds.add(INVALID_ID);
+
+        payload.setRolesId(rIds);
+        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(payload))
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getRolesForUser() throws Exception {
+        initializeVars();
+        mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getRolesForUserByEntity() throws Exception {
+        initializeVars();
+        mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+        ).andExpect(status().isOk());
+    }
+
+    private void initializeVars() {
         BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
         p = permissionRepository.save(p);
         p = permissionRepository.findOne(p.getId());
@@ -323,42 +294,13 @@ public class UserControllerTest {
         ArrayList<Long> rolesId = new ArrayList<>(1);
         rolesId.add(r.getId());
         rolesId.add(r2.getId());
-        //endregion
 
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rolesId);
-
-        //entity not found
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + INVALID_USERNAME).contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isNotFound());
-
-        //user not found
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + e.getUsername()).contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isNotFound());
-
-        //none of the roles was found
-        rolesId.clear();
-        rolesId.add(INVALID_ID);
-
-        payload.setRolesId(rolesId);
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + u.getUsername() + "/" + e.getUsername())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void getRolesForUser() {
-
-    }
-    @Test
-    public void getRolesForUserByEntity() {
-
+        permission = p;
+        role = r;
+        role2 = r2;
+        entity = e;
+        user = u;
+        rIds = rolesId;
     }
 
 }

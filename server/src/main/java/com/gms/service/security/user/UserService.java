@@ -49,6 +49,7 @@ public class UserService implements UserDetailsService{
     private final PermissionService permissionService;
 
     private static final String USER_NOT_FOUND = "user.not.found";
+    private static final String O_ENTITY_NOT_FOUND = "entity.not.found";
 
     //region default user
     public EUser createDefaultUser() {
@@ -90,7 +91,7 @@ public class UserService implements UserDetailsService{
         if (u == null) throw new NotFoundEntityException(USER_NOT_FOUND);
 
         EOwnedEntity e = entityRepository.findFirstByUsername(entityUsername);
-        if (e == null) throw new NotFoundEntityException("entity.not.found");
+        if (e == null) throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
         BRole r;
 
         for (Long iRoleId : rolesId) {
@@ -153,6 +154,18 @@ public class UserService implements UserDetailsService{
             throw new NotFoundEntityException(USER_NOT_FOUND);
         }
         return authorizationRepository.getRolesForUserOverAllEntities(u.getId());
+    }
+
+    public List<BRole> getRolesForUserOverEntity(String userUsername, String entityUsername) throws NotFoundEntityException {
+        EUser u = userRepository.findFirstByUsername(userUsername);
+        if (u == null) {
+            throw new NotFoundEntityException(USER_NOT_FOUND);
+        }
+        EOwnedEntity e = entityRepository.findFirstByUsername(entityUsername);
+        if (e == null) {
+            throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
+        }
+        return authorizationRepository.getRolesForUserOverEntity(u.getId(), e.getId());
     }
 
     /**

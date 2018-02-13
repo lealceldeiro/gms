@@ -24,35 +24,56 @@ public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCus
 
     private final QueryService queryService;
 
+    private static final String USER_ID_PARAM = "userId";
+
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, List<BRole>> getRolesForUserOverAllEntities(long userId) {
         Map<String, List<BRole>> r = new HashMap<>();
         final Query queryOE = queryService.createNativeQuery("SELECT e.username FROM eowned_entity e INNER JOIN" +
                 " bauthorization auth ON e.id = auth.entity_id WHERE auth.user_id = :userId");
-        queryOE.setParameter("userId", userId);
+        queryOE.setParameter(USER_ID_PARAM, userId);
         List<String> oEntitiesUsernames = queryOE.getResultList();
 
         Query queryR;
         List<Object[]> result;
         List<BRole> rl;
-        BRole role;
         for (String OEUsername : oEntitiesUsernames) {
             queryR = queryService.createNativeQuery("SELECT r.id, r.version, r.label, r.enabled FROM brole r" +
                     " INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_entity e ON" +
                     " auth.entity_id = e.id WHERE e.username = :eUsername AND auth.user_id = :userId");
-            queryR.setParameter("eUsername", OEUsername).setParameter("userId", userId);
+            queryR.setParameter("eUsername", OEUsername).setParameter(USER_ID_PARAM, userId);
             result = queryR.getResultList();
             rl = new ArrayList<>(result.size());
-            for (Object[] roleValues : result) {
-                role = new BRole(roleValues[2].toString());
-                role.setId(Long.valueOf(roleValues[0].toString()));
-                role.setVersion(Integer.valueOf(roleValues[1].toString()));
-                role.setEnabled(Boolean.valueOf(roleValues[3].toString()));
-                rl.add(role);
-            }
+            processRolesVal(result, rl);
             r.put(OEUsername, rl);
         }
         return r;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<BRole> getRolesForUserOverEntity(long userId, long entityId) {
+        Query queryR = queryService.createNativeQuery("SELECT r.id, r.version, r.label, r.enabled FROM brole r" +
+                " INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_entity e ON" +
+                " auth.entity_id = e.id WHERE e.id = :entityId AND auth.user_id = :userId");
+        queryR.setParameter("entityId", entityId).setParameter(USER_ID_PARAM, userId);
+        List<Object[]> rawVal = queryR.getResultList();
+        List<BRole> r = new ArrayList<>(rawVal.size());
+
+        processRolesVal(rawVal, r);
+
+        return r;
+    }
+
+    private void processRolesVal(List<Object[]> rawVal, List<BRole> r) {
+        BRole role;
+        for (Object[] oVal : rawVal) {
+            role = new BRole(oVal[2].toString());
+            role.setId(Long.valueOf(oVal[0].toString()));
+            role.setVersion(Integer.valueOf(oVal[1].toString()));
+            role.setEnabled(Boolean.valueOf(oVal[3].toString()));
+            r.add(role);
+        }
     }
 }
