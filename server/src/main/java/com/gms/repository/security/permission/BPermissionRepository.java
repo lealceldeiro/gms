@@ -15,7 +15,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
  * Dec 12, 2017
  */
 @RepositoryRestResource(collectionResourceRel = Resource.PERMISSION_PATH, path = Resource.PERMISSION_PATH)
-public interface BPermissionRepository extends PagingAndSortingRepository<BPermission, Long> {
+public interface BPermissionRepository extends PagingAndSortingRepository<BPermission, Long>, BPermissionRepositoryCustom {
 
     @Override
     @RestResource(exported = false)
