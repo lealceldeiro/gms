@@ -1,0 +1,19 @@
+[[resource-user-get-roles]]
+==== Getting roles
+A `GET` request gets the roles associated to a user over all possible owned entities.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-roles-for-user/curl-request.adoc[]
+
+*Response*
+
+This response is an object containing a series of key values. Every key is the username of the entity over which the user has some roles. Every value is an array of objects in which every one of them contains the information to the role assigned to the user over the entity (the entity is the one with the username represented by the key).
+
+In this case, in the information provided for every role, is included neither the `description` nor the `permissions`; they both will be shown as null.
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-roles-for-user/http-response.adoc[]

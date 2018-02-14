@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -70,9 +71,10 @@ public class BPermissionRepositoryTest {
 
     private final GMSRandom random = new GMSRandom();
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
-        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))

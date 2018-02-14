@@ -1,0 +1,15 @@
+[[resource-user-get-roles-by-entity]]
+==== Getting roles by an entity
+A `GET` request gets the roles associated to a user over an owned entity.
+
+*Request*
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-roles-for-user-by-entity/curl-request.adoc[]
+
+*Response*
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-roles-for-user-by-entity/http-response.adoc[]

@@ -78,9 +78,10 @@ public class BRoleRepositoryTest {
 
     private final GMSRandom random = new GMSRandom();
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
-        assertTrue("Initial configuration is incorrect.", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))

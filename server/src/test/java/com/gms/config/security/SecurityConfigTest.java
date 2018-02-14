@@ -83,7 +83,7 @@ public class SecurityConfigTest {
 
     @Before
     public void setUp() throws Exception {
-        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))

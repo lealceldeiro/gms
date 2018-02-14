@@ -10,6 +10,15 @@ import java.util.Arrays;
  * Feb 07, 2018
  */
 public class StringUtil {
+
+    public static final String EXAMPLE_USERNAME = "ExampleUsername-";
+    public static final String EXAMPLE_NAME = "ExampleName-";
+    public static final String EXAMPLE_LAST_NAME = "ExampleLastName-";
+    public static final String EXAMPLE_PASSWORD = "ExamplePassword-";
+    public static final String EXAMPLE_LABEL = "ExampleLabel-";
+    public static final String EXAMPLE_EMAIL = "example-email@test.com";
+    public static final String EXAMPLE_DESCRIPTION = "ExampleDescription-";
+
     private StringUtil() {
     }
 

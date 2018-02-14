@@ -32,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -65,7 +66,7 @@ public class BaseControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        org.junit.Assert.assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilter(this.springSecurityFilterChain)
@@ -81,7 +82,7 @@ public class BaseControllerTest {
 
     @Test
     public void handleNotFoundEntityException() throws Exception {
-        final String testUsername = "testId-" + random.nextString();
+        final String testUsername = "SampleUsername-" + random.nextString();
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
         mvc.perform(
                 post(apiPrefix + "/roles/" + testUsername + "/" + testUsername)
@@ -145,8 +146,9 @@ public class BaseControllerTest {
 
     @Test
     public void handleTransactionSystemException() throws Exception {
-        String fd = random.nextString();
-        EUser u = new EUser(null, "bcTest" + fd + "@test.com", fd, fd, fd);
+        final String r = random.nextString();
+        EUser u = new EUser(null ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
@@ -156,16 +158,17 @@ public class BaseControllerTest {
 
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
-        String fd = random.nextString();
-        String email = "bcTest" + fd + "@test.com";
-        EUser u = new EUser(fd, email, fd, fd, fd);
+        final String r = random.nextString();
+        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());
 
-        u = new EUser(u.getUsername() + fd, email, u.getName() + fd, u.getLastName() + fd, u.getPassword() + fd);
+        u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)

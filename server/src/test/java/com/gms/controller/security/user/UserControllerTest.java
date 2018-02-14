@@ -97,8 +97,8 @@ public class UserControllerTest {
                 .addFilter(springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();
-        apiPrefix = dc.getApiBasePath();
 
+        apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
@@ -172,21 +172,8 @@ public class UserControllerTest {
 
     @Test
     public void removeRolesFromUserUserOK() throws Exception {
-        //region var-initialisation
         initializeVars();
-        //endregion
-
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rIds);
-
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
-        ).andReturn();
-
-        assertTrue("The relationship among user, entity and role(s) could not be saved",
-                mvcResult.getResponse().getStatus() == HttpStatus.OK.value());
+        RolesForUserOverEntity payload = assignRolesForUserOverEntity();
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
@@ -249,6 +236,8 @@ public class UserControllerTest {
     @Test
     public void getRolesForUser() throws Exception {
         initializeVars();
+        assignRolesForUserOverEntity();
+
         mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
@@ -258,6 +247,8 @@ public class UserControllerTest {
     @Test
     public void getRolesForUserByEntity() throws Exception {
         initializeVars();
+        assignRolesForUserOverEntity();
+
         mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
@@ -265,28 +256,30 @@ public class UserControllerTest {
     }
 
     private void initializeVars() {
-        BPermission p = new BPermission("pn" + random.nextString(), "pl" + random.nextString());
+        BPermission p = new BPermission("RandomPermissionName-" + random.nextString(), "RandomPermissionLabel-" + random.nextString());
         p = permissionRepository.save(p);
         p = permissionRepository.findOne(p.getId());
         assertNotNull("Test permission could not be saved", p);
 
-        BRole r = new BRole("rl" + random.nextString());
+        BRole r = new BRole("RandomRoleLabel-" + random.nextString());
         r = roleRepository.save(r);
         r = roleRepository.findOne(r.getId());
         assertNotNull("Test role could not be saved", r);
 
-        BRole r2 = new BRole("r2l" + random.nextString());
+        BRole r2 = new BRole("RandomRoleLabel-" + random.nextString());
         r2 = roleRepository.save(r2);
         r2 = roleRepository.findOne(r2.getId());
         assertNotNull("Test role 2 could not be saved", r2);
 
-        EOwnedEntity e = new EOwnedEntity("en" + random.nextString(), "eu" + random.nextString(), "Test description");
+        EOwnedEntity e = new EOwnedEntity("RandomEntityName" + random.nextString(), "RandomEntityUsername" + random.nextString(),
+                "Test description");
         e = entityRepository.save(e);
         e = entityRepository.findOne(e.getId());
         assertNotNull("Test entity could not be saved", e);
 
-        EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com", "name" + random.nextString(),
-                "lastname" + random.nextString(), "pass");
+        EUser u = new EUser("RandomUserUsername-" + random.nextString(), "random-email" + random.nextString() + "@test.com",
+                "RandomName-" + random.nextString(),
+                "RandomLastName" + random.nextString(), "pass");
         u = userRepository.save(u);
         u = userRepository.findOne(u.getId());
         assertNotNull("Test user could not be saved", u);
@@ -301,6 +294,21 @@ public class UserControllerTest {
         entity = e;
         user = u;
         rIds = rolesId;
+    }
+
+    private RolesForUserOverEntity assignRolesForUserOverEntity() throws Exception{
+        RolesForUserOverEntity payload = new RolesForUserOverEntity();
+        payload.setRolesId(rIds);
+
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(payload))
+        ).andReturn();
+
+        assertTrue("The relationship among user, entity and role(s) could not be saved",
+                mvcResult.getResponse().getStatus() == HttpStatus.OK.value());
+        return payload;
     }
 
 }

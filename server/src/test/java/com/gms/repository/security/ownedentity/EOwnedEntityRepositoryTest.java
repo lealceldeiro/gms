@@ -79,9 +79,10 @@ public class EOwnedEntityRepositoryTest {
 
     private final GMSRandom random = new GMSRandom();
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
-        assertTrue("Application initial configuration failed.", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))

@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -73,9 +74,10 @@ public class RestUserControllerTest {
 
     private final GMSRandom random = new GMSRandom();
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
-        assertTrue("Application initial configuration failed!", appService.isInitialLoadOK());
+        assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
@@ -83,19 +85,19 @@ public class RestUserControllerTest {
                 .addFilter(springSecurityFilterChain)
                 .alwaysExpect(forwardedUrl(null))
                 .build();
-        apiPrefix = dc.getApiBasePath();
 
+        apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-
     @Test
     public void register() throws Exception {
-        EUser u = new EUser("uu" + random.nextString(), "test" + random.nextString() + "@test.com",
-                "un" + random.nextString(), "ul" + random.nextString(), "pass");
+        final String r = random.nextString();
+        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         u.setEnabled(true);
         Resource<EUser> resource = new Resource<>(u);
         ReflectionTestUtils.setField(resource, "links", null);
@@ -128,8 +130,9 @@ public class RestUserControllerTest {
 
     @Test
     public void handleTransactionSystemException() throws Exception {
-        String fd = random.nextString();
-        EUser u = new EUser(null, "rucTest" + fd + "@test.com", fd, fd, fd);
+        String r = random.nextString();
+        EUser u = new EUser(null ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
@@ -140,9 +143,9 @@ public class RestUserControllerTest {
 
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
-        String fd = random.nextString();
-        String email = "rucTest" + fd + "@test.com";
-        EUser u = new EUser(fd, email, fd, fd, fd);
+        String r = random.nextString();
+        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
@@ -150,7 +153,8 @@ public class RestUserControllerTest {
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());
 
-        u = new EUser(u.getUsername() + fd, email, u.getName() + fd, u.getLastName() + fd, u.getPassword() + fd);
+        u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)

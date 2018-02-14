@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -91,8 +92,9 @@ public class SecurityControllerTest {
         if (!initial) {
             assertTrue(configService.setUserRegistrationAllowed(true));
         }
-        String rd = random.nextString() + "scTest";
-        EUser u = new EUser(rd, "scTest" + rd + "esc@test.com", rd, rd, rd);
+        final String r = random.nextString();
+        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         u.setEnabled(false);
 
         Resource<EUser> resource = new Resource<>(u);
@@ -136,8 +138,9 @@ public class SecurityControllerTest {
             assertTrue(configService.setUserRegistrationAllowed(false));
         }
 
-        String rd = random.nextString() + "scTest";
-        EUser u = new EUser(rd, "escTest" + rd + "esc@test.com", rd, rd, rd);
+        final String r = random.nextString();
+        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
