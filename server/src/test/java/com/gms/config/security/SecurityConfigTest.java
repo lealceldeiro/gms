@@ -38,9 +38,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,7 +66,7 @@ public class SecurityConfigTest {
     @Autowired private MessageResolver msg;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     private String authHeader;
     private String tokenType;

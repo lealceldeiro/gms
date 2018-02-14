@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -30,9 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -65,7 +64,7 @@ public class RestUserControllerTest {
     @Autowired private AppService appService;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     private String authHeader;
     private String tokenType;
@@ -96,8 +95,7 @@ public class RestUserControllerTest {
     @Test
     public void register() throws Exception {
         final String r = random.nextString();
-        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
+        EUser u = EntityUtil.getSampleUser(r);
         u.setEnabled(true);
         Resource<EUser> resource = new Resource<>(u);
         ReflectionTestUtils.setField(resource, "links", null);
@@ -144,18 +142,13 @@ public class RestUserControllerTest {
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
         String r = random.nextString();
-        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
-        Resource<EUser> resource = new Resource<>(u);
+        Resource<EUser> resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
                 post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());
-
-        u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
-        resource = new Resource<>(u);
+        resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))

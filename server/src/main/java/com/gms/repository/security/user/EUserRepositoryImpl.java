@@ -25,10 +25,7 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
 
     @Override
     public <S extends EUser> S save(S s) {
-        if (s.getPassword() != null) {
-            s.setPassword(encoder.encode(s.getPassword()));
-        }
-        entityManager.persist(s);
+        persist(s);
         return s;
     }
 
@@ -38,11 +35,15 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
         S s;
         while (iterator.hasNext()) {
             s = it.iterator().next();
-            if (s.getPassword() != null) {
-                s.setPassword(encoder.encode(s.getPassword()));
-            }
-            entityManager.persist(s);
+            persist(s);
         }
         return it;
+    }
+
+    private void persist(EUser u) {
+        if (u.getPassword() != null) {
+            u.setPassword(encoder.encode(u.getPassword()));
+        }
+        entityManager.persist(u);
     }
 }

@@ -6,6 +6,7 @@ import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -33,11 +34,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.gms.util.StringUtil.*;
+import static com.gms.util.EntityUtil.getSampleUserResource;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -63,7 +62,7 @@ public class SecurityControllerTest {
     @Autowired private MessageResolver msg;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     private String refreshToken;
     private String apiPrefix;
@@ -93,8 +92,7 @@ public class SecurityControllerTest {
             assertTrue(configService.setUserRegistrationAllowed(true));
         }
         final String r = random.nextString();
-        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
+        EUser u = EntityUtil.getSampleUser(r);
         u.setEnabled(false);
 
         Resource<EUser> resource = new Resource<>(u);
@@ -137,11 +135,7 @@ public class SecurityControllerTest {
         if (initial) {
             assertTrue(configService.setUserRegistrationAllowed(false));
         }
-
-        final String r = random.nextString();
-        EUser u = new EUser(EXAMPLE_USERNAME + r ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
-        Resource<EUser> resource = new Resource<>(u);
+        Resource<EUser> resource = getSampleUserResource(random.nextString());
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))

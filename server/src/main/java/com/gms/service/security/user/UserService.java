@@ -87,11 +87,8 @@ public class UserService implements UserDetailsService{
         BAuthorizationPk pk;
         BAuthorization newUserAuth;
 
-        EUser u = userRepository.findFirstByUsername(userUsername);
-        if (u == null) throw new NotFoundEntityException(USER_NOT_FOUND);
-
-        EOwnedEntity e = entityRepository.findFirstByUsername(entityUsername);
-        if (e == null) throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
+        EUser u = getUser(userUsername);
+        EOwnedEntity e = getOwnedEntity(entityUsername);
         BRole r;
 
         for (Long iRoleId : rolesId) {
@@ -149,23 +146,12 @@ public class UserService implements UserDetailsService{
     }
 
     public Map<String, List<BRole>> getRolesForUser(String userUsername) throws NotFoundEntityException {
-        EUser u = userRepository.findFirstByUsername(userUsername);
-        if (u == null) {
-            throw new NotFoundEntityException(USER_NOT_FOUND);
-        }
+        EUser u = getUser(userUsername);
         return authorizationRepository.getRolesForUserOverAllEntities(u.getId());
     }
 
     public List<BRole> getRolesForUserOverEntity(String userUsername, String entityUsername) throws NotFoundEntityException {
-        EUser u = userRepository.findFirstByUsername(userUsername);
-        if (u == null) {
-            throw new NotFoundEntityException(USER_NOT_FOUND);
-        }
-        EOwnedEntity e = entityRepository.findFirstByUsername(entityUsername);
-        if (e == null) {
-            throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
-        }
-        return authorizationRepository.getRolesForUserOverEntity(u.getId(), e.getId());
+        return authorizationRepository.getRolesForUserOverEntity(getUser(userUsername).getId(), getOwnedEntity(entityUsername).getId());
     }
 
     /**
@@ -186,5 +172,21 @@ public class UserService implements UserDetailsService{
             configService.setLastAccessedEntityIdByUser(u.getId(), entityId); // todo: log if the config couldn't be saved
         }
         return entityId;
+    }
+
+    private EUser getUser(String username) throws NotFoundEntityException {
+        EUser u = userRepository.findFirstByUsername(username);
+        if (u == null) {
+            throw new NotFoundEntityException(USER_NOT_FOUND);
+        }
+        return u;
+    }
+
+    private EOwnedEntity getOwnedEntity(String username) throws NotFoundEntityException {
+        EOwnedEntity e = entityRepository.findFirstByUsername(username);
+        if (e == null) {
+            throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
+        }
+        return e;
     }
 }

@@ -108,20 +108,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private String[] getFreeUrl(String[] urls, String ... additionalUrls) {
-        String b = dc.getApiBasePath();
+
         ArrayList<String> free = new ArrayList<>(urls.length);
         for (String s: urls) {
-            if (s != null && !s.equals("")) {
-                free.add(b + (s.startsWith("/") ? s : "/" + s));
-            }
+            addUrl(free, s);
         }
         for (String s: additionalUrls) {
-            if (s != null && !s.equals("")) {
-                free.add(b + (s.startsWith("/") ? s : "/" + s));
-            }
+            addUrl(free, s);
         }
 
         return free.toArray(new String[free.size()]);
+    }
+
+    private void addUrl(ArrayList<String> urlList, String url) {
+        String b = dc.getApiBasePath();
+        if (url != null && !url.equals("")) {
+            urlList.add(b + (url.startsWith("/") ? url : "/" + url));
+        }
     }
 
     private String[] getAdditionalFreePostUrls() {

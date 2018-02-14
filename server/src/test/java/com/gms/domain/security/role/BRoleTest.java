@@ -156,8 +156,8 @@ public class BRoleTest {
     public void setDescription() {
         cleanEntity0();
 
-        entity0.setPermissions(permissionsS);
-        assertTrue(permissionsS.equals(ReflectionTestUtils.getField(entity0, "permissions")));
+        entity0.setDescription(descriptionS);
+        assertTrue(descriptionS.equals(ReflectionTestUtils.getField(entity0, "description")));
     }
 
     @Test

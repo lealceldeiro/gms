@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.ownedentity.EOwnedEntityMeta;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -28,9 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -62,7 +61,7 @@ public class EOwnedEntityRepositoryTest {
     @Autowired private EOwnedEntityRepository repository;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
     private String apiPrefix;
@@ -143,7 +142,8 @@ public class EOwnedEntityRepositoryTest {
 
     @Test
     public void getOwnedEntity() throws Exception {
-        EOwnedEntity e = repository.save(new EOwnedEntity(name + random.nextString(), username + random.nextString(), description + random.nextString()));
+        String r = random.nextString();
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
@@ -162,7 +162,8 @@ public class EOwnedEntityRepositoryTest {
 
     @Test
     public void updateOwnedEntity() throws Exception {
-        EOwnedEntity e = repository.save(new EOwnedEntity(name + random.nextString(), username + random.nextString(), description + random.nextString()));
+        String r = random.nextString();
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
         EOwnedEntity e2 = new EOwnedEntity(name + "Updated-" + random, username + "Updated-" + random.nextString(),
                 description + "Updated-" + random.nextString());
         mvc.perform(
@@ -184,7 +185,8 @@ public class EOwnedEntityRepositoryTest {
 
     @Test
     public void deleteOwnedEntity() throws Exception {
-        EOwnedEntity e = repository.save(new EOwnedEntity(name + random.nextString(), username + random.nextString(), description + random.nextString()));
+        String r = random.nextString();
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
         mvc.perform(
                 delete(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)

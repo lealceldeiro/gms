@@ -12,6 +12,7 @@ import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -41,9 +42,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -71,7 +70,7 @@ public class UserControllerTest {
     @Autowired private EUserRepository userRepository;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     private String authHeader;
     private String tokenType;
@@ -257,41 +256,34 @@ public class UserControllerTest {
     }
 
     private void initializeVars() {
-        BPermission p = new BPermission("RandomPermissionName-" + random.nextString(), "RandomPermissionLabel-" + random.nextString());
-        p = permissionRepository.save(p);
+        String r = random.nextString();
+        BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(r));
         p = permissionRepository.findOne(p.getId());
         assertNotNull("Test permission could not be saved", p);
 
-        BRole r = new BRole("RandomRoleLabel-" + random.nextString());
-        r = roleRepository.save(r);
-        r = roleRepository.findOne(r.getId());
-        assertNotNull("Test role could not be saved", r);
+        BRole ro = roleRepository.save(EntityUtil.getSampleRole(r));
+        ro = roleRepository.findOne(ro.getId());
+        assertNotNull("Test role could not be saved", ro);
 
-        BRole r2 = new BRole("RandomRoleLabel-" + random.nextString());
-        r2 = roleRepository.save(r2);
-        r2 = roleRepository.findOne(r2.getId());
-        assertNotNull("Test role 2 could not be saved", r2);
+        BRole ro2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString())); // get another random string
+        ro2 = roleRepository.findOne(ro2.getId());
+        assertNotNull("Test role 2 could not be saved", ro2);
 
-        EOwnedEntity e = new EOwnedEntity("RandomEntityName" + random.nextString(), "RandomEntityUsername" + random.nextString(),
-                "Test description");
-        e = entityRepository.save(e);
+        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEnitity(r));
         e = entityRepository.findOne(e.getId());
         assertNotNull("Test entity could not be saved", e);
 
-        EUser u = new EUser("RandomUserUsername-" + random.nextString(), "random-email" + random.nextString() + "@test.com",
-                "RandomName-" + random.nextString(),
-                "RandomLastName" + random.nextString(), "pass");
-        u = userRepository.save(u);
+        EUser u = userRepository.save(EntityUtil.getSampleUser(r));
         u = userRepository.findOne(u.getId());
         assertNotNull("Test user could not be saved", u);
 
         ArrayList<Long> rolesId = new ArrayList<>(1);
-        rolesId.add(r.getId());
-        rolesId.add(r2.getId());
+        rolesId.add(ro.getId());
+        rolesId.add(ro2.getId());
 
         permission = p;
-        role = r;
-        role2 = r2;
+        role = ro;
+        role2 = ro2;
         entity = e;
         user = u;
         rIds = rolesId;

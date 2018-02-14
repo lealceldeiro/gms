@@ -143,28 +143,30 @@ public class EOwnedEntityTest {
 
     private void cleanEntity() {
         entity = new EOwnedEntity();
-        assertNull(ReflectionTestUtils.getField(entity, "name"));
-        assertNull(ReflectionTestUtils.getField(entity, "username"));
-        assertNull(ReflectionTestUtils.getField(entity, "description"));
+        assertEntityValidity(entity);
     }
 
     private void cleanEntity3() {
         entity3 = new EOwnedEntity();
-        assertNull(ReflectionTestUtils.getField(entity3, "name"));
-        assertNull(ReflectionTestUtils.getField(entity3, "username"));
-        assertNull(ReflectionTestUtils.getField(entity3, "description"));
+        assertEntityValidity(entity3);
+    }
+
+    private void assertEntityValidity(EOwnedEntity entity) {
+        assertNull(ReflectionTestUtils.getField(entity, "name"));
+        assertNull(ReflectionTestUtils.getField(entity, "username"));
+        assertNull(ReflectionTestUtils.getField(entity, "description"));
     }
 
 
     private void prepareEntitiesForEqualityTest() {
         cleanEntity();
         cleanEntity3();
-
-        ReflectionTestUtils.setField(entity, "name", name);
-        ReflectionTestUtils.setField(entity, "username", username);
-        ReflectionTestUtils.setField(entity, "description", description);
-        ReflectionTestUtils.setField(entity3, "name", name);
-        ReflectionTestUtils.setField(entity3, "username", username);
-        ReflectionTestUtils.setField(entity3, "description", description);
+        prepareEntityForEqualityTest(entity);
+        prepareEntityForEqualityTest(entity3);
+    }
+    private void prepareEntityForEqualityTest(EOwnedEntity e) {
+        ReflectionTestUtils.setField(e, "name", name);
+        ReflectionTestUtils.setField(e, "username", username);
+        ReflectionTestUtils.setField(e, "description", description);
     }
 }

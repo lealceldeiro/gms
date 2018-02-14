@@ -143,28 +143,29 @@ public class BPermissionTest {
 
     private void cleanEntity1() {
         entity1 = new BPermission();
-        assertNull(ReflectionTestUtils.getField(entity1, "name"));
-        assertNull(ReflectionTestUtils.getField(entity1, "label"));
-        assertTrue(ReflectionTestUtils.getField(entity1, "roles").equals(new HashSet<BRole>()));
+        assertEntityValidity(entity1);
     }
 
     private void cleanEntity0() {
         entity0 = new BPermission();
-        assertNull(ReflectionTestUtils.getField(entity0, "name"));
-        assertNull(ReflectionTestUtils.getField(entity0, "label"));
-        assertTrue(ReflectionTestUtils.getField(entity0, "roles").equals(new HashSet<BRole>()));
+        assertEntityValidity(entity0);
     }
 
+    private void assertEntityValidity(BPermission entity) {
+        assertNull(ReflectionTestUtils.getField(entity, "name"));
+        assertNull(ReflectionTestUtils.getField(entity, "label"));
+        assertNull(ReflectionTestUtils.getField(entity, "roles"));
+    }
 
     private void prepareEntitiesForEqualityTest() {
         cleanEntity0();
         cleanEntity1();
-
-        ReflectionTestUtils.setField(entity0, "name", name);
-        ReflectionTestUtils.setField(entity0, "label", label);
-        ReflectionTestUtils.setField(entity0, "roles", roles);
-        ReflectionTestUtils.setField(entity1, "name", name);
-        ReflectionTestUtils.setField(entity1, "label", label);
-        ReflectionTestUtils.setField(entity1, "roles", roles);
+        prepareEntityForEqualityTest(entity0);
+        prepareEntityForEqualityTest(entity1);
+    }
+    private void prepareEntityForEqualityTest(BPermission e) {
+        ReflectionTestUtils.setField(e, "name", name);
+        ReflectionTestUtils.setField(e, "label", label);
+        ReflectionTestUtils.setField(e, "roles", roles);
     }
 }

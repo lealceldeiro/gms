@@ -82,23 +82,29 @@ public class GmsEntityTest {
 
     private void cleanEntity() {
         entity = new GmsEntity();
-        assertNull(ReflectionTestUtils.getField(entity, "id"));
-        assertNull(ReflectionTestUtils.getField(entity, "version"));
+        assertEntityValidity(entity);
     }
 
     private void cleanEntity2() {
         entity2 = new GmsEntity();
-        assertNull(ReflectionTestUtils.getField(entity2, "id"));
-        assertNull(ReflectionTestUtils.getField(entity2, "version"));
+        assertEntityValidity(entity2);
+    }
+
+    private void assertEntityValidity(GmsEntity entity) {
+        assertNull(ReflectionTestUtils.getField(entity, "id"));
+        assertNull(ReflectionTestUtils.getField(entity, "version"));
     }
 
     private void prepareEntitiesForEqualityTest() {
         cleanEntity();
         cleanEntity2();
 
-        ReflectionTestUtils.setField(entity, "id", id);
-        ReflectionTestUtils.setField(entity, "version", v);
-        ReflectionTestUtils.setField(entity2, "id", id);
-        ReflectionTestUtils.setField(entity2, "version", v);
+        prepareEntityForEqualityTest(entity);
+        prepareEntityForEqualityTest(entity2);
+    }
+
+    private void prepareEntityForEqualityTest(GmsEntity e) {
+        ReflectionTestUtils.setField(e, "id", id);
+        ReflectionTestUtils.setField(e, "version", v);
     }
 }

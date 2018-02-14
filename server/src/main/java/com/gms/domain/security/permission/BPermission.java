@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -52,5 +51,5 @@ public class BPermission extends GmsEntity {
      * Roles in which the permission is being used.
      */
     @ManyToMany(mappedBy = "permissions")
-    private Set<BRole> roles = new HashSet<>();
+    private Set<BRole> roles;
 }

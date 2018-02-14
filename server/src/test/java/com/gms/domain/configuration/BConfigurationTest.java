@@ -139,28 +139,29 @@ public class BConfigurationTest {
 
     private void cleanEntity() {
         entity = new BConfiguration();
+        assertEntityValidity(entity);
+    }
+
+    private void cleanEntity1() {
+        entity1 = new BConfiguration();
+        assertEntityValidity(entity1);
+    }
+
+    private void assertEntityValidity(BConfiguration entity) {
         assertNull(ReflectionTestUtils.getField(entity, "key"));
         assertNull(ReflectionTestUtils.getField(entity, "value"));
         assertNull(ReflectionTestUtils.getField(entity, "userId"));
     }
 
-    private void cleanEntity1() {
-        entity1 = new BConfiguration();
-        assertNull(ReflectionTestUtils.getField(entity1, "key"));
-        assertNull(ReflectionTestUtils.getField(entity1, "value"));
-        assertNull(ReflectionTestUtils.getField(entity1, "userId"));
-    }
-
-
     private void prepareEntitiesForEqualityTest() {
         cleanEntity();
         cleanEntity1();
-
+        setEntityFields(entity);
+        setEntityFields(entity1);
+    }
+    private void setEntityFields(BConfiguration entity) {
         ReflectionTestUtils.setField(entity, "key", k);
         ReflectionTestUtils.setField(entity, "value", v);
         ReflectionTestUtils.setField(entity, "userId", id);
-        ReflectionTestUtils.setField(entity1, "key", k);
-        ReflectionTestUtils.setField(entity1, "value", v);
-        ReflectionTestUtils.setField(entity1, "userId", id);
     }
 }

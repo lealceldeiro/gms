@@ -27,9 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -62,7 +60,7 @@ public class EUserRepositoryTest {
     @Autowired private EUserRepository repository;
 
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = document(RestDoc.IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
     private String apiPrefix;
@@ -77,6 +75,8 @@ public class EUserRepositoryTest {
     private static final String name = "SampleName-";
     private static final String lastName = "SampleLastName-";
     private static final String password = "SamplePassword-";
+
+    private EUser user;
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -122,10 +122,9 @@ public class EUserRepositoryTest {
 
     @Test
     public void getUser() throws Exception {
-        EUser e = repository.save(new EUser(username + random.nextString(), email + random.nextString(),
-                name + random.nextString(), lastName + random.nextString(), password + random.nextString()));
+        createSampleUser();
         mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + e.getId())
+                get(apiPrefix + "/" + reqString + "/" + user.getId())
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andDo(
@@ -150,13 +149,12 @@ public class EUserRepositoryTest {
 
     @Test
     public void updateUser() throws Exception {
-        EUser e = repository.save(new EUser(username + random.nextString(), email + random.nextString(),
-                name + random.nextString(), lastName + random.nextString(), password + random.nextString()));
+        createSampleUser();
         EUser e2 = new EUser(username + "2-" + random.nextString(), "another" + email + random.nextString(),
                 name + "2-" + random.nextString(), lastName + "2-" + random.nextString(), password + "2-" + random.nextString());
         e2.setEnabled(true);
         mvc.perform(
-                put(apiPrefix + "/" + reqString + "/" + e.getId())
+                put(apiPrefix + "/" + reqString + "/" + user.getId())
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(e2))
@@ -182,12 +180,16 @@ public class EUserRepositoryTest {
 
     @Test
     public void deleteUser() throws Exception {
-        EUser e = repository.save(new EUser(username + random.nextString(), email + random.nextString(),
-                name + random.nextString(), lastName + random.nextString(), password + random.nextString()));
+        createSampleUser();
         mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + e.getId())
+                delete(apiPrefix + "/" + reqString + "/" + user.getId())
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNoContent());
+    }
+
+    private void createSampleUser() {
+        user = repository.save(new EUser(username + random.nextString(), email + random.nextString(),
+                name + random.nextString(), lastName + random.nextString(), password + random.nextString()));
     }
 }

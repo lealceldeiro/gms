@@ -1,5 +1,10 @@
 package com.gms.util;
 
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+
 /**
  * RestDoc
  *
@@ -10,8 +15,12 @@ package com.gms.util;
 public class RestDoc {
     public static final String APIDOC_LOCATION = "build/generated-snippets";
 
-    public static final String IDENTIFIER = "{method-name}";
+    private static final String IDENTIFIER = "{method-name}";
 
     private RestDoc() {
+    }
+
+    public static RestDocumentationResultHandler getRestDocumentationResultHandler() {
+        return document(IDENTIFIER, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
     }
 }

@@ -328,28 +328,19 @@ public class EUserTest {
         assertNull(ReflectionTestUtils.getField(entity, "name"));
         assertNull(ReflectionTestUtils.getField(entity, "lastName"));
         assertNull(ReflectionTestUtils.getField(entity, "password"));
-        Object e = ReflectionTestUtils.getField(entity, "enabled");
-        if (e != null) {
-            assertFalse(Boolean.valueOf(e.toString()));
-        }
-        e = ReflectionTestUtils.getField(entity, "emailVerified");
-        if (e != null) {
-            assertFalse(Boolean.valueOf(e.toString()));
-        }
-        e = ReflectionTestUtils.getField(entity, "accountNonExpired");
-        if (e != null) {
-            assertFalse(Boolean.valueOf(e.toString()));
-        }
-        e = ReflectionTestUtils.getField(entity, "accountNonLocked");
-        if (e != null) {
-            assertFalse(Boolean.valueOf(e.toString()));
-        }
-        e = ReflectionTestUtils.getField(entity, "credentialsNonExpired");
-        if (e != null) {
-            assertFalse(Boolean.valueOf(e.toString()));
-        }
+        assertBooleanFalseIfNotNull(ReflectionTestUtils.getField(entity, "enabled"));
+        assertBooleanFalseIfNotNull(ReflectionTestUtils.getField(entity, "emailVerified"));
+        assertBooleanFalseIfNotNull(ReflectionTestUtils.getField(entity, "accountNonExpired"));
+        assertBooleanFalseIfNotNull(ReflectionTestUtils.getField(entity, "accountNonLocked"));
+        assertBooleanFalseIfNotNull(ReflectionTestUtils.getField(entity, "credentialsNonExpired"));
 
         assertNull(ReflectionTestUtils.getField(entity, "authorities"));
+    }
+
+    private void assertBooleanFalseIfNotNull(Object field) {
+        if (field != null) {
+            assertFalse(Boolean.valueOf(field.toString()));
+        }
     }
 
     private void prepareEntityForEqualityTest(EUser entity) {
