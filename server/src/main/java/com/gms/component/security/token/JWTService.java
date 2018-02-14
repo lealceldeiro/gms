@@ -134,16 +134,7 @@ public class JWTService {
      */
     public Map getClaims(String claimsJwt, String... key) {
         Map<Object, Object> r = new HashMap<>();
-        Claims claims = Jwts.parser()
-                .setSigningKey(sc.getSecret().getBytes())
-                .requireIssuer(sc.getIssuer())
-                .parseClaimsJws(claimsJwt)
-                .getBody();
-        for (String k : key) {
-            if (!(k != null && k.trim().equals(""))){
-                r.put(k, claims.get(k));
-            }
-        }
+        processClaimsJWT(claimsJwt, r, key);
         return r;
     }
 
@@ -188,16 +179,8 @@ public class JWTService {
      */
     public Map getClaimsExtended(String claimsJwt, String... key) {
         Map<Object, Object> r = new HashMap<>();
-        Claims claims = Jwts.parser()
-                .setSigningKey(sc.getSecret().getBytes())
-                .requireIssuer(sc.getIssuer())
-                .parseClaimsJws(claimsJwt)
-                .getBody();
-        for (String k : key) {
-            if (!(k != null && k.trim().equals(""))){
-                r.put(k, claims.get(k));
-            }
-        }
+        Claims claims = processClaimsJWT(claimsJwt, r, key);
+
         r.put(AUDIENCE, claims.getAudience());
         r.put(EXPIRATION, claims.getExpiration());
         r.put(ID, claims.getId());
@@ -207,6 +190,20 @@ public class JWTService {
         r.put(SUBJECT, claims.getSubject());
 
         return r;
+    }
+
+    private Claims processClaimsJWT(String claimsJwt, Map<Object, Object> claims, String... key) {
+        Claims pClaims = Jwts.parser()
+                .setSigningKey(sc.getSecret().getBytes())
+                .requireIssuer(sc.getIssuer())
+                .parseClaimsJws(claimsJwt)
+                .getBody();
+        for (String k : key) {
+            if (!(k != null && k.trim().equals(""))){
+                claims.put(k, pClaims.get(k));
+            }
+        }
+        return pClaims;
     }
 
     /**

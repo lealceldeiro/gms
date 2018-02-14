@@ -87,6 +87,7 @@ public class UserControllerTest {
 
     private final GMSRandom random = new GMSRandom();
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());

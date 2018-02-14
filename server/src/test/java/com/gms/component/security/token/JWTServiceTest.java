@@ -117,19 +117,7 @@ public class JWTServiceTest {
         final String token = jwtService.createToken(sub, auth);
         final Map claims = jwtService.getClaims(token, JWTService.SUBJECT, sc.getAuthoritiesHolder(), JWTService.EXPIRATION);
 
-        assertTrue("Claims map is empty", !claims.isEmpty());
-
-        assertNotNull("Claims map is null", claims);
-        assertNotNull("Expiration time claims is null", claims.get(JWTService.EXPIRATION));
-        assertNotNull("Subject claims is null", claims.get(JWTService.SUBJECT));
-        assertNotNull("Authorities claims is null", claims.get(sc.getAuthoritiesHolder()));
-
-        if (claims.get(JWTService.SUBJECT) != null) {
-            assertEquals("Subjects are not equals", sub, claims.get(JWTService.SUBJECT).toString());
-        }
-        if (claims.get(sc.getAuthoritiesHolder()) != null) {
-            assertEquals("Authorities are not equals", auth, claims.get(sc.getAuthoritiesHolder()).toString());
-        }
+        assertClaimsState(claims, sub, auth);
     }
 
     @Test
@@ -141,6 +129,18 @@ public class JWTServiceTest {
         final String randomKey = "randomKey";
         final Map claims = jwtService.getClaimsExtended(token, randomKey, sc.getAuthoritiesHolder());
 
+        assertClaimsState(claims, sub, auth);
+
+        assertNull("Claims contains an incorrect pair key-value", claims.get(randomKey));
+        assertNotNull("Expiration time is null", claims.get(JWTService.EXPIRATION));
+        assertTrue("Expiration time is not an instance of Date", claims.get(JWTService.EXPIRATION) instanceof Date);
+        if (claims.get(JWTService.EXPIRATION) != null && claims.get(JWTService.EXPIRATION) instanceof Date) {
+            assertTrue("Expiration time is not greater than the creation time of the token",
+                    ((Date)claims.get(JWTService.EXPIRATION)).getTime() > expiresIn);
+        }
+    }
+
+    private void assertClaimsState(Map claims, String subject, String authorities) {
         assertTrue("Claims map is empty", !claims.isEmpty());
 
         assertNotNull("Claims map is null", claims);
@@ -149,17 +149,10 @@ public class JWTServiceTest {
         assertNotNull("Authorities claims is null", claims.get(sc.getAuthoritiesHolder()));
 
         if (claims.get(JWTService.SUBJECT) != null) {
-            assertEquals("Subjects are not equals", sub, claims.get(JWTService.SUBJECT).toString());
+            assertEquals("Subjects are not equals", subject, claims.get(JWTService.SUBJECT).toString());
         }
         if (claims.get(sc.getAuthoritiesHolder()) != null) {
-            assertEquals("Authorities are not equals", auth, claims.get(sc.getAuthoritiesHolder()).toString());
-        }
-        assertNull("Claims contains an incorrect pair key-value", claims.get(randomKey));
-        assertNotNull("Expiration time is null", claims.get(JWTService.EXPIRATION));
-        assertTrue("Expiration time is not an instance of Date", claims.get(JWTService.EXPIRATION) instanceof Date);
-        if (claims.get(JWTService.EXPIRATION) != null && claims.get(JWTService.EXPIRATION) instanceof Date) {
-            assertTrue("Expiration time is not greater than the creation time of the token",
-                    ((Date)claims.get(JWTService.EXPIRATION)).getTime() > expiresIn);
+            assertEquals("Authorities are not equals", authorities, claims.get(sc.getAuthoritiesHolder()).toString());
         }
     }
 }
