@@ -19,7 +19,6 @@ import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
-import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
@@ -109,20 +108,17 @@ public class UserControllerTest {
     public void addRolesToUserOK() throws Exception {
         initializeVars();
 
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rIds);
-
-        ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
+        ConstrainedFields fields = new ConstrainedFields(ArrayList.class);
 
         mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isOk())
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleIdAdd)
+                                        fields.withPath("[]").description("List of " + BAuthorizationMeta.roleIdAdd)
                                 )
                         )
                 )
@@ -141,51 +137,46 @@ public class UserControllerTest {
         initializeVars();
         //endregion
 
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rIds);
-
         //entity not found
         mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
 
         //user not found
         mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
 
         //none of the roles was found
         rIds.clear();
         rIds.add(INVALID_ID);
 
-        payload.setRolesId(rIds);
         mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
     }
 
     @Test
     public void removeRolesFromUserUserOK() throws Exception {
         initializeVars();
-        RolesForUserOverEntity payload = assignRolesForUserOverEntity();
 
-        ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
+        ConstrainedFields fields = new ConstrainedFields(ArrayList.class);
 
         mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isOk())
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleIdRemove)
+                                        fields.withPath("[]").description("List of " + BAuthorizationMeta.roleIdRemove)
                                 )
                         )
                 )
@@ -204,32 +195,28 @@ public class UserControllerTest {
         initializeVars();
         //endregion
 
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rIds);
-
         //entity not found
         mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
 
         //user not found
         mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
 
         //none of the roles was found
         rIds.clear();
         rIds.add(INVALID_ID);
 
-        payload.setRolesId(rIds);
         mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andExpect(status().isNotFound());
     }
 
@@ -289,19 +276,15 @@ public class UserControllerTest {
         rIds = rolesId;
     }
 
-    private RolesForUserOverEntity assignRolesForUserOverEntity() throws Exception{
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
-        payload.setRolesId(rIds);
-
+    private void assignRolesForUserOverEntity() throws Exception{
         final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(payload))
+                .content(objectMapper.writeValueAsString(rIds))
         ).andReturn();
 
         assertTrue("The relationship among user, entity and role(s) could not be saved",
                 mvcResult.getResponse().getStatus() == HttpStatus.OK.value());
-        return payload;
     }
 
 }

@@ -215,8 +215,4 @@ public class BRoleRepositoryTest {
         );
     }
 
-    @Test void updateRolePermissions() {
-
-    }
-
 }

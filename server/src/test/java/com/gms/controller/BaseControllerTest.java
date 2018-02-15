@@ -12,7 +12,6 @@ import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
-import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -32,6 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import static com.gms.util.EntityUtil.getSampleUserResource;
 import static com.gms.util.StringUtil.*;
@@ -85,12 +85,11 @@ public class BaseControllerTest {
     @Test
     public void handleNotFoundEntityException() throws Exception {
         final String testUsername = "SampleUsername-" + random.nextString();
-        RolesForUserOverEntity payload = new RolesForUserOverEntity();
         mvc.perform(
                 post(apiPrefix + "/roles/" + testUsername + "/" + testUsername)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(payload))
+                        .content(objectMapper.writeValueAsString(new ArrayList<>()))
         )
                 .andExpect(status().isNotFound());
     }
