@@ -1,7 +1,7 @@
 package com.gms.repository.security.permission;
 
 import com.gms.domain.security.permission.BPermission;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -14,7 +14,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
  * @version 0.1
  * Dec 12, 2017
  */
-@RepositoryRestResource(collectionResourceRel = Resource.PERMISSION_PATH, path = Resource.PERMISSION_PATH)
+@RepositoryRestResource(collectionResourceRel = ResourcePath.PERMISSION, path = ResourcePath.PERMISSION)
 public interface BPermissionRepository extends PagingAndSortingRepository<BPermission, Long>, BPermissionRepositoryCustom {
 
     @Override

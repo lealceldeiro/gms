@@ -10,7 +10,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
@@ -70,7 +70,7 @@ public class EOwnedEntityRepositoryTest {
     private String accessToken;
     private String pageSizeAttr;
     private int pageSize;
-    private static final String reqString = Resource.OWNED_ENTITY_PATH;
+    private static final String reqString = ResourcePath.OWNED_ENTITY;
     private static final String name = "SampleName-";
     private static final String username = "SampleUsername-";
     private static final String description = "SampleDescription-";

@@ -3,6 +3,7 @@ package com.gms.controller.security.user;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.i18n.MessageResolver;
@@ -57,7 +58,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      * @return A {@link EUser} mapped into a @{@link ResponseBody}.
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
-    @PostMapping(path = com.gms.util.constant.Resource.USER_PATH, produces = "application/hal+json")
+    @PostMapping(path = ResourcePath.USER, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ResponseEntity register(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)

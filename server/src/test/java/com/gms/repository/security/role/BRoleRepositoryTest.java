@@ -2,15 +2,17 @@ package com.gms.repository.security.role;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
+import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.service.AppService;
 import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
@@ -59,6 +61,7 @@ public class BRoleRepositoryTest {
 
     @Autowired private AppService appService;
     @Autowired private BRoleRepository repository;
+    @Autowired private BPermissionRepository permissionRepository;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
@@ -70,7 +73,7 @@ public class BRoleRepositoryTest {
     private String accessToken;
     private String pageSizeAttr;
     private int pageSize;
-    private static final String reqString = Resource.ROLE_PATH;
+    private static final String reqString = ResourcePath.ROLE;
     private static final String label = "SampleLabel-";
     private static final String description = "SampleDescription-";
     //endregion
@@ -124,6 +127,7 @@ public class BRoleRepositoryTest {
 
     @Test
     public void listRole() throws Exception {
+        repository.save(EntityUtil.getSampleRole(random.nextString()));
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
                         .header(authHeader, tokenType + " " + accessToken)
@@ -188,6 +192,27 @@ public class BRoleRepositoryTest {
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void getPermissionForRoles() throws Exception {
+        BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        BRole r = EntityUtil.getSampleRole(random.nextString());
+        r.addPermission(p, p2);
+        repository.save(r);
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s?" + pageSizeAttr +
+                "=" + pageSize).header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andDo(
+                restDocResHandler.document(
+                        responseFields(
+                                fieldWithPath("_embedded." + ResourcePath.PERMISSION).description("Array of permissions"),
+                                fieldWithPath("_links").description("Available links for requesting other webservices related to roles")
+                        )
+                )
+        );
     }
 
 }

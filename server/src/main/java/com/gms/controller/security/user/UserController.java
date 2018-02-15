@@ -4,7 +4,7 @@ import com.gms.controller.BaseController;
 import com.gms.domain.security.role.BRole;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.Map;
  * Dec 12, 2017
  */
 @RestController
-@RequestMapping(Resource.USER_PATH)
+@RequestMapping(ResourcePath.USER)
 public class UserController extends BaseController{
 
     private final UserService userService;

@@ -1,7 +1,7 @@
 package com.gms.repository.security.ownedentity;
 
 import com.gms.domain.security.ownedentity.EOwnedEntity;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -13,7 +13,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version 0.1
  * Dec 12, 2017
  */
-@RepositoryRestResource(collectionResourceRel = Resource.OWNED_ENTITY_PATH, path = Resource.OWNED_ENTITY_PATH)
+@RepositoryRestResource(collectionResourceRel = ResourcePath.OWNED_ENTITY, path = ResourcePath.OWNED_ENTITY)
 public interface EOwnedEntityRepository extends PagingAndSortingRepository<EOwnedEntity, Long> {
 
     EOwnedEntity findFirstByUsername(String username);

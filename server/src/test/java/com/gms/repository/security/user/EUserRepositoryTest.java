@@ -10,7 +10,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
 import org.junit.Rule;
@@ -70,7 +70,7 @@ public class EUserRepositoryTest {
     private String accessToken;
     private String pageSizeAttr;
     private int pageSize;
-    private static final String reqString = Resource.USER_PATH;
+    private static final String reqString = ResourcePath.USER;
     private static final String username = "SampleUsername-";
     private static final String email = "sample@email.com-";
     private static final String name = "SampleName-";

@@ -1,7 +1,7 @@
 package com.gms.repository.security.user;
 
 import com.gms.domain.security.user.EUser;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -13,7 +13,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version 0.1
  * Dec 12, 2017
  */
-@RepositoryRestResource(collectionResourceRel = Resource.USER_PATH, path = Resource.USER_PATH)
+@RepositoryRestResource(collectionResourceRel = ResourcePath.USER, path = ResourcePath.USER)
 public interface EUserRepository extends EUserRepositoryCustom, PagingAndSortingRepository<EUser, Long> {
 
     EUser findFirstByUsernameOrEmail(String username, String email);

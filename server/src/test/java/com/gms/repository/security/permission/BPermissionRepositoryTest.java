@@ -12,7 +12,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
 import org.junit.Rule;
@@ -66,7 +66,7 @@ public class BPermissionRepositoryTest {
     private String accessToken;
     private String pageSizeAttr;
     private int pageSize;
-    private static final String reqString = Resource.PERMISSION_PATH;
+    private static final String reqString = ResourcePath.PERMISSION;
     private static final String name = "SampleName-";
     private static final String label = "SampleLabel-";
     //endregion
@@ -154,7 +154,7 @@ public class BPermissionRepositoryTest {
                 .andDo(
                         restDocResHandler.document(
                                 responseFields(
-                                        fieldWithPath("_embedded.role").description("Array of roles in which the permission is included"),
+                                        fieldWithPath("_embedded." + ResourcePath.ROLE).description("Array of roles in which the permission is included"),
                                         fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission's roles")
                                 )
                         )

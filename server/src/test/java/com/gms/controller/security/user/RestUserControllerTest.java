@@ -10,6 +10,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
@@ -102,7 +103,7 @@ public class RestUserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
-        mvc.perform(post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated())
@@ -133,7 +134,7 @@ public class RestUserControllerTest {
                 EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
-                post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
@@ -144,7 +145,7 @@ public class RestUserControllerTest {
         String r = random.nextString();
         Resource<EUser> resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
-                post(apiPrefix + "/" + com.gms.util.constant.Resource.USER_PATH).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());

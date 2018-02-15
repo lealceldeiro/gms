@@ -17,7 +17,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.Resource;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.request.mapping.user.RolesForUserOverEntity;
 import com.gms.util.validation.ConstrainedFields;
@@ -114,7 +114,7 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -145,14 +145,14 @@ public class UserControllerTest {
         payload.setRolesId(rIds);
 
         //entity not found
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //user not found
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -163,7 +163,7 @@ public class UserControllerTest {
         rIds.add(INVALID_ID);
 
         payload.setRolesId(rIds);
-        mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -177,7 +177,7 @@ public class UserControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(RolesForUserOverEntity.class);
 
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -208,14 +208,14 @@ public class UserControllerTest {
         payload.setRolesId(rIds);
 
         //entity not found
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
+        mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + INVALID_USERNAME)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isNotFound());
 
         //user not found
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
+        mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + INVALID_USERNAME + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -226,7 +226,7 @@ public class UserControllerTest {
         rIds.add(INVALID_ID);
 
         payload.setRolesId(rIds);
-        mvc.perform(delete(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        mvc.perform(delete(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))
@@ -238,7 +238,7 @@ public class UserControllerTest {
         initializeVars();
         assignRolesForUserOverEntity();
 
-        mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername())
+        mvc.perform(get(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
         ).andExpect(status().isOk());
@@ -249,7 +249,7 @@ public class UserControllerTest {
         initializeVars();
         assignRolesForUserOverEntity();
 
-        mvc.perform(get(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        mvc.perform(get(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
         ).andExpect(status().isOk());
@@ -293,7 +293,7 @@ public class UserControllerTest {
         RolesForUserOverEntity payload = new RolesForUserOverEntity();
         payload.setRolesId(rIds);
 
-        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + Resource.USER_PATH + "/roles/" + user.getUsername() + "/" + entity.getUsername())
+        final MvcResult mvcResult = mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/roles/" + user.getUsername() + "/" + entity.getUsername())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(payload))

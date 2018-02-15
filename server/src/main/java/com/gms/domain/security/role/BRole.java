@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,16 +66,20 @@ public class BRole extends GmsEntity{
      * Adds a permission p to a role.
      * @param p Permission to be added.
      */
-    public void addPermission(BPermission p) {
+    public void addPermission(BPermission... p) {
         if (permissions == null) permissions = new HashSet<>();
-        permissions.add(p);
+        permissions.addAll(Arrays.asList(p));
     }
 
     /**
      * Removes a permission from a role.
      * @param p Permission to be removed.
      */
-    public void removePermission(BPermission p) {
-        if (permissions != null) permissions.remove(p);
+    public void removePermission(BPermission... p) {
+        if (permissions != null) {
+            for (BPermission iP : p) {
+                permissions.remove(iP);
+            }
+        }
     }
 }
