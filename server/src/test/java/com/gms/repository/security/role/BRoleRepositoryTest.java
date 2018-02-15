@@ -195,7 +195,7 @@ public class BRoleRepositoryTest {
     }
 
     @Test
-    public void getPermissionForRoles() throws Exception {
+    public void getPermissionForRole() throws Exception {
         BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         BRole r = EntityUtil.getSampleRole(random.nextString());
@@ -213,6 +213,10 @@ public class BRoleRepositoryTest {
                         )
                 )
         );
+    }
+
+    @Test void updateRolePermissions() {
+
     }
 
 }
