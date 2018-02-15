@@ -2,6 +2,7 @@ package com.gms.domain.security.role;
 
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
+import com.gms.util.EntityUtil;
 import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
@@ -37,18 +38,18 @@ public class BRoleTest {
     private final int MAX_RANGE_10485760 = 10485760;
     private BRole entity0;
     private BRole entity1;
-    private BPermission sampleP = new BPermission("samplePN", "samplePL");
+    private BPermission sampleP = EntityUtil.getSamplePermission();
 
     @Before
     public void setUp() {
-        permissionsS.add(new BPermission("sampleN", "sampleL"));
+        permissionsS.add(EntityUtil.getSamplePermission());
     }
 
     //region persistence constraints validations
     @Test
     public void checkValidEntity() {
         cleanEntity0();
-        entity0 = new BRole(labelS);
+        entity0 = EntityUtil.getSampleRole();
         final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity0);
         assertTrue(cv.isEmpty());
     }

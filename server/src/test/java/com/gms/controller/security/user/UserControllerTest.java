@@ -122,7 +122,7 @@ public class UserControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
+                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleIdAdd)
                                 )
                         )
                 )
@@ -185,7 +185,7 @@ public class UserControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleId)
+                                        fields.withPath("rolesId").description("List of " + BAuthorizationMeta.roleIdRemove)
                                 )
                         )
                 )

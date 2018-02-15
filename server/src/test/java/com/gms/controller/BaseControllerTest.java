@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
@@ -124,9 +125,7 @@ public class BaseControllerTest {
             configService.setUserRegistrationAllowed(false);
         }
 
-        String fd = random.nextString();
-        EUser u = new EUser(fd, "bcTest" + fd + "@test.com", fd, fd, fd);
-        Resource<EUser> resource = new Resource<>(u);
+        Resource<EUser> resource = EntityUtil.getSampleUserResource();
         final MockHttpServletResponse result = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))

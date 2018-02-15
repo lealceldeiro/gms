@@ -1,6 +1,7 @@
 package com.gms.domain.security.user;
 
 import com.gms.Application;
+import com.gms.util.EntityUtil;
 import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
@@ -56,7 +57,7 @@ public class EUserTest {
     @Test
     public void checkValidEntity() {
         cleanEntity0();
-        entity0 = new EUser(usernameS, emailS, nameS, lastNameS, passwordS);
+        entity0 = EntityUtil.getSampleUser();
         final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity0);
         assertTrue(cv.isEmpty());
     }

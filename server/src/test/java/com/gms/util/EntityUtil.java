@@ -19,21 +19,41 @@ public class EntityUtil {
 
     private EntityUtil() {}
 
+    public static EUser getSampleUser() {
+        return getSampleUser(new GMSRandom().nextString());
+    }
+
     public static EUser getSampleUser(String random) {
         return new EUser(EXAMPLE_USERNAME + random ,"a" + random + EXAMPLE_EMAIL, EXAMPLE_NAME + random +
                 random, EXAMPLE_LAST_NAME + random, EXAMPLE_PASSWORD + random);
+    }
+
+    public static Resource<EUser> getSampleUserResource() {
+        return getSampleUserResource(new GMSRandom().nextString());
     }
 
     public static Resource<EUser> getSampleUserResource(String random) {
         return new Resource<>(getSampleUser(random));
     }
 
+    public static EOwnedEntity getSampleEnitity() {
+        return getSampleEnitity(new GMSRandom().nextString());
+    }
+
     public static EOwnedEntity getSampleEnitity(String random) {
         return new EOwnedEntity(EXAMPLE_NAME + random, EXAMPLE_USERNAME + random, EXAMPLE_DESCRIPTION + random);
     }
 
+    public static Resource<EOwnedEntity> getSampleEnitityResource() {
+        return getSampleEnitityResource(new GMSRandom().nextString());
+    }
+
     public static Resource<EOwnedEntity> getSampleEnitityResource(String random) {
         return new Resource<>(getSampleEnitity(random));
+    }
+
+    public static BRole getSampleRole() {
+        return getSampleRole(new GMSRandom().nextString());
     }
 
     public static BRole getSampleRole(String random) {
@@ -43,12 +63,24 @@ public class EntityUtil {
         return r;
     }
 
+    public static Resource<BRole> getSampleRoleResource() {
+        return getSampleRoleResource(new GMSRandom().nextString());
+    }
+
     public static Resource<BRole> getSampleRoleResource(String random) {
         return new Resource<>(getSampleRole(random));
     }
 
+    public static BPermission getSamplePermission() {
+        return getSamplePermission(new GMSRandom().nextString());
+    }
+
     public static BPermission getSamplePermission(String random) {
         return new BPermission(EXAMPLE_NAME + random, EXAMPLE_LABEL + random);
+    }
+
+    public static Resource<BPermission> getSamplePermissionResource() {
+        return getSamplePermissionResource(new GMSRandom().nextString());
     }
 
     public static Resource<BPermission> getSamplePermissionResource(String random) {

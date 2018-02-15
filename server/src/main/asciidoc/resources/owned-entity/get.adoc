@@ -1,6 +1,6 @@
 [[resource-owned-entity-get]]
 ==== Getting an owned entity's info
-A `GET` request lists an owned entity's information.
+A `GET` request gets an owned entity's information.
 
 *Request*
 

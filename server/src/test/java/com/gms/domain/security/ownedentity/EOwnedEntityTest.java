@@ -1,6 +1,7 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.Application;
+import com.gms.util.EntityUtil;
 import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
@@ -40,7 +41,7 @@ public class EOwnedEntityTest {
     @Test
     public void checkValidEntity() {
         cleanEntity();
-        entity = new EOwnedEntity(name, username, description);
+        entity = EntityUtil.getSampleEnitity();
         final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity);
         assertTrue(cv.isEmpty());
     }

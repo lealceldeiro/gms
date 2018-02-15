@@ -1,6 +1,6 @@
 [[resource-role-get]]
 ==== Getting a role's info
-A `GET` request lists a role's information.
+A `GET` request gets a role's information.
 
 *Request*
 

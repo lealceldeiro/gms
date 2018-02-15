@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.permission.BPermissionMeta;
+import com.gms.domain.security.role.BRole;
+import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -51,6 +54,7 @@ public class BPermissionRepositoryTest {
 
     @Autowired private AppService appService;
     @Autowired private BPermissionRepository repository;
+    @Autowired private BRoleRepository roleRepository;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
@@ -134,6 +138,12 @@ public class BPermissionRepositoryTest {
     @Test
     public void getRolesPermission() throws Exception {
         BPermission p = createPermissionUsingRepository();
+        BRole r = EntityUtil.getSampleRole(random.nextString());
+        BRole r2 = EntityUtil.getSampleRole(random.nextString());
+        r.addPermission(p);
+        r2.addPermission(p);
+        roleRepository.save(r);
+        roleRepository.save(r2);
 
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "/" + p.getId() + "/roles")
@@ -157,10 +167,7 @@ public class BPermissionRepositoryTest {
     }
 
     private BPermission createPermissionUsingRepository() {
-        return createPermissionUsingRepository(name + random.nextString(), label + random.nextString());
-    }
-    private BPermission createPermissionUsingRepository(String name, String label) {
-        return repository.save(new BPermission(name, label));
+        return repository.save(EntityUtil.getSamplePermission(random.nextString()));
     }
 
 }

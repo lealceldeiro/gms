@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -150,8 +151,7 @@ public class EUserRepositoryTest {
     @Test
     public void updateUser() throws Exception {
         createSampleUser();
-        EUser e2 = new EUser(username + "2-" + random.nextString(), "another" + email + random.nextString(),
-                name + "2-" + random.nextString(), lastName + "2-" + random.nextString(), password + "2-" + random.nextString());
+        EUser e2 = EntityUtil.getSampleUser(random.nextString());
         e2.setEnabled(true);
         mvc.perform(
                 put(apiPrefix + "/" + reqString + "/" + user.getId())
@@ -189,7 +189,6 @@ public class EUserRepositoryTest {
     }
 
     private void createSampleUser() {
-        user = repository.save(new EUser(username + random.nextString(), email + random.nextString(),
-                name + random.nextString(), lastName + random.nextString(), password + random.nextString()));
+        user = repository.save(EntityUtil.getSampleUser(random.nextString()));
     }
 }

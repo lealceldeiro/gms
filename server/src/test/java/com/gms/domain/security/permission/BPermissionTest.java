@@ -2,6 +2,7 @@ package com.gms.domain.security.permission;
 
 import com.gms.Application;
 import com.gms.domain.security.role.BRole;
+import com.gms.util.EntityUtil;
 import com.gms.util.StringUtil;
 import com.gms.util.i18n.CodeI18N;
 import com.gms.util.validation.PersistenceValidation;
@@ -39,14 +40,14 @@ public class BPermissionTest {
 
     @Before
     public void setUp() {
-        roles.add(new BRole("sampleL"));
+        roles.add(EntityUtil.getSampleRole());
     }
 
     //region persistence constraints validations
     @Test
     public void checkValidEntity() {
         cleanEntity0();
-        entity0 = new BPermission(name, label);
+        entity0 = EntityUtil.getSamplePermission();
         final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity0);
         assertTrue(cv.isEmpty());
     }

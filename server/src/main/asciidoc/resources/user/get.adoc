@@ -1,6 +1,6 @@
 [[resource-user-get]]
 ==== Getting a user's info
-A `GET` request lists a user's information.
+A `GET` request gets a user's information.
 
 *Request*
 

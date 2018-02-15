@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.service.AppService;
+import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
@@ -100,10 +101,7 @@ public class BRoleRepositoryTest {
 
     @Test
     public void createRole() throws Exception {
-        BRole e = new BRole(label + random.nextString());
-        e.setDescription(description + random.nextString());
-        e.setEnabled(true);
-
+        BRole e = EntityUtil.getSampleRole(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(BRole.class);
 
         mvc.perform(
@@ -143,7 +141,7 @@ public class BRoleRepositoryTest {
 
     @Test
     public void getRole() throws Exception {
-        BRole e = repository.save(new BRole(label + random.nextString()));
+        BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
@@ -163,9 +161,8 @@ public class BRoleRepositoryTest {
     @Test
     public void updateRole() throws Exception {
         BRole e = repository.save(new BRole(label + random.nextString()));
-        BRole e2 = new BRole(label + random.nextString());
-        e2.setEnabled(true);
-        e2.setDescription(description + random.nextString());
+        BRole e2 = EntityUtil.getSampleRole(random.nextString());
+
         mvc.perform(
                 put(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
@@ -185,7 +182,7 @@ public class BRoleRepositoryTest {
 
     @Test
     public void deleteRole() throws Exception {
-        BRole e = repository.save(new BRole(label + random.nextString()));
+        BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
         mvc.perform(
                 delete(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)

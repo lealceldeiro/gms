@@ -1,6 +1,6 @@
 [[resource-permission-get]]
 ==== Getting a permission's info
-A `GET` request lists a permission's information.
+A `GET` request gets a permission's information.
 
 *Request*
 

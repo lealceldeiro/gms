@@ -4,6 +4,7 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
+import com.gms.util.EntityUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +29,9 @@ public class BAuthorizationTest {
     private final Long uId = 999999999L;
     private final Long eId = 9999999999L;
     private final Long rId = 99999999999L;
-    private final EUser user = new EUser("sampleU", "sample@email.com", "sampleN", "sampleL", "sampleP");
-    private final EOwnedEntity oEntity = new EOwnedEntity("sampleOWN", "sampleOWU", "sampleOWD");
-    private final BRole role = new BRole("sampleRL");
+    private final EUser user = EntityUtil.getSampleUser();
+    private final EOwnedEntity oEntity = EntityUtil.getSampleEnitity();
+    private final BRole role = EntityUtil.getSampleRole();
     private final BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
 
     private BAuthorization entity;

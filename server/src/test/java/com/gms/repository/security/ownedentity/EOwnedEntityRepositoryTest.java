@@ -102,8 +102,7 @@ public class EOwnedEntityRepositoryTest {
 
     @Test
     public void createOwnedEntity() throws Exception {
-        EOwnedEntity e = new EOwnedEntity(name + random.nextString(), username + random.nextString(),
-                description + random.nextString());
+        EOwnedEntity e = EntityUtil.getSampleEnitity(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
 
         mvc.perform(
@@ -164,8 +163,7 @@ public class EOwnedEntityRepositoryTest {
     public void updateOwnedEntity() throws Exception {
         String r = random.nextString();
         EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
-        EOwnedEntity e2 = new EOwnedEntity(name + "Updated-" + random, username + "Updated-" + random.nextString(),
-                description + "Updated-" + random.nextString());
+        EOwnedEntity e2 = EntityUtil.getSampleEnitity(random.nextString());
         mvc.perform(
                 put(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
