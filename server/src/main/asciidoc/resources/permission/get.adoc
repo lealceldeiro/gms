@@ -2,13 +2,13 @@
 ==== Getting a permission's info
 A `GET` request gets a permission's information.
 
-*Request*
+include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/get-permission/curl-request.adoc[]
 
-*Response*
+include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 

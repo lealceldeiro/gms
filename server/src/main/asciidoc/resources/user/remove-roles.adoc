@@ -2,7 +2,7 @@
 ==== Removing roles
 A `DELETE` request removes some roles for a user from an owned entity.
 
-*Request*
+include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
@@ -12,7 +12,7 @@ include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/remove-roles-from-user-user-o-k/curl-request.adoc[]
 
-*Response*
+include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 

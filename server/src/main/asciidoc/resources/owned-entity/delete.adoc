@@ -2,13 +2,13 @@
 ==== Deleting an owned entity's info
 A `DELETE` request deletes an owned entity's information.
 
-*Request*
+include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/delete-owned-entity/curl-request.adoc[]
 
-*Response*
+include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 

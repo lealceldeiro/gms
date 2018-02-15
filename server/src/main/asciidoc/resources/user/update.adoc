@@ -2,13 +2,13 @@
 ==== Updating a user's info
 A `PUT` (full update) or `PATCH` (partial update) request updates a user's information.
 
-*Request*
+include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/update-user/curl-request.adoc[]
 
-*Response*
+include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 

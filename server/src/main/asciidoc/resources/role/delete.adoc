@@ -2,13 +2,13 @@
 ==== Deleting a role's info
 A `DELETE` request deletes a role's information.
 
-*Request*
+include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/delete-role/curl-request.adoc[]
 
-*Response*
+include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
