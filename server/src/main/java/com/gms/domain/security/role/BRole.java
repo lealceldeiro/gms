@@ -82,4 +82,8 @@ public class BRole extends GmsEntity{
             }
         }
     }
+
+    public void removeAllPermissions() {
+        if (permissions != null) permissions.clear();
+    }
 }

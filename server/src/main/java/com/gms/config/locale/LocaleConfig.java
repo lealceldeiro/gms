@@ -26,8 +26,9 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
 
     private static final String [] i18NBaseNames = {
             "classpath:/i18n/entity",
-            "classpath:/i18n/label",
             "classpath:/i18n/user",
+            "classpath:/i18n/role",
+            "classpath:/i18n/label",
             "classpath:/i18n/messages",
             "classpath:/i18n/frameworkoverride",
             "classpath:/i18n/validations",
