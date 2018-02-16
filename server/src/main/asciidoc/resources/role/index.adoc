@@ -12,6 +12,10 @@ include::get.adoc[]
 
 include::delete.adoc[]
 
-include::get-permission.adoc[]
+include::get-permissions.adoc[]
 
-include::update-permission.adoc[]
+include::add-permissions.adoc[]
+
+include::update-permissions.adoc[]
+
+include::remove-permissions.adoc[]

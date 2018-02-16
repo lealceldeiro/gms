@@ -43,16 +43,19 @@ public class RoleController extends ResponseEntityExceptionHandler {
     }
 
     @PostMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
+    @ResponseBody
     public List<Long> addPermissionsRole(@PathVariable Long id, @RequestBody List<Long> permissionsId) throws NotFoundEntityException {
         return roleService.addPermissionsToRole(id, permissionsId);
     }
 
     @DeleteMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
+    @ResponseBody
     public List<Long> removePermissionsFromRole(@PathVariable Long id, @RequestBody List<Long> permissionsId) throws NotFoundEntityException {
         return roleService.removePermissionsFromRole(id, permissionsId);
     }
 
     @PutMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
+    @ResponseBody
     public List<Long> updatePermissionsFromRole(@PathVariable Long id, @RequestBody List<Long> permissionsId) throws NotFoundEntityException {
         return roleService.updatePermissionsInRole(id, permissionsId);
     }

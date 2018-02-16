@@ -3,8 +3,8 @@
 
 include::permission/index.adoc[]
 
-include::owned-entity/index.adoc[]
-
 include::role/index.adoc[]
+
+include::owned-entity/index.adoc[]
 
 include::user/index.adoc[]

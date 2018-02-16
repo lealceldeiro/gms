@@ -1,0 +1,17 @@
+[[resource-roles-add-permission]]
+==== Adding permissions
+A `POST` request add new permissions to a role if this has not this permission already assigned. This request does not delete eny of the existing permissions assigned to the role.
+
+include::../../util/H-REQUEST.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/add-permissions-role/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+The result is a list with the `id` with which the operation was successful.
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/add-permissions-role/http-response.adoc[]

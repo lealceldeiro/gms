@@ -1,0 +1,17 @@
+[[resource-roles-remove-permission]]
+==== Removing permissions
+A `DELETE` request deletes some of the assigned permissions to a role. If there not any eny permission in database with the id equal to any of the one provided a Not Found is thrown.
+
+include::../../util/H-REQUEST.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/remove-permissions-from-role/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+The result is a list with the `id` with which the operation was successful.
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/remove-permissions-from-role/http-response.adoc[]
