@@ -2,6 +2,7 @@ package com.gms.repository.security.ownedentity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.ownedentity.EOwnedEntityMeta;
 import com.gms.service.AppService;
@@ -150,6 +151,7 @@ public class EOwnedEntityRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
                                 fieldWithPath("username").description(EOwnedEntityMeta.username),
                                 fieldWithPath("description").description(EOwnedEntityMeta.description),
@@ -172,6 +174,7 @@ public class EOwnedEntityRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
                                 fieldWithPath("username").description(EOwnedEntityMeta.username),
                                 fieldWithPath("description").description(EOwnedEntityMeta.description),

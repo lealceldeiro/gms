@@ -2,6 +2,7 @@ package com.gms.repository.security.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
@@ -131,6 +132,7 @@ public class EUserRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("username").description(EUserMeta.username),
                                 fieldWithPath("email").optional().description(EUserMeta.email),
                                 fieldWithPath("name").optional().description(EUserMeta.name),
@@ -161,6 +163,7 @@ public class EUserRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("username").description(EUserMeta.username),
                                 fieldWithPath("email").description(EUserMeta.email),
                                 fieldWithPath("name").description(EUserMeta.name),

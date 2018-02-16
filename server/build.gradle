@@ -64,6 +64,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-security")
 	compile("io.jsonwebtoken:jjwt:${jwtVersion}")
 	compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.reflections:reflections:0.9.11")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
 	runtime("org.springframework.boot:spring-boot-devtools")
 	runtime("org.postgresql:postgresql")

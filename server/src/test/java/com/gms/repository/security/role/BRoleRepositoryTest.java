@@ -2,6 +2,7 @@ package com.gms.repository.security.role;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
@@ -153,6 +154,7 @@ public class BRoleRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("label").description(BRoleMeta.label),
                                 fieldWithPath("description").optional().description(BRoleMeta.description),
                                 fieldWithPath("enabled").optional().description(BRoleMeta.enabled),
@@ -175,6 +177,7 @@ public class BRoleRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("label").description(BRoleMeta.label),
                                 fieldWithPath("description").description(BRoleMeta.description),
                                 fieldWithPath("enabled").description(BRoleMeta.enabled),

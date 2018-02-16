@@ -2,6 +2,7 @@ package com.gms.repository.security.permission;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.permission.BPermissionMeta;
 import com.gms.domain.security.role.BRole;
@@ -126,6 +127,7 @@ public class BPermissionRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
+                                fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("name").description(BPermissionMeta.name),
                                 fieldWithPath("label").description(BPermissionMeta.label),
                                 fieldWithPath("_links").description("Available links for requesting other webservices related to the returned permission")
