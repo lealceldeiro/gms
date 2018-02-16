@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +27,12 @@ public class GmsError {
 
     GmsError() {
         this.errors = new HashMap<>();
-        this.errors.put(OTHERS, new ArrayList<>());
+        this.errors.put(OTHERS, new LinkedList<>());
     }
 
     public void addError(String field, String message) {
         if (errors.get(field) == null) {
-            ArrayList<String> l = new ArrayList<>(1);
+            LinkedList<String> l = new LinkedList<>();
             l.add(message);
             errors.put(field, l);
         } else {

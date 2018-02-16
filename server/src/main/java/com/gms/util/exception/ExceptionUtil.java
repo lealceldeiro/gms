@@ -100,9 +100,9 @@ public class ExceptionUtil {
         GmsError gmsError = new GmsError();
         Object aux1;
         Object aux2;
-        ArrayList<String> args;
+        LinkedList<String> args;
         for (ConstraintViolation<?> cv : v) {
-            args = new ArrayList<>();
+            args = new LinkedList<>();
             args.add(cv.getPropertyPath().toString());
             aux1 = cv.getConstraintDescriptor().getAttributes().get("min");
             if (aux1 != null) {

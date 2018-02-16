@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCus
                     " auth.entity_id = e.id WHERE e.username = :eUsername AND auth.user_id = :userId");
             queryR.setParameter("eUsername", OEUsername).setParameter(USER_ID_PARAM, userId);
             result = queryR.getResultList();
-            rl = new ArrayList<>(result.size());
+            rl = new LinkedList<>();
             processRolesVal(result, rl);
             r.put(OEUsername, rl);
         }
@@ -59,7 +59,7 @@ public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCus
                 " auth.entity_id = e.id WHERE e.id = :entityId AND auth.user_id = :userId");
         queryR.setParameter("entityId", entityId).setParameter(USER_ID_PARAM, userId);
         List<Object[]> rawVal = queryR.getResultList();
-        List<BRole> r = new ArrayList<>(rawVal.size());
+        List<BRole> r = new LinkedList<>();
 
         processRolesVal(rawVal, r);
 

@@ -28,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * SecurityConfig
@@ -120,7 +121,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return free.toArray(new String[free.size()]);
     }
 
-    private void addUrl(ArrayList<String> urlList, String url) {
+    private void addUrl(List<String> urlList, String url) {
         String b = dc.getApiBasePath();
         if (url != null && !url.equals("")) {
             urlList.add(b + (url.startsWith("/") ? url : "/" + url));

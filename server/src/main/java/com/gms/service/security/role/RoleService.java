@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * RoleService
@@ -43,4 +44,7 @@ public class RoleService {
     }
     //endregion
 
+    private List<Long> addRemovePermissionToFromRole(long roleId, List<Long> permissionsId) {
+       return null;
+    }
 }

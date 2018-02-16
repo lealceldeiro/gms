@@ -32,7 +32,7 @@ public interface BAuthorizationRepositoryCustom {
      * Returns a Map with all {@link com.gms.domain.security.role.BRole} a user has one {@link com.gms.domain.security.ownedentity.EOwnedEntity}
      * @param userId The user identifier.
      * @param entityId The associated entity to the user.
-     * @return An {@link java.util.ArrayList} of {@link BRole} containing all the associated roles to the user over the
+     * @return An {@link List} of {@link BRole} containing all the associated roles to the user over the
      * entity which identifier matches with the provided as second parameter.
      */
     List<BRole> getRolesForUserOverEntity(long userId, long entityId);

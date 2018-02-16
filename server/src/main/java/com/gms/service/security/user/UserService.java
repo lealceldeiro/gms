@@ -22,7 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,9 +80,9 @@ public class UserService implements UserDetailsService{
         return addRemoveRolesToFromUser(userUsername, entityUsername, rolesId, false);
     }
 
-    private ArrayList<Long> addRemoveRolesToFromUser (String userUsername, String entityUsername, List<Long> rolesId, Boolean add)
+    private List<Long> addRemoveRolesToFromUser (String userUsername, String entityUsername, List<Long> rolesId, Boolean add)
             throws NotFoundEntityException {
-        ArrayList<Long> addedOrRemoved = new ArrayList<>();
+        LinkedList<Long> addedOrRemoved = new LinkedList<>();
 
         BAuthorizationPk pk;
         BAuthorization newUserAuth;
