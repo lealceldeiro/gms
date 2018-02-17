@@ -14,7 +14,7 @@ import java.util.Locale;
  * @version 0.1
  * Dec 12, 2017
  */
-public class GmsCHLocaleResolver extends CookieLocaleResolver {
+public class GmsCLocaleResolver extends CookieLocaleResolver {
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {

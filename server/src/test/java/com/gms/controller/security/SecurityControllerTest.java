@@ -84,6 +84,7 @@ public class SecurityControllerTest {
         refreshToken = GmsSecurityUtil.createSuperAdminRefreshToken(dc, sc, mvc, objectMapper, false);
     }
 
+    //C
     @Test
     public void signUpUserOK() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();

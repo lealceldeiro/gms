@@ -167,9 +167,6 @@ public class RoleControllerTest {
         assertTrue("The permission " + p1.getName() + " was not added properly", r.getPermissions().contains(p1));
         assertTrue("The permission " + p2.getName() + " was not added properly", r.getPermissions().contains(p2));
 
-        BPermission temp1 = p1;
-        BPermission temp2 = p2;
-
         //create de new ones
         createSamplePermissions();
 

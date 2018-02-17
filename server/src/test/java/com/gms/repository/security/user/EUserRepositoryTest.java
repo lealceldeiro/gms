@@ -105,6 +105,7 @@ public class EUserRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    //R
     @Test
     public void listUser() throws Exception {
         mvc.perform(
@@ -150,6 +151,7 @@ public class EUserRepositoryTest {
         );
     }
 
+    //U
     @Test
     public void updateUser() throws Exception {
         createSampleUser();
@@ -181,6 +183,7 @@ public class EUserRepositoryTest {
         );
     }
 
+    //D
     @Test
     public void deleteUser() throws Exception {
         createSampleUser();

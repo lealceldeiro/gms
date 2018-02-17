@@ -93,6 +93,7 @@ public class RestUserControllerTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    //C
     @Test
     public void register() throws Exception {
         final String r = random.nextString();

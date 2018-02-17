@@ -103,6 +103,7 @@ public class BRoleRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    //C
     @Test
     public void createRole() throws Exception {
         BRole e = EntityUtil.getSampleRole(random.nextString());
@@ -126,6 +127,7 @@ public class BRoleRepositoryTest {
                 );
     }
 
+    //R
     @Test
     public void listRole() throws Exception {
         repository.save(EntityUtil.getSampleRole(random.nextString()));
@@ -164,6 +166,7 @@ public class BRoleRepositoryTest {
         );
     }
 
+    //U
     @Test
     public void updateRole() throws Exception {
         BRole e = repository.save(new BRole(label + random.nextString()));
@@ -187,6 +190,7 @@ public class BRoleRepositoryTest {
         );
     }
 
+    //D
     @Test
     public void deleteRole() throws Exception {
         BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));

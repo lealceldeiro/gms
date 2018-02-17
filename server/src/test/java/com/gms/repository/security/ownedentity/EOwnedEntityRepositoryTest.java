@@ -101,6 +101,7 @@ public class EOwnedEntityRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    //C
     @Test
     public void createOwnedEntity() throws Exception {
         EOwnedEntity e = EntityUtil.getSampleEnitity(random.nextString());
@@ -123,6 +124,7 @@ public class EOwnedEntityRepositoryTest {
                 );
     }
 
+    //R
     @Test
     public void listOwnedEntity() throws Exception {
         mvc.perform(
@@ -161,6 +163,7 @@ public class EOwnedEntityRepositoryTest {
         );
     }
 
+    //U
     @Test
     public void updateOwnedEntity() throws Exception {
         String r = random.nextString();
@@ -184,6 +187,7 @@ public class EOwnedEntityRepositoryTest {
         );
     }
 
+    //D
     @Test
     public void deleteOwnedEntity() throws Exception {
         String r = random.nextString();

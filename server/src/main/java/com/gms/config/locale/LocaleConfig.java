@@ -52,7 +52,7 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        return new GmsCHLocaleResolver();
+        return new GmsCLocaleResolver();
     }
 
     @Bean
