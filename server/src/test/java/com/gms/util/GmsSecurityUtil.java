@@ -133,7 +133,8 @@ public class GmsSecurityUtil {
                         .content(objectMapper.writeValueAsString(loginData))
         ).andExpect(shouldIFail ? status().isUnauthorized() : status().isOk());
     }
-    private static String getValueInJSON(String source, String key) throws JSONException {
+
+    public static String getValueInJSON(String source, String key) throws JSONException {
         return (source != null && !source.equals("")) ? new JSONObject(source).getString(key) : "";
     }
 }
