@@ -41,7 +41,7 @@ public class EOwnedEntityTest {
     @Test
     public void checkValidEntity() {
         cleanEntity();
-        entity = EntityUtil.getSampleEnitity();
+        entity = EntityUtil.getSampleEntity();
         final Set<ConstraintViolation<Object>> cv = PersistenceValidation.validate(entity);
         assertTrue(cv.isEmpty());
     }

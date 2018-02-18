@@ -256,7 +256,7 @@ public class UserControllerTest {
         ro2 = roleRepository.findOne(ro2.getId());
         assertNotNull("Test role 2 could not be saved", ro2);
 
-        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEnitity(r));
+        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(r));
         e = entityRepository.findOne(e.getId());
         assertNotNull("Test entity could not be saved", e);
 

@@ -30,7 +30,7 @@ public class BAuthorizationTest {
     private final Long eId = 9999999999L;
     private final Long rId = 99999999999L;
     private final EUser user = EntityUtil.getSampleUser();
-    private final EOwnedEntity oEntity = EntityUtil.getSampleEnitity();
+    private final EOwnedEntity oEntity = EntityUtil.getSampleEntity();
     private final BRole role = EntityUtil.getSampleRole();
     private final BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
 

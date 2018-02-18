@@ -104,7 +104,7 @@ public class EOwnedEntityRepositoryTest {
     //C
     @Test
     public void createOwnedEntity() throws Exception {
-        EOwnedEntity e = EntityUtil.getSampleEnitity(random.nextString());
+        EOwnedEntity e = EntityUtil.getSampleEntity(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
 
         mvc.perform(
@@ -145,7 +145,7 @@ public class EOwnedEntityRepositoryTest {
     @Test
     public void getOwnedEntity() throws Exception {
         String r = random.nextString();
-        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
@@ -167,8 +167,8 @@ public class EOwnedEntityRepositoryTest {
     @Test
     public void updateOwnedEntity() throws Exception {
         String r = random.nextString();
-        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
-        EOwnedEntity e2 = EntityUtil.getSampleEnitity(random.nextString());
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
+        EOwnedEntity e2 = EntityUtil.getSampleEntity(random.nextString());
         mvc.perform(
                 put(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
@@ -191,7 +191,7 @@ public class EOwnedEntityRepositoryTest {
     @Test
     public void deleteOwnedEntity() throws Exception {
         String r = random.nextString();
-        EOwnedEntity e = repository.save(EntityUtil.getSampleEnitity(r));
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
         mvc.perform(
                 delete(apiPrefix + "/" + reqString + "/" + e.getId())
                         .header(authHeader, tokenType + " " + accessToken)
