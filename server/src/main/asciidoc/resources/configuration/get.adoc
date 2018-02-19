@@ -1,0 +1,19 @@
+[[system-configuration-get]]
+==== Getting all system-related configurations
+A `GET` request list all system-wide available configurations.
+
+include::../../util/H-REQUEST.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-config/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+include::../../util/H-RESPONSE-FIELDS.adoc[]
+
+include::{snippets}/get-config/response-fields.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-config/http-response.adoc[]

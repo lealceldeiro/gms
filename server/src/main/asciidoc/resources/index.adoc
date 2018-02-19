@@ -8,3 +8,5 @@ include::role/index.adoc[]
 include::owned-entity/index.adoc[]
 
 include::user/index.adoc[]
+
+include::configuration/index.adoc[]

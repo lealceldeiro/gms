@@ -1,0 +1,17 @@
+[[system-configuration-get-by-key-and-user]]
+==== Getting a user configuration value by its key
+A `GET` request gets a specific configuration by providing the config key which is desired to get the value of and the user it is associated to.
+
+In this example the key `language` was used to retrieved its configuration value for a specific user by providing the user `id`. The value, of course, varies depending on what it represents. It can be any kind of object.
+
+include::../../util/H-REQUEST.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/get-config-by-key-and-user/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/get-config-by-key-and-user/http-response.adoc[]

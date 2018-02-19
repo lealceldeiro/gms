@@ -5,6 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
+import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
@@ -63,6 +64,7 @@ public class RestUserControllerTest {
     @Autowired private DefaultConst dc;
 
     @Autowired private AppService appService;
+    @Autowired private ConfigurationService configService;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
@@ -143,6 +145,12 @@ public class RestUserControllerTest {
 
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
+        boolean initial = configService.isUserRegistrationAllowed();
+        // allow new user registration
+        if (!initial) {
+            configService.setUserRegistrationAllowed(true);
+        }
+
         String r = random.nextString();
         Resource<EUser> resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
@@ -155,5 +163,10 @@ public class RestUserControllerTest {
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
+
+        // restart initial config
+        if (!initial) {
+            assertTrue(configService.setUserRegistrationAllowed(false));
+        }
     }
 }

@@ -145,6 +145,12 @@ public class BaseControllerTest {
 
     @Test
     public void handleTransactionSystemException() throws Exception {
+        boolean initial = configService.isUserRegistrationAllowed();
+        // allow new user registration
+        if (!initial) {
+            configService.setUserRegistrationAllowed(true);
+        }
+
         final String r = random.nextString();
         EUser u = new EUser(null ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
                 EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
@@ -153,10 +159,21 @@ public class BaseControllerTest {
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
+
+        // restart initial config
+        if (!initial) {
+            assertTrue(configService.setUserRegistrationAllowed(false));
+        }
     }
 
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
+        boolean initial = configService.isUserRegistrationAllowed();
+        // allow new user registration
+        if (!initial) {
+            configService.setUserRegistrationAllowed(true);
+        }
+
         final String r = random.nextString();
         Resource<EUser> resource = getSampleUserResource(r);
         mvc.perform(
@@ -169,5 +186,10 @@ public class BaseControllerTest {
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
+
+        // restart initial config
+        if (!initial) {
+            assertTrue(configService.setUserRegistrationAllowed(false));
+        }
     }
 }
