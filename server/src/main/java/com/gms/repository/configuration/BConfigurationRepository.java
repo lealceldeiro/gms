@@ -5,6 +5,8 @@ import com.gms.util.constant.ResourcePath;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 /**
  * BConfigurationRepository
  *
@@ -18,4 +20,6 @@ public interface BConfigurationRepository extends CrudRepository<BConfiguration,
 
     BConfiguration findFirstByKey (String key);
     BConfiguration findFirstByKeyAndUserId (String key, Long userId);
+    List<BConfiguration> findAllByKeyEndingWith(String endingString);
+    List<BConfiguration> findAllByUserId(Long id);
 }

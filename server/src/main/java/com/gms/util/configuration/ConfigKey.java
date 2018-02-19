@@ -12,12 +12,12 @@ public enum ConfigKey {
     /**
      * App which handles multiple entities (enterprises, businesses,etc)
      */
-    IS_MULTI_ENTITY_APP,
+    IS_MULTI_ENTITY_APP_IN_SERVER,
 
     /**
      * New users are can be register using a "register" form
      */
-    IS_USER_REGISTRATION_ALLOWED,
+    IS_USER_REGISTRATION_ALLOWED_IN_SERVER,
 
     /**
      * Last language used by a user
