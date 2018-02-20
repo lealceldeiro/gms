@@ -1,6 +1,7 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.domain.GmsEntity;
+import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.CodeI18N;
 import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
@@ -8,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -41,6 +43,7 @@ public class EOwnedEntity extends GmsEntity{
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = 255, message = CodeI18N.FIELD_SIZE)
+    @Pattern(regexp = SecurityConst.USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false, length = 255)
     private final String username;
 

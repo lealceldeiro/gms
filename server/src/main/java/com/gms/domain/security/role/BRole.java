@@ -8,10 +8,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 
 /**
  * BRole
@@ -35,6 +38,7 @@ public class BRole extends GmsEntity{
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = 255, message = CodeI18N.FIELD_SIZE)
+    @Pattern(regexp = USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false, length = 255)
     private final String label;
 

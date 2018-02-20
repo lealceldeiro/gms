@@ -144,6 +144,13 @@ public class SecurityConst {
 
     public static final String USERNAME_HOLDER = "username";
 
+    /**
+     * No more than 255 characters and no less than 1
+     * No special characters except underscore and hyphen ("_" and "-"). Those two characters cannot be the one after the
+     * other and the username can't start or end with them.
+     */
+    public static final String USERNAME_REGEXP = "^(?!.*[-_]{2,})(?=^[^-_].*[^-_]$)[\\w-]{1,255}$";
+
     public String [] getFreeURLsAnyRequest() {
         return freeURLsAnyRequest.split(";");
     }
