@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/dist-server
 /tmp
 /out-tsc
 
@@ -30,7 +31,6 @@
 /coverage
 /libpeerconnection.log
 npm-debug.log
-package-lock.json
 testem.log
 /typings
 
