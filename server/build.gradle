@@ -81,7 +81,7 @@ dependencies {
 task clientBuild(type: NpmTask) {
     group = 'client tasks'
     description = "Compiles client side folder for production"
-    args = ['run', 'buildProd']
+    args = ['run', 'build']
 }
 
 task copyClientBuild(type: Copy, dependsOn: ['clientBuild']) {
