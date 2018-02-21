@@ -63,6 +63,25 @@ public class BPermissionTest {
     }
 
     @Test
+    public void nameIsNotWithInvalidPattern() {
+        String[] invalidNames = StringUtil.INVALID_USERNAME;
+        for (String name: invalidNames) {
+            propertyIsNot(name, label, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+                    "name property does not fulfill the username pattern restrictions");
+        }
+    }
+
+    @Test
+    public void nameIsValidWithValidPattern() {
+        BPermission p;
+        String[] validNames = StringUtil.VALID_USERNAME;
+        for (String name: validNames) {
+            p = new BPermission(name, label);
+            assertTrue("Permission is not valid with a valid name: " + name, PersistenceValidation.validate(p).isEmpty());
+        }
+    }
+
+    @Test
     public void labelIsNotBlank() {
         propertyIsNot(name, "", CodeI18N.FIELD_NOT_BLANK, "label property must not be blank");
     }

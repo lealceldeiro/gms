@@ -77,6 +77,25 @@ public class EOwnedEntityTest {
     }
 
     @Test
+    public void usernameIsNotWithInvalidPattern() {
+        String[] invalidUsername = StringUtil.INVALID_USERNAME;
+        for (String username: invalidUsername) {
+            propertyIsNot(name, username, description, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+                    "username property does not fulfill the username pattern restrictions");
+        }
+    }
+
+    @Test
+    public void usernameIsValidWithValidPattern() {
+        EOwnedEntity e;
+        String[] validUsername = StringUtil.VALID_USERNAME;
+        for (String username: validUsername) {
+            e = new EOwnedEntity(name, username, description);
+            assertTrue("Owned entity is not valid with a valid username: " + username, PersistenceValidation.validate(e).isEmpty());
+        }
+    }
+
+    @Test
     public void descriptionIsNotBlank() {
         propertyIsNot(name, username, "", CodeI18N.FIELD_NOT_BLANK, "description property must not be blank");
     }

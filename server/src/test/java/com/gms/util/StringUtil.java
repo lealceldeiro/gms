@@ -19,6 +19,37 @@ public class StringUtil {
     public static final String EXAMPLE_EMAIL = "example-email@test.com";
     public static final String EXAMPLE_DESCRIPTION = "ExampleDescription-";
 
+    public static final String[] INVALID_USERNAME = {
+            "-9randomChars9",
+            "-randomChars9",
+            "-9randomChars",
+            "-randomChars",
+            "_random_Chars",
+            "_random-Chars",
+
+            "9randomChars9-",
+            "randomChars9-",
+            "9randomChars-",
+            "randomChars-",
+            "random_Chars_",
+            "random-Chars_",
+
+            "random_-Chars-KO",
+            "9random_Chars-_KO",
+    };
+
+    public static final String[] VALID_USERNAME = {
+            "9randomChars9",
+            "randomChars9",
+            "9randomChars",
+            "randomChars",
+            "random_Chars",
+            "random-Chars",
+            "random_Chars-OK",
+            "9random_Chars-OK",
+            "9random_Chars-OK9",
+    };
+
     private StringUtil() {
     }
 

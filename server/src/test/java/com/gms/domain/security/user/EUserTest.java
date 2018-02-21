@@ -78,6 +78,26 @@ public class EUserTest {
     }
 
     @Test
+    public void usernameIsNotWithInvalidPattern() {
+        String[] invalidUsernames = StringUtil.INVALID_USERNAME;
+        for (String username: invalidUsernames) {
+            propertyIsNot(username, emailS, nameS, lastNameS, passwordS, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+                    "username property does not fulfill the username pattern restrictions");
+        }
+    }
+
+    @Test
+    public void  usernameIsValidWithValidPattern() {
+        EUser u;
+        String[] validUsernames = StringUtil.VALID_USERNAME;
+        for (String username: validUsernames) {
+            u = new EUser(username, emailS, nameS, lastNameS, passwordS);
+            assertTrue("User is not valid with a valid label: " + username, PersistenceValidation.validate(u).isEmpty());
+        }
+    }
+
+
+    @Test
     public void emailIsNotBlank() {
         propertyIsNot(usernameS, "", nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_BLANK, "email property must not be blank");
     }

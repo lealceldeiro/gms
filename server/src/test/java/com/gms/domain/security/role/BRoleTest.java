@@ -70,6 +70,25 @@ public class BRoleTest {
     }
 
     @Test
+    public void labelIsNotWithInvalidPattern() {
+        String[] invalidLabels = StringUtil.INVALID_USERNAME;
+        for (String label: invalidLabels) {
+            propertyIsNot(label, descriptionS, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+                    "label property does not fulfill the username pattern restrictions");
+        }
+    }
+
+    @Test
+    public void labelIsValidWithValidPattern() {
+        BRole r;
+        String[] validLabels = StringUtil.VALID_USERNAME;
+        for (String label: validLabels) {
+            r = new BRole(label);
+            assertTrue("Role is not valid with a valid label: " + label, PersistenceValidation.validate(r).isEmpty());
+        }
+    }
+
+    @Test
     public void descriptionIsNotOutOfRange() {
         propertyIsNot(labelS, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
     }
