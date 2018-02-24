@@ -13,7 +13,6 @@ import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
-import com.gms.util.validation.ConstrainedFields;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +30,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,29 +99,6 @@ public class EOwnedEntityRepositoryTest {
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
-    }
-
-    //C
-    @Test
-    public void createOwnedEntity() throws Exception {
-        EOwnedEntity e = EntityUtil.getSampleEntity(random.nextString());
-        ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
-
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(e))
-        ).andExpect(status().isCreated())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                        fields.withPath("username").description("A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
-                                        fields.withPath("description").description("A brief description of the entity")
-                                )
-                        )
-                );
     }
 
     //R

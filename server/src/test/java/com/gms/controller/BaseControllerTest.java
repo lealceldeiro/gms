@@ -64,6 +64,8 @@ public class BaseControllerTest {
     private String accessToken;
     private String apiPrefix;
 
+    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
+
     private final GMSRandom random = new GMSRandom(10);
 
     @Before
@@ -139,7 +141,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (initial) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(true));
         }
     }
 
@@ -162,7 +164,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
         }
     }
 
@@ -189,7 +191,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
         }
     }
 }

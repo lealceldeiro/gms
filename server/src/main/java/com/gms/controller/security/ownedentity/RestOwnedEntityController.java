@@ -1,7 +1,7 @@
-package com.gms.controller.security.user;
+package com.gms.controller.security.ownedentity;
 
-import com.gms.domain.security.user.EUser;
-import com.gms.service.security.user.UserService;
+import com.gms.domain.security.ownedentity.EOwnedEntity;
+import com.gms.service.security.ownedentity.OwnedEntityService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.ExceptionUtil;
@@ -21,47 +21,47 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.Valid;
 
 /**
- * RestUserController
+ * RestOwnedEntityController
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  *
  * @version 0.1
- * Dec 26, 2017
+ * Feb 24, 2018
  */
 @BasePathAwareController
 @RestControllerAdvice
-public class RestUserController extends ResponseEntityExceptionHandler {
+public class RestOwnedEntityController extends ResponseEntityExceptionHandler {
 
     private final MessageResolver msg;
     private final DefaultConst dc;
-    private final UserService userService;
+    private final OwnedEntityService entityService;
 
-    public RestUserController(UserService userService, MessageResolver messageResolver, DefaultConst defaultConst) {
+    public RestOwnedEntityController(OwnedEntityService entityService, MessageResolver messageResolver, DefaultConst defaultConst) {
         this.dc = defaultConst;
-        this.userService = userService;
+        this.entityService = entityService;
         this.msg = messageResolver;
     }
 
 
     /**
-     * Registers a new {@link EUser} setting it as active with properties such as emailVerified and enabled to `true`.
-     * This method overrides the default "user" url in the {@link com.gms.repository.security.user.EUserRepository}
-     * by setting its path to 'user' (like in the `EUserRepository` interface, by doing `produces = 'application/hal+json'`
+     * Registers a new {@link com.gms.domain.security.ownedentity.EOwnedEntity}.
+     * This method overrides the default "entity" url in the {@link com.gms.repository.security.ownedentity.EOwnedEntityRepository}
+     * by setting its path to 'entity' (like in the `EOwnedEntityRepository` interface, by doing `produces = 'application/hal+json'`
      * and by putting in within a controller annotated as `@BasePathAwareController`.
-     * @param user {@link EUser} data to be created.
-     * @return A {@link EUser} mapped into a @{@link ResponseBody}.
+     * @param entity {@link com.gms.domain.security.ownedentity.EOwnedEntity} data to be created.
+     * @return A {@link com.gms.domain.security.ownedentity.EOwnedEntity} mapped into a @{@link ResponseBody}.
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
-    @PostMapping(path = ResourcePath.USER, produces = "application/hal+json")
+    @PostMapping(path = ResourcePath.OWNED_ENTITY, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity register(@Valid @RequestBody Resource<EUser> user)
+    public ResponseEntity create(@Valid @RequestBody Resource<EOwnedEntity> entity)
             throws GmsGeneralException {
-        EUser u = userService.signUp(user.getContent(), true, true);
-        if (u != null) {
+        EOwnedEntity e = entityService.create(entity.getContent());
+        if (e != null) {
             return new ResponseEntity(HttpStatus.CREATED);
         }
-        else throw new GmsGeneralException("user.add.error", false);
+        else throw new GmsGeneralException("entity.add.error", false);
     }
 
     //region exception handling
@@ -69,7 +69,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      * Handles all exceptions which where not specifically treated.
      * @param ex {@link GmsGeneralException} exception.
      * @param req {@link WebRequest} request.
-     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * @return Formatted {@link ResponseEntity} depending on the requested format (i.e.: json, xml)
      * containing detailed information about the exception.
      */
     @ExceptionHandler(GmsGeneralException.class)
@@ -84,7 +84,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      *
      * @param ex  {@link TransactionSystemException} exception.
      * @param req {@link WebRequest} request.
-     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * @return Formatted {@link ResponseEntity} depending on the requested format (i.e.: json, xml)
      * containing detailed information about the exception.
      */
     @ExceptionHandler(TransactionSystemException.class)
@@ -97,7 +97,7 @@ public class RestUserController extends ResponseEntityExceptionHandler {
      *
      * @param ex  {@link DataIntegrityViolationException} exception.
      * @param req {@link WebRequest} request.
-     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * @return Formatted {@link ResponseEntity} depending on the requested format (i.e.: json, xml)
      * containing detailed information about the exception.
      */
     @ExceptionHandler(DataIntegrityViolationException.class)

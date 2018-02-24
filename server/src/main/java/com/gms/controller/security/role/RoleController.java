@@ -6,7 +6,6 @@ import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +34,6 @@ public class RoleController extends ResponseEntityExceptionHandler {
     private final DefaultConst dc;
     private final RoleService roleService;
 
-    @Autowired
     public RoleController(RoleService roleService, MessageResolver messageResolver, DefaultConst defaultConst) {
         this.roleService = roleService;
         this.msg = messageResolver;

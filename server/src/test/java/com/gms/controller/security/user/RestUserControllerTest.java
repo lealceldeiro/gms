@@ -74,6 +74,8 @@ public class RestUserControllerTest {
     private String accessToken;
     private String apiPrefix;
 
+    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
+
     private final GMSRandom random = new GMSRandom();
 
     @SuppressWarnings("Duplicates")
@@ -166,7 +168,7 @@ public class RestUserControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
         }
     }
 }

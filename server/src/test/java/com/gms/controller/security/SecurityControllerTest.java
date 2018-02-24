@@ -67,6 +67,8 @@ public class SecurityControllerTest {
     private String refreshToken;
     private String apiPrefix;
 
+    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
+
     private final GMSRandom random = new GMSRandom(10);
 
     @Before
@@ -125,7 +127,7 @@ public class SecurityControllerTest {
                 );
 
         if (!initial) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
         }
     }
 
@@ -143,7 +145,7 @@ public class SecurityControllerTest {
         ).andExpect(status().isConflict());
 
         if (initial) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(true));
         }
     }
 
