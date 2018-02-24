@@ -1,17 +1,15 @@
 package com.gms.controller.security;
 
-import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.controller.BaseController;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
-import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.hateoas.Resource;
@@ -36,6 +34,7 @@ import java.util.Map;
  * @version 0.1
  * Dec 12, 2017
  */
+@RequiredArgsConstructor
 @RestController
 @BasePathAwareController
 public class SecurityController extends BaseController{
@@ -43,15 +42,6 @@ public class SecurityController extends BaseController{
     private final UserService userService;
     private final SecurityConst sc;
     private final JWTService jwtService;
-
-    @Autowired
-    public SecurityController(UserService userService, DefaultConst defaultConst,
-                              SecurityConst sc, JWTService jwtService, AuthenticationFacade authenticationFacade) {
-        super(defaultConst);
-        this.userService = userService;
-        this.sc = sc;
-        this.jwtService = jwtService;
-    }
 
     /**
      * Registers a new {@link EUser} setting it as active with some properties such as enabled to `true`.

@@ -34,13 +34,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
     @Autowired protected MessageResolver msg;
     @Autowired private AuthenticationFacade authenticationFacade;
-
-    @SuppressWarnings("WeakerAccess")
-    protected final DefaultConst dc;
-
-    public BaseController(DefaultConst defaultConst) {
-        this.dc = defaultConst;
-    }
+    @Autowired protected DefaultConst dc;
 
     //region exceptions handling
 

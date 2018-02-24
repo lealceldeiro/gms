@@ -2,10 +2,9 @@ package com.gms.controller.configuration;
 
 import com.gms.controller.BaseController;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.domain.NotFoundEntityException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +18,12 @@ import java.util.Map;
  * @version 0.1
  * Feb 18, 2017
  */
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(ResourcePath.CONFIGURATION)
 public class ConfigurationController extends BaseController{
 
     private final ConfigurationService configService;
-
-    @Autowired
-    public ConfigurationController(ConfigurationService userService, DefaultConst defaultConst) {
-        super(defaultConst);
-        this.configService = userService;
-    }
 
     @GetMapping
     @ResponseBody

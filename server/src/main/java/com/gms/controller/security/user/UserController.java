@@ -3,10 +3,9 @@ package com.gms.controller.security.user;
 import com.gms.controller.BaseController;
 import com.gms.domain.security.role.BRole;
 import com.gms.service.security.user.UserService;
-import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.domain.NotFoundEntityException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,18 +19,12 @@ import java.util.Map;
  * @version 0.1
  * Dec 12, 2017
  */
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(ResourcePath.USER)
 public class UserController extends BaseController{
 
     private final UserService userService;
-
-
-    @Autowired
-    public UserController(UserService userService, DefaultConst defaultConst) {
-        super(defaultConst);
-        this.userService = userService;
-    }
 
     @GetMapping(ResourcePath.ROLE + "s/{userUsername}")
     public Map<String, List<BRole>> getRolesForUser(@PathVariable String userUsername) throws NotFoundEntityException {
