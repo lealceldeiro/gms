@@ -16,6 +16,7 @@ import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +35,7 @@ import java.util.Map;
  * @version 0.1
  * Dec 12, 2017
  */
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -169,7 +171,10 @@ public class UserService implements UserDetailsService{
                 return null;
             }
             entityId = anAuth.getEntity().getId();
-            configService.setLastAccessedEntityIdByUser(u.getId(), entityId); // todo: log if the config couldn't be saved
+            if (!configService.setLastAccessedEntityIdByUser(u.getId(), entityId)) {
+                log.warn("Last accessed entity with id `" + entityId + "` for user with id `" + u.getId()
+                        + "` could not be saved.");
+            }
         }
         return entityId;
     }
