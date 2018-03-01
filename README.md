@@ -17,8 +17,6 @@ The project consists of two main (independent) modules (api server and front-end
 _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./gradlew
 ` instead of `gradle` for the previous mentioned steps.
 
-[6]: https://gradle.org/
-
 ## How to start developing?
 * Make a local working copy of the project (` git clone https://github.com/lealceldeiro/gms.git`).
 
