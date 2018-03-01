@@ -1,5 +1,5 @@
 ## Overview
-The project consist of two main (independent) modules (api server and front-end resources). These are located in the **server** and **client** folder respectively. You can collaborate on any of them indepentently by modifying only the module you would like to change.
+The project consists of two main (independent) modules (api server and front-end resources). These are located in the **server** and **client** folder respectively. You can collaborate on any of them indepentently by modifying only the module you would like to change.
 
 ## Ready to production
 * Packing as a WAR file with the API server only
