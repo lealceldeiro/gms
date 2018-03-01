@@ -6,7 +6,6 @@ buildscript {
         propdepsPluginVersion = '0.0.9.RELEASE'
         jwtVersion = '0.9.0'
         lombokVersion = '1.16.18'
-        buildClient = false
         envSet = false
         buildPropertiesFilePath = "./build/resources/main/application.properties"
         snippetsDir = file('build/generated-snippets')
@@ -168,15 +167,15 @@ private String getSpringAppPropertyInBuild(String key){
 //endregion
 
 //region control enabled tasks
-clientBuild.enabled = buildClient
-copyClientBuild.enabled = buildClient
+clientBuild.enabled = buildClient()
+copyClientBuild.enabled = buildClient()
 
 task resetConfigTaskState(type: Exec) {
     group = 'other'
     description = 'Resets the custom tasks to their original state'
     doLast {
-        clientBuild.enabled = buildClient
-        copyClientBuild.enabled = buildClient
+        clientBuild.enabled = buildClient()
+        copyClientBuild.enabled = buildClient()
         setDevConfig.enabled = true
         setTestingConfig.enabled = true
         setProductionConfig.enabled = true
@@ -227,3 +226,7 @@ war {
 }
 
 compileJava.dependsOn(processResources)
+
+private boolean buildClient() {
+    return project.getProperties().get('buildClient')
+}
