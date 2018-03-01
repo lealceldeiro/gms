@@ -14,6 +14,11 @@ The project consists of two main (independent) modules (api server and front-end
   3. Save the file and update it inside the WAR file
   4. Deploy WAR
 
+_**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./gradlew
+` instead of `gradle` for the previous mentioned steps.
+
+[6]: https://gradle.org/
+
 ## How to start developing?
 * Make a local working copy of the project (` git clone https://github.com/lealceldeiro/gms.git`).
 
@@ -39,3 +44,4 @@ The project consists of two main (independent) modules (api server and front-end
 [3]: https://www.npmjs.com/package/angular-cli
 [4]: https://nodejs.org/en/
 [5]: https://www.postgresql.org/
+[6]: https://gradle.org/
