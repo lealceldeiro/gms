@@ -1,14 +1,14 @@
 buildscript {
 	ext {
-        appName = "gms"
-		springBootVersion = '1.5.6.RELEASE'
-		nodePluginVersion = '1.2.0'
-        propdepsPluginVersion = '0.0.9.RELEASE'
-        jwtVersion = '0.9.0'
-        lombokVersion = '1.16.18'
+		springBootVersion = "1.5.6.RELEASE"
+		nodePluginVersion = "1.2.0"
+        propdepsPluginVersion = "0.0.9.RELEASE"
+        jwtVersion = "0.9.0"
+        lombokVersion = "1.16.18"
+        refVersion = "0.9.11"
         envSet = false
         buildPropertiesFilePath = "./build/resources/main/application.properties"
-        snippetsDir = file('build/generated-snippets')
+        snippetsDir = file("build/generated-snippets")
         apiDocsFolder = "apidocs"
 	}
 	repositories {
@@ -27,22 +27,22 @@ plugins {
 }
 
 configure(allprojects) {
-    apply plugin: 'propdeps'
-    apply plugin: 'propdeps-maven'
-    apply plugin: 'propdeps-idea'
-    apply plugin: 'propdeps-eclipse'
+    apply plugin: "propdeps"
+    apply plugin: "propdeps-maven"
+    apply plugin: "propdeps-idea"
+    apply plugin: "propdeps-eclipse"
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'war'
-apply plugin: 'com.moowork.node'
-apply plugin: 'org.asciidoctor.convert'
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "org.springframework.boot"
+apply plugin: "war"
+apply plugin: "com.moowork.node"
+apply plugin: "org.asciidoctor.convert"
 
-group = 'com.gms'
-version = '0.0.1'
+group = "com.gms"
+version = "0.0.1"
 sourceCompatibility = 1.8
 
 repositories {
@@ -63,7 +63,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-security")
 	compile("io.jsonwebtoken:jjwt:${jwtVersion}")
 	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.reflections:reflections:0.9.11")
+	compile("org.reflections:reflections:${refVersion}")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
 	runtime("org.springframework.boot:spring-boot-devtools")
 	runtime("org.postgresql:postgresql")
@@ -78,26 +78,26 @@ dependencies {
 
 //region client task
 task clientBuild(type: NpmTask) {
-    group = 'client tasks'
+    group = "client tasks"
     description = "Compiles client side folder for production"
-    args = ['run', 'build']
+    args = ["run", "build"]
 }
 
-task copyClientBuild(type: Copy, dependsOn: ['clientBuild']) {
-    group = 'client tasks'
+task copyClientBuild(type: Copy, dependsOn: ["clientBuild"]) {
+    group = "client tasks"
     description = "Checks all client side resources are ready for deployment"
-    from '../client/dist'
-    into 'build/resources/main/static'
+    from "../client/dist"
+    into "build/resources/main/static"
 }
 //endregion
 
 //region environments config
 task setDevConfig() {
-    group = 'other'
+    group = "other"
     description = "Sets the environment for development mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild('spring.profiles.active')
-        if (p && p  != 'development') {
+        def p = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (p && p  != "development") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "development")
             }
@@ -105,18 +105,18 @@ task setDevConfig() {
         }
     }
     doLast {
-        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'development') {
-            println 'Environment set for development mode...'
+        if (getSpringAppPropertyInBuild("spring.profiles.active") == "development") {
+            println "Environment set for development mode..."
         }
     }
 }
 
 task setTestingConfig() {
-    group = 'other'
+    group = "other"
     description = "Sets the environment for testing mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild('spring.profiles.active')
-        if (p && p != 'test') {
+        def p = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (p && p != "test") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "test")
             }
@@ -124,18 +124,18 @@ task setTestingConfig() {
         }
     }
     doLast {
-        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'test') {
-            println 'Environment set for testing mode...'
+        if (getSpringAppPropertyInBuild("spring.profiles.active") == "test") {
+            println "Environment set for testing mode..."
         }
     }
 }
 
 task setProductionConfig() {
-    group = 'other'
+    group = "other"
     description = "Sets the environment for production mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild('spring.profiles.active')
-        if (p && p  != 'production') {
+        def p = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (p && p  != "production") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "production")
             }
@@ -143,7 +143,7 @@ task setProductionConfig() {
         }
     }
     doLast {
-        if (getSpringAppPropertyInBuild('spring.profiles.active') == 'production') {
+        if (getSpringAppPropertyInBuild("spring.profiles.active") == "production") {
             println 'Environment set for production mode...'
         }
     }
@@ -171,8 +171,8 @@ clientBuild.enabled = buildClient()
 copyClientBuild.enabled = buildClient()
 
 task resetConfigTaskState(type: Exec) {
-    group = 'other'
-    description = 'Resets the custom tasks to their original state'
+    group = "other"
+    description = "Resets the custom tasks to their original state"
     doLast {
         clientBuild.enabled = buildClient()
         copyClientBuild.enabled = buildClient()
@@ -186,29 +186,23 @@ task resetConfigTaskState(type: Exec) {
 //region api docs
 asciidoctor {
     //noinspection GroovyAssignabilityCheck
-    attributes 'snippets': snippetsDir
+    attributes "snippets": snippetsDir
     inputs.dir snippetsDir
     outputDir "build/asciidoc"
     dependsOn test
-    sourceDir 'src/main/asciidoc'
+    sourceDir "src/main/asciidoc"
 }
 
 task processApiDocs(type: Copy, dependsOn: asciidoctor) {
-    group = 'build'
+    group = "build"
     description = "Copies de api documentation to the destinated folder"
     from "${asciidoctor.outputDir}/html5"
     into "build/resources/main/static/" + (apiDocsFolder as String)
 }
 //endregion
-
-task warForTesting(type: War, dependsOn: ['setTestingConfig', 'processApiDocs', 'copyClientBuild']) {
-    group = 'build'
-    description = "Generates a war archive with all the compiled classes, the web-app content and the libraries ready for testing environment"
-}
-
 //endregion
 
-resetConfigTaskState.mustRunAfter(bootRun, war, warForTesting, clean)
+resetConfigTaskState.mustRunAfter(bootRun, war, clean)
 
 clean.dependsOn(setDevConfig)
 bootRun.dependsOn(setDevConfig)
@@ -222,11 +216,15 @@ testClasses.dependsOn(setTestingConfig)
 
 war {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
-    baseName = appName
+    baseName = getAppName()
 }
 
 compileJava.dependsOn(processResources)
 
 private boolean buildClient() {
-    return project.getProperties().get('buildClient')
+    return project.getProperties().get("buildClient")
+}
+
+private String getAppName() {
+    return getSpringAppPropertyInBuild("spring.application.name")
 }
