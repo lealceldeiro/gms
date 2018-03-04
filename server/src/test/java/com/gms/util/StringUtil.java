@@ -26,6 +26,7 @@ public class StringUtil {
             "-randomChars",
             "_random_Chars",
             "_random-Chars",
+            "_random Chars whit spaces",
 
             "9randomChars9-",
             "randomChars9-",
