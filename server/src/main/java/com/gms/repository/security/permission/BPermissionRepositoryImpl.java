@@ -43,11 +43,11 @@ public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {
                 "WHERE" +
                 "  auth.entity_id = :entityId" +
                 "  AND auth.user_id = :userId" +
-                "  AND u.enabled = TRUE" +                                                          // by default users are not enabled
-                "  AND (u.account_non_expired = TRUE OR u.account_non_expired IS NULL)" +            // by default users' account are not expired
-                "  AND (u.account_non_locked = TRUE OR u.account_non_locked IS NULL)" +              // by default users are not locked
-                "  AND (u.credentials_non_expired = TRUE OR u.credentials_non_expired IS NULL)" +    // by default users' credentials are not expired
-                "  AND r.enabled = TRUE";                                                           // by default roles are not enabled
+                "  AND u.enabled = TRUE" +                                                              // by default users are not enabled
+                "  AND (u.account_non_expired = TRUE OR u.account_non_expired IS NULL)" +               // by default users' account are not expired
+                "  AND (u.account_non_locked = TRUE OR u.account_non_locked IS NULL)" +                 // by default users are not locked
+                "  AND (u.credentials_non_expired = TRUE OR u.credentials_non_expired IS NULL)" +       // by default users' credentials are not expired
+                "  AND r.enabled = TRUE";                                                               // by default roles are not enabled
 
         final Query query = queryService.createNativeQuery(sql, BPermission.class);
         query.setParameter("userId", userId).setParameter("entityId", entityId);

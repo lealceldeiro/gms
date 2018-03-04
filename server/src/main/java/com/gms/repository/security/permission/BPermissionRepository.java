@@ -6,6 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
+import java.util.List;
+
 /**
  * BPermissionRepository
  *
@@ -32,4 +34,6 @@ public interface BPermissionRepository extends PagingAndSortingRepository<BPermi
     @Override
     @RestResource(exported = false)
     <S extends BPermission> Iterable<S> save(Iterable<S> it);
+
+    List<BPermission> findFirstByName(String name);
 }

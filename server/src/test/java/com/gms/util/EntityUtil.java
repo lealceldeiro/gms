@@ -33,8 +33,10 @@ public class EntityUtil {
      * @return A {@link EUser}
      */
     public static EUser getSampleUser(String random) {
-        return new EUser(EXAMPLE_USERNAME + random ,"a" + random + EXAMPLE_EMAIL, EXAMPLE_NAME + random +
+        EUser u = new EUser(EXAMPLE_USERNAME + random ,"a" + random + EXAMPLE_EMAIL, EXAMPLE_NAME + random +
                 random, EXAMPLE_LAST_NAME + random, EXAMPLE_PASSWORD + random);
+        u.setEnabled(true); // make user enabled for test which required
+        return u;
     }
 
     /**
