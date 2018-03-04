@@ -21,5 +21,6 @@ public interface BConfigurationRepository extends CrudRepository<BConfiguration,
     BConfiguration findFirstByKey (String key);
     BConfiguration findFirstByKeyAndUserId (String key, Long userId);
     List<BConfiguration> findAllByKeyEndingWith(String endingString);
+    Iterable<BConfiguration> findAllByKeyEndingWithAndUserIdIsNull(String endingString);
     List<BConfiguration> findAllByUserId(Long id);
 }

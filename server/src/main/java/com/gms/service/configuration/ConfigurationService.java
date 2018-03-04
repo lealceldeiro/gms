@@ -43,7 +43,6 @@ public class ConfigurationService {
     private final EOwnedEntityRepository entityRepository;
     private final BRoleRepository roleRepository;
     private final BAuthorizationRepository authRepository;
-    private final QueryService queryService;
 
     @Getter private boolean multiEntity;
     @Getter private boolean userRegistrationAllowed;
@@ -63,27 +62,46 @@ public class ConfigurationService {
         this.roleRepository = roleRepository;
         this.authRepository = authRepository;
         this.dc = defaultConst;
-        this.queryService = queryService;
 
         loadDBConfig();
     }
 
     //region default config
+
+    /**
+     * Returns whether the default configuration was set in place or not, buy counting the entries in the configuration
+     * table.
+     * @return <code>true</code> if there is any entry in the configuration table, <code>false</code> otherwise.
+     */
     public boolean configurationExist() {
         return configurationRepository.count() > 0;
     }
 
+    /**
+     * Creates the default system configuration. All not user-specific configurations are set in place after this method
+     * is called.
+     * @return <code>true</code> if the configurations are created properly, <code>false</code> otherwise.
+     */
     public boolean createDefaultConfig() {
         BConfiguration isMultiEntity = new BConfiguration(ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString(),
                 dc.getIsMultiEntity().toString());
         BConfiguration isUserRegistrationAllowed = new BConfiguration(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString(),
                 dc.getIsUserRegistrationAllowed().toString());
 
-        return
-                configurationRepository.save(isMultiEntity) != null &&
-                        configurationRepository.save(isUserRegistrationAllowed) != null;
+        if (configurationRepository.save(isMultiEntity) != null &&
+                configurationRepository.save(isUserRegistrationAllowed) != null) {
+            multiEntity = Boolean.parseBoolean(isMultiEntity.getValue());
+            userRegistrationAllowed = Boolean.parseBoolean(isUserRegistrationAllowed.getValue());
+            return true;
+        }
+        return false;
     }
 
+    /**
+     * Creates the default configuration related to the default user, owned entity and roles assigned to him/her over that
+     * owned entity. The required authorization of the default user is created after this method is called.
+     * @return <code>true</code> if the authorization is created properly, <code>false</code> otherwise.
+     */
     public boolean assignDefaultUserToEntityWithRole() {
         EUser u = userRepository.findFirstByUsernameOrEmail(dc.getUserAdminDefaultName(), dc.getUserAdminDefaultEmail());
         if (u != null) { //got default user
@@ -142,6 +160,8 @@ public class ConfigurationService {
                 default: throw new NotFoundEntityException(CONFIG_NOT_FOUND);
             }
         }
+        BConfiguration c = getValue(key);
+        if (c != null) return c;
         throw new NotFoundEntityException(CONFIG_NOT_FOUND);
     }
 
@@ -170,6 +190,15 @@ public class ConfigurationService {
         return map;
     }
 
+    /**
+     * Save various configurations at once.
+     * @param configs A {@link Map} of configurations. Every key in the Map is the configuration key, and the corresponding
+     *                value is the configuration value.
+     * @return <code>true</code> if the configurations are saved successfully, <code>false</code> otherwise.
+     * @throws NotFoundEntityException if any of the provided keys is not a valid key. Keys must correspond to any of the
+     * values in {@link ConfigKey} as String.
+     * @see ConfigKey
+     */
     public boolean saveConfig(Map<String, Object> configs) throws NotFoundEntityException {
         if (configs.get("user") != null) {
             long id = Long.parseLong(configs.remove("user").toString());
@@ -198,9 +227,19 @@ public class ConfigurationService {
         return allOK;
     }
 
-    public boolean saveConfig(Map<String, Object> configs, long userId) {
+    /**
+     * Save various configurations at once for a specific user.
+     * @param configs A {@link Map} of configurations. Every key in the Map is the configuration key, and the corresponding
+     *                value is the configuration value.
+     * @return <code>true</code> if the configurations are saved successfully, <code>false</code> otherwise.
+     * @throws NotFoundEntityException if any of the provided keys is not a valid key. Keys must correspond to any of the
+     * values in {@link ConfigKey} as String.
+     * @see ConfigKey
+     */
+    public boolean saveConfig(Map<String, Object> configs, long userId) throws NotFoundEntityException {
         boolean allOK = true;
         for (Map.Entry<String, Object> entry : configs.entrySet()) {
+            checkKey(entry.getKey().toUpperCase());
             if (!insertOrUpdateValue(entry.getKey(), entry.getValue().toString(), userId)) {
                 allOK = false;
             }
@@ -214,7 +253,7 @@ public class ConfigurationService {
      * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
      */
     public boolean setUserRegistrationAllowed(boolean userRegistrationAllowed) {
-        if (updateValue(ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER, userRegistrationAllowed)) {
+        if (insertOrUpdateValue(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER, userRegistrationAllowed)) {
             this.userRegistrationAllowed = userRegistrationAllowed;
             return true;
         }
@@ -227,7 +266,7 @@ public class ConfigurationService {
      * @return <code>true</code> if the configuration was set properly. <code>false</code> if not.
      */
     public boolean setIsMultiEntity(boolean isMultiEntity) {
-        if (updateValue(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER, isMultiEntity)) {
+        if (insertOrUpdateValue(ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER, isMultiEntity)) {
             this.multiEntity = isMultiEntity;
             return true;
         }
@@ -296,46 +335,20 @@ public class ConfigurationService {
         }
     }
 
-    private boolean updateValue(String key, String value) {
-        return queryService.createQuery("update BConfiguration set value = :value where key = :key")
-                .setParameter("key", key)
-                .setParameter("value", value)
-                .executeUpdate() > 0;
-    }
-
-    private boolean updateValue(String key, String value, long userId) {
-        return queryService.createQuery("update BConfiguration set value = :value where key = :key and userId = :userId")
-                .setParameter("key", key)
-                .setParameter("value", value)
-                .setParameter("userId", userId)
-                .executeUpdate() > 0;
-    }
-
-    private boolean updateValue(ConfigKey key, String value) {
-        return updateValue(String.valueOf(key), value);
-    }
-
-    private boolean updateValue(ConfigKey key, String value, long userId) {
-        return updateValue(String.valueOf(key), value, userId);
-    }
-
-    private boolean updateValue(ConfigKey key, Object value) {
-        return updateValue(String.valueOf(key), String.valueOf(value));
-    }
-
-    private boolean updateValue(ConfigKey key, Object value, long userId) {
-        return updateValue(String.valueOf(key), String.valueOf(value), userId);
-    }
-
     private boolean insertOrUpdateValue(String key, String value) {
+        key = key.toUpperCase();
         BConfiguration c = configurationRepository.findFirstByKey(key);
         if (c == null) {
             c = new BConfiguration(key, value);
+        }
+        else {
+            c.setValue(value);
         }
         return configurationRepository.save(c) != null;
     }
 
     private boolean insertOrUpdateValue(String key, String value, long userId) {
+        key = key.toUpperCase();
         BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key, userId);
         if (c == null) {
             c = new BConfiguration(key, value, userId);
@@ -363,11 +376,15 @@ public class ConfigurationService {
     }
 
     private String getValueByUser(String key, long userId) {
-        final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key, userId);
+        final BConfiguration c = configurationRepository.findFirstByKeyAndUserId(key.toUpperCase(), userId);
         if (c != null) {
             return c.getValue();
         }
         return null;
+    }
+
+    private BConfiguration getValue(String key) {
+        return configurationRepository.findFirstByKey(key.toUpperCase());
     }
     //endregion
 }
