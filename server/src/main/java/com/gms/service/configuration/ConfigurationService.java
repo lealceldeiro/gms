@@ -109,15 +109,9 @@ public class ConfigurationService {
             if (e != null) { //got entity
                 BRole role = roleRepository.findFirstByLabel(dc.getRoleAdminDefaultLabel());
                 if (role != null) {
-                    com.gms.domain.security.BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), role.getId());
-
-                    BAuthorization auth = new BAuthorization();
-                    auth.setBAuthorizationPk(pk);
-                    auth.setUser(u);
-                    auth.setEntity(e);
-                    auth.setRole(role);
-
-                    return authRepository.save(auth) != null;
+                    com.gms.domain.security.BAuthorization.BAuthorizationPk pk =
+                            new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), role.getId());
+                    return authRepository.save(new BAuthorization(pk, u, e, role)) != null;
                 }
             }
         }

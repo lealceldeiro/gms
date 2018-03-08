@@ -83,19 +83,8 @@ public class PermissionServiceTest {
         roleRepository.save(r);
 
         // create authorization with info about user, entity and role(s)
-        BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
-        pk.setUserId(u.getId());
-        pk.setEntityId(e.getId());
-        pk.setRoleId(r.getId());
-
-        BAuthorization auth = new BAuthorization();
-        auth.setBAuthorizationPk(pk);
-        auth.setUser(u);
-        auth.setEntity(e);
-        auth.setRole(r);
-
-        auth = authRepository.save(auth);
-        assertNotNull(auth);
+        BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r.getId());
+        assertNotNull(authRepository.save(new BAuthorization(pk, u, e, r)));
 
         // check if permissions are really associated to user over entity through BAuthorization (through BRole)
         final List<BPermission> permissions = permissionService.findPermissionsByUserIdAndEntityId(u.getId(), e.getId());

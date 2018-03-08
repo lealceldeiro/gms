@@ -93,15 +93,11 @@ public class UserService implements UserDetailsService{
         EOwnedEntity e = getOwnedEntity(entityUsername);
         BRole r;
 
-        for (Long iRoleId : rolesId) {
+        for (long iRoleId : rolesId) {
             r = roleRepository.findOne(iRoleId);
             if (r != null) {
                 pk = new BAuthorizationPk(u.getId(), e.getId(), r.getId());
-                newUserAuth = new BAuthorization();
-                newUserAuth.setBAuthorizationPk(pk);
-                newUserAuth.setUser(u);
-                newUserAuth.setRole(r);
-                newUserAuth.setEntity(e);
+                newUserAuth = new BAuthorization(pk, u, e, r);
                 if (add) {
                     authorizationRepository.save(newUserAuth);
                 }

@@ -134,17 +134,7 @@ public class BAuthorizationRepositoryTest {
     }
 
     private void createAuthorization(EUser user, BRole role, EOwnedEntity entity) {
-        BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
-        pk.setUserId(user.getId());
-        pk.setRoleId(role.getId());
-        pk.setEntityId(entity.getId());
-
-        BAuthorization authorization = new BAuthorization();
-        authorization.setBAuthorizationPk(pk);
-        authorization.setUser(user);
-        authorization.setRole(role);
-        authorization.setEntity(entity);
-
-        assertNotNull(authorizationRepository.save(authorization));
+        BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk(user.getId(), entity.getId(), role.getId());
+        assertNotNull(authorizationRepository.save(new BAuthorization(pk, user, entity, role)));
     }
 }

@@ -23,6 +23,7 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
 @Entity
 public class BAuthorization implements Serializable{
 
