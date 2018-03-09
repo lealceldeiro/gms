@@ -3,10 +3,12 @@ package com.gms.service.security.user;
 import com.gms.Application;
 import com.gms.domain.security.BAuthorization;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
+import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
 import com.gms.repository.security.authorization.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
+import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
@@ -21,8 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +45,7 @@ public class UserServiceTest {
 
     @Autowired private EUserRepository userRepository;
     @Autowired private BRoleRepository roleRepository;
+    @Autowired private BPermissionRepository permissionRepository;
     @Autowired private EOwnedEntityRepository entityRepository;
     @Autowired private BAuthorizationRepository authorizationRepository;
     @Autowired private AppService appService;
@@ -216,10 +221,63 @@ public class UserServiceTest {
 
     @Test
     public void loadUserByUsername() {
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+        UserDetails su = userService.loadUserByUsername(u.getUsername());
+        assertNotNull(su);
+        assertTrue(su.equals(u));
     }
 
     @Test
+//    @Transactional
     public void getUserAuthoritiesForToken() {
+        // first set of permissions
+        BPermission p1 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        assertNotNull(p1);
+        BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        assertNotNull(p2);
+
+        BRole r1 = EntityUtil.getSampleRole(random.nextString());
+        r1.addPermission(p1, p2);
+        assertNotNull(roleRepository.save(r1));
+
+        // second set of permissions
+        BPermission p3 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        assertNotNull(p3);
+        BPermission p4 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        assertNotNull(p4);
+        BRole r2 = EntityUtil.getSampleRole(random.nextString());
+        r2.addPermission(p3, p4);
+        assertNotNull(roleRepository.save(r2));
+
+        // user
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+
+        // authorities
+        // 1
+        BAuthorization.BAuthorizationPk pk1 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r1.getId());
+        BAuthorization auth1 = new BAuthorization(pk1, u, e, r1);
+        assertNotNull(authorizationRepository.save(auth1));
+        // 1
+        BAuthorization.BAuthorizationPk pk2 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r2.getId());
+        BAuthorization auth2 = new BAuthorization(pk2, u, e, r2);
+        assertNotNull(authorizationRepository.save(auth2));
+
+        // test
+        String separator = "--<<" + random.nextString() + ">>--"; // attempt to make a unique separator
+        String authForToken = userService.getUserAuthoritiesForToken(u.getUsername(), separator);
+        assertNotNull(authForToken);
+        assertTrue(!authForToken.equals(""));
+
+        List<String> permissionNames = Arrays.asList(authForToken.split(separator));
+        assertTrue(permissionNames.contains(p1.getName()));
+        assertTrue(permissionNames.contains(p2.getName()));
+        assertTrue(permissionNames.contains(p3.getName()));
+        assertTrue(permissionNames.contains(p4.getName()));
+
     }
 
     @Test
