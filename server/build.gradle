@@ -26,13 +26,10 @@ plugins {
     id "org.asciidoctor.convert" version "1.5.3"
 }
 
-configure(allprojects) {
-    apply plugin: "propdeps"
-    apply plugin: "propdeps-maven"
-    apply plugin: "propdeps-idea"
-    apply plugin: "propdeps-eclipse"
-}
-
+apply plugin: "propdeps"
+apply plugin: "propdeps-maven"
+apply plugin: "propdeps-idea"
+apply plugin: "propdeps-eclipse"
 apply plugin: "java"
 apply plugin: "eclipse"
 apply plugin: "idea"
