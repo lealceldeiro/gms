@@ -21,7 +21,7 @@ public interface BPermissionRepository extends PagingAndSortingRepository<BPermi
 
     @Override
     @RestResource(exported = false)
-    void delete(Long id);
+    void deleteById(Long id);
 
     @Override
     @RestResource(exported = false)
@@ -33,7 +33,7 @@ public interface BPermissionRepository extends PagingAndSortingRepository<BPermi
 
     @Override
     @RestResource(exported = false)
-    <S extends BPermission> Iterable<S> save(Iterable<S> it);
+    <S extends BPermission> Iterable<S> saveAll(Iterable<S> it);
 
     List<BPermission> findFirstByName(String name);
 }

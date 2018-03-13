@@ -141,7 +141,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
     }
 
@@ -164,7 +164,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
     }
 
@@ -191,7 +191,7 @@ public class BaseControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
     }
 }

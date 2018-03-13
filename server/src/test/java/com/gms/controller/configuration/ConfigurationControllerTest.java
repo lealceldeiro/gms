@@ -33,8 +33,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -199,7 +202,11 @@ public class ConfigurationControllerTest {
     @Test
     public void saveConfigForUser() throws Exception {
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
         SampleConfigurationPayload payload = new SampleConfigurationPayload(Locale.ENGLISH.toString(), e.getId());
+        payload.setUser(u.getId());
         ConstrainedFields fields = new ConstrainedFields(SampleConfigurationPayload.class);
 
         mvc.perform(
@@ -215,8 +222,23 @@ public class ConfigurationControllerTest {
                                 fields.withPath("is_user_registration_allowed_in_server").ignored().optional().description(IS_MULTI_ENTITY_DESC),
                                 fields.withPath("language").ignored().optional().description(LANGUAGE_DESC),
                                 fields.withPath("last_accessed_entity").ignored().optional().description(LAST_ACCESSED_ENT_DESC),
-                                fields.withPath("userId").ignored().optional().description(USER_ID_DESC)
+                                fields.withPath("user").ignored().optional().description(USER_ID_DESC)
                         )
                 ));
+    }
+
+    @Test
+    public void saveConfigForUserKO() throws Exception {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("language", "es");
+        payload.put("user", "invalidNumber");
+
+        mvc.perform(
+                post(apiPrefix + "/" + reqString)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+        ).andExpect(status().isUnprocessableEntity());
     }
 }

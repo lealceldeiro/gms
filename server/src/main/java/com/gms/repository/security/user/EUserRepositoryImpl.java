@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Iterator;
 
@@ -21,7 +22,7 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
 
     private final BCryptPasswordEncoder encoder;
 
-    private final EntityManager entityManager;
+    @PersistenceContext private EntityManager entityManager;
 
     @Override
     public <S extends EUser> S save(S s) {
@@ -30,7 +31,7 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
     }
 
     @Override
-    public <S extends EUser> Iterable<S> save(Iterable<S> it) {
+    public <S extends EUser> Iterable<S> saveAll(Iterable<S> it) {
         final Iterator<S> iterator = it.iterator();
         S s;
         while (iterator.hasNext()) {

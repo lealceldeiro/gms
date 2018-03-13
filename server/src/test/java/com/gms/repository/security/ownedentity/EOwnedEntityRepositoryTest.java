@@ -11,6 +11,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
@@ -111,10 +112,15 @@ public class EOwnedEntityRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("_embedded." + reqString).description("Array of owned entities"),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to owned entities"),
-                                fieldWithPath("page").description("Options for paging the owned entities")
-                        )
+                                RestDoc.getPagingfields(
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].name").description(EOwnedEntityMeta.name),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].username").description(EOwnedEntityMeta.username),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].description").description(EOwnedEntityMeta.description),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].id").description(GmsEntityMeta.id),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("eOwnedEntity")).ignored(),
+                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+                                ))
                 )
         );
     }
@@ -134,7 +140,8 @@ public class EOwnedEntityRepositoryTest {
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
                                 fieldWithPath("username").description(EOwnedEntityMeta.username),
                                 fieldWithPath("description").description(EOwnedEntityMeta.description),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned owned entity")
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("eOwnedEntity")).ignored()
                         )
                 )
         );
@@ -158,7 +165,8 @@ public class EOwnedEntityRepositoryTest {
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
                                 fieldWithPath("username").description(EOwnedEntityMeta.username),
                                 fieldWithPath("description").description(EOwnedEntityMeta.description),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned owned entity")
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("eOwnedEntity")).ignored()
                         )
                 )
         );

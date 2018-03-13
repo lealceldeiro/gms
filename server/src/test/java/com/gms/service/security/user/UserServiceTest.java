@@ -26,9 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -70,7 +68,7 @@ public class UserServiceTest {
     public void signServiceUpOK() {
         final boolean registration = configService.isUserRegistrationAllowed();
         if (!registration) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
         EUser u = getUser();
         u = userService.signUp(u, true);
@@ -80,7 +78,7 @@ public class UserServiceTest {
 
         assertEquals(u, ru);
         if (!registration) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
     }
 
@@ -88,13 +86,13 @@ public class UserServiceTest {
     public void signServiceUpKO() {
         final boolean registration = configService.isUserRegistrationAllowed();
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
 
         assertNull(userService.signUp(getUser(), true));
 
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
     }
 
@@ -102,7 +100,7 @@ public class UserServiceTest {
     public void signUpSuperRegistrationConditionallyOK() {
         final boolean registration = configService.isUserRegistrationAllowed();
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
         EUser u = getUser();
         u = userService.signUp(u, true, true);
@@ -112,7 +110,7 @@ public class UserServiceTest {
         assertEquals(u, ru);
 
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
     }
 
@@ -120,13 +118,13 @@ public class UserServiceTest {
     public void signUpSuperRegistrationConditionallyKO() {
         final boolean registration = configService.isUserRegistrationAllowed();
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
         EUser u = getUser();
         assertNull(userService.signUp(u, true, false));
 
         if (registration) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
     }
 
@@ -229,7 +227,6 @@ public class UserServiceTest {
     }
 
     @Test
-//    @Transactional
     public void getUserAuthoritiesForToken() {
         // first set of permissions
         BPermission p1 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
@@ -261,7 +258,7 @@ public class UserServiceTest {
         BAuthorization.BAuthorizationPk pk1 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r1.getId());
         BAuthorization auth1 = new BAuthorization(pk1, u, e, r1);
         assertNotNull(authorizationRepository.save(auth1));
-        // 1
+        // 2
         BAuthorization.BAuthorizationPk pk2 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r2.getId());
         BAuthorization auth2 = new BAuthorization(pk2, u, e, r2);
         assertNotNull(authorizationRepository.save(auth2));
@@ -282,10 +279,101 @@ public class UserServiceTest {
 
     @Test
     public void getRolesForUser() {
+        // user
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+        // entities
+        EOwnedEntity e1 = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e1);
+        EOwnedEntity e2 = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e2);
+
+        // roles
+        BRole r1 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r1);
+        BRole r2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r2);
+        BRole r3 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r3);
+        BRole r4 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r4);
+
+        // authorities
+        // entity 1, role 1 and 2
+        BAuthorization.BAuthorizationPk pk1 = new BAuthorization.BAuthorizationPk(u.getId(), e1.getId(), r1.getId());
+        BAuthorization auth1 = authorizationRepository.save(new BAuthorization(pk1, u, e1, r1));
+        assertNotNull(auth1);
+
+        BAuthorization.BAuthorizationPk pk2 = new BAuthorization.BAuthorizationPk(u.getId(), e1.getId(), r2.getId());
+        BAuthorization auth2 = authorizationRepository.save(new BAuthorization(pk2, u, e1, r2));
+        assertNotNull(auth2);
+
+        // entity 2, role 3 and 4
+        BAuthorization.BAuthorizationPk pk3 = new BAuthorization.BAuthorizationPk(u.getId(), e2.getId(), r3.getId());
+        BAuthorization auth3 = authorizationRepository.save(new BAuthorization(pk3, u, e2, r3));
+        assertNotNull(auth3);
+
+        BAuthorization.BAuthorizationPk pk4 = new BAuthorization.BAuthorizationPk(u.getId(), e2.getId(), r4.getId());
+        BAuthorization auth4 = authorizationRepository.save(new BAuthorization(pk4, u, e2, r4));
+        assertNotNull(auth4);
+
+        try {
+            final Map<String, List<BRole>> rolesForUser = userService.getRolesForUser(u.getUsername());
+            assertNotNull(rolesForUser);
+            assertTrue(!rolesForUser.isEmpty());
+
+            final Set<String> keySet = rolesForUser.keySet();
+
+            assertTrue(keySet.contains(e1.getUsername()));
+            assertTrue(keySet.contains(e2.getUsername()));
+
+            assertTrue(rolesForUser.get(e1.getUsername()).contains(r1));
+            assertTrue(rolesForUser.get(e1.getUsername()).contains(r2));
+
+            assertTrue(rolesForUser.get(e2.getUsername()).contains(r3));
+            assertTrue(rolesForUser.get(e2.getUsername()).contains(r4));
+        } catch (NotFoundEntityException e) {
+            e.printStackTrace();
+            fail("The username was not found");
+        }
     }
 
     @Test
     public void getRolesForUserOverEntity() {
+        // user
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+        // entities
+        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+
+        // roles
+        BRole r1 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r1);
+        BRole r2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r2);
+
+        // authorities
+        // entity 1, role 1 and 2
+        BAuthorization.BAuthorizationPk pk1 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r1.getId());
+        BAuthorization auth1 = authorizationRepository.save(new BAuthorization(pk1, u, e, r1));
+        assertNotNull(auth1);
+
+        BAuthorization.BAuthorizationPk pk2 = new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), r2.getId());
+        BAuthorization auth2 = authorizationRepository.save(new BAuthorization(pk2, u, e, r2));
+        assertNotNull(auth2);
+
+        try {
+            final List<BRole> roles = userService.getRolesForUserOverEntity(u.getUsername(), e.getUsername());
+            assertNotNull(roles);
+            assertTrue(!roles.isEmpty());
+
+            assertTrue(roles.contains(r1));
+            assertTrue(roles.contains(r2));
+        } catch (NotFoundEntityException ex) {
+            ex.printStackTrace();
+            fail("Either the username or the entity was not found");
+        }
     }
 
     private EUser getUser() {

@@ -29,6 +29,11 @@ public class AppService {
      private final OwnedEntityService oeService;
      private Boolean initialLoadOK = null;
 
+    /**
+     * Returns whether the application started successfully or not. In order to start the application successfully there
+     * are some requisites that must be fulfilled.
+     * @return <code>true</code> if the application started successfully, <code>false</code> otherwise.
+     */
      public boolean isInitialLoadOK() {
          if (initialLoadOK == null) {
              boolean ok = true;

@@ -3,6 +3,7 @@ package com.gms.controller.configuration;
 import com.gms.controller.BaseController;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.constant.ResourcePath;
+import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class ConfigurationController extends BaseController{
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void saveConfig(@RequestBody Map<String, Object> configs) throws NotFoundEntityException {
+    public void saveConfig(@RequestBody Map<String, Object> configs) throws NotFoundEntityException, GmsGeneralException {
         configService.saveConfig(configs);
     }
 

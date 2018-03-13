@@ -112,13 +112,13 @@ public class RestOwnedEntityControllerTest {
                         restDocResHandler.document(
                                 requestFields(
                                         fields.withPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                        fields.withPath("username").description("A unique string representation of the {@link #name}. Useful when there are other entities with the same {@link #name}"),
+                                        fields.withPath("username").description("A unique string representation of the {@LINK #name}. Useful when there are other entities with the same {@LINK #name}"),
                                         fields.withPath("description").description("A brief description of the entity")
                                 )
                         )
                 );
         if (!multiEntity) {
-            assertTrue(CONFIG_NOT_RESET, configService.setIsMultiEntity(false));
+            configService.setIsMultiEntity(false);
         }
     }
 
@@ -138,7 +138,7 @@ public class RestOwnedEntityControllerTest {
         ).andExpect(status().isConflict());
 
         if (multiEntity) {
-            assertTrue(CONFIG_NOT_RESET, configService.setIsMultiEntity(true));
+            configService.setIsMultiEntity(true);
         }
     }
 }

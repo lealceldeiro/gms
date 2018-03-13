@@ -1,6 +1,6 @@
 [[resource-roles-update-permission]]
 ==== Updating permissions
-A `PUT` request set the permissions for a role. This service sets the permissions with the id as the ones provided in the payload as the ones assigned to the specified role (through the id in the URL). This removes all previous permissions assigned to the role and adds the new ones.
+A `PUT` request set the permissions for a role. This service sets the permissions with the `id` as the ones provided in the payload as the ones assigned to the specified role (through the `id` in the URL). This removes all previous permissions assigned to the role and adds the new ones.
 
 include::../../util/H-REQUEST.adoc[]
 

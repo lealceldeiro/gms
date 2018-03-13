@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = "1.5.6.RELEASE"
+		springBootVersion = "2.0.0.RELEASE"
 		nodePluginVersion = "1.2.0"
         propdepsPluginVersion = "0.0.9.RELEASE"
         jwtVersion = "0.9.0"
@@ -19,6 +19,7 @@ buildscript {
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
 		classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
         classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
+        classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
 	}
 }
 
@@ -26,6 +27,7 @@ plugins {
     id "org.asciidoctor.convert" version "1.5.3"
 }
 
+apply plugin: "io.spring.dependency-management"
 apply plugin: "propdeps"
 apply plugin: "propdeps-maven"
 apply plugin: "propdeps-idea"
@@ -199,7 +201,7 @@ task processApiDocs(type: Copy, dependsOn: asciidoctor) {
 //endregion
 //endregion
 
-resetConfigTaskState.mustRunAfter(bootRun, war, clean)
+resetConfigTaskState.mustRunAfter(bootRun, bootWar, clean)
 
 clean.dependsOn(setDevConfig)
 bootRun.dependsOn(setDevConfig)
@@ -211,7 +213,7 @@ test {
 
 testClasses.dependsOn(setTestingConfig)
 
-war {
+bootWar {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
     baseName = getAppName()
 }

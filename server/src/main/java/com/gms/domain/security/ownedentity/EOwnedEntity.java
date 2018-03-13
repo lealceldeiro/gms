@@ -4,10 +4,10 @@ import com.gms.domain.GmsEntity;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.CodeI18N;
 import lombok.*;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

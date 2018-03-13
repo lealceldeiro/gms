@@ -14,6 +14,7 @@ class SampleConfigurationPayload {
     private String language;
     private Long last_accessed_entity;
     private Long userId;
+    private Long user;
 
     SampleConfigurationPayload(Boolean is_multi_entity_app_in_server, Boolean is_user_registration_allowed_in_server) {
         this.is_multi_entity_app_in_server = is_multi_entity_app_in_server;
@@ -63,5 +64,13 @@ class SampleConfigurationPayload {
 
     public void setLast_accessed_entity(Long last_accessed_entity) {
         this.last_accessed_entity = last_accessed_entity;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 }

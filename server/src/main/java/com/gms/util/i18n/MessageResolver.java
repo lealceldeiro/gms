@@ -19,6 +19,12 @@ public class MessageResolver {
         this.messageSource = messageSource;
     }
 
+    /**
+     * Gets the appropriate message according to the request locale given a code.
+     * @param code Message code in the resource bundle.
+     * @param args Arguments to be interpolated in the resultant message.
+     * @return A {@link String} which is the message associated to the specified <code>code</code>.
+     */
     @SuppressWarnings("WeakerAccess")
     public String getMessage(String code, String... args) {
         String[] realArgs = new String[args.length];
@@ -28,6 +34,11 @@ public class MessageResolver {
         return messageSource.getMessage(code, realArgs, code, LocaleContextHolder.getLocale());
     }
 
+    /**
+     * Gets the appropriate message according to the request locale given a code.
+     * @param code Message code in the resource bundle.
+     * @return A {@link String} which is the message associated to the specified <code>code</code>.
+     */
     public String getMessage(String code) {
         return getMessage(code, new String[0]);
     }

@@ -3,8 +3,8 @@ package com.gms.util.request.mapping.security;
 import com.gms.util.i18n.CodeI18N;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**

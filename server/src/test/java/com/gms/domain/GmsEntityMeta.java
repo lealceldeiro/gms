@@ -11,5 +11,6 @@ public class GmsEntityMeta {
 
     private GmsEntityMeta() {}
     public static final String id = "Identifier";
+    public static final String self = "Link to the resource itself";
 
 }

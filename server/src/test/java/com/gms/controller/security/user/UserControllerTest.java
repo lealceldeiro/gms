@@ -38,8 +38,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -245,24 +245,24 @@ public class UserControllerTest {
     private void initializeVars() {
         String r = random.nextString();
         BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(r));
-        p = permissionRepository.findOne(p.getId());
-        assertNotNull("Test permission could not be saved", p);
+        Optional<BPermission> op = permissionRepository.findById(p.getId());
+        assertTrue("Test permission could not be saved", op.isPresent());
 
         BRole ro = roleRepository.save(EntityUtil.getSampleRole(r));
-        ro = roleRepository.findOne(ro.getId());
-        assertNotNull("Test role could not be saved", ro);
+        Optional<BRole> oro = roleRepository.findById(ro.getId());
+        assertTrue("Test role could not be saved", oro.isPresent());
 
         BRole ro2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString())); // get another random string
-        ro2 = roleRepository.findOne(ro2.getId());
-        assertNotNull("Test role 2 could not be saved", ro2);
+        Optional<BRole> oro2 = roleRepository.findById(ro2.getId());
+        assertTrue("Test role 2 could not be saved", oro2.isPresent());
 
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(r));
-        e = entityRepository.findOne(e.getId());
-        assertNotNull("Test entity could not be saved", e);
+        Optional<EOwnedEntity> oe = entityRepository.findById(e.getId());
+        assertTrue("Test entity could not be saved", oe.isPresent());
 
         EUser u = userRepository.save(EntityUtil.getSampleUser(r));
-        u = userRepository.findOne(u.getId());
-        assertNotNull("Test user could not be saved", u);
+        Optional<EUser> ou = userRepository.findById(u.getId());
+        assertTrue("Test user could not be saved", ou.isPresent());
 
         ArrayList<Long> rolesId = new ArrayList<>(1);
         rolesId.add(ro.getId());

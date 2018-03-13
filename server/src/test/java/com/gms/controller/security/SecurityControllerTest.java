@@ -92,13 +92,14 @@ public class SecurityControllerTest {
         boolean initial = configService.isUserRegistrationAllowed();
         // allow new user registration
         if (!initial) {
-            assertTrue(configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
         final String r = random.nextString();
         EUser u = EntityUtil.getSampleUser(r);
         u.setEnabled(false);
 
         Resource<EUser> resource = new Resource<>(u);
+        //noinspection ConstantConditions
         ReflectionTestUtils.setField(resource, "links", null);
 
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);
@@ -127,7 +128,7 @@ public class SecurityControllerTest {
                 );
 
         if (!initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
     }
 
@@ -136,7 +137,7 @@ public class SecurityControllerTest {
         boolean initial = configService.isUserRegistrationAllowed();
 
         if (initial) {
-            assertTrue(configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
         Resource<EUser> resource = getSampleUserResource(random.nextString());
         mvc.perform(
@@ -145,7 +146,7 @@ public class SecurityControllerTest {
         ).andExpect(status().isConflict());
 
         if (initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(true));
+            configService.setUserRegistrationAllowed(true);
         }
     }
 

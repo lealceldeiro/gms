@@ -30,6 +30,11 @@ public class GmsError {
         this.errors.put(OTHERS, new LinkedList<>());
     }
 
+    /**
+     * Adds a new error <code>message</code> for the specified <code>field</code>.
+     * @param field Field to which the errors belongs.
+     * @param message Error message (generally a i18n code).
+     */
     public void addError(String field, String message) {
         if (errors.get(field) == null) {
             LinkedList<String> l = new LinkedList<>();
@@ -40,14 +45,27 @@ public class GmsError {
         }
     }
 
+    /**
+     * Adds a new error <code>message</code> for under the key {@link GmsError#OTHERS}.
+     * @param message Error message (generally a i18n code).
+     */
     public void addError(String message) {
         errors.get(OTHERS).add(message);
     }
 
+    /**
+     * Removes all errors set a <code>field</code>.
+     * @param field Field to ve removed the errors from.
+     */
     public void removeError(String field) {
         errors.remove(field);
     }
 
+    /**
+     * Removes a <code>message</code> error set in a <code>field</code>.
+     * @param field Field to ve removed the errors from.
+     * @param message Message to be removed.
+     */
     public void removeError(String field, String message) {
         if (errors.get(field) != null) {
             errors.get(field).remove(message);

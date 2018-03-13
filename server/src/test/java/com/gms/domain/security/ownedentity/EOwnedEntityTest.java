@@ -110,7 +110,7 @@ public class EOwnedEntityTest {
         propertyIsNot(name, username, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
     }
 
-    public void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {
+    private void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {
         EOwnedEntity e = new EOwnedEntity(name, username, description);
         assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
     }

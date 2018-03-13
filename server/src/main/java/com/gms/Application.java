@@ -5,12 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.persistence.EntityManagerFactory;
 
 
 /**
@@ -23,7 +20,7 @@ import javax.persistence.EntityManagerFactory;
  * Dec 12, 2017
  */
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer{
+public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -55,19 +52,6 @@ public class Application extends SpringBootServletInitializer{
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    /**Provides a SessionFactory (hibernate session) in case is needed. In order to require one a dependency to
-     * {@link org.hibernate.SessionFactory} must be set.
-     *
-     * @param factory {@link EntityManagerFactory}
-     * @return SessionFactory
-     */
-    @Bean
-    public HibernateJpaSessionFactoryBean getSessionFactory(EntityManagerFactory factory) {
-        HibernateJpaSessionFactoryBean fact = new HibernateJpaSessionFactoryBean();
-        fact.setEntityManagerFactory(factory);
-        return fact;
     }
 
     //endregion

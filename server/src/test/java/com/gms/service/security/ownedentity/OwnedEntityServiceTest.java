@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 /**
@@ -48,10 +50,10 @@ public class OwnedEntityServiceTest {
             final EOwnedEntity e = service.create(EntityUtil.getSampleEntity());
             assertNotNull(e);
 
-            EOwnedEntity er = repository.findOne(e.getId());
-            assertNotNull(er);
+            Optional<EOwnedEntity> er = repository.findById(e.getId());
+            assertTrue(er.isPresent());
 
-            assertEquals(e, er);
+            assertEquals(e, er.get());
 
         } catch (GmsGeneralException e) {
             e.printStackTrace();

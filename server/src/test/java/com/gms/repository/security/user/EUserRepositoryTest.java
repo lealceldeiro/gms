@@ -11,6 +11,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
@@ -115,9 +116,23 @@ public class EUserRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("_embedded." + reqString).description("Array of users"),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to users"),
-                                fieldWithPath("page").description("Options for paging the users")
+                                RestDoc.getPagingfields(
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].username").description(EUserMeta.username),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].email").description(EUserMeta.email),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].name").description(EUserMeta.name),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].lastName").description(EUserMeta.lastName),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].password").ignored(),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].enabled").description(EUserMeta.enabled),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].emailVerified").description(EUserMeta.emailVerified),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].accountNonExpired").description(EUserMeta.accountNonExpired),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].accountNonLocked").description(EUserMeta.accountNonLocked),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].credentialsNonExpired").description(EUserMeta.credentialsNonExpired),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].id").description(GmsEntityMeta.id),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("eUser")).ignored(),
+                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+
+                                )
                         )
                 )
         );
@@ -145,7 +160,8 @@ public class EUserRepositoryTest {
                                 fieldWithPath("accountNonExpired").optional().description(EUserMeta.accountNonExpired),
                                 fieldWithPath("accountNonLocked").optional().description(EUserMeta.accountNonLocked),
                                 fieldWithPath("credentialsNonExpired").optional().description(EUserMeta.credentialsNonExpired),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned user")
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("eUser")).ignored()
                         )
                 )
         );
@@ -177,7 +193,8 @@ public class EUserRepositoryTest {
                                 fieldWithPath("accountNonExpired").optional().description(EUserMeta.accountNonExpired),
                                 fieldWithPath("accountNonLocked").optional().description(EUserMeta.accountNonLocked),
                                 fieldWithPath("credentialsNonExpired").optional().description(EUserMeta.credentialsNonExpired),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned role")
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("eUser")).ignored()
                         )
                 )
         );

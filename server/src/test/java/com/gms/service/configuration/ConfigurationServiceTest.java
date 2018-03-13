@@ -13,6 +13,7 @@ import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.configuration.ConfigKey;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -134,7 +135,7 @@ public class ConfigurationServiceTest {
             fail("Configuration with key " + c.getKey() + " not found despite it was saved via repository.");
         }
 
-        configurationRepository.delete(c.getId());
+        configurationRepository.deleteById(c.getId());
         // re-set config values
         restoreAllServerConfig(list);
     }
@@ -181,7 +182,7 @@ public class ConfigurationServiceTest {
                 configs.get(keyLastAccessedEntity).equals(e.getId().toString()));
     }
 
-   @Test
+    @Test
     public void saveConfig() {
         // make pristine
         List<Iterable<BConfiguration>> list = deleteAllServerConfig();
@@ -192,7 +193,7 @@ public class ConfigurationServiceTest {
         configs.put(keyMultiEntityApp, true);
 
         try {
-            assertTrue(configurationService.saveConfig(configs));
+            configurationService.saveConfig(configs);
             BConfiguration cR = configurationRepository.findFirstByKey(keyUserRegistrationAllowed);
             assertNotNull(cR);
             assertTrue(cR.getValue().equals(Boolean.toString(false)));
@@ -202,6 +203,9 @@ public class ConfigurationServiceTest {
         } catch (NotFoundEntityException e) {
             e.printStackTrace();
             fail("At least one of the keys was not found.");
+        } catch (GmsGeneralException e) {
+            e.printStackTrace();
+            fail("The provided user key was not valid");
         }
 
         // re-set config values
@@ -217,7 +221,7 @@ public class ConfigurationServiceTest {
         configs.put(keyLang, "fr");
         configs.put(keyLastAccessedEntity, e.getId());
         try {
-            assertTrue(configurationService.saveConfig(configs, u.getId()));
+            configurationService.saveConfig(configs, u.getId());
         } catch (NotFoundEntityException e1) {
             e1.printStackTrace();
             fail("At least one of the keys was not found.");
@@ -228,7 +232,7 @@ public class ConfigurationServiceTest {
     public void setUserRegistrationAllowed() {
         final List<Iterable<BConfiguration>> list = deleteAllServerConfig();
 
-        assertTrue(configurationService.setUserRegistrationAllowed(true));
+        configurationService.setUserRegistrationAllowed(true);
         BConfiguration c = configurationRepository.findFirstByKey(keyUserRegistrationAllowed);
         assertNotNull(c);
         assertTrue(c.getValue().equals(Boolean.toString(true)));
@@ -241,7 +245,7 @@ public class ConfigurationServiceTest {
     public void setIsMultiEntity() {
         final List<Iterable<BConfiguration>> list = deleteAllServerConfig();
 
-        assertTrue(configurationService.setIsMultiEntity(true));
+        configurationService.setIsMultiEntity(true);
         BConfiguration c = configurationRepository.findFirstByKey(keyMultiEntityApp);
         assertNotNull(c);
         assertTrue(c.getValue().equals(Boolean.toString(true)));
@@ -268,7 +272,7 @@ public class ConfigurationServiceTest {
         EOwnedEntity entity = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
         assertNotNull(entity);
 
-        assertTrue(configurationService.setLastAccessedEntityIdByUser(user.getId(), entity.getId()));
+        configurationService.setLastAccessedEntityIdByUser(user.getId(), entity.getId());
 
         BConfiguration c = configurationRepository.findFirstByKeyAndUserId(keyLastAccessedEntity, user.getId());
         assertNotNull(c);
@@ -298,20 +302,17 @@ public class ConfigurationServiceTest {
         Iterable<BConfiguration> it2 = configurationRepository
                 .findAllByKeyEndingWithAndUserIdIsNull(keyMultiEntityApp);
         list.add(it2);
-        configurationRepository.delete(it);
-        configurationRepository.delete(it2);
+        configurationRepository.deleteAll(it);
+        configurationRepository.deleteAll(it2);
         return list;
     }
 
     private boolean restoreAllServerConfig(List<Iterable<BConfiguration>> list) {
-        boolean ok = true;
         for (Iterable<BConfiguration> it : list) {
             for (BConfiguration iConf : it) {
-                if (null == configurationRepository.save(new BConfiguration(iConf.getKey(), iConf.getValue()))) {
-                    ok = false;
-                }
+                configurationRepository.save(new BConfiguration(iConf.getKey(), iConf.getValue()));
             }
         }
-        return ok;
+        return true;
     }
 }

@@ -162,7 +162,7 @@ public class EUserTest {
         propertyIsNot(nameS, emailS, nameS, StringUtil.createJString(MAX_RANGE_10485760 + 1), passwordS, CodeI18N.FIELD_SIZE, "password property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
     }
 
-    public void propertyIsNot(String username, String email, String name, String lastName, String password, String messageTest, String assertMessage) {
+    private void propertyIsNot(String username, String email, String name, String lastName, String password, String messageTest, String assertMessage) {
         EUser e = new EUser(username, email, name, lastName, password);
         assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
     }

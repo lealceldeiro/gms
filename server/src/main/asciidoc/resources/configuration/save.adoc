@@ -1,6 +1,6 @@
 [[system-configuration-save]]
 ==== Setting configurations
-A `POST` or (`PUT`) request that insert or update a configuration. The key values you should pass as a body request can vary depending on the configuration parameter you would like to set. In this example the parameters `is_multi_entity_app_in_server` and `is_user_registration_allowed_in_server` are provided in order to set those values respectively.
+A `POST` or (`PUT`) request that inserts or updates a configuration. The key values you should pass as a body request can vary depending on the configuration parameter you would like to set. In this example the parameters `is_multi_entity_app_in_server` and `is_user_registration_allowed_in_server` are provided in order to set those values respectively.
 
 include::../../util/H-REQUEST.adoc[]
 

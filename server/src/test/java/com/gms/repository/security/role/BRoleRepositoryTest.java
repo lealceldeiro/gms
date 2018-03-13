@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.permission.BPermission;
+import com.gms.domain.security.permission.BPermissionMeta;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
@@ -13,6 +14,7 @@ import com.gms.util.GMSRandom;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
@@ -131,6 +133,7 @@ public class BRoleRepositoryTest {
     @Test
     public void listRole() throws Exception {
         repository.save(EntityUtil.getSampleRole(random.nextString()));
+
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
                         .header(authHeader, tokenType + " " + accessToken)
@@ -138,9 +141,16 @@ public class BRoleRepositoryTest {
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("_embedded." + reqString).description("Array of roles"),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to roles"),
-                                fieldWithPath("page").description("Options for paging the roles")
+                                RestDoc.getPagingfields(
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].label").description(BRoleMeta.label),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].id").description(GmsEntityMeta.id),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].description").description(BRoleMeta.description),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[].enabled").description(BRoleMeta.enabled),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("bRole")).ignored(),
+                                        fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("permissions")).description(BRoleMeta.permissionsLink),
+                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+                                )
                         )
                 )
         );
@@ -160,7 +170,9 @@ public class BRoleRepositoryTest {
                                 fieldWithPath("label").description(BRoleMeta.label),
                                 fieldWithPath("description").optional().description(BRoleMeta.description),
                                 fieldWithPath("enabled").optional().description(BRoleMeta.enabled),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned role")
+                                fieldWithPath(LinkPath.get("self")).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("bRole")).ignored(),
+                                fieldWithPath(LinkPath.get("permissions")).description(BRoleMeta.permissionsLink)
                         )
                 )
         );
@@ -184,7 +196,9 @@ public class BRoleRepositoryTest {
                                 fieldWithPath("label").description(BRoleMeta.label),
                                 fieldWithPath("description").description(BRoleMeta.description),
                                 fieldWithPath("enabled").description(BRoleMeta.enabled),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to the returned role")
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.get("bRole")).ignored(),
+                                fieldWithPath(LinkPath.get("permissions")).description(BRoleMeta.permissionsLink)
                         )
                 )
         );
@@ -210,13 +224,18 @@ public class BRoleRepositoryTest {
         repository.save(r);
         mvc.perform(
                 get(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s?" + pageSizeAttr +
-                "=" + pageSize).header(authHeader, tokenType + " " + accessToken)
+                        "=" + pageSize).header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andDo(
                 restDocResHandler.document(
                         responseFields(
-                                fieldWithPath("_embedded." + ResourcePath.PERMISSION).description("Array of permissions"),
-                                fieldWithPath("_links").description("Available links for requesting other webservices related to roles")
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].name").description(BPermissionMeta.name),
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].label").description(BPermissionMeta.label),
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].id").description(GmsEntityMeta.id),
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("bPermission")).ignored(),
+                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("roles")).ignored(),
+                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                         )
                 )
         );

@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -141,10 +142,10 @@ public class RoleServiceTest {
             assertTrue(!updated.contains(p1.getId()));
             assertTrue(!updated.contains(p2.getId()));
 
-            BRole role = roleRepository.findOne(r.getId());
-            assertNotNull(role);
+            Optional<BRole> role = roleRepository.findById(r.getId());
+            assertTrue(role.isPresent());
 
-            final Set<BPermission> rPermissions = role.getPermissions();
+            final Set<BPermission> rPermissions = role.get().getPermissions();
             assertTrue(!rPermissions.contains(p1));
             assertTrue(!rPermissions.contains(p2));
             assertTrue(rPermissions.contains(p3));

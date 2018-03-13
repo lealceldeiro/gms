@@ -30,6 +30,11 @@ public class OwnedEntityService {
 
 
     //region default entity
+
+    /**
+     * Creates the default Owned Entity according to the values regarding to this resource in {@link DefaultConst}
+     * @return The just created resource {@link EOwnedEntity}
+     */
     public EOwnedEntity createDefaultEntity() {
         return entityRepository.save(
                 new EOwnedEntity(dc.getEntityDefaultName(), dc.getEntityDefaultUsername(), dc.getEntityDefaultDescription())
@@ -37,6 +42,12 @@ public class OwnedEntityService {
     }
     //endregion
 
+    /**
+     * Creates and return an {@link EOwnedEntity}
+     * @param e {@link EOwnedEntity} data.
+     * @return The created {@link EOwnedEntity}
+     * @throws GmsGeneralException if the server configuration is no set in order to create new Owned Entities
+     */
     public EOwnedEntity create(EOwnedEntity e) throws GmsGeneralException {
         if (configService.isMultiEntity()) {
             return entityRepository.save(e);

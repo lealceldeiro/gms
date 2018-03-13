@@ -17,4 +17,5 @@ public class BRoleMeta {
     public static final String enabled = "Whether the role is enabled or not." +
             " If a role associated to a user is not enabled, the user will no be granted the" +
             " associated permissions to this role.";
+    public static final String permissionsLink = "Link to get the associated permissions to the role";
 }

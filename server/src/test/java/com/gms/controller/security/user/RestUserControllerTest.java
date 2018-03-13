@@ -102,8 +102,8 @@ public class RestUserControllerTest {
     public void register() throws Exception {
         final String r = random.nextString();
         EUser u = EntityUtil.getSampleUser(r);
-        u.setEnabled(true);
         Resource<EUser> resource = new Resource<>(u);
+        //noinspection ConstantConditions
         ReflectionTestUtils.setField(resource, "links", null);
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);
@@ -168,7 +168,7 @@ public class RestUserControllerTest {
 
         // restart initial config
         if (!initial) {
-            assertTrue(CONFIG_NOT_RESET, configService.setUserRegistrationAllowed(false));
+            configService.setUserRegistrationAllowed(false);
         }
     }
 }

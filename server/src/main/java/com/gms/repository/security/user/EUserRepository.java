@@ -24,5 +24,5 @@ public interface EUserRepository extends EUserRepositoryCustom, PagingAndSorting
     <S extends EUser> S save(S s);
 
     @Override
-    <S extends EUser> Iterable<S> save(Iterable<S> it);
+    <S extends EUser> Iterable<S> saveAll(Iterable<S> it);
 }
