@@ -2,7 +2,7 @@
 ==== Getting a user configurations
 A `GET` request lists all configurations related to a user by specifying the user's `id` it is associated to.
 
-The every configuration value, of course, vary depending on what it represents. It can be any kind of object. Also, notice in this example only two configuration values are being returned as an example but a user might have (or not) other configuration values set.
+The value of every configuration, of course, vary depending on what it represents. It can be any kind of object. Also, notice in this example only two configuration values are being returned as an example but a user might have (or not) other configuration values set.
 
 include::../../util/H-REQUEST.adoc[]
 
