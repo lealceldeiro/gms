@@ -6,10 +6,10 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/delete-user/curl-request.adoc[]
+include::{snippets}/e-user-repository-test/delete-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/delete-user/http-response.adoc[]
+include::{snippets}/e-user-repository-test/delete-user/http-response.adoc[]

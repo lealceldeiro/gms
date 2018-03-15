@@ -22,7 +22,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 public class RestDoc {
     public static final String APIDOC_LOCATION = "build/generated-snippets";
 
-    private static final String IDENTIFIER = "{method-name}";
+    private static final String IDENTIFIER = "{class-name}/{method-name}";
 
     private RestDoc() {
     }

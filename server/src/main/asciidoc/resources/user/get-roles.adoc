@@ -6,7 +6,7 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/get-roles-for-user/curl-request.adoc[]
+include::{snippets}/user-controller-test/get-roles-for-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
@@ -16,4 +16,4 @@ In this case, in the information provided for every role, is not included the `p
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/get-roles-for-user/http-response.adoc[]
+include::{snippets}/user-controller-test/get-roles-for-user/http-response.adoc[]

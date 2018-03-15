@@ -6,14 +6,14 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
-include::{snippets}/create-owned-entity/request-fields.adoc[]
+include::{snippets}/rest-owned-entity-controller-test/create-owned-entity/request-fields.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/create-owned-entity/curl-request.adoc[]
+include::{snippets}/rest-owned-entity-controller-test/create-owned-entity/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/create-owned-entity/http-response.adoc[]
+include::{snippets}/rest-owned-entity-controller-test/create-owned-entity/http-response.adoc[]

@@ -6,7 +6,7 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/add-permissions-role/curl-request.adoc[]
+include::{snippets}/role-controller-test/add-permissions-role/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
@@ -14,4 +14,4 @@ The result is a list with the `id` with which the operation was successful.
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/add-permissions-role/http-response.adoc[]
+include::{snippets}/role-controller-test/add-permissions-role/http-response.adoc[]

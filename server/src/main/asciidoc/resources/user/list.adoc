@@ -6,14 +6,14 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/list-user/curl-request.adoc[]
+include::{snippets}/e-user-repository-test/list-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/list-user/response-fields.adoc[]
+include::{snippets}/e-user-repository-test/list-user/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/list-user/http-response.adoc[]
+include::{snippets}/e-user-repository-test/list-user/http-response.adoc[]

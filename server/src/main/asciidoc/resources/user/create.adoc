@@ -6,17 +6,17 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
-include::{snippets}/register/request-fields.adoc[]
+include::{snippets}/rest-user-controller-test/register/request-fields.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/register/curl-request.adoc[]
+include::{snippets}/rest-user-controller-test/register/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/register/http-response.adoc[]
+include::{snippets}/rest-user-controller-test/register/http-response.adoc[]
 
 [[resource-user-signup]]
 ==== Signing up a new user
@@ -26,14 +26,14 @@ A `POST` request adds a new user. This service is only available if the system i
 
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
-include::{snippets}/sign-up-user-o-k/request-fields.adoc[]
+include::{snippets}/security-controller-test/sign-up-user-o-k/request-fields.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/sign-up-user-o-k/curl-request.adoc[]
+include::{snippets}/security-controller-test/sign-up-user-o-k/curl-request.adoc[]
 
 *Response*
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/sign-up-user-o-k/http-response.adoc[]
+include::{snippets}/security-controller-test/sign-up-user-o-k/http-response.adoc[]

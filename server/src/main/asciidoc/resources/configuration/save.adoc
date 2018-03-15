@@ -6,10 +6,10 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/save-config/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/save-config/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/save-config/http-response.adoc[]
+include::{snippets}/configuration-controller-test/save-config/http-response.adoc[]
