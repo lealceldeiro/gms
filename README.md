@@ -3,10 +3,10 @@ The project consists of two main (independent) modules (api server and front-end
 
 ## Ready to production
 * Packing as a WAR file with the API server only
-  1. From the location `server/` run `gradle war`
+  1. From the location `server/` run `gradle bootWar`
 * API + Angular Client
   1. You need to have [Node.js][4] installed
-  2. From the location `server/` run `gradle war -PbuildClient=true`
+  2. From the location `server/` run `gradle bootWar -PbuildClient=true`
 * This will create a WAR file inside `server/build/libs` ready to be deployed
 * Database configuration
   1. Create a [PostgreSQL][5] database
