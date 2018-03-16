@@ -3,6 +3,7 @@ package com.gms.repository.security.permission;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.repository.security.permission.dao.BPermissionDAO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @Transactional
 public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {
 
+    @Qualifier("PostgreSQLBPermissionDAO")
     private final BPermissionDAO permissionDAO;
 
     /**
