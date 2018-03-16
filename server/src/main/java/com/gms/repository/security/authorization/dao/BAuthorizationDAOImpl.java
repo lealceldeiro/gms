@@ -22,10 +22,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service("PostgreSQLBAuthorizationDAOImpl")
 @Transactional
-public class BAuthorizationDAOImpl implements BAuthorizationDAO {
+public class BAuthorizationDAOImpl extends BAuthorizationDAOImplBase implements BAuthorizationDAO {
 
     private final QueryService queryService;
-    private static final String USER_ID_PARAM = "userId";
 
     @SuppressWarnings("unchecked")
     @Override
@@ -65,17 +64,5 @@ public class BAuthorizationDAOImpl implements BAuthorizationDAO {
         processRolesVal(rawVal, r);
 
         return r;
-    }
-
-    private void processRolesVal(List<Object[]> rawVal, List<BRole> r) {
-        BRole role;
-        for (Object[] oVal : rawVal) {
-            role = new BRole(oVal[2].toString());
-            role.setId(Long.valueOf(oVal[0].toString()));
-            role.setVersion(Integer.valueOf(oVal[1].toString()));
-            role.setEnabled(Boolean.valueOf(oVal[4].toString()));
-            role.setDescription(oVal[3].toString());
-            r.add(role);
-        }
     }
 }
