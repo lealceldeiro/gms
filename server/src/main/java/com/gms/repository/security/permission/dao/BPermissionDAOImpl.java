@@ -3,7 +3,7 @@ package com.gms.repository.security.permission.dao;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.service.db.QueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -17,7 +17,7 @@ import java.util.List;
  * Mar 16, 2018
  */
 @RequiredArgsConstructor
-@Service("PostgreSQLBPermissionDAO")
+@Repository("PostgreSQLBPermissionDAO")
 @Transactional
 public class BPermissionDAOImpl implements BPermissionDAO {
 

@@ -3,7 +3,7 @@ package com.gms.repository.security.authorization.dao;
 import com.gms.domain.security.role.BRole;
 import com.gms.service.db.QueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -20,7 +20,7 @@ import java.util.Map;
  * Mar 16, 2018
  */
 @RequiredArgsConstructor
-@Service("PostgreSQLBAuthorizationDAOImpl")
+@Repository("PostgreSQLBAuthorizationDAOImpl")
 @Transactional
 public class BAuthorizationDAOImpl extends BAuthorizationDAOImplBase implements BAuthorizationDAO {
 
