@@ -4,20 +4,24 @@ A `DELETE` request removes some roles for a user from an owned entity.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/user-controller-test/remove-roles/path-parameters.adoc[]
+
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
-include::{snippets}/user-controller-test/remove-roles-from-user-user-o-k/request-fields.adoc[]
+include::{snippets}/user-controller-test/remove-roles/request-fields.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/user-controller-test/remove-roles-from-user-user-o-k/curl-request.adoc[]
+include::{snippets}/user-controller-test/remove-roles/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/user-controller-test/remove-roles-from-user-user-o-k/response-fields.adoc[]
+include::{snippets}/user-controller-test/remove-roles/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/user-controller-test/remove-roles-from-user-user-o-k/http-response.adoc[]
+include::{snippets}/user-controller-test/remove-roles/http-response.adoc[]

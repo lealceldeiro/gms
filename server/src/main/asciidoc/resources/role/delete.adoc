@@ -4,12 +4,16 @@ A `DELETE` request deletes a role's information.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/b-role-repository-test/delete-e/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/b-role-repository-test/delete-role/curl-request.adoc[]
+include::{snippets}/b-role-repository-test/delete-e/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/b-role-repository-test/delete-role/http-response.adoc[]
+include::{snippets}/b-role-repository-test/delete-e/http-response.adoc[]

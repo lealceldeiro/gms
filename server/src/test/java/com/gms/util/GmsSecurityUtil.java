@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**

@@ -10,6 +10,7 @@ package com.gms.domain.security.user;
 public class EUserMeta {
     private EUserMeta() {}
 
+    public static final String id = "User's identifier";
     public static final String username = "User's username";
     public static final String email = "User's email";
     public static final String name = "User's name";

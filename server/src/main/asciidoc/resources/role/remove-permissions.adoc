@@ -4,9 +4,13 @@ A `DELETE` request deletes some of the assigned permissions to a role. If there 
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/role-controller-test/remove-permissions/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/role-controller-test/remove-permissions-from-role/curl-request.adoc[]
+include::{snippets}/role-controller-test/remove-permissions/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
@@ -14,4 +18,4 @@ The result is a list with the `id` with which the operation was successful.
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/role-controller-test/remove-permissions-from-role/http-response.adoc[]
+include::{snippets}/role-controller-test/remove-permissions/http-response.adoc[]

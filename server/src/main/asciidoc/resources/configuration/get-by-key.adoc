@@ -6,12 +6,16 @@ In this example the key `is_server_multi_entity_app_in_server` was used to retri
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-QUERY-PARAMS.adoc[]
+
+include::{snippets}/configuration-controller-test/get-by-key/request-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-key/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/get-by-key/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-key/http-response.adoc[]
+include::{snippets}/configuration-controller-test/get-by-key/http-response.adoc[]

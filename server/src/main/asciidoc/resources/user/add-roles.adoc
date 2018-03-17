@@ -4,20 +4,24 @@ A `POST` request adds new roles for a user over an owned entity.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/user-controller-test/add-roles/path-parameters.adoc[]
+
 include::../../util/H-REQUEST-FIELDS.adoc[]
 
-include::{snippets}/user-controller-test/add-roles-to-user-o-k/request-fields.adoc[]
+include::{snippets}/user-controller-test/add-roles/request-fields.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/user-controller-test/add-roles-to-user-o-k/curl-request.adoc[]
+include::{snippets}/user-controller-test/add-roles/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/user-controller-test/add-roles-to-user-o-k/response-fields.adoc[]
+include::{snippets}/user-controller-test/add-roles/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/user-controller-test/add-roles-to-user-o-k/http-response.adoc[]
+include::{snippets}/user-controller-test/add-roles/http-response.adoc[]

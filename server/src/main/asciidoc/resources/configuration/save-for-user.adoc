@@ -6,12 +6,16 @@ In this example the parameters `language` and `last_accessed_entity` are provide
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-FIELDS.adoc[]
+
+include::{snippets}/configuration-controller-test/save-for-user/request-fields.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/configuration-controller-test/save-config-for-user/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/save-for-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/configuration-controller-test/save-config-for-user/http-response.adoc[]
+include::{snippets}/configuration-controller-test/save-for-user/http-response.adoc[]

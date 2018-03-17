@@ -6,6 +6,7 @@ import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
 import com.gms.service.AppService;
 import com.gms.service.security.user.UserService;
+import com.gms.util.GmsMockUtil;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.RestDoc;
 import com.gms.util.constant.DefaultConst;
@@ -29,7 +30,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -38,9 +38,8 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -83,11 +82,7 @@ public class SecurityConfigTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(this.springSecurityFilterChain)
-                .build();
+        mvc = GmsMockUtil.getMvcMockForwardUrlNotNull(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
@@ -96,7 +91,7 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void loginOK() throws Exception { // for documentation purposes
+    public void login() throws Exception { // for documentation purposes
         GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, restDocResHandler, false);
     }
 
@@ -108,8 +103,8 @@ public class SecurityConfigTest {
     @Test
     public void baseUrlPermitAll() throws Exception {
         int s = mvc.perform(get("/")).andReturn().getResponse().getStatus();
-        assert s != HttpStatus.FORBIDDEN.value();
-        assert s != HttpStatus.UNAUTHORIZED.value();
+        assertTrue(s != HttpStatus.FORBIDDEN.value());
+        assertTrue(s != HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test

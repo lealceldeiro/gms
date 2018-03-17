@@ -26,26 +26,26 @@ public class UserController extends BaseController{
 
     private final UserService userService;
 
-    @GetMapping(ResourcePath.ROLE + "s/{userUsername}")
-    public Map<String, List<BRole>> getRolesForUser(@PathVariable String userUsername) throws NotFoundEntityException {
-        return userService.getRolesForUser(userUsername);
+    @GetMapping(ResourcePath.ROLE + "s/{userId}")
+    public Map<String, List<BRole>> getRolesForUser(@PathVariable Long userId) throws NotFoundEntityException {
+        return userService.getRolesForUser(userId);
     }
 
-    @GetMapping(ResourcePath.ROLE + "s/{userUsername}/{entityUsername}")
-    public List<BRole> getRolesForUserOverEntity(@PathVariable String userUsername, @PathVariable String entityUsername)
+    @GetMapping(ResourcePath.ROLE + "s/{userId}/{entityId}")
+    public List<BRole> getRolesForUserOverEntity(@PathVariable Long userId, @PathVariable Long entityId)
             throws NotFoundEntityException {
-        return userService.getRolesForUserOverEntity(userUsername, entityUsername);
+        return userService.getRolesForUserOverEntity(userId, entityId);
     }
 
-    @PostMapping(ResourcePath.ROLE + "s/{userUsername}/{entityUsername}")
-    public List<Long> addRolesToUser(@PathVariable String userUsername, @PathVariable String entityUsername,
+    @PostMapping(ResourcePath.ROLE + "s/{userId}/{entityId}")
+    public List<Long> addRolesToUser(@PathVariable Long userId, @PathVariable Long entityId,
                                      @RequestBody List<Long> rolesId) throws NotFoundEntityException {
-        return userService.addRolesToUser(userUsername, entityUsername, rolesId);
+        return userService.addRolesToUser(userId, entityId, rolesId);
     }
 
-    @DeleteMapping(ResourcePath.ROLE + "s/{userUsername}/{entityUsername}")
-    public List<Long> removeRolesFromUser(@PathVariable String userUsername, @PathVariable String entityUsername,
+    @DeleteMapping(ResourcePath.ROLE + "s/{userId}/{entityId}")
+    public List<Long> removeRolesFromUser(@PathVariable Long userId, @PathVariable Long entityId,
                                           @RequestBody  List<Long> rolesId) throws NotFoundEntityException {
-        return userService.removeRolesFromUser(userUsername, entityUsername, rolesId);
+        return userService.removeRolesFromUser(userId, entityId, rolesId);
     }
 }

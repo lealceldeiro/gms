@@ -6,12 +6,16 @@ In this example the key `language` was used to retrieved its configuration value
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-QUERY-PARAMS.adoc[]
+
+include::{snippets}/configuration-controller-test/get-by-key-and-user/request-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-key-and-user/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/get-by-key-and-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-key-and-user/http-response.adoc[]
+include::{snippets}/configuration-controller-test/get-by-key-and-user/http-response.adoc[]

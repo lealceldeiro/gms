@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
+import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
@@ -27,7 +25,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.LinkedList;
@@ -35,10 +32,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -72,6 +69,7 @@ public class RoleControllerTest {
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
+    private static final String permissionsPath = ResourcePath.PERMISSION + "s";
     private String apiPrefix;
     private String authHeader;
     private String tokenType;
@@ -90,12 +88,7 @@ public class RoleControllerTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -106,30 +99,29 @@ public class RoleControllerTest {
 
 
     @Test
-    public void addPermissionsRole() throws Exception {
+    public void addPermissions() throws Exception {
         createSamplePermissions();
         BRole r = repository.save(EntityUtil.getSampleRole(random.nextString()));
         assertNotNull(r);
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(
-                post(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(permissions))
-        )
+        mvc.perform(post(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath, r.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("[]").description("Identifiers of permissions which are intended to be added to the role")
-                                )
+                .andDo(restDocResHandler.document(
+                        requestFields(
+                                fields.withPath("[]").description("Identifiers of permissions which are intended to be added to the role")
                         )
-                );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                ));
     }
 
     @Test
-    public void removePermissionsFromRole() throws Exception {
+    public void removePermissions() throws Exception {
         createSamplePermissions();
         BRole r = EntityUtil.getSampleRole(random.nextString());
         r.addPermission(p1, p2);
@@ -140,24 +132,23 @@ public class RoleControllerTest {
         assertTrue("The permission " + p2.getName() + " was not added properly", r.getPermissions().contains(p2));
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(permissions))
-        )
+        mvc.perform(delete(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath, r.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("[]").description("Identifiers of permissions which are intended to be removed from the role")
-                                )
+                .andDo(restDocResHandler.document(
+                        requestFields(
+                                fields.withPath("[]").description("Identifiers of permissions which are intended to be removed from the role")
                         )
-                );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                ));
     }
 
     @Test
-    public void updatePermissionsFromRole() throws Exception{
+    public void updatePermissions() throws Exception {
         createSamplePermissions();
         BRole r = EntityUtil.getSampleRole(random.nextString());
         r.addPermission(p1, p2);
@@ -171,20 +162,19 @@ public class RoleControllerTest {
         createSamplePermissions();
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(
-                put(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(permissions))
-        )
+        mvc.perform(put(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath , r.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("[]").description("Identifiers of permissions which are intended to be set for the role")
-                                )
+                .andDo(restDocResHandler.document(
+                        requestFields(
+                                fields.withPath("[]").description("Identifiers of permissions which are intended to be set for the role")
                         )
-                );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                ));
     }
 
     private void createSamplePermissions() {

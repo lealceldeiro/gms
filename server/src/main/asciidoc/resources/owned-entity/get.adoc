@@ -4,16 +4,20 @@ A `GET` request gets an owned entity's information.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/e-owned-entity-repository-test/get-e/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/get-owned-entity/curl-request.adoc[]
+include::{snippets}/e-owned-entity-repository-test/get-e/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/get-owned-entity/response-fields.adoc[]
+include::{snippets}/e-owned-entity-repository-test/get-e/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/get-owned-entity/http-response.adoc[]
+include::{snippets}/e-owned-entity-repository-test/get-e/http-response.adoc[]

@@ -6,10 +6,7 @@ import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -26,15 +23,14 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -71,13 +67,8 @@ public class EUserRepositoryTest {
     private String tokenType;
     private String accessToken;
     private String pageSizeAttr;
-    private int pageSize;
+    private String pageSize;
     private static final String reqString = ResourcePath.USER;
-    private static final String username = "SampleUsername-";
-    private static final String email = "sample@email.com-";
-    private static final String name = "SampleName-";
-    private static final String lastName = "SampleLastName-";
-    private static final String password = "SamplePassword-";
 
     private EUser user;
     //endregion
@@ -89,12 +80,7 @@ public class EUserRepositoryTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc =  GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -106,15 +92,14 @@ public class EUserRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //R
     @Test
-    public void listUser() throws Exception {
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+    public void list() throws Exception {
+        mvc.perform(get(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .param(pageSizeAttr, pageSize))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 RestDoc.getPagingfields(
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].username").description(EUserMeta.username),
@@ -134,19 +119,17 @@ public class EUserRepositoryTest {
 
                                 )
                         )
-                )
-        );
+                ));
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void getE() throws Exception {
         createSampleUser();
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + user.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}", user.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("username").description(EUserMeta.username),
@@ -163,23 +146,24 @@ public class EUserRepositoryTest {
                                 fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
                                 fieldWithPath(LinkPath.get("eUser")).ignored()
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EUserMeta.id))
+                ));
     }
 
-    //U
     @Test
-    public void updateUser() throws Exception {
+    public void update() throws Exception {
         createSampleUser();
         EUser e2 = EntityUtil.getSampleUser(random.nextString());
         e2.setEnabled(true);
         mvc.perform(
-                put(apiPrefix + "/" + reqString + "/" + user.getId())
+                put(apiPrefix + "/" + reqString + "/{id}", user.getId())
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(e2))
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+                        .content(objectMapper.writeValueAsString(e2)))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("username").description(EUserMeta.username),
@@ -196,19 +180,22 @@ public class EUserRepositoryTest {
                                 fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
                                 fieldWithPath(LinkPath.get("eUser")).ignored()
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EUserMeta.id))
+                ));
     }
 
-    //D
     @Test
-    public void deleteUser() throws Exception {
+    public void deleteE() throws Exception {
         createSampleUser();
-        mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + user.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNoContent());
+        mvc.perform(delete(apiPrefix + "/" + reqString + "/{id}", user.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EUserMeta.id))
+                ));
     }
 
     private void createSampleUser() {

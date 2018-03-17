@@ -4,9 +4,13 @@ A `PUT` request set the permissions for a role. This service sets the permission
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/role-controller-test/update-permissions/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/role-controller-test/update-permissions-from-role/curl-request.adoc[]
+include::{snippets}/role-controller-test/update-permissions/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
@@ -14,4 +18,4 @@ The result is a list with the `id` with which the operation was successful.
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/role-controller-test/update-permissions-from-role/http-response.adoc[]
+include::{snippets}/role-controller-test/update-permissions/http-response.adoc[]

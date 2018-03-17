@@ -6,10 +6,7 @@ import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
@@ -28,15 +25,12 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -74,8 +68,6 @@ public class RestUserControllerTest {
     private String accessToken;
     private String apiPrefix;
 
-    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
-
     private final GMSRandom random = new GMSRandom();
 
     @SuppressWarnings("Duplicates")
@@ -83,12 +75,7 @@ public class RestUserControllerTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -97,9 +84,8 @@ public class RestUserControllerTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //C
     @Test
-    public void register() throws Exception {
+    public void create() throws Exception {
         final String r = random.nextString();
         EUser u = EntityUtil.getSampleUser(r);
         Resource<EUser> resource = new Resource<>(u);
@@ -112,24 +98,22 @@ public class RestUserControllerTest {
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("username").description(EUserMeta.username),
-                                        fields.withPath("email").description(EUserMeta.email),
-                                        fields.withPath("name").description(EUserMeta.name),
-                                        fields.withPath("lastName").description(EUserMeta.lastName),
-                                        fields.withPath("password").description(EUserMeta.password),
-                                        fields.withPath("enabled").optional().description(EUserMeta.enabled),
-                                        fields.withPath("authorities").optional().ignored(),
-                                        fields.withPath("emailVerified").optional().ignored(),
-                                        fields.withPath("accountNonExpired").optional().ignored(),
-                                        fields.withPath("accountNonLocked").optional().ignored(),
-                                        fields.withPath("credentialsNonExpired").optional().ignored(),
-                                        fields.withPath("links").optional().ignored()
-                                )
+                .andDo(restDocResHandler.document(
+                        requestFields(
+                                fields.withPath("username").description(EUserMeta.username),
+                                fields.withPath("email").description(EUserMeta.email),
+                                fields.withPath("name").description(EUserMeta.name),
+                                fields.withPath("lastName").description(EUserMeta.lastName),
+                                fields.withPath("password").description(EUserMeta.password),
+                                fields.withPath("enabled").optional().description(EUserMeta.enabled),
+                                fields.withPath("authorities").optional().ignored(),
+                                fields.withPath("emailVerified").optional().ignored(),
+                                fields.withPath("accountNonExpired").optional().ignored(),
+                                fields.withPath("accountNonLocked").optional().ignored(),
+                                fields.withPath("credentialsNonExpired").optional().ignored(),
+                                fields.withPath("links").optional().ignored()
                         )
-                );
+                ));
     }
 
     @Test

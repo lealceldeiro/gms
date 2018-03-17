@@ -6,10 +6,7 @@ import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.ownedentity.EOwnedEntityMeta;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -26,15 +23,14 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -71,11 +67,8 @@ public class EOwnedEntityRepositoryTest {
     private String tokenType;
     private String accessToken;
     private String pageSizeAttr;
-    private int pageSize;
+    private String pageSize;
     private static final String reqString = ResourcePath.OWNED_ENTITY;
-    private static final String name = "SampleName-";
-    private static final String username = "SampleUsername-";
-    private static final String description = "SampleDescription-";
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -85,12 +78,7 @@ public class EOwnedEntityRepositoryTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc =  GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -102,15 +90,14 @@ public class EOwnedEntityRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //R
     @Test
-    public void listOwnedEntity() throws Exception {
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+    public void list() throws Exception {
+        mvc.perform(get(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .param(pageSizeAttr, pageSize))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 RestDoc.getPagingfields(
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].name").description(EOwnedEntityMeta.name),
@@ -121,20 +108,18 @@ public class EOwnedEntityRepositoryTest {
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("eOwnedEntity")).ignored(),
                                         fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                                 ))
-                )
-        );
+                ));
     }
 
     @Test
-    public void getOwnedEntity() throws Exception {
+    public void getE() throws Exception {
         String r = random.nextString();
         EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
@@ -143,23 +128,23 @@ public class EOwnedEntityRepositoryTest {
                                 fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
                                 fieldWithPath(LinkPath.get("eOwnedEntity")).ignored()
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EOwnedEntityMeta.id))
+                ));
     }
 
-    //U
     @Test
-    public void updateOwnedEntity() throws Exception {
+    public void update() throws Exception {
         String r = random.nextString();
         EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
         EOwnedEntity e2 = EntityUtil.getSampleEntity(random.nextString());
-        mvc.perform(
-                put(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(e2))
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(put(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(e2)))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("name").description(EOwnedEntityMeta.name),
@@ -168,19 +153,22 @@ public class EOwnedEntityRepositoryTest {
                                 fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
                                 fieldWithPath(LinkPath.get("eOwnedEntity")).ignored()
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EOwnedEntityMeta.id))
+                ));
     }
 
-    //D
     @Test
-    public void deleteOwnedEntity() throws Exception {
+    public void deleteE() throws Exception {
         String r = random.nextString();
         EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(r));
-        mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNoContent());
+        mvc.perform(delete(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(EOwnedEntityMeta.id))
+                ));
     }
 }

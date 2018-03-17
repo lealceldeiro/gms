@@ -2,13 +2,18 @@ package com.gms.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.user.EUser;
+import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
+import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.EntityUtil;
 import com.gms.util.GMSRandom;
+import com.gms.util.GmsMockUtil;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
@@ -27,7 +32,6 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
@@ -36,8 +40,7 @@ import java.util.ArrayList;
 import static com.gms.util.EntityUtil.getSampleUserResource;
 import static com.gms.util.StringUtil.*;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -56,6 +59,8 @@ public class BaseControllerTest {
     @Autowired private AppService appService;
     @Autowired private ConfigurationService configService;
     @Autowired private MessageResolver msg;
+    @Autowired private EUserRepository userRepository;
+    @Autowired private EOwnedEntityRepository entityRepository;
 
     private MockMvc mvc;
 
@@ -64,20 +69,16 @@ public class BaseControllerTest {
     private String accessToken;
     private String apiPrefix;
 
-    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
-
     private final GMSRandom random = new GMSRandom(10);
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilter(this.springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
-        apiPrefix = dc.getApiBasePath();
+        mvc =  GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
+        apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
@@ -86,14 +87,30 @@ public class BaseControllerTest {
 
     @Test
     public void handleNotFoundEntityException() throws Exception {
-        final String testUsername = "SampleUsername-" + random.nextString();
-        mvc.perform(
-                post(apiPrefix + "/roles/" + testUsername + "/" + testUsername)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(new ArrayList<>()))
-        )
-                .andExpect(status().isNotFound());
+        doNotFound("user");
+        doNotFound("entity");
+    }
+
+    private void doNotFound(String whichOne) throws Exception  {
+        final Long INVALID_ID = -999999999999999999L;
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
+        Long userId = INVALID_ID;
+        Long entityId = e.getId();
+
+        switch (whichOne) {
+            case "entity":
+                entityId = INVALID_ID;
+                userId = u.getId();
+                break;
+            default: //"user"
+        }
+
+        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}", userId, entityId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(new ArrayList<>()))
+        ).andExpect(status().isNotFound());
     }
 
     @Test

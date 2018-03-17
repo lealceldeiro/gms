@@ -4,16 +4,20 @@ A `PUT` (full update) or `PATCH` (partial update) request updates an owned entit
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/e-owned-entity-repository-test/update/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/update-owned-entity/curl-request.adoc[]
+include::{snippets}/e-owned-entity-repository-test/update/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/update-owned-entity/response-fields.adoc[]
+include::{snippets}/e-owned-entity-repository-test/update/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/e-owned-entity-repository-test/update-owned-entity/http-response.adoc[]
+include::{snippets}/e-owned-entity-repository-test/update/http-response.adoc[]

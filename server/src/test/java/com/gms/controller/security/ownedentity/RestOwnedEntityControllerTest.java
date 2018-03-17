@@ -5,10 +5,7 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
@@ -25,14 +22,11 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -69,7 +63,6 @@ public class RestOwnedEntityControllerTest {
     private String tokenType;
     private String accessToken;
     private static final String reqString = ResourcePath.OWNED_ENTITY;
-    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -79,12 +72,7 @@ public class RestOwnedEntityControllerTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -94,7 +82,7 @@ public class RestOwnedEntityControllerTest {
     }
 
     @Test
-    public void createOwnedEntity() throws Exception {
+    public void create() throws Exception {
         final boolean multiEntity = configService.isMultiEntity();
         if (!multiEntity) {
             configService.setIsMultiEntity(true);
@@ -102,28 +90,25 @@ public class RestOwnedEntityControllerTest {
         EOwnedEntity e = EntityUtil.getSampleEntity(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
 
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(e))
-        ).andExpect(status().isCreated())
-                .andDo(
-                        restDocResHandler.document(
-                                requestFields(
-                                        fields.withPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                        fields.withPath("username").description("A unique string representation of the {@LINK #name}. Useful when there are other entities with the same {@LINK #name}"),
-                                        fields.withPath("description").description("A brief description of the entity")
-                                )
+        mvc.perform(post(apiPrefix + "/" + reqString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(e)))
+                .andExpect(status().isCreated())
+                .andDo(restDocResHandler.document(
+                        requestFields(
+                                fields.withPath("name").description("Natural name which is used commonly for referring to the entity"),
+                                fields.withPath("username").description("A unique string representation of the {@LINK #name}. Useful when there are other entities with the same {@LINK #name}"),
+                                fields.withPath("description").description("A brief description of the entity")
                         )
-                );
+                ));
         if (!multiEntity) {
             configService.setIsMultiEntity(false);
         }
     }
 
     @Test
-    public void createOwnedEntityKO() throws Exception {
+    public void createKO() throws Exception {
         final boolean multiEntity = configService.isMultiEntity();
         if (multiEntity) {
             configService.setIsMultiEntity(false);

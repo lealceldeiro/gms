@@ -144,7 +144,7 @@ public class UserServiceTest {
         assertTrue(ids.size() == 2);    // make sure later a java.lang.ArrayIndexOutOfBoundsException is not thrown
         List<Long> added = null;
         try {
-            added = userService.addRolesToUser(u.getUsername(), e.getUsername(), ids);
+            added = userService.addRolesToUser(u.getId(), e.getId(), ids);
             assertNotNull(added);
             assertTrue(added.size() == ids.size());
             assertTrue(added.contains(ids.get(0)));
@@ -201,7 +201,7 @@ public class UserServiceTest {
         // check the service method
         List<Long> removed = null;
         try {
-             removed = userService.removeRolesFromUser(u.getUsername(), e.getUsername(), ids);
+             removed = userService.removeRolesFromUser(u.getId(), e.getId(), ids);
         } catch (NotFoundEntityException e1) {
             e1.printStackTrace();
             fail("Roles could not be removed");
@@ -318,7 +318,7 @@ public class UserServiceTest {
         assertNotNull(auth4);
 
         try {
-            final Map<String, List<BRole>> rolesForUser = userService.getRolesForUser(u.getUsername());
+            final Map<String, List<BRole>> rolesForUser = userService.getRolesForUser(u.getId());
             assertNotNull(rolesForUser);
             assertTrue(!rolesForUser.isEmpty());
 
@@ -364,7 +364,7 @@ public class UserServiceTest {
         assertNotNull(auth2);
 
         try {
-            final List<BRole> roles = userService.getRolesForUserOverEntity(u.getUsername(), e.getUsername());
+            final List<BRole> roles = userService.getRolesForUserOverEntity(u.getId(), e.getId());
             assertNotNull(roles);
             assertTrue(!roles.isEmpty());
 

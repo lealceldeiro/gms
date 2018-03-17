@@ -6,10 +6,7 @@ import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
@@ -31,15 +28,12 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.gms.util.EntityUtil.getSampleUserResource;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -67,28 +61,21 @@ public class SecurityControllerTest {
     private String refreshToken;
     private String apiPrefix;
 
-    private static final String CONFIG_NOT_RESET = "Configuration could not be re-set to its original state";
-
     private final GMSRandom random = new GMSRandom(10);
 
     @Before
     public void setUp() throws Exception{
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
+
         apiPrefix = dc.getApiBasePath();
 
         refreshToken = GmsSecurityUtil.createSuperAdminRefreshToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //C
     @Test
-    public void signUpUserOK() throws Exception {
+    public void signUp() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
         // allow new user registration
         if (!initial) {
@@ -133,7 +120,7 @@ public class SecurityControllerTest {
     }
 
     @Test
-    public void signUpUserKO() throws Exception {
+    public void signUpKO() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
 
         if (initial) {
@@ -151,7 +138,7 @@ public class SecurityControllerTest {
     }
 
     @Test
-    public void refreshTokenOK() throws Exception {
+    public void refreshToken() throws Exception {
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
         final ConstrainedFields fields = new ConstrainedFields(RefreshTokenPayload.class);
         mvc.perform(

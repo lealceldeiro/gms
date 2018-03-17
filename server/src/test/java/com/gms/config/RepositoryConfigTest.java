@@ -6,6 +6,7 @@ import com.gms.domain.security.user.EUser;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
 import com.gms.util.EntityUtil;
+import com.gms.util.GmsMockUtil;
 import com.gms.util.GmsSecurityUtil;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
@@ -20,12 +21,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -61,14 +60,12 @@ public class RepositoryConfigTest {
     private static final String reqString = ResourcePath.USER;
     //endregion
 
+    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc =  GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -85,14 +82,14 @@ public class RepositoryConfigTest {
     public void exposeIdsForDomainClasses() throws Exception{
         EUser u = repository.save(EntityUtil.getSampleUser());
         String result = mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + u.getId())
+                get(apiPrefix + "/" + reqString + "/{userId}", u.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
         ).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         final String id = GmsSecurityUtil.getValueInJSON(result, "id");
-        assertTrue("id not found", id != null && !id.equals(""));
+        assertTrue("Entity id not found", id != null && !id.equals(""));
         assertTrue(u.getId().equals(Long.valueOf(id)));
     }
 

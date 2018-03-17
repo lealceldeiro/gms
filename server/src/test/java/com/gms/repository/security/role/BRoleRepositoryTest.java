@@ -9,10 +9,7 @@ import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -30,14 +27,13 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -75,10 +71,9 @@ public class BRoleRepositoryTest {
     private String tokenType;
     private String accessToken;
     private String pageSizeAttr;
-    private int pageSize;
+    private String pageSize;
     private static final String reqString = ResourcePath.ROLE;
     private static final String label = "SampleLabel-";
-    private static final String description = "SampleDescription-";
     //endregion
 
     private final GMSRandom random = new GMSRandom();
@@ -88,12 +83,7 @@ public class BRoleRepositoryTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc =  GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -105,18 +95,16 @@ public class BRoleRepositoryTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
-    //C
     @Test
-    public void createRole() throws Exception {
+    public void create() throws Exception {
         BRole e = EntityUtil.getSampleRole(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(BRole.class);
 
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(e))
-        ).andExpect(status().isCreated())
+        mvc.perform(post(apiPrefix + "/" + reqString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(authHeader, tokenType + " " + accessToken)
+                .content(objectMapper.writeValueAsString(e)))
+                .andExpect(status().isCreated())
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
@@ -129,17 +117,16 @@ public class BRoleRepositoryTest {
                 );
     }
 
-    //R
     @Test
-    public void listRole() throws Exception {
+    public void list() throws Exception {
         repository.save(EntityUtil.getSampleRole(random.nextString()));
 
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "?" + pageSizeAttr + "=" + pageSize)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(get(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .param(pageSizeAttr, pageSize))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 RestDoc.getPagingfields(
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].label").description(BRoleMeta.label),
@@ -152,19 +139,17 @@ public class BRoleRepositoryTest {
                                         fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                                 )
                         )
-                )
-        );
+                ));
     }
 
     @Test
-    public void getRole() throws Exception {
+    public void getE() throws Exception {
         BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("label").description(BRoleMeta.label),
@@ -174,23 +159,23 @@ public class BRoleRepositoryTest {
                                 fieldWithPath(LinkPath.get("bRole")).ignored(),
                                 fieldWithPath(LinkPath.get("permissions")).description(BRoleMeta.permissionsLink)
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
+                ));
     }
 
-    //U
     @Test
-    public void updateRole() throws Exception {
+    public void update() throws Exception {
         BRole e = repository.save(new BRole(label + random.nextString()));
         BRole e2 = EntityUtil.getSampleRole(random.nextString());
 
-        mvc.perform(
-                put(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(e2))
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(put(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(e2)))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
                                 fieldWithPath("id").description(GmsEntityMeta.id),
                                 fieldWithPath("label").description(BRoleMeta.label),
@@ -200,45 +185,52 @@ public class BRoleRepositoryTest {
                                 fieldWithPath(LinkPath.get("bRole")).ignored(),
                                 fieldWithPath(LinkPath.get("permissions")).description(BRoleMeta.permissionsLink)
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
+                ));
     }
 
-    //D
     @Test
-    public void deleteRole() throws Exception {
+    public void deleteE() throws Exception {
         BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
-        mvc.perform(
-                delete(apiPrefix + "/" + reqString + "/" + e.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNoContent());
+        mvc.perform(delete(apiPrefix + "/" + reqString + "/{id}", e.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
+                ));
     }
 
     @Test
-    public void getPermissionForRole() throws Exception {
+    public void getPermissions() throws Exception {
         BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         BRole r = EntityUtil.getSampleRole(random.nextString());
         r.addPermission(p, p2);
         repository.save(r);
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + r.getId() + "/" + ResourcePath.PERMISSION + "s?" + pageSizeAttr +
-                        "=" + pageSize).header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andDo(
-                restDocResHandler.document(
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}/" + ResourcePath.PERMISSION + "s", r.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .param(pageSizeAttr, pageSize))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
                         responseFields(
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].name").description(BPermissionMeta.name),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].label").description(BPermissionMeta.label),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].id").description(GmsEntityMeta.id),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("bPermission")).ignored(),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("roles")).ignored(),
-                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+                                RestDoc.getPagingfields(
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].name").description(BPermissionMeta.name),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].label").description(BPermissionMeta.label),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].id").description(GmsEntityMeta.id),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("bPermission")).ignored(),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("roles")).ignored(),
+                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+                                )
                         )
-                )
-        );
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
+                ));
     }
 
 }

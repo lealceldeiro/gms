@@ -4,12 +4,16 @@ A `POST` or (`PUT`) request that inserts or updates a configuration. The key val
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-FIELDS.adoc[]
+
+include::{snippets}/configuration-controller-test/save/request-fields.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/configuration-controller-test/save-config/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/save/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/configuration-controller-test/save-config/http-response.adoc[]
+include::{snippets}/configuration-controller-test/save/http-response.adoc[]

@@ -6,16 +6,20 @@ The value of every configuration, of course, vary depending on what it represent
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/configuration-controller-test/get-by-user/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-user/curl-request.adoc[]
+include::{snippets}/configuration-controller-test/get-by-user/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-user/response-fields.adoc[]
+include::{snippets}/configuration-controller-test/get-by-user/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/configuration-controller-test/get-config-by-user/http-response.adoc[]
+include::{snippets}/configuration-controller-test/get-by-user/http-response.adoc[]

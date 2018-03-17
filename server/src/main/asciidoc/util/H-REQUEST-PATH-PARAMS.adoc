@@ -1,0 +1,1 @@
+_Path parameters in the request url_

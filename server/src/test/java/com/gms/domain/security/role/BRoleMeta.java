@@ -11,6 +11,7 @@ public class BRoleMeta {
 
     private BRoleMeta() {}
 
+    public static final String id = "Role's identifier";
     public static final String label = "Label to which the role can be referred to";
     public static final String description = "A description of what is this role for";
     public static final String permissions = "Permissions which this role will be associated to. These must be links to the permission resource";

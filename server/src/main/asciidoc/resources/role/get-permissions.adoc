@@ -4,16 +4,20 @@ A `GET` request lists all permissions assigned to a role.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
+
+include::{snippets}/b-role-repository-test/get-permissions/path-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permission-for-role/curl-request.adoc[]
+include::{snippets}/b-role-repository-test/get-permissions/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permission-for-role/response-fields.adoc[]
+include::{snippets}/b-role-repository-test/get-permissions/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permission-for-role/http-response.adoc[]
+include::{snippets}/b-role-repository-test/get-permissions/http-response.adoc[]

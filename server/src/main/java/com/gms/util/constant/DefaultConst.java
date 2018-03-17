@@ -72,7 +72,7 @@ public class DefaultConst {
 
     //region vars
     @Value("${gms.config.page.size:1}")
-    private int pageSize;
+    private String pageSize;
 
     @Value("${gms.config.page.size_holder:size}")
     private String pageSizeHolder;

@@ -89,41 +89,41 @@ public class UserService implements UserDetailsService{
 
     /**
      * Add some existing {@link BRole}s to an existing {@link EUser} over some {@link EOwnedEntity}
-     * @param userUsername {@link EUser}'s username
-     * @param entityUsername {@link EOwnedEntity}'username
+     * @param userId {@link EUser}'s id
+     * @param entityId {@link EOwnedEntity}'id
      * @param rolesId A {@link List<Long>} which contains the identifiers of the {@link BRole}'s to be added ({@link BRole#id}
      * @return A {@link List<Long>} with the identifiers which were successfully added to the user.
      * @throws NotFoundEntityException if there is not any {@link EUser} registered with the provided <code>userUsername</code>,
      * if there is no any {@link EOwnedEntity} registered with the provided <code>entityUsername</code>, or if there is not
      * any {@link BRole} with an <code>id</code> equals to any of the provided in the <code>rolesId</code>.
      */
-    public List<Long> addRolesToUser(String userUsername, String entityUsername, List<Long> rolesId) throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userUsername, entityUsername, rolesId, true);
+    public List<Long> addRolesToUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
+        return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
     }
 
     /**
      * Removes some existing {@link BRole}s from an existing {@link EUser} over some {@link EOwnedEntity}
-     * @param userUsername {@link EUser}'s username
-     * @param entityUsername {@link EOwnedEntity}'username
+     * @param userId {@link EUser}'s id
+     * @param entityId {@link EOwnedEntity}'id
      * @param rolesId A {@link List<Long>} which contains the identifiers of the {@link BRole}'s to be removed ({@link BRole#id}
      * @return A {@link List<Long>} with the identifiers which were successfully removed the the user.
      * @throws NotFoundEntityException if there is not any {@link EUser} registered with the provided <code>userUsername</code>,
      * if there is no any {@link EOwnedEntity} registered with the provided <code>entityUsername</code>, or if there is not
      * any {@link BRole} with an <code>id</code> equals to any of the provided in the <code>rolesId</code>.
      */
-    public List<Long> removeRolesFromUser(String userUsername, String entityUsername, List<Long> rolesId) throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userUsername, entityUsername, rolesId, false);
+    public List<Long> removeRolesFromUser(Long userId, Long entityId, List<Long> rolesId) throws NotFoundEntityException {
+        return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
     }
 
-    private List<Long> addRemoveRolesToFromUser (String userUsername, String entityUsername, List<Long> rolesId, Boolean add)
+    private List<Long> addRemoveRolesToFromUser (Long userId, Long entityId, List<Long> rolesId, Boolean add)
             throws NotFoundEntityException {
         LinkedList<Long> addedOrRemoved = new LinkedList<>();
 
         BAuthorizationPk pk;
         BAuthorization newUserAuth;
 
-        EUser u = getUser(userUsername);
-        EOwnedEntity e = getOwnedEntity(entityUsername);
+        EUser u = getUser(userId);
+        EOwnedEntity e = getOwnedEntity(entityId);
         Optional<BRole> r;
 
         for (long iRoleId : rolesId) {
@@ -189,27 +189,27 @@ public class UserService implements UserDetailsService{
 
     /**
      * Returns all the roles associated to a user over all entities int the shape of a Map.
-     * @param userUsername {@link EUser}'s username.
+     * @param id {@link EUser}'s id.
      * @return A {@link Map} with all the roles associated to a user over all possible entities. Every key in the map is
      * the entity username and the associated value is a {@link List<BRole>} with all the roles the user has over that entity
      * represented by the key (which is the username).
      * @throws NotFoundEntityException if there is not any username with the specififed <code>userUsername</code>.
      */
-    public Map<String, List<BRole>> getRolesForUser(String userUsername) throws NotFoundEntityException {
-        EUser u = getUser(userUsername);
+    public Map<String, List<BRole>> getRolesForUser(Long id) throws NotFoundEntityException {
+        EUser u = getUser(id);
         return authorizationRepository.getRolesForUserOverAllEntities(u.getId());
     }
 
     /**
      * Returns all he roles associated to a user over a specific entity.
-     * @param userUsername {@link EUser}'s username.
-     * @param entityUsername {@link EOwnedEntity}'s username.
+     * @param userId {@link EUser}'s id.
+     * @param entityId {@link EOwnedEntity}'s id.
      * @return A {@link List<BRole>} with all the roles the user has over the entity with the specified <code>entityUsername</code>.
      * @throws NotFoundEntityException if either the user or the entity are not found with the provided <code>userUsername</code>
      * and the <code>entityUsername</code> respectively.
      */
-    public List<BRole> getRolesForUserOverEntity(String userUsername, String entityUsername) throws NotFoundEntityException {
-        return authorizationRepository.getRolesForUserOverEntity(getUser(userUsername).getId(), getOwnedEntity(entityUsername).getId());
+    public List<BRole> getRolesForUserOverEntity(Long userId, Long entityId) throws NotFoundEntityException {
+        return authorizationRepository.getRolesForUserOverEntity(getUser(userId).getId(), getOwnedEntity(entityId).getId());
     }
 
     /**
@@ -232,19 +232,19 @@ public class UserService implements UserDetailsService{
         return entityId;
     }
 
-    private EUser getUser(String username) throws NotFoundEntityException {
-        EUser u = userRepository.findFirstByUsername(username);
-        if (u == null) {
+    private EUser getUser(Long id) throws NotFoundEntityException {
+        Optional<EUser> u = userRepository.findById(id);
+        if (!u.isPresent()) {
             throw new NotFoundEntityException(USER_NOT_FOUND);
         }
-        return u;
+        return u.get();
     }
 
-    private EOwnedEntity getOwnedEntity(String username) throws NotFoundEntityException {
-        EOwnedEntity e = entityRepository.findFirstByUsername(username);
-        if (e == null) {
+    private EOwnedEntity getOwnedEntity(Long id) throws NotFoundEntityException {
+        Optional<EOwnedEntity> e = entityRepository.findById(id);
+        if (!e.isPresent()) {
             throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
         }
-        return e;
+        return e.get();
     }
 }

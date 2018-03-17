@@ -3,16 +3,14 @@ package com.gms.controller.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.configuration.BConfiguration;
+import com.gms.domain.configuration.BConfigurationMeta;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.user.EUser;
 import com.gms.repository.configuration.BConfigurationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
-import com.gms.util.GMSRandom;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.configuration.ConfigKey;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.ResourcePath;
@@ -30,7 +28,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
@@ -39,11 +36,10 @@ import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -65,10 +61,8 @@ public class ConfigurationControllerTest {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired
-    private SecurityConst sc;
-    @Autowired
-    private DefaultConst dc;
+    @Autowired private SecurityConst sc;
+    @Autowired private DefaultConst dc;
 
     @Autowired private AppService appService;
     @Autowired private EUserRepository userRepository;
@@ -101,12 +95,7 @@ public class ConfigurationControllerTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(restDocResHandler)
-                .addFilter(springSecurityFilterChain)
-                .alwaysExpect(forwardedUrl(null))
-                .build();
+        mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -116,7 +105,7 @@ public class ConfigurationControllerTest {
     }
 
     @Test
-    public void getConfig() throws Exception {
+    public void getE() throws Exception {
         mvc.perform(
                 get(apiPrefix + "/" + reqString)
                         .header(authHeader, tokenType + " " + accessToken)
@@ -134,60 +123,71 @@ public class ConfigurationControllerTest {
     }
 
     @Test
-    public void getConfigByKey() throws Exception {
+    public void getByKey() throws Exception {
         mvc.perform(
                 get(apiPrefix + "/" + reqString)
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("key", ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString().toLowerCase())
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
+                        relaxedRequestParameters(parameterWithName("key").description(BConfigurationMeta.key))
+                ));
     }
 
     @Test
-    public void getConfigByKeyAndUser() throws Exception {
+    public void getByKeyAndUser() throws Exception {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         configurationRepository.save(new BConfiguration(ConfigKey.LANGUAGE.toString(), Locale.ENGLISH.toString(), u.getId()));
-        mvc.perform(
-                get(apiPrefix + "/" + reqString)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("key", ConfigKey.LANGUAGE.toString().toLowerCase())
-                        .param("id", u.getId().toString())
-        ).andExpect(status().isOk());
+        mvc.perform(get(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("key", ConfigKey.LANGUAGE.toString().toLowerCase())
+                .param("id", u.getId().toString()))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
+                        relaxedRequestParameters(
+                                parameterWithName("key").description(BConfigurationMeta.key),
+                                parameterWithName("id").description(BConfigurationMeta.userId)
+                        )
+                ));
     }
 
     @Test
-    public void getConfigByUser() throws Exception {
+    public void getByUser() throws Exception {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
         configurationRepository.save(new BConfiguration(ConfigKey.LANGUAGE.toString(), Locale.ENGLISH.toString(), u.getId()));
         configurationRepository.save(new BConfiguration(ConfigKey.LAST_ACCESSED_ENTITY.toString(), e.getId().toString(), u.getId()));
-        mvc.perform(
-                get(apiPrefix + "/" + reqString + "/" + u.getId())
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk())
-                .andDo(restDocResHandler.document(responseFields(
-                        fieldWithPath(ConfigKey.LANGUAGE.toString()).description(LANGUAGE_DESC),
-                        fieldWithPath(ConfigKey.LAST_ACCESSED_ENTITY.toString()).description(LAST_ACCESSED_ENT_DESC)
-                )));
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{userId}", u.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
+                        responseFields(
+                                fieldWithPath(ConfigKey.LANGUAGE.toString()).description(LANGUAGE_DESC),
+                                fieldWithPath(ConfigKey.LAST_ACCESSED_ENTITY.toString()).description(LAST_ACCESSED_ENT_DESC)
+                        )
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("userId").description(BConfigurationMeta.userId))
+                ));
     }
 
     @Test
-    public void saveConfig() throws Exception {
+    public void save() throws Exception {
         SampleConfigurationPayload payload = new SampleConfigurationPayload(true, false);
         ConstrainedFields fields = new ConstrainedFields(SampleConfigurationPayload.class);
 
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isNoContent())
+        mvc.perform(post(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isNoContent())
                 .andDo(restDocResHandler.document(
                         requestFields(
                                 fields.withPath("is_multi_entity_app_in_server").ignored().optional().description(IS_MULTI_ENTITY_DESC),
@@ -200,7 +200,7 @@ public class ConfigurationControllerTest {
     }
 
     @Test
-    public void saveConfigForUser() throws Exception {
+    public void saveForUser() throws Exception {
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
         assertNotNull(e);
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
@@ -209,13 +209,12 @@ public class ConfigurationControllerTest {
         payload.setUser(u.getId());
         ConstrainedFields fields = new ConstrainedFields(SampleConfigurationPayload.class);
 
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isNoContent())
+        mvc.perform(post(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isNoContent())
                 .andDo(restDocResHandler.document(
                         requestFields(
                                 fields.withPath("is_multi_entity_app_in_server").ignored().optional().description(IS_MULTI_ENTITY_DESC),
@@ -228,17 +227,16 @@ public class ConfigurationControllerTest {
     }
 
     @Test
-    public void saveConfigForUserKO() throws Exception {
+    public void saveForUserKO() throws Exception {
         Map<String, Object> payload = new HashMap<>();
         payload.put("language", "es");
         payload.put("user", "invalidNumber");
 
-        mvc.perform(
-                post(apiPrefix + "/" + reqString)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-        ).andExpect(status().isUnprocessableEntity());
+        mvc.perform(post(apiPrefix + "/" + reqString)
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isUnprocessableEntity());
     }
 }
