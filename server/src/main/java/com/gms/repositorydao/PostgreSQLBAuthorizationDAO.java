@@ -1,8 +1,7 @@
-package com.gms.repository.security.authorization.dao;
+package com.gms.repositorydao;
 
 import com.gms.domain.security.role.BRole;
 import com.gms.service.db.QueryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -13,18 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * PostgreSQLBAuthorizationDAOImpl (default implementation of {@link BAuthorizationDAO}.
+ * In order to get an instance of this class, you must call {@link DAOProvider#getBAuthorizationDAO()}.
  *
- * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
- * Mar 16, 2018
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com.
+ * @version 0.1.
+ * @see DAOProvider
  */
-@RequiredArgsConstructor
-@Repository("PostgreSQLBAuthorizationDAOImpl")
+@Repository
 @Transactional
-public class BAuthorizationDAOImpl extends BAuthorizationDAOImplBase implements BAuthorizationDAO {
+class PostgreSQLBAuthorizationDAO extends BAuthorizationDAO {
 
-    private final QueryService queryService;
+    private static final String USER_ID_PARAM = "userId";
+
+    PostgreSQLBAuthorizationDAO(QueryService queryService) {
+        this.queryService = queryService;
+    }
 
     @SuppressWarnings("unchecked")
     @Override

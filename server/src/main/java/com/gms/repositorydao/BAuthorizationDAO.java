@@ -1,19 +1,21 @@
-package com.gms.repository.security.authorization.dao;
+package com.gms.repositorydao;
 
 import com.gms.domain.security.role.BRole;
+import com.gms.service.db.QueryService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * BAuthorizationDAOImplBase
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 16, 2018
  */
-public abstract class BAuthorizationDAOImplBase {
+public abstract class BAuthorizationDAO {
 
-    static final String USER_ID_PARAM = "userId";
+    QueryService queryService;
+
+    public abstract Map<String, List<BRole>> getRolesForUserOverAllEntities(long userId);
+    public abstract List<BRole> getRolesForUserOverEntity(long userId, long entityId);
 
     void processRolesVal(List<Object[]> rawVal, List<BRole> r) {
         BRole role;

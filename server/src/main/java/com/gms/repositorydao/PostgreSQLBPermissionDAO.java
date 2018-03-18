@@ -1,8 +1,7 @@
-package com.gms.repository.security.permission.dao;
+package com.gms.repositorydao;
 
 import com.gms.domain.security.permission.BPermission;
 import com.gms.service.db.QueryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -10,18 +9,19 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * PostgreSQLBPermissionDAO (default implementation of {@link BPermissionDAO}.
+ * In order to get an instance of this class, you must call {@link DAOProvider#getBPermissionDAO()}.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
- * Mar 16, 2018
+ * @version 0.1.
+ * @see DAOProvider
  */
-@RequiredArgsConstructor
-@Repository("PostgreSQLBPermissionDAO")
+@Repository
 @Transactional
-public class BPermissionDAOImpl implements BPermissionDAO {
+class PostgreSQLBPermissionDAO extends BPermissionDAO {
 
-    private final QueryService queryService;
+    PostgreSQLBPermissionDAO(QueryService queryService) {
+        this.queryService = queryService;
+    }
 
     @SuppressWarnings("unchecked")
     @Override

@@ -1,9 +1,8 @@
 package com.gms.repository.security.permission;
 
 import com.gms.domain.security.permission.BPermission;
-import com.gms.repository.security.permission.dao.BPermissionDAO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.gms.repositorydao.BPermissionDAO;
+import com.gms.repositorydao.DAOProvider;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -15,12 +14,14 @@ import java.util.List;
  * @version 0.1
  * Feb 13, 2018
  */
-@RequiredArgsConstructor
 @Transactional
 public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {
 
-    @Qualifier("PostgreSQLBPermissionDAO")
     private final BPermissionDAO permissionDAO;
+
+    BPermissionRepositoryImpl(DAOProvider daoProvider) {
+        permissionDAO = daoProvider.getBPermissionDAO();
+    }
 
     /**
      * Return the list of permissions associated to some role(s). This (theses) role(s) is(are) the one(s) associated to
