@@ -1,11 +1,8 @@
 package com.gms.config.security;
 
 /**
- * LoginPayloadSample
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Dec 26, 2017
  */
 public class LoginPayloadSample {
 

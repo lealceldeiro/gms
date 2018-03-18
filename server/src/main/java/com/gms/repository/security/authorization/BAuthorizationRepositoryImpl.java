@@ -9,11 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * BAuthorizationRepositoryImpl
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 13, 2018
  */
 @Transactional
 public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCustom {

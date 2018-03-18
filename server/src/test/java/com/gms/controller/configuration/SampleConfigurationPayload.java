@@ -1,13 +1,9 @@
 package com.gms.controller.configuration;
 
 /**
- * SampleConfigurationPayload
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 19, 2018
  */
-
 class SampleConfigurationPayload {
     private Boolean is_multi_entity_app_in_server;
     private Boolean is_user_registration_allowed_in_server;

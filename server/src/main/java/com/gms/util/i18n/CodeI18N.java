@@ -1,11 +1,8 @@
 package com.gms.util.i18n;
 
 /**
- * Code
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 02, 2018
  */
 public class CodeI18N {
 

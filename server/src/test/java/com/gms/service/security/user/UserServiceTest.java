@@ -31,11 +31,8 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * UserServiceTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 06, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

@@ -26,11 +26,8 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * RoleServiceTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 04, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

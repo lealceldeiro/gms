@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * GmsError
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 01, 2018
  */
 @AllArgsConstructor
 public class GmsError {

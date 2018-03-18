@@ -13,11 +13,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * ExceptionUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Jan 31, 2018
  */
 public class ExceptionUtil {
 

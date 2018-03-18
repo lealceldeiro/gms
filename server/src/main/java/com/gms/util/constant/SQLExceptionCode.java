@@ -1,13 +1,11 @@
 package com.gms.util.constant;
 
 /**
- * SQLExceptionCode
  * <p>
  * According to https://www.postgresql.org/docs/9.2/static/errcodes-appendix.html
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 01, 2018
  */
 public class SQLExceptionCode {
 

@@ -43,11 +43,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * ConfigurationControllerTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 19, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

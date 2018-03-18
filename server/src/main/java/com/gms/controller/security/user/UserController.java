@@ -12,12 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * UserController
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @RequiredArgsConstructor
 @RestController

@@ -28,11 +28,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * RepositoryConfigTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 17, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

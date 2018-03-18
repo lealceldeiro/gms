@@ -11,13 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 /**
- * Application
  * Entry point to the application.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {

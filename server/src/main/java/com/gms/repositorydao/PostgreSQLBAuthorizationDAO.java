@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * In order to get an instance of this class, you must call {@link DAOProvider#getBAuthorizationDAO()}.
  *
- * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com.
- * @version 0.1.
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
  * @see DAOProvider
  */
 @Repository

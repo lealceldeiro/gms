@@ -21,11 +21,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * BPermissionTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 03, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

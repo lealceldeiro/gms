@@ -8,11 +8,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * BPermissionRepositoryImpl
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 13, 2018
  */
 @Transactional
 public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {

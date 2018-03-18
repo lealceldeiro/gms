@@ -1,11 +1,8 @@
 package com.gms.util.constant;
 
 /**
- * ResourcePath
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 08, 2018
  */
 public class ResourcePath {
     /**

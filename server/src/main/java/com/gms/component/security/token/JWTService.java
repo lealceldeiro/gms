@@ -16,12 +16,10 @@ import java.util.Map;
 import static java.lang.String.valueOf;
 
 /**
- * JWTService
  * Utility service for generating jwt.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Dec 13, 2017
  */
 @SuppressWarnings("WeakerAccess")
 @RequiredArgsConstructor

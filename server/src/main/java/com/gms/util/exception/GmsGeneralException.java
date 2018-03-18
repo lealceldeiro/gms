@@ -3,12 +3,8 @@ package com.gms.util.exception;
 import org.springframework.http.HttpStatus;
 
 /**
- * GmsGeneralException
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 public class GmsGeneralException extends Exception {
 

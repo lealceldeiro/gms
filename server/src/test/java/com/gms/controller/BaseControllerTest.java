@@ -43,6 +43,10 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 public class BaseControllerTest {

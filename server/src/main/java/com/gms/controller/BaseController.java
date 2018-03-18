@@ -20,13 +20,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * BaseController
  * Base controller for defining common actions to all controllers in the app.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @RestController
 @RestControllerAdvice

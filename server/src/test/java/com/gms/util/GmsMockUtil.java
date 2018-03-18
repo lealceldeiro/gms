@@ -11,11 +11,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 /**
- * MockUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 17, 2018
  */
 public class GmsMockUtil {
 

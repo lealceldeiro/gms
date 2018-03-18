@@ -1,11 +1,8 @@
 package com.gms.util.constant;
 
 /**
- * LinkPath
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 12, 2018
  */
 public class LinkPath {
 

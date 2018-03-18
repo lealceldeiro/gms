@@ -16,6 +16,10 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 public class AuthenticationFacadeImplTest {

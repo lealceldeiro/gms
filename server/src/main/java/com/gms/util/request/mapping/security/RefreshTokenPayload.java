@@ -8,11 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * RefreshTokenPayload
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Dec 18, 2017
  */
 @RequiredArgsConstructor
 @Getter

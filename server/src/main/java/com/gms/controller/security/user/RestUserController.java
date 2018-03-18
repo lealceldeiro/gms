@@ -21,12 +21,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.Valid;
 
 /**
- * RestUserController
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 26, 2017
  */
 @BasePathAwareController
 @RestControllerAdvice

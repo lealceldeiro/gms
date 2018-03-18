@@ -9,13 +9,10 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import java.util.Set;
 
 /**
- * RepositoryConfig
- *
  * Configures the repositories for exposing the <code>id</code> property of the domain entities.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 16, 2018
  */
 @Configuration
 public class RepositoryConfig extends RepositoryRestConfigurerAdapter {

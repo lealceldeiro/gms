@@ -15,6 +15,10 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 public class JWTServiceTest {

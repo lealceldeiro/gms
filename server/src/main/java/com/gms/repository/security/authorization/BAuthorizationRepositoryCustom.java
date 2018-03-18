@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * BAuthorizationRepositoryCustom
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 13, 2018
  */
 public interface BAuthorizationRepositoryCustom {
 

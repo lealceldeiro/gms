@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * DAOProvider
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 18, 2018
  */
 @Component
 public class DAOProvider {
@@ -29,6 +26,15 @@ public class DAOProvider {
         this.queryService = queryService;
     }
 
+    /**
+     * Returns a proper instance of a {@link BAuthorizationDAO} according to the current database management system.
+     * @return An extended-from-{@link BAuthorizationDAO} class.
+     * @throws NullPointerException if the database driver property specified in application.properties under the key
+     * "spring.datasource.driver-class-name" corresponds to one of the following database management systems: MySQL,
+     * Oracle.
+     * @throws NullPointerException if the property "spring.datasource.driver-class-name" is not specified in the
+     * application.properties.
+     */
     public BAuthorizationDAO getBAuthorizationDAO () {
         checkQueryService();
         switch (driver) {
@@ -43,6 +49,15 @@ public class DAOProvider {
         }
     }
 
+    /**
+     * Returns a proper instance of a {@link BPermissionDAO} according to the current database management system.
+     * @return An extended-from-{@link BPermissionDAO} class.
+     * @throws NullPointerException if the database driver property specified in application.properties under the key
+     * "spring.datasource.driver-class-name" corresponds to one of the following database management systems: MySQL,
+     * Oracle.
+     * @throws NullPointerException if the property "spring.datasource.driver-class-name" is not specified in the
+     * application.properties.
+     */
     public BPermissionDAO getBPermissionDAO () {
         checkQueryService();
         switch (driver) {

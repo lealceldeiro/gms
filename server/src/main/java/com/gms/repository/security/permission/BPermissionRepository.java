@@ -9,12 +9,8 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import java.util.List;
 
 /**
- * BPermissionRepository
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @RepositoryRestResource(collectionResourceRel = ResourcePath.PERMISSION, path = ResourcePath.PERMISSION)
 public interface BPermissionRepository extends PagingAndSortingRepository<BPermission, Long>, BPermissionRepositoryCustom {

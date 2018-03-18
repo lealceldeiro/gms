@@ -1,11 +1,8 @@
 package com.gms.domain.security.user;
 
 /**
- * UserMeta
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 12, 2018
  */
 public class EUserMeta {
     private EUserMeta() {}

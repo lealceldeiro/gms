@@ -11,11 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 /**
- * AppService
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Dec 18, 2017
  */
 @Service
 @Transactional

@@ -30,11 +30,8 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * ConfigurationServiceTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 03, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

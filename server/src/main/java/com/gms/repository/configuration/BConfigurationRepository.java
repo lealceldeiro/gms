@@ -8,12 +8,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 /**
- * BConfigurationRepository
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @RepositoryRestResource(collectionResourceRel = ResourcePath.CONFIGURATION, path = ResourcePath.CONFIGURATION, exported = false)
 public interface BConfigurationRepository extends CrudRepository<BConfiguration, Long> {

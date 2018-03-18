@@ -3,11 +3,8 @@ package com.gms.util;
 import java.util.Arrays;
 
 /**
- * StringUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 07, 2018
  */
 public class StringUtil {
 

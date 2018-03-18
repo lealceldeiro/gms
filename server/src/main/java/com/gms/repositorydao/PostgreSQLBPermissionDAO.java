@@ -12,7 +12,7 @@ import java.util.List;
  * In order to get an instance of this class, you must call {@link DAOProvider#getBPermissionDAO()}.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1.
+ * @version 0.1
  * @see DAOProvider
  */
 @Repository

@@ -13,11 +13,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 /**
- * RestDoc
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 08, 2018
  */
 public class RestDoc {
     public static final String APIDOC_LOCATION = "build/generated-snippets";

@@ -12,12 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.lang.reflect.Method;
 
 /**
- * ApiPathConfig (borrowed from https://stackoverflow.com/questions/32927937/how-to-set-base-url-for-rest-in-spring-boot/39907655#39907655)
+ * Based on content borrowed from https://stackoverflow.com/questions/32927937/how-to-set-base-url-for-rest-in-spring-boot/39907655#39907655
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @PropertySource("classpath:application.properties")
 @Configuration

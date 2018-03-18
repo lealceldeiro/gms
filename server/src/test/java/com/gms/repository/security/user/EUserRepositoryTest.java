@@ -34,11 +34,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * EUserRepositoryTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 12, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

@@ -12,12 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * ConfigurationController
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Feb 18, 2017
  */
 @RequiredArgsConstructor
 @RestController

@@ -17,12 +17,8 @@ import java.util.Set;
 import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 
 /**
- * BRole
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @Data
 @NoArgsConstructor(force = true)

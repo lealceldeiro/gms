@@ -19,12 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.List;
 
 /**
- * RoleController
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Feb 17, 2017
  */
 @BasePathAwareController
 @RestControllerAdvice

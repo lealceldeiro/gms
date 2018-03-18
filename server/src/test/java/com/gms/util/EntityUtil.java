@@ -9,11 +9,8 @@ import org.springframework.hateoas.Resource;
 import static com.gms.util.StringUtil.*;
 
 /**
- * EntityUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 14, 2018
  */
 public class EntityUtil {
 

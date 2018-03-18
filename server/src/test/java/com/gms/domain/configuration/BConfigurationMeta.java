@@ -1,11 +1,8 @@
 package com.gms.domain.configuration;
 
 /**
- * BConfigurationMeta
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 17, 2018
  */
 public class BConfigurationMeta {
 

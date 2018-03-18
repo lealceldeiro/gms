@@ -34,11 +34,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * RestUserControllerTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Jan 30, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

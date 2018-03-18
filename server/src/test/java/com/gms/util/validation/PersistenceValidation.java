@@ -7,11 +7,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * HibernateValidationUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 02, 2018
  */
 public class PersistenceValidation {
 

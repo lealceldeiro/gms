@@ -11,15 +11,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * BAuthorization
  * Describes the authorization which has a user over some specific entity(ies) with some role(s). The public constructor
  * for all argument should be the one used when initializing this class. Never the no-args constructor, since this exists
  * only for orm-handling purposes only.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @Data
 @NoArgsConstructor(force = true)

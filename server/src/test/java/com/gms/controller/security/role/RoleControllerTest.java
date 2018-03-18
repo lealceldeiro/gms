@@ -39,11 +39,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * RoleControllerTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 16, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

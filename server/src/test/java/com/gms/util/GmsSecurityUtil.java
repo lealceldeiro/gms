@@ -23,11 +23,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * GmsSecurityUtil
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Dec 21, 2017
  */
 public class GmsSecurityUtil {
 

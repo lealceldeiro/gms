@@ -1,11 +1,8 @@
 package com.gms.domain.security;
 
 /**
- * BAuthorizationMeta
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 12, 2018
  */
 public class BAuthorizationMeta {
     private BAuthorizationMeta() {}

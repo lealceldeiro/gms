@@ -8,11 +8,8 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 /**
- * QueryService
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Jan 06, 2018
  */
 @Service
 @Transactional

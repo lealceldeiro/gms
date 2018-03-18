@@ -25,11 +25,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * BAuthorizationRepositoryTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 17, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

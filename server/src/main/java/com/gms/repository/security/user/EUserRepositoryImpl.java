@@ -10,11 +10,8 @@ import javax.transaction.Transactional;
 import java.util.Iterator;
 
 /**
- * EUserSaveRepositoryImpl
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 12, 2018
  */
 @RequiredArgsConstructor
 @Transactional

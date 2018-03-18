@@ -19,11 +19,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * QueryServiceTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Mar 04, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

@@ -14,14 +14,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * BConfiguration
- *
  * Represents a configuration through a string-representation under a key and a value.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

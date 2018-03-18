@@ -6,12 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * EOwnedEntityRepository
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- *
  * @version 0.1
- * Dec 12, 2017
  */
 @RepositoryRestResource(collectionResourceRel = ResourcePath.OWNED_ENTITY, path = ResourcePath.OWNED_ENTITY)
 public interface EOwnedEntityRepository extends PagingAndSortingRepository<EOwnedEntity, Long> {

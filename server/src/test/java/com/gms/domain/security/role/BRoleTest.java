@@ -20,11 +20,8 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * BRoleTest
- *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
- * Feb 07, 2018
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
