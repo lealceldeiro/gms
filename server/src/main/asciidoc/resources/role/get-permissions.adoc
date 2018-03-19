@@ -8,6 +8,10 @@ include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
 
 include::{snippets}/b-role-repository-test/get-permissions/path-parameters.adoc[]
 
+include::../../util/H-REQUEST-QUERY-PARAMS.adoc[]
+
+include::{snippets}/b-role-repository-test/get-permissions/request-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/b-role-repository-test/get-permissions/curl-request.adoc[]

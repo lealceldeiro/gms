@@ -29,8 +29,7 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -81,7 +80,7 @@ public class EOwnedEntityRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        pageSizeAttr = dc.getPageSizeHolder();
+        pageSizeAttr = DefaultConst.PAGE_SIZE_HOLDER;
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
@@ -96,7 +95,7 @@ public class EOwnedEntityRepositoryTest {
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
-                                RestDoc.getPagingfields(
+                                RestDoc.getPagingFields(
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].name").description(EOwnedEntityMeta.name),
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].username").description(EOwnedEntityMeta.username),
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].description").description(EOwnedEntityMeta.description),
@@ -105,7 +104,10 @@ public class EOwnedEntityRepositoryTest {
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[]." + LinkPath.get("eOwnedEntity")).ignored(),
                                         fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                                 ))
-                ));
+                ))
+                .andDo(restDocResHandler.document(relaxedRequestParameters(
+                        RestDoc.getRelaxedPagingParameters()
+                )));
     }
 
     @Test

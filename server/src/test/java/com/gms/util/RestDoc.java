@@ -1,5 +1,6 @@
 package com.gms.util;
 
+import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import org.springframework.restdocs.hypermedia.HypermediaDocumentation;
 import org.springframework.restdocs.hypermedia.LinkDescriptor;
@@ -7,10 +8,12 @@ import org.springframework.restdocs.hypermedia.LinksSnippet;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.ParameterDescriptor;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -57,10 +60,23 @@ public class RestDoc {
         };
     }
 
-    public static FieldDescriptor[] getPagingfields(FieldDescriptor... descriptors) {
+    public static FieldDescriptor[] getPagingFields(FieldDescriptor... descriptors) {
         FieldDescriptor[] common = pagingFields();
         FieldDescriptor[] finalDescriptors = new FieldDescriptor[common.length + descriptors.length];
 
+        System.arraycopy(descriptors, 0, finalDescriptors, 0, descriptors.length);
+        System.arraycopy(common, 0, finalDescriptors, descriptors.length, common.length);
+
+        return finalDescriptors;
+    }
+
+    public static ParameterDescriptor[] getRelaxedPagingParameters(ParameterDescriptor... descriptors) {
+        ParameterDescriptor[] common = {
+                parameterWithName(DefaultConst.PAGE_SIZE_HOLDER).optional().description(LinkPath.PAGE_SIZE_ATTR_META),
+                parameterWithName(DefaultConst.PAGE_PAGE_HOLDER).optional().description(LinkPath.PAGE_NUMBER_ATTR_META),
+                parameterWithName(DefaultConst.PAGE_SORT_HOLDER).optional().description(LinkPath.PAGE_SORT_ATTR_META),
+        };
+        ParameterDescriptor[] finalDescriptors = new ParameterDescriptor[common.length + descriptors.length];
         System.arraycopy(descriptors, 0, finalDescriptors, 0, descriptors.length);
         System.arraycopy(common, 0, finalDescriptors, descriptors.length, common.length);
 

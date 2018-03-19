@@ -32,8 +32,7 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -85,7 +84,7 @@ public class BPermissionRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        pageSizeAttr = dc.getPageSizeHolder();
+        pageSizeAttr = DefaultConst.PAGE_SIZE_HOLDER;
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
@@ -102,7 +101,7 @@ public class BPermissionRepositoryTest {
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
-                                RestDoc.getPagingfields(
+                                RestDoc.getPagingFields(
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].name").description(BPermissionMeta.name),
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].label").description(BPermissionMeta.label),
                                         fieldWithPath(LinkPath.EMBEDDED + reqString + "[].id").description(GmsEntityMeta.id),
@@ -112,7 +111,10 @@ public class BPermissionRepositoryTest {
                                         fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                                 )
                         )
-                ));
+                ))
+                .andDo(restDocResHandler.document(relaxedRequestParameters(
+                        RestDoc.getRelaxedPagingParameters()
+                )));
     }
 
     @Test

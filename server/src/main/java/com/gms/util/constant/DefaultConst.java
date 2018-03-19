@@ -70,8 +70,9 @@ public class DefaultConst {
     @Value("${gms.config.page.size:1}")
     private String pageSize;
 
-    @Value("${gms.config.page.size_holder:size}")
-    private String pageSizeHolder;
+    public static final String PAGE_SIZE_HOLDER = "size";
+    public static final String PAGE_PAGE_HOLDER = "page";
+    public static final String PAGE_SORT_HOLDER = "sort";
 
     @Value("${gms.response.message:message}")
     private String resMessageHolder;

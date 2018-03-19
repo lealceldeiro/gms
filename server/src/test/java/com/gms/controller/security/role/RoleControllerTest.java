@@ -102,7 +102,7 @@ public class RoleControllerTest {
         assertNotNull(r);
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(post(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath, r.getId())
+        mvc.perform(post(apiPrefix + "/" + reqString + "/{id}/" + permissionsPath, r.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(permissions)))
@@ -113,7 +113,7 @@ public class RoleControllerTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(
-                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ));
     }
 
@@ -129,7 +129,7 @@ public class RoleControllerTest {
         assertTrue("The permission " + p2.getName() + " was not added properly", r.getPermissions().contains(p2));
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(delete(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath, r.getId())
+        mvc.perform(delete(apiPrefix + "/" + reqString + "/{id}/" + permissionsPath, r.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(permissions)))
@@ -140,7 +140,7 @@ public class RoleControllerTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(
-                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ));
     }
 
@@ -159,7 +159,7 @@ public class RoleControllerTest {
         createSamplePermissions();
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
-        mvc.perform(put(apiPrefix + "/" + reqString + "/{roleId}/" + permissionsPath , r.getId())
+        mvc.perform(put(apiPrefix + "/" + reqString + "/{id}/" + permissionsPath , r.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(permissions)))
@@ -170,7 +170,7 @@ public class RoleControllerTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(
-                        pathParameters(parameterWithName("roleId").description(BRoleMeta.id))
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ));
     }
 

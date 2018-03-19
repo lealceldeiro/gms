@@ -4,6 +4,10 @@ A `GET` request lists roles.
 
 include::../../util/H-REQUEST.adoc[]
 
+include::../../util/H-REQUEST-QUERY-PARAMS.adoc[]
+
+include::{snippets}/b-role-repository-test/list/request-parameters.adoc[]
+
 include::../../util/H-EXAMPLE.adoc[]
 
 include::{snippets}/b-role-repository-test/list/curl-request.adoc[]
