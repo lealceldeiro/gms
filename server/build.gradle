@@ -6,6 +6,7 @@ buildscript {
         jwtVersion = "0.9.0"
         lombokVersion = "1.16.18"
         refVersion = "0.9.11"
+        flywayVersion = "5.0.7"
         envSet = false
         buildPropertiesFilePath = "./build/resources/main/application.properties"
         snippetsDir = file("build/generated-snippets")
@@ -63,6 +64,7 @@ dependencies {
 	compile("io.jsonwebtoken:jjwt:${jwtVersion}")
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.reflections:reflections:${refVersion}")
+    compile("org.flywaydb:flyway-core:${flywayVersion}")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
 	runtime("org.springframework.boot:spring-boot-devtools")
 	runtime("org.postgresql:postgresql")
