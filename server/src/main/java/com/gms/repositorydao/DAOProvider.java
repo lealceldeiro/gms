@@ -3,6 +3,7 @@ package com.gms.repositorydao;
 import com.gms.service.db.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,17 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DAOProvider {
 
-    @Value("${spring.datasource.driver-class-name:\"driver_no_set\"}")
-    private String driver;
-
-    private static final String POSTGRESQL = "org.postgresql.Driver";
-    private static final String MYSQL = "com.mysql.jdbc.Driver";
-    private static final String ORACLE = "oracle.jdbc.OracleDriver";
+    @Value("${spring.datasource.url:null}")
+    private String url;
 
     private final QueryService queryService;
 
     @Autowired
     public DAOProvider(QueryService queryService) {
+        if (queryService == null) {
+            throw new NullPointerException("QueryService not found");
+        }
         this.queryService = queryService;
     }
 
@@ -36,16 +36,11 @@ public class DAOProvider {
      * application.properties.
      */
     public BAuthorizationDAO getBAuthorizationDAO () {
-        checkQueryService();
-        switch (driver) {
+        switch (DatabaseDriver.fromJdbcUrl(url)) {
             case POSTGRESQL:
                 return new PostgreSQLBAuthorizationDAO(queryService);
-            case MYSQL:
-                throw new NullPointerException("Support for DBMS MySQL driver has not been implemented yet");
-            case ORACLE:
-                throw new NullPointerException("Support for DBMS Oracle driver has not been implemented yet");
             default:
-                throw new NullPointerException("DBMS Driver has not been specified");
+                throw new NullPointerException("Whether DBMS Driver has not been specified or Support for the specified one has not been implemented yet");
         }
     }
 
@@ -59,22 +54,11 @@ public class DAOProvider {
      * application.properties.
      */
     public BPermissionDAO getBPermissionDAO () {
-        checkQueryService();
-        switch (driver) {
+        switch (DatabaseDriver.fromJdbcUrl(url)) {
             case POSTGRESQL:
                 return new PostgreSQLBPermissionDAO(queryService);
-            case MYSQL:
-                throw new NullPointerException("Support for DBMS MySQL driver has not been implemented yet");
-            case ORACLE:
-                throw new NullPointerException("Support for DBMS Oracle driver has not been implemented yet");
             default:
-                throw new NullPointerException("DBMS Driver has not been specified");
-        }
-    }
-
-    private void checkQueryService() {
-        if (queryService == null) {
-            throw new NullPointerException("QueryService not found");
+                throw new NullPointerException("Whether DBMS Driver has not been specified or Support for the specified one has not been implemented yet");
         }
     }
 }
