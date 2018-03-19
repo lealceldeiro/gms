@@ -3,7 +3,7 @@
  */
 CREATE TABLE bconfiguration (
   id int8 NOT NULL , version int4,
-  KEY VARCHAR(255) NOT NULL,
+  key VARCHAR(255) NOT NULL,
   user_id int8,
   value VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
