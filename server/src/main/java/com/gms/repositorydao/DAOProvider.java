@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DAOProvider {
 
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("${spring.datasource.driver-class-name:\"driver_no_set\"}")
     private String driver;
 
     private static final String POSTGRESQL = "org.postgresql.Driver";
-    private static final String MYSQL = "<todo-mysql>";
-    private static final String ORACLE = "<todo-oracle>";
+    private static final String MYSQL = "com.mysql.jdbc.Driver";
+    private static final String ORACLE = "oracle.jdbc.OracleDriver";
 
     private final QueryService queryService;
 
