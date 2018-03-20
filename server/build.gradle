@@ -151,9 +151,9 @@ task setProductionConfig() {
 }
 
 @SuppressWarnings("GrMethodMayBeStatic")
-private String getSpringAppPropertyInBuild(String key){
+private String getSpringAppPropertyInBuild(String key, String filePath = null){
     def props = new Properties()
-    def propFile = new File(buildPropertiesFilePath)
+    def propFile = new File(filePath ?: buildPropertiesFilePath)
     def p = null
 
     if (propFile.exists() && propFile.canRead()){
@@ -227,5 +227,5 @@ private boolean buildClient() {
 }
 
 private String getAppName() {
-    return getSpringAppPropertyInBuild("spring.application.name")
+    return getSpringAppPropertyInBuild("spring.application.name", "./src/main/resources/application.properties")
 }
