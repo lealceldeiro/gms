@@ -71,7 +71,6 @@ ALTER TABLE IF EXISTS euser ADD CONSTRAINT UK_EUSER_USERNAME UNIQUE (username);
 /*
  * EOwnedEntity
  */
-
 CREATE TABLE eowned_entity (
   id int8 NOT NULL,
   version int4,
