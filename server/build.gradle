@@ -56,22 +56,22 @@ node {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-hateoas")
-	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-	compile("org.springframework.boot:spring-boot-starter-mail")
-	compile("org.springframework.boot:spring-boot-starter-security")
-	compile("io.jsonwebtoken:jjwt:${jwtVersion}")
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.reflections:reflections:${refVersion}")
-    compile("org.flywaydb:flyway-core:${flywayVersion}")
+    compile ("org.springframework.boot:spring-boot-starter-hateoas")
+	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile ("org.springframework.boot:spring-boot-starter-data-rest")
+	compile ("org.springframework.boot:spring-boot-starter-mail")
+	compile ("org.springframework.boot:spring-boot-starter-security")
+	compile ("io.jsonwebtoken:jjwt:${jwtVersion}")
+	compile ("org.springframework.boot:spring-boot-starter-web")
+	compile ("org.reflections:reflections:${refVersion}")
+    compile ("org.flywaydb:flyway-core:${flywayVersion}")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
-	runtime("org.springframework.boot:spring-boot-devtools")
-	runtime("org.postgresql:postgresql")
-    testCompile("com.jayway.jsonpath:json-path")
-	testCompile("org.springframework.boot:spring-boot-starter-test")
-	testCompile("org.springframework.restdocs:spring-restdocs-mockmvc")
-	testCompile("org.springframework.security:spring-security-test")
+	runtime ("org.springframework.boot:spring-boot-devtools")
+	runtime ("org.postgresql:postgresql")
+    testCompile ("com.jayway.jsonpath:json-path")
+	testCompile ("org.springframework.boot:spring-boot-starter-test")
+	testCompile ("org.springframework.restdocs:spring-restdocs-mockmvc")
+	testCompile ("org.springframework.security:spring-security-test")
     optional ("org.springframework.boot:spring-boot-configuration-processor")
 }
 
@@ -220,6 +220,7 @@ bootWar {
     baseName = getAppName()
 }
 
+// In order to generate our own metadata by Using the Annotation Processor
 compileJava.dependsOn(processResources)
 
 private boolean buildClient() {

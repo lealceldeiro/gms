@@ -13,78 +13,167 @@ import org.springframework.stereotype.Component;
 public class DefaultConst {
 
     //region role
+    /**
+     * <code>label</code> property for default role created at initial start up.
+     * @see com.gms.domain.security.role.BRole#label
+     */
     @Value("${gms.role.default.label:ROLE_ADMIN}")
     private String roleAdminDefaultLabel;
 
+    /**
+     * <code>description</code> property for default role created at initial start up.
+     * @see com.gms.domain.security.role.BRole#description
+     */
     @Value("${gms.role.default.description:Default role}")
     private String roleAdminDefaultDescription;
 
+    /**
+     * <code>enabled</code> property for default role created at initial start up.
+     * @see com.gms.domain.security.role.BRole#enabled
+     */
     @Value("${gms.role.default.enabled:true}")
     private boolean roleAdminDefaultEnabled;
     //endregion
 
     //region user
+    /**
+     * <code>name</code> property for default user created at initial start up.
+     * @see com.gms.domain.security.user.EUser#name
+     */
     @Value("${gms.user.default.name:Admin}")
     private String userAdminDefaultName;
 
+    /**
+     * <code>lastName</code> property for default user created at initial start up.
+     * @see com.gms.domain.security.user.EUser#lastName
+     */
     @Value("${gms.user.default.lastName:Default}")
     private String userAdminDefaultLastName;
 
+    /**
+     * <code>username</code> property for default user created at initial start up.
+     * @see com.gms.domain.security.user.EUser#username
+     */
     @Value("${gms.user.default.username:admin}")
     private String userAdminDefaultUsername;
 
+    /**
+     * <code>password</code> property for default user created at initial start up.
+     * @see com.gms.domain.security.user.EUser#password
+     */
     @Value("${gms.user.default.password:admin}")
     private String userAdminDefaultPassword;
 
+    /**
+     * <code>email</code> property for default user created at initial start up.
+     * @see com.gms.domain.security.user.EUser#email
+     */
     @Value("${gms.user.default.email:admin@gms.com}")
     private String userAdminDefaultEmail;
     //endregion
 
     //region entity
+    /**
+     * <code>name</code> property for default owned entity created at initial start up.
+     * @see com.gms.domain.security.ownedentity.EOwnedEntity#name
+     */
     @Value("${gms.entity.default.name:HOME}")
     private String entityDefaultName;
 
+    /**
+     * <code>username</code> property for default owned entity created at initial start up.
+     * @see com.gms.domain.security.ownedentity.EOwnedEntity#username
+     */
     @Value("${gms.entity.default.username:home}")
     private String entityDefaultUsername;
 
+    /**
+     * <code>description</code> property for default owned entity created at initial start up.
+     * @see com.gms.domain.security.ownedentity.EOwnedEntity#description
+     */
     @Value("${gms.entity.default.description:Default entity}")
     private String entityDefaultDescription;
     //endregion
 
     //region config
+    /**
+     * Initial which indicates whether this is a multi entity application or not.
+     */
     @Value("${gms.config.multi-entity:false}")
     private Boolean isMultiEntity;
 
+    /**
+     * Initial which indicates whether this application will handle user registratio via sign-up or not.
+     */
     @Value("${gms.config.user-registration-allowed:true}")
     private Boolean isUserRegistrationAllowed;
     //endregion
 
     //region system
+    /**
+     * API base path.
+     */
     @Value("${spring.data.rest.basePath:/api}")
     private String apiBasePath;
 
+    /**
+     * API documentation base path.
+     */
     public static final String API_DOC_PATH = "apidocs";
     //endregion
 
     //region vars
-    @Value("${gms.config.page.size:1}")
+    /**
+     * Default size of pages.
+     */
+    @Value("${spring.data.rest.default-page-size:10}")
     private String pageSize;
 
-    public static final String PAGE_SIZE_HOLDER = "size";
-    public static final String PAGE_PAGE_HOLDER = "page";
-    public static final String PAGE_SORT_HOLDER = "sort";
+    /**
+     * Name of the URL query string parameter that indicates how many results to return at
+     * once.
+     */
+    @Value("${spring.data.rest.limit-param-name:size}")
+    private String pageSizeParam;
 
+    /**
+     * Name of the URL query string parameter that indicates what page to return.
+     */
+    @Value("${spring.data.rest.page-param-name:page}")
+    private String pagePageParam;
+
+    /**
+     * Name of the URL query string parameter that indicates what direction to sort
+     * results.
+     */
+    @Value("${spring.data.rest.sort-param-name:sort}")
+    private String pageSortParam;
+
+    /**
+     * Variable in which all message will be sent in the response body (when sent)
+     */
     @Value("${gms.response.message:message}")
     private String resMessageHolder;
     //endregion
 
     //region lang
-    @Value("${gms.i18n.lang_holder:lang}")
+    /**
+     * Request variable in which it is specified what should be the response language.
+     * @see DefaultConst#DEFAULT_LANGUAGE_HEADER
+     */
+    @Value("${gms.i18n.lang.holder:lang}")
     private String languageHolder;
 
-    @Value("${gms.i18n.default:en}")
+    /**
+     * Default language should be set in the response.
+     */
+    @Value("${gms.i18n.lang.default:en}")
     private String defaultLanguage;
 
+    /**
+     * Header in which it is specified what should be the response language.
+     * @see DefaultConst#languageHolder
+     */
     public static final String DEFAULT_LANGUAGE_HEADER = "Accept-Language";
     //endregion
 }

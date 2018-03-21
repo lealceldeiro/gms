@@ -85,7 +85,7 @@ public class BRoleRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        pageSizeAttr = DefaultConst.PAGE_SIZE_HOLDER;
+        pageSizeAttr = dc.getPageSizeParam();
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
@@ -137,7 +137,7 @@ public class BRoleRepositoryTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters()
+                        RestDoc.getRelaxedPagingParameters(dc)
                 )));
     }
 
@@ -231,7 +231,7 @@ public class BRoleRepositoryTest {
                         pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters()
+                        RestDoc.getRelaxedPagingParameters(dc)
                 )));
     }
 

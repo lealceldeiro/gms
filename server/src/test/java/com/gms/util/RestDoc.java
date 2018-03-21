@@ -70,11 +70,11 @@ public class RestDoc {
         return finalDescriptors;
     }
 
-    public static ParameterDescriptor[] getRelaxedPagingParameters(ParameterDescriptor... descriptors) {
+    public static ParameterDescriptor[] getRelaxedPagingParameters(DefaultConst dc, ParameterDescriptor... descriptors) {
         ParameterDescriptor[] common = {
-                parameterWithName(DefaultConst.PAGE_SIZE_HOLDER).optional().description(LinkPath.PAGE_SIZE_ATTR_META),
-                parameterWithName(DefaultConst.PAGE_PAGE_HOLDER).optional().description(LinkPath.PAGE_NUMBER_ATTR_META),
-                parameterWithName(DefaultConst.PAGE_SORT_HOLDER).optional().description(LinkPath.PAGE_SORT_ATTR_META),
+                parameterWithName(dc.getPageSizeParam()).optional().description(LinkPath.PAGE_SIZE_PARAM_META),
+                parameterWithName(dc.getPagePageParam()).optional().description(LinkPath.PAGE_PAGE_PARAM_META),
+                parameterWithName(dc.getPageSortParam()).optional().description(LinkPath.PAGE_SORT_PARAM_META),
         };
         ParameterDescriptor[] finalDescriptors = new ParameterDescriptor[common.length + descriptors.length];
         System.arraycopy(descriptors, 0, finalDescriptors, 0, descriptors.length);

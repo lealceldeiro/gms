@@ -84,7 +84,7 @@ public class BPermissionRepositoryTest {
         authHeader = sc.getATokenHeader();
         tokenType = sc.getATokenType();
 
-        pageSizeAttr = DefaultConst.PAGE_SIZE_HOLDER;
+        pageSizeAttr = dc.getPageSizeParam();
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
@@ -113,7 +113,7 @@ public class BPermissionRepositoryTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters()
+                        RestDoc.getRelaxedPagingParameters(dc)
                 )));
     }
 

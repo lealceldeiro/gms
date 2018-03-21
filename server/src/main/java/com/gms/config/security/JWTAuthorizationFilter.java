@@ -29,6 +29,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final AuthenticationFacade authFacade;
 
+    /**
+     * Password holder for storing the password (hashed) in the token's claims
+     */
+    private static final String PASS_HOLDER = "password";
+
     @SuppressWarnings("WeakerAccess")
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService,
                                   AuthenticationFacade authenticationFacade) {
@@ -59,7 +64,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 //parse the token
                 Map claims = jwtService.getClaimsExtended(
-                        token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), SecurityConst.PASS_HOLDER
+                        token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
                 );
                 String user = claims.get(JWTService.SUBJECT).toString();
                 if (user != null) {
@@ -70,7 +75,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         for (String a : authoritiesS) {
                             authorities.add(new SimpleGrantedAuthority(a));
                         }
-                        String password = (String) claims.get(SecurityConst.PASS_HOLDER);  // encoded password
+                        String password = (String) claims.get(PASS_HOLDER);  // hashed password
 
                         return new UsernamePasswordAuthenticationToken(user, password, authorities);
                     }

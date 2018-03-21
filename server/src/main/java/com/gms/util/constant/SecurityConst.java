@@ -13,14 +13,23 @@ import org.springframework.stereotype.Component;
 public class SecurityConst {
 
     //region auth request
+    /**
+     * Variable in which the username (or any other user identifier) is sent to the login request.
+     */
     @Value("${gms.request.auth.username:username}")
     private String reqUsernameHolder;
 
+    /**
+     * Variable in which the User's password is sent to the login request.
+     */
     @Value("${gms.request.auth.password:password}")
     private String reqPasswordHolder;
     //endregion
 
     //region token
+    /**
+     * Secret for signing and verifying the jwt.
+     */
     @Value("${gms.security.jwt.secret:OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb}")
     private String secret;
 
@@ -30,9 +39,15 @@ public class SecurityConst {
     @Value("${gms.security.jwt.issued_time_holder:issued_at}")
     private String issuedTimeHolder;
 
+    /**
+     * Variable which will contain the authorities granted to the logged user.
+     */
     @Value("${gms.security.jwt.authorities_holder:authorities}")
     private String authoritiesHolder;
 
+    /**
+     * Jwt issuer.
+     */
     @Value("${gms.security.jwt.issuer:www.gms.com}")
     private String issuer;
 
@@ -74,6 +89,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.token_expiration:86400}")  // 1 day (in seconds)
     private long aTokenExpirationTime;
 
+    /**
+     * Variable in which the access token expiration time will be sent in the login response.
+     */
     @Value("${gms.security.jwt.token_expiration_time_holder:token_expiration_time}")
     private String aTokenExpirationTimeHolder;
 
@@ -97,6 +115,9 @@ public class SecurityConst {
     @Value("${gms.security.jwt.refresh_token_expiration:2592000}") // 30 days in seconds
     private long rTokenExpirationTime;
 
+    /**
+     * Variable in which the refresh token expiration time will be sent in the login response.
+     */
     @Value("${gms.security.jwt.refresh_token_expiration_time_holder:refresh_token_expiration_time}")
     private String rTokenExpirationTimeHolder;
 
@@ -110,22 +131,40 @@ public class SecurityConst {
     //endregion
 
     //region sign in/up/out URLs
+    /**
+     * Url for accepting new user via sign-up.
+     */
     @Value("${gms.security.sign_up_url}")
     private String signUpUrl;
 
+    /**
+     * Url for processing the login request.
+     */
     @Value("${gms.security.sign_in_url:/login}")
     private String signInUrl;
     //endregion
 
+    /**
+     * Url which are not checked by the security mechanism.
+     */
     @Value("${gms.security.free_url_any:}")
     private String freeURLsAnyRequest;
 
+    /**
+     * Url which are not checked by the security mechanism when the HttpRequestMethod is POST.
+     */
     @Value("${gms.security.free_url_post:}")
     private String freeURLsPostRequest;
 
+    /**
+     * Url which are not checked by the security mechanism when the HttpRequestMethod is GET.
+     */
     @Value("${gms.security.free_url_get:}")
     private String freeURLsGetRequest;
 
+    /**
+     * String separator used for concatenating the user authorities in the login response.
+     */
     public static final String AUTHORITIES_SEPARATOR = ";";
 
     /**
@@ -133,11 +172,16 @@ public class SecurityConst {
      */
     public static final String ACCESS_TOKEN_URL = "access_token";
 
+    /**
+     * Variable in which the {@link com.gms.domain.security.user.EUser}'s username will be sent in the response of the
+     * login request.
+     */
     @Value("${gms.response.auth.username:username}")
     private String usernameHolder;
 
-    public static final String PASS_HOLDER = "password";
-
+    /**
+     * Password holder for storing the username in a token's claims
+     */
     public static final String USERNAME_HOLDER = "username";
 
     /**

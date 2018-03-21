@@ -1,6 +1,18 @@
 {
   "properties": [
     {
+      "name": "gms.request.auth.username",
+      "type": "java.lang.String",
+      "description": "[Optional | default = usernameOrEmail] Variable in which the User's username (or any other user identifier) is sent to the login request.",
+      "defaultValue": "usernameOrEmail"
+    },
+    {
+      "name": "gms.request.auth.password",
+      "type": "java.lang.String",
+      "description": "[Optional | default = password] Variable in which the User's password is sent to the login request.",
+      "defaultValue": "password"
+    },
+    {
       "name": "gms.security.jwt.secret",
       "type": "java.lang.String",
       "description": "[Optional | default = OIwOG02p4f8UyfqAwEAHnKaEjpwQMyBqO9cmvp70d6P9nbuNbF6c0WQwlYBjWjb] Defines the secret to be used for generating the JWT.",
