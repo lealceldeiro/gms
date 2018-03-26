@@ -63,6 +63,7 @@ public class EOwnedEntityRepositoryTest {
     private String tokenType;
     private String accessToken;
     private String pageSizeAttr;
+    private String pageSortAttr;
     private String pageSize;
     private static final String reqString = ResourcePath.OWNED_ENTITY;
     //endregion
@@ -81,6 +82,7 @@ public class EOwnedEntityRepositoryTest {
         tokenType = sc.getATokenType();
 
         pageSizeAttr = dc.getPageSizeParam();
+        pageSortAttr = dc.getPageSortParam();
         pageSize = dc.getPageSize();
 
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
@@ -88,10 +90,12 @@ public class EOwnedEntityRepositoryTest {
 
     @Test
     public void list() throws Exception {
+        String[] sortParams = {"name", "username,asc"};
         mvc.perform(get(apiPrefix + "/" + reqString)
                 .header(authHeader, tokenType + " " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
-                .param(pageSizeAttr, pageSize))
+                .param(pageSizeAttr, pageSize)
+                .param(pageSortAttr, sortParams))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
