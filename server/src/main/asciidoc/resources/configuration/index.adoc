@@ -11,6 +11,8 @@ include::get-by-key-and-user.adoc[]
 
 include::get-by-user.adoc[]
 
+include::get-user-registration-allowed.adoc[]
+
 include::save.adoc[]
 
 include::save-for-user.adoc[]

@@ -18,6 +18,9 @@ public class DAOProvider {
 
     private final QueryService queryService;
 
+    private static final String NOT_IMPLEMENTED_YET = "Whether the `spring.datasource.url` property has not been specified or " +
+            "support for the specified one has not been implemented yet";
+
     @Autowired
     public DAOProvider(QueryService queryService) {
         if (queryService == null) {
@@ -40,7 +43,7 @@ public class DAOProvider {
             case POSTGRESQL:
                 return new PostgreSQLBAuthorizationDAO(queryService);
             default:
-                throw new NullPointerException("Whether DBMS Driver has not been specified or Support for the specified one has not been implemented yet");
+                throw new NullPointerException(NOT_IMPLEMENTED_YET);
         }
     }
 
@@ -58,7 +61,7 @@ public class DAOProvider {
             case POSTGRESQL:
                 return new PostgreSQLBPermissionDAO(queryService);
             default:
-                throw new NullPointerException("Whether DBMS Driver has not been specified or Support for the specified one has not been implemented yet");
+                throw new NullPointerException(NOT_IMPLEMENTED_YET);
         }
     }
 }

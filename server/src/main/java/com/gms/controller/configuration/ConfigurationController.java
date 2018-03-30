@@ -22,6 +22,12 @@ public class ConfigurationController extends BaseController{
 
     private final ConfigurationService configService;
 
+    @GetMapping("sign-up")
+    @ResponseBody
+    public boolean isUserRegistrationAllowed() {
+        return configService.isUserRegistrationAllowed();
+    }
+
     @GetMapping
     @ResponseBody
     public Object getConfig(@RequestParam(value = "key", required = false) String key,
