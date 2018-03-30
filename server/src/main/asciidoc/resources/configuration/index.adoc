@@ -13,6 +13,8 @@ include::get-by-user.adoc[]
 
 include::get-user-registration-allowed.adoc[]
 
+include::get-is-multi-entity.adoc[]
+
 include::save.adoc[]
 
 include::save-for-user.adoc[]

@@ -28,6 +28,12 @@ public class ConfigurationController extends BaseController{
         return configService.isUserRegistrationAllowed();
     }
 
+    @GetMapping("multientity")
+    @ResponseBody
+    public boolean isMultiEntity() {
+        return configService.isMultiEntity();
+    }
+
     @GetMapping
     @ResponseBody
     public Object getConfig(@RequestParam(value = "key", required = false) String key,

@@ -1,0 +1,13 @@
+[[system-configuration-get-is-multientity]]
+==== Getting whether the system is multi-entity or not
+A `GET` request return `true` or `false` indicating whether the system is configured for managing multiple entities (`true`) or not (`false`).
+
+include::../../util/H-REQUEST.adoc[]
+
+include::{snippets}/configuration-controller-test/is-multi-entity/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/configuration-controller-test/is-multi-entity/http-response.adoc[]

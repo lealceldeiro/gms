@@ -185,6 +185,16 @@ public class ConfigurationControllerTest {
     }
 
     @Test
+    public void isMultiEntity() throws Exception{
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "/multientity")
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
     public void save() throws Exception {
         SampleConfigurationPayload payload = new SampleConfigurationPayload(true, false);
         ConstrainedFields fields = new ConstrainedFields(SampleConfigurationPayload.class);
