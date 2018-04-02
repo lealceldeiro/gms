@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
+import static com.gms.util.constant.ResourcePath.QUERY_VALUE;
+
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
@@ -17,15 +19,13 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RepositoryRestResource(collectionResourceRel = ResourcePath.ROLE, path = ResourcePath.ROLE)
 public interface BRoleRepository extends PagingAndSortingRepository<BRole, Long> {
 
-    String value = ResourcePath.QUERY_VALUE;
-
     @RestResource(exported = false)
     BRole findFirstByLabel(String label);
 
     @RestResource(path = ResourcePath.ROLE_SEARCH_LABEL_LIKE, rel = ResourcePath.ROLE_SEARCH_LABEL_LIKE)
-    Page<BRole> findByLabelContainsIgnoreCase(@Param(value) String label, Pageable pageable);
+    Page<BRole> findByLabelContainsIgnoreCase(@Param(QUERY_VALUE) String label, Pageable pageable);
 
     @RestResource(path = ResourcePath.ROLE_SEARCH_LABEL, rel = ResourcePath.ROLE_SEARCH_LABEL)
-    Page<BRole> findByLabelEquals(@Param(value) String label, Pageable pageable);
+    Page<BRole> findByLabelEquals(@Param(QUERY_VALUE) String label, Pageable pageable);
 
 }
