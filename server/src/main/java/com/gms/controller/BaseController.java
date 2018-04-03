@@ -9,6 +9,7 @@ import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class BaseController extends ResponseEntityExceptionHandler {
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired protected MessageResolver msg;
     @Autowired private AuthenticationFacade authenticationFacade;
     @Autowired protected DefaultConst dc;
@@ -77,7 +79,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
 
 
     /**
-     * Handles all ConstraintViolationException exceptions thrown through the {@link TransactionSystemException} exception.
+     * Handles all {@link javax.validation.ConstraintViolationException} exceptions thrown through the {@link TransactionSystemException} exception.
      *
      * @param ex  {@link TransactionSystemException} exception.
      * @param req {@link WebRequest} request.
@@ -90,7 +92,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handles all ConstraintViolationException exceptions thrown through the {@link DataIntegrityViolationException} exception.
+     * Handles all {@link javax.validation.ConstraintViolationException} exceptions thrown through the {@link DataIntegrityViolationException} exception.
      *
      * @param ex  {@link DataIntegrityViolationException} exception.
      * @param req {@link WebRequest} request.
@@ -100,6 +102,22 @@ public class BaseController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest req) {
         return handleConstraintViolationException(ex, req);
+    }
+
+    /**
+     * Handles all {@link InvalidDataAccessApiUsageException} exceptions thrown through the {@link DataIntegrityViolationException} exception.
+     *
+     * @param ex  {@link DataIntegrityViolationException} exception.
+     * @param req {@link WebRequest} request.
+     * @return Formatted {@link org.springframework.http.ResponseEntity} depending on the requested format (i.e.: json, xml)
+     * containing detailed information about the exception.
+     */
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    protected ResponseEntity<Object> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex,
+                                                                              WebRequest req) {
+        return handleExceptionInternal(ex,
+                ExceptionUtil.createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc),
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, req);
     }
 
     //endregion

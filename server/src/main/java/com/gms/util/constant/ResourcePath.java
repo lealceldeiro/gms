@@ -26,7 +26,13 @@ public class ResourcePath {
      *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name or
      *  label (like search).
      */
-    public static final String PERMISSION_SEARCH_NAME_LABEL_LIKE = "name-label-like";
+    public static final String PERMISSION_SEARCH_MULTI_LIKE = "multi-like";
+
+    /**
+     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name or
+     *  label.
+     */
+    public static final String PERMISSION_SEARCH_MULTI = "multi";
 
     /**
      *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name (like search).
@@ -61,7 +67,13 @@ public class ResourcePath {
      * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name or
      * username (like search).
      */
-    public static final String OWNED_ENTITY_SEARCH_NAME_USERNAME_LIKE = "name-username-like";
+    public static final String OWNED_ENTITY_SEARCH_MULTI_LIKE = "multi-like";
+
+    /**
+     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name or
+     * username.
+     */
+    public static final String OWNED_ENTITY_SEARCH_MULTI = "multi";
 
     /**
      * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name (like search).
@@ -151,6 +163,18 @@ public class ResourcePath {
      */
     public static final String USER_SEARCH_LASTNAME_LIKE = "lastname-like";
 
+    /**
+     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username, email, name or
+     * last name (like search).
+     */
+    public static final String USER_SEARCH_MULTI_LIKE = "multi-like";
+
+    /**
+     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username, email, name or
+     * last name.
+     */
+    public static final String USER_SEARCH_MULTI = "multi";
+
     // endregion
 
     // region authorization
@@ -162,12 +186,37 @@ public class ResourcePath {
 
     // endregion
 
-    // region query
+    // region query params
 
     /**
      * Query param "value"
      */
     public static final String QUERY_VALUE = "value";
+
+    /**
+     * Query param "username"
+     */
+    public static final String QUERY_USERNAME = "username";
+
+    /**
+     * Query param "email"
+     */
+    public static final String QUERY_EMAIL = "email";
+
+    /**
+     * Query param "name"
+     */
+    public static final String QUERY_NAME = "name";
+
+    /**
+     * Query param "lastname"
+     */
+    public static final String QUERY_LASTNAME = "lastname";
+
+    /**
+     * Query param "label"
+     */
+    public static final String QUERY_LABEL = "label";
 
     // endregion
 

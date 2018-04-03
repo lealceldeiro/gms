@@ -11,6 +11,8 @@ import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,8 +25,15 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.UnsupportedEncodingException;
+
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -173,5 +182,196 @@ public class EOwnedEntityRepositoryTest {
                 .andDo(restDocResHandler.document(
                         pathParameters(parameterWithName("id").description(EOwnedEntityMeta.id))
                 ));
+    }
+
+    @Test
+    public void searchMulti() throws Exception {
+        searchMulti(false);
+    }
+
+    @Test
+    public void searchMultiLike() throws Exception {
+        searchMulti(true);
+    }
+
+    @Test
+    public void searchName() throws Exception {
+        searchName(false);
+    }
+
+    @Test
+    public void searchNameLike() throws Exception {
+        searchName(true);
+    }
+    @Test
+    public void searchUsername() throws Exception {
+        searchUsername(false);
+    }
+
+    @Test
+    public void searchUsernameLike() throws Exception {
+        searchUsername(true);
+    }
+
+    private void searchName(boolean isLike) throws Exception {
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+        String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_NAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_NAME;
+        String nameU = isLike ? e.getName().toUpperCase() : e.getName();
+
+        testSearchValue(url, nameU);
+
+        if (isLike) { // check also for the same result with the name in lower case and a with substring of it
+            String nameL = e.getName().toLowerCase();
+            String nameLShortened = nameL.substring(1, nameL.length() - 2);
+            testSearchValue(url, nameL);
+            testSearchValue(url, nameLShortened);
+        }
+    }
+
+    private void searchUsername(boolean isLike) throws Exception {
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+        String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_USERNAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_USERNAME;
+        String usernameU = isLike ? e.getUsername().toUpperCase() : e.getUsername();
+
+        testSearchValue(url, usernameU);
+
+        if (isLike) { // check also for the same result with the username in lower case and a with substring of it
+            String usernameL = e.getUsername().toLowerCase();
+            String usernameLShortened = usernameL.substring(1, usernameL.length() - 2);
+            testSearchValue(url, usernameL);
+            testSearchValue(url, usernameLShortened);
+        }
+    }
+
+    private void testSearchValue(String url, String name, ResultMatcher status) throws Exception {
+        final MvcResult mvcResult = mvc.perform(
+                get(apiPrefix + "/" + reqString + "/search/" + url)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param(ResourcePath.QUERY_VALUE, name)
+        ).andExpect(status).andReturn();
+
+        if (status == status().isOk()) {
+            checkMvcResult(mvcResult);
+        }
+    }
+
+    private void testSearchValue(String url, String name) throws Exception {
+        testSearchValue(url, name, status().isOk());
+    }
+
+    private void searchMulti(boolean isLike) throws Exception {
+        EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(random.nextString()));
+        assertNotNull(e);
+        MultiValueMap<String, String> paramMapBase = new LinkedMultiValueMap<>();
+        paramMapBase.add(pageSizeAttr, pageSize);
+
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        String url;
+
+        // region OWNED_ENTITY_SEARCH_MULTI_LIKE - OK
+        String notFound = random.nextString();
+        url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_MULTI_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_MULTI;
+        String nameL = isLike ? e.getName().toLowerCase() : e.getName();
+        String usernameL = isLike ? e.getUsername().toLowerCase() : e.getUsername();
+
+        // region name (lower case?) - username invalid
+        paramMap.clear();
+        paramMap.add(ResourcePath.QUERY_NAME, nameL);
+        paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+        paramMap.addAll(paramMapBase);
+
+        testSearchMulti(url, paramMap);
+        //endregion
+
+        // region name invalid - username (lower case?)
+        paramMap.clear();
+        paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
+        paramMap.add(ResourcePath.QUERY_NAME, notFound);
+        paramMap.addAll(paramMapBase);
+
+        testSearchMulti(url, paramMap);
+        //endregion
+
+        // endregion
+
+        if (isLike) {
+            // as it is like, test the other alternatives as well
+            String nameU = e.getName().toUpperCase();
+            String usernameU = e.getUsername().toUpperCase();
+
+            // region name (upper case) - username invalid
+            paramMap.clear();
+            paramMap.add(ResourcePath.QUERY_NAME, nameU);
+            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+            paramMap.addAll(paramMapBase);
+
+            testSearchMulti(url, paramMap);
+            //endregion
+
+            // region name (upper case shortened) - username invalid
+            paramMap.clear();
+            paramMap.add(ResourcePath.QUERY_NAME, nameU.substring(1, nameU.length() - 2));
+            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+            paramMap.addAll(paramMapBase);
+
+            testSearchMulti(url, paramMap);
+            //endregion
+
+            // region name invalid - username (upper case)
+            paramMap.clear();
+            paramMap.add(ResourcePath.QUERY_USERNAME, usernameU);
+            paramMap.add(ResourcePath.QUERY_NAME, notFound);
+            paramMap.addAll(paramMapBase);
+
+            testSearchMulti(url, paramMap);
+            //endregion
+
+            // region OWNED_ENTITY_SEARCH_MULTI_LIKE - KO
+
+            // region name ok - username null
+            paramMap.clear();
+            paramMap.add(ResourcePath.QUERY_NAME, nameL);
+            paramMap.addAll(paramMapBase);
+
+            testSearchMulti(url, paramMap, status().isBadRequest());
+            //endregion
+
+            // region name null - username ok
+            paramMap.clear();
+            paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
+            paramMap.addAll(paramMapBase);
+
+            testSearchMulti(url, paramMap, status().isBadRequest());
+            //endregion
+
+            // endregion
+        }
+    }
+
+    private void testSearchMulti(String url, MultiValueMap<String, String> paramMap, ResultMatcher status) throws Exception {
+        final MvcResult mvcResult = mvc.perform(
+                get(apiPrefix + "/" + reqString + "/search/" + url)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .params(paramMap)
+        ).andExpect(status).andReturn();
+
+        if (status == status().isOk()) {
+            checkMvcResult(mvcResult);
+        }
+    }
+
+    private void testSearchMulti(String url, MultiValueMap<String, String> paramMap) throws Exception {
+        testSearchMulti(url, paramMap, status().isOk());
+    }
+
+    private void checkMvcResult(MvcResult mvcResult) throws JSONException, UnsupportedEncodingException {
+        final String valueInJSON = GmsSecurityUtil.getValueInJSON(mvcResult.getResponse().getContentAsString(), "_embedded");
+        JSONArray entities = new JSONArray(GmsSecurityUtil.getValueInJSON(valueInJSON, "entity"));
+        assertNotNull(entities);
+        assertTrue(entities.length() > 0);
     }
 }
