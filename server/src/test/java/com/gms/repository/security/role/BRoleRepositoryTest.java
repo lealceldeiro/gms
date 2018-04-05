@@ -15,6 +15,8 @@ import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.validation.ConstrainedFields;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,8 +29,13 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.UnsupportedEncodingException;
+
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -237,6 +244,56 @@ public class BRoleRepositoryTest {
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
                         RestDoc.getRelaxedPagingParameters(dc)
                 )));
+    }
+
+    @Test
+    public void searchLabel() throws Exception {
+        searchLabelR(false);
+    }
+
+    @Test
+    public void searchLabelLike() throws Exception {
+        searchLabelR(true);
+    }
+
+    private void searchLabelR(boolean isLike) throws Exception {
+        BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(e);
+        String url = isLike ? ResourcePath.ROLE_SEARCH_LABEL_LIKE : ResourcePath.ROLE_SEARCH_LABEL;
+        String labelUpper = isLike ? e.getLabel().toUpperCase() : e.getLabel();
+
+        testSearchValueR(url, labelUpper);
+
+        if (isLike) { // check also for the same result with the name in lower case and a with substring of it
+            String labelRLower = e.getLabel().toLowerCase();
+            String labelRLowerShortened = labelRLower.substring(1, labelRLower.length() - 2);
+            testSearchValueR(url, labelRLower);
+            testSearchValueR(url, labelRLowerShortened);
+        }
+    }
+
+    private void testSearchValueR(String url, String name, ResultMatcher status) throws Exception {
+        final MvcResult mvcResult = mvc.perform(
+                get(apiPrefix + "/" + reqString + "/search/" + url)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param(ResourcePath.QUERY_VALUE, name)
+        ).andExpect(status).andReturn();
+
+        if (status == status().isOk()) {
+            checkMvcResult(mvcResult);
+        }
+    }
+
+    private void testSearchValueR(String url, String name) throws Exception {
+        testSearchValueR(url, name, status().isOk());
+    }
+
+    private void checkMvcResult(MvcResult mvcResult) throws JSONException, UnsupportedEncodingException {
+        final String valueInJSON = GmsSecurityUtil.getValueInJSON(mvcResult.getResponse().getContentAsString(), "_embedded");
+        JSONArray entities = new JSONArray(GmsSecurityUtil.getValueInJSON(valueInJSON, ResourcePath.ROLE));
+        assertNotNull(entities);
+        assertTrue(entities.length() > 0);
     }
 
 }
