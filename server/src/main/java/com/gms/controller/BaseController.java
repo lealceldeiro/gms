@@ -30,7 +30,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class BaseController extends ResponseEntityExceptionHandler {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired protected MessageResolver msg;
     @Autowired private AuthenticationFacade authenticationFacade;
     @Autowired protected DefaultConst dc;

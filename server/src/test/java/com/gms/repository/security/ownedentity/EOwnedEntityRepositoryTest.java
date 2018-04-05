@@ -203,6 +203,7 @@ public class EOwnedEntityRepositoryTest {
     public void searchNameLike() throws Exception {
         searchName(true);
     }
+
     @Test
     public void searchUsername() throws Exception {
         searchUsername(false);
@@ -219,13 +220,13 @@ public class EOwnedEntityRepositoryTest {
         String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_NAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_NAME;
         String nameU = isLike ? e.getName().toUpperCase() : e.getName();
 
-        testSearchValue(url, nameU);
+        testSearchValueOE(url, nameU);
 
         if (isLike) { // check also for the same result with the name in lower case and a with substring of it
             String nameL = e.getName().toLowerCase();
             String nameLShortened = nameL.substring(1, nameL.length() - 2);
-            testSearchValue(url, nameL);
-            testSearchValue(url, nameLShortened);
+            testSearchValueOE(url, nameL);
+            testSearchValueOE(url, nameLShortened);
         }
     }
 
@@ -235,17 +236,17 @@ public class EOwnedEntityRepositoryTest {
         String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_USERNAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_USERNAME;
         String usernameU = isLike ? e.getUsername().toUpperCase() : e.getUsername();
 
-        testSearchValue(url, usernameU);
+        testSearchValueOE(url, usernameU);
 
         if (isLike) { // check also for the same result with the username in lower case and a with substring of it
             String usernameL = e.getUsername().toLowerCase();
             String usernameLShortened = usernameL.substring(1, usernameL.length() - 2);
-            testSearchValue(url, usernameL);
-            testSearchValue(url, usernameLShortened);
+            testSearchValueOE(url, usernameL);
+            testSearchValueOE(url, usernameLShortened);
         }
     }
 
-    private void testSearchValue(String url, String name, ResultMatcher status) throws Exception {
+    private void testSearchValueOE(String url, String name, ResultMatcher status) throws Exception {
         final MvcResult mvcResult = mvc.perform(
                 get(apiPrefix + "/" + reqString + "/search/" + url)
                         .header(authHeader, tokenType + " " + accessToken)
@@ -258,8 +259,8 @@ public class EOwnedEntityRepositoryTest {
         }
     }
 
-    private void testSearchValue(String url, String name) throws Exception {
-        testSearchValue(url, name, status().isOk());
+    private void testSearchValueOE(String url, String name) throws Exception {
+        testSearchValueOE(url, name, status().isOk());
     }
 
     private void searchMulti(boolean isLike) throws Exception {
@@ -370,7 +371,7 @@ public class EOwnedEntityRepositoryTest {
 
     private void checkMvcResult(MvcResult mvcResult) throws JSONException, UnsupportedEncodingException {
         final String valueInJSON = GmsSecurityUtil.getValueInJSON(mvcResult.getResponse().getContentAsString(), "_embedded");
-        JSONArray entities = new JSONArray(GmsSecurityUtil.getValueInJSON(valueInJSON, "entity"));
+        JSONArray entities = new JSONArray(GmsSecurityUtil.getValueInJSON(valueInJSON, ResourcePath.OWNED_ENTITY));
         assertNotNull(entities);
         assertTrue(entities.length() > 0);
     }
