@@ -37,7 +37,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityConst sc;
@@ -67,8 +67,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
+                // needs to be authenticated by default to access anything within the scope of the API path
                 .antMatchers(dc.getApiBasePath()).authenticated()
+                // needs to be authenticated by default to access anything beyond the base ("/") path
                 .antMatchers(dc.getApiBasePath() + "/**").authenticated()
+                // permit request to base url, not request to API
                 .antMatchers("/").permitAll()
                 .and()
                 .addFilter(authFilter)
@@ -76,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // 401 instead of 403
+                // 401 instead as "unauthorized" response HttpStatus
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
