@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { HomeModule } from './home/home.module';
+import { AppRoutingModule } from './app-routing.module';
+import { PageNotFoundModule } from './page-not-found/page-not-found.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +13,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    PageNotFoundModule,
+    HomeModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
