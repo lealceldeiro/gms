@@ -64,7 +64,7 @@ public class SecurityController extends BaseController{
      * {@link com.gms.config.security.JWTAuthenticationFilter#successfulAuthentication(HttpServletRequest, HttpServletResponse, FilterChain, Authentication)}
      * method.
      */
-    @PostMapping("access_token")
+    @PostMapping(SecurityConst.ACCESS_TOKEN_URL)
     @PreAuthorize("permitAll()")
     @ResponseBody
     public Map refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
@@ -83,9 +83,9 @@ public class SecurityController extends BaseController{
                 return jwtService.createLoginData(sub, newAccessToken, iat, authorities, newRefreshToken);
             } catch (JwtException e) {
                 //return 401
-                throw new GmsSecurityException("access_token", "security.token.refresh.invalid");
+                throw new GmsSecurityException(SecurityConst.ACCESS_TOKEN_URL, "security.token.refresh.invalid");
             }
         }
-        throw new GmsSecurityException("access_token", "security.token.refresh.required");
+        throw new GmsSecurityException(SecurityConst.ACCESS_TOKEN_URL, "security.token.refresh.required");
     }
 }

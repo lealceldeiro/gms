@@ -146,7 +146,7 @@ public class SecurityControllerTest {
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
         final ConstrainedFields fields = new ConstrainedFields(RefreshTokenPayload.class);
         mvc.perform(
-                post(apiPrefix + "/access_token").contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
                 .andDo(
@@ -172,7 +172,7 @@ public class SecurityControllerTest {
     private void testRefreshTokenKO(String refreshToken) throws Exception{
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
         String temp = mvc.perform(
-                post(apiPrefix + "/access_token").contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isUnauthorized()).andReturn().getResponse().getContentAsString();
 
@@ -185,7 +185,7 @@ public class SecurityControllerTest {
         assert temp.equals(msg.getMessage("security.unauthorized"));
 
         temp = json.getString("path");
-        assert temp.equals(dc.getApiBasePath() + "/access_token");
+        assert temp.equals(dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
 
         temp = json.getString(dc.getResMessageHolder());
 

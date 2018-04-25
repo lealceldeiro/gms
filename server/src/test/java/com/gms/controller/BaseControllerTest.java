@@ -129,12 +129,12 @@ public class BaseControllerTest {
         JSONObject res = new JSONObject(mvcResult.getResponse().getContentAsString());
         assertTrue("HttpStatuses do not match.", res.getInt("status") == HttpStatus.UNAUTHORIZED.value());
         assertTrue("Error messages do not match.", res.getString("error").equals(msg.getMessage("security.unauthorized")));
-        assertTrue("Paths do not match.", res.getString("path").equals(dc.getApiBasePath() + "/access_token"));
+        assertTrue("Paths do not match.", res.getString("path").equals(dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL));
     }
 
     private MvcResult doRequest(RefreshTokenPayload payload) throws Exception {
         return mvc.perform(
-                post(apiPrefix + "/access_token").contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isUnauthorized()).andReturn();
     }
