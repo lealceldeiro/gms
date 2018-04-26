@@ -1,0 +1,8 @@
+$gmsSpacer: 1rem !default;
+$gmsSpacers: () !default;
+$gmsSpacers: map-merge((
+  6: ($gmsSpacer * 4),
+  7: ($gmsSpacer * 5.5),
+  8: ($gmsSpacer * 7.5),
+  9: ($gmsSpacer * 10)
+), $gmsSpacers);
