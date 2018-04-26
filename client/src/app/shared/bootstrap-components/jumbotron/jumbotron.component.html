@@ -1,0 +1,11 @@
+<div class="jumbotron">
+  <h2 *ngIf="header"> {{header}} </h2>
+  <p *ngIf="text">{{text}}</p>
+  <p>
+    <a class="btn btn-primary btn-large"
+       *ngIf="link && linkText"
+       [ngClass]="[sizeClass, typeClass]"
+       [routerLink]="[link]"
+    >{{linkText}}</a>
+  </p>
+</div>
