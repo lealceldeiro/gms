@@ -15,7 +15,6 @@ import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +46,6 @@ public class SecurityController extends BaseController{
      */
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("permitAll()")
     @ResponseBody
     public ResponseEntity signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
@@ -65,7 +63,6 @@ public class SecurityController extends BaseController{
      * method.
      */
     @PostMapping(SecurityConst.ACCESS_TOKEN_URL)
-    @PreAuthorize("permitAll()")
     @ResponseBody
     public Map refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
         String oldRefreshToken = payload.getRefreshToken();
