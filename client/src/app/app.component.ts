@@ -15,5 +15,5 @@ export class AppComponent {
    *
    * @type {string}
    */
-  title = 'GMS Boilerplate Client';
+  title = 'General Management System';
 }

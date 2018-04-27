@@ -11,16 +11,24 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/todo">
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" routerLink="/todo">
             To do <span class="sr-only" *ngIf="isLinkActive('/todo')">(current)</span>
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Type anything to search" aria-label="Type anything to search">
-        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+      <form class="form-inline my-2 my-lg-0 mr-5">
+        <div class="input-group">
+          <input class="form-control" type="search" placeholder="Type anything to search" aria-label="Type anything to search">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">Search</button>
+          </div>
+        </div>
       </form>
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" routerLink="/sign-up">Sign up</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
+      </ul>
     </div>
 
   </div>
