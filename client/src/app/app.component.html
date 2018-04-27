@@ -1,19 +1,36 @@
-<div class="container-fluid">
+<div class="container-fluid h-100">
   <div class="col-md-12">
 
-    <!--nav bar-->
+    <!--region top nav bar-->
     <div class="row">
       <div class="col-md-12">
         <gms-nav-bar></gms-nav-bar>
       </div>
     </div>
-    <!--./ nav bar-->
+    <!--endregion-->
 
-    <!--routing-->
-    <div class="container-fluid pt-6">
-      <router-outlet></router-outlet>
+    <!--region button navbar and content-->
+    <div class="row container-fluid" id="content-wrapper">
+      <!--region left menu bar-->
+      <div class="col-md-2 container pt-6 d-flex">
+        <div class="align-self-center" style="position: fixed">
+          <nav class="nav flex-column nav-pills">
+            <a class="nav-link active" href="#">Active</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </nav>
+        </div>
+      </div>
+      <!--endregion-->
+
+      <!--region routing-->
+      <div class="col-md-10 container-fluid pt-6">
+        <router-outlet></router-outlet>
+      </div>
+      <!--endregion-->
     </div>
-    <!--./ routing-->
+    <!--endregion-->
 
   </div>
 </div>
