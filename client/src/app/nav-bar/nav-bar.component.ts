@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit {
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
    * @type {boolean}
    */
-  isCollapsed : boolean = true;
+  isCollapsed = true;
 
   /**
    * Component constructor

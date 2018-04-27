@@ -4,12 +4,13 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "doc:build": "compodoc -p src/tsconfig.app.json",
-    "doc:serve": "compodoc -s",
-    "doc:buildandserve": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
+    "builddoc": "compodoc -p src/tsconfig.app.json",
+    "servedoc": "compodoc -s",
+    "buildandservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
+    "testcoverage": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

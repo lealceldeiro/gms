@@ -38,13 +38,13 @@ export class GmsJumbotronComponent implements OnInit {
    * The bootstrap class which gives the button its size.
    * @type {string}
    */
-  @Input() sizeClass: string = 'btn-lg';
+  @Input() sizeClass = 'btn-lg';
 
   /**
    * The bootstrap class which gives the button its color style.
    * @type {string}
    */
-  @Input() typeClass: string = 'btn-primary';
+  @Input() typeClass = 'btn-primary';
 
   /**
    * Component constructor
