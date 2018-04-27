@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+/**
+ * Component for generating a Bootstrap's Jumbotron.
+ */
 @Component({
   selector: 'gms-jumbotron',
   templateUrl: './jumbotron.component.html',
@@ -7,15 +10,50 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class GmsJumbotronComponent implements OnInit {
 
-  @Input() header: string = null;
-  @Input() text: string = null;
-  @Input() link: string = null;
-  @Input() linkText: string = null;
+  /**
+   * The text to be shown as header.
+   * @type {string}
+   */
+  @Input() header: string;
+
+  /**
+   * The text to be shown.
+   * @type {string}
+   */
+  @Input() text: string;
+
+  /**
+   * The path to which the button will be linked to.
+   * @type {string}
+   */
+  @Input() link: string;
+
+  /**
+   * The text to be shown in the button.
+   * @type {string}
+   */
+  @Input() linkText: string;
+
+  /**
+   * The bootstrap class which gives the button its size.
+   * @type {string}
+   */
   @Input() sizeClass: string = 'btn-lg';
+
+  /**
+   * The bootstrap class which gives the button its color style.
+   * @type {string}
+   */
   @Input() typeClass: string = 'btn-primary';
 
+  /**
+   * Component constructor
+   */
   constructor() { }
 
+  /**
+   * Lifecycle hook that is called after data-bound properties of a directive are initialized.
+   */
   ngOnInit() {
   }
 
