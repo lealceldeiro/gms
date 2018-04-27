@@ -4,6 +4,7 @@
 /dist/
 /dist-server/
 /tmp/
+/documentation/
 /out-tsc
 
 # dependencies
