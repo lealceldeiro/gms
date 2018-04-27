@@ -1,5 +1,4 @@
 .gradle
-/build/
 /out/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -14,13 +13,12 @@
 ### IntelliJ IDEA ###
 .idea
 *.iws
-*.iml
 *.ipr
 
 ### NetBeans ###
 nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
 .nb-gradle/
