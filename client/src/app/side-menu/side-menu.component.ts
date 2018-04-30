@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 /**
- * Component for generating a Bootstrap's NavBar.
+ * Component for generating a side menu.
  */
 @Component({
-  selector: 'gms-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+  selector: 'gms-side-menu',
+  templateUrl: './side-menu.component.html',
+  styleUrls: ['./side-menu.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class SideMenuComponent implements OnInit {
 
   /**
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
@@ -18,9 +18,7 @@ export class NavBarComponent implements OnInit {
   isCollapsed = true;
 
   /**
-   * Component constructor
-   *
-   * @param router Router component for handling routes.
+   * Component constructor.
    */
   constructor(private router: Router) { }
 
@@ -39,5 +37,4 @@ export class NavBarComponent implements OnInit {
   isLinkActive(link: string): boolean {
     return this.router.isActive(link, true);
   }
-
 }

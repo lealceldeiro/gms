@@ -1,3 +1,8 @@
+#component-wrapper {
+  -ms-overflow-x: hidden;
+  overflow-x: hidden;
+}
+
 #content-wrapper {
   min-height: 100vh !important;
 }
