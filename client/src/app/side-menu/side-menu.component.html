@@ -1,7 +1,7 @@
 <div class="container col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 d-flex" id="nav-wrapper">
   <nav class="navbar navbar-expand-md fixed-bottom navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="sideNavBar"
-            aria-controls="sideNavBar" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle secondary navigation"
+            aria-controls="sideNavBar" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle side navigation"
             (click)="isCollapsed = !isCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -29,7 +29,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/todo">
+          <a class="nav-link" routerLinkActive="active" routerLink="/configuration">
             Configuration <span class="sr-only" *ngIf="isLinkActive('/configuration')">(current)</span>
           </a>
         </li>
