@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SharedModule } from './shared/shared.module';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { GmsCoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
   ],
   imports: [
     BrowserModule,
+    GmsCoreModule.forRoot(),
     NgbModule.forRoot(),
     HomeModule,
     AppRoutingModule,
