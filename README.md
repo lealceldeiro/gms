@@ -6,13 +6,14 @@ The project consists of two main (independent) modules (api server and front-end
   1. From the location `server/` run `gradle bootWar`
 * API + Angular Client
   1. You need to have [Node.js][4] installed
-  2. From the location `server/` run `gradle bootWar -PbuildClient=true`
+  2. From the location `server/` run `gradle bootWar -Pclient=true`
+  3. Optionally you can generate the client app (Angular) documentation by setting also the `clientDoc` param to true like this `-PclientDoc=true`.
 * This will create a WAR file inside `server/build/libs` ready to be deployed
 * Database configuration
   1. Create a [PostgreSQL][5] database
   2. Open the WAR file and set the proper connection parameters inside the file `WEB-INF/classes/config/application-production.properties`
   3. Save the file and update it inside the WAR file
-  4. Deploy WAR
+  4. Deploy the WAR archive
 
 _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./gradlew` instead of `gradle` for the previous mentioned steps.
 
