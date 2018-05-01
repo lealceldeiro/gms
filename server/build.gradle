@@ -78,7 +78,7 @@ dependencies {
 //region custom tasks
 
 //region client task
-task clientBuild(type: NpmTask) {
+task clientBuild(type: NpmTask, dependsOn: ["copyClientDocBuild"]) {
     group = "client tasks"
     description = "Compiles client side folder for production"
     args = ["run", "build"]
@@ -86,9 +86,22 @@ task clientBuild(type: NpmTask) {
 
 task copyClientBuild(type: Copy, dependsOn: ["clientBuild"]) {
     group = "client tasks"
-    description = "Checks all client side resources are ready for deployment"
+    description = "Checks all client side resources are ready for deployment and copy them into the `static` folder"
     from "../client/dist"
     into "build/resources/main/static"
+}
+
+task clientDocBuild(type: NpmTask) {
+    group = "client tasks"
+    description = "Compiles client side documentation folder for production"
+    args = ["run", "builddoc"]
+}
+
+task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
+    group = "client tasks"
+    description = "Checks all client app documentation resources are ready for deployment and copy them into the `static` folder"
+    from "../client/documentation"
+    into "build/resources/main/static/appdoc"
 }
 //endregion
 
@@ -170,6 +183,8 @@ private String getSpringAppPropertyInBuild(String key, String filePath = null){
 //region control enabled tasks
 clientBuild.enabled = buildClient()
 copyClientBuild.enabled = buildClient()
+clientDocBuild.enabled = buildDocClient()
+copyClientDocBuild.enabled = buildDocClient()
 
 task resetConfigTaskState(type: Exec) {
     group = "other"
@@ -177,6 +192,8 @@ task resetConfigTaskState(type: Exec) {
     doLast {
         clientBuild.enabled = buildClient()
         copyClientBuild.enabled = buildClient()
+        clientDocBuild.enabled = buildDocClient()
+        copyClientDocBuild.enabled = buildDocClient()
         setDevConfig.enabled = true
         setTestingConfig.enabled = true
         setProductionConfig.enabled = true
@@ -224,7 +241,10 @@ bootWar {
 compileJava.dependsOn(processResources)
 
 private boolean buildClient() {
-    return project.getProperties().get("buildClient")
+    return project.getProperties().get("client")
+}
+private boolean buildDocClient() {
+    return project.getProperties().get("clientDoc")
 }
 
 private String getAppName() {
