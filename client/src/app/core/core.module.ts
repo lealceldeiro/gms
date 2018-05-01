@@ -34,7 +34,7 @@ export class GmsCoreModule {
       providers: [
         {
           provide: SessionService,
-          useValue: config && config['sessionService'] ? config['sessionService'] : new SessionService()
+          useValue: config && config['sessionService'] ? config['sessionService'] : SessionService
         }
       ]
     };
