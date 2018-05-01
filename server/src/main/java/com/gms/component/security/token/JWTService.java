@@ -141,8 +141,8 @@ public class JWTService {
      * @param subject The subject set on the jwt.
      * @param accessToken The access token generated.
      * @param issuedAt Date when the token was issued.
-     * @param authoritiesString The principal authorities in the format of "AUTHORITY_NAME<separator>AUTHORITY_NAME" where
-     * <separator> is defined in {@link SecurityConst#AUTHORITIES_SEPARATOR}.
+     * @param authoritiesString The principal authorities in the format of <code>AUTHORITY_NAME-separator-AUTHORITY_NAME</code>
+     * where <code>-separator-</code> is defined in {@link SecurityConst#AUTHORITIES_SEPARATOR}.
      * @param refreshToken Refresh token generated in this request.
      * @return Map with all this information set under the key defined in {@link SecurityConst} intended for that.
      */

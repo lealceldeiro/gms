@@ -4,13 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.component.security.token.JWTService;
+import com.gms.domain.security.ownedentity.EOwnedEntity;
+import com.gms.domain.security.role.BRole;
+import com.gms.domain.security.user.EUser;
+import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
+import com.gms.repository.security.role.BRoleRepository;
+import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
 import com.gms.service.security.user.UserService;
-import com.gms.util.GmsMockUtil;
-import com.gms.util.GmsSecurityUtil;
-import com.gms.util.RestDoc;
+import com.gms.util.*;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,12 +37,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,6 +69,10 @@ public class SecurityConfigTest {
     @Autowired private JWTService jwtService;
     @Autowired private AuthenticationFacade authFacade;
     @Autowired private MessageResolver msg;
+
+    @Autowired private BRoleRepository roleRepository;
+    @Autowired private EOwnedEntityRepository entityRepository;
+    @Autowired private EUserRepository userRepository;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
@@ -105,6 +111,54 @@ public class SecurityConfigTest {
     }
 
     @Test
+    public void loginOKNoAuthorities() throws Exception{
+        // region role
+        BRole roleWithoutPermissions = roleRepository.save(EntityUtil.getSampleRole());
+        assertNotNull(roleWithoutPermissions);
+        // endregion
+
+        // region entity
+        EOwnedEntity entity = entityRepository.save(EntityUtil.getSampleEntity());
+        assertNotNull(entity);
+        // endregion
+
+        // region user
+        String r = new GMSRandom().nextString();
+        String password = StringUtil.EXAMPLE_PASSWORD;
+        EUser user = new EUser(StringUtil.EXAMPLE_USERNAME + r, "sc" + r + "@test.com", StringUtil.EXAMPLE_NAME + r,
+                StringUtil.EXAMPLE_LAST_NAME + r, password);
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+        user.setAccountNonExpired(true);
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        assertNotNull(userRepository.save(user));
+        // endregion
+
+        List<Long> ids = new LinkedList<>();
+        ids.add(roleWithoutPermissions.getId());
+
+        try {
+            assertTrue("Role could not be added to user",
+                    userService.addRolesToUser(user.getId(), entity.getId(), ids).size() == ids.size());
+
+            Map<String, String> loginData = new HashMap<>();
+            loginData.put(sc.getReqUsernameHolder(), user.getUsername());
+            loginData.put(sc.getReqPasswordHolder(), password);
+
+            mvc.perform(
+                    post(dc.getApiBasePath() + sc.getSignInUrl())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(loginData))
+            ).andExpect(status().isUnauthorized());
+        } catch (NotFoundEntityException e) {
+            e.printStackTrace();
+            fail("Role could not be added to user");
+        }
+
+    }
+
+    @Test
     public void baseUrlPermitAll() throws Exception {
         int s = mvc.perform(get("/")).andReturn().getResponse().getStatus();
         assertTrue(s != HttpStatus.FORBIDDEN.value());
@@ -118,13 +172,25 @@ public class SecurityConfigTest {
 
     @Test
     public void failOnAccessTokenIntegrityCompromised() throws Exception {
+        // region completely wrong token
         mvc.perform(
                 get(dc.getApiBasePath() + "/permissions")
                         .header(sc.getATokenHeader(), "sampleOfWrongToken")
         ).andExpect(status().isUnauthorized());
+        // endregion
+
+        // region token manipulated (string appended)
         mvc.perform(
                 get(dc.getApiBasePath() + "/permissions")
                         .header(sc.getATokenHeader(), accessToken + "manipulated")
+        ).andExpect(status().isUnauthorized());
+        // endregion
+    }
+
+    @Test
+    public void failOnNotAccessTokenHeaderProvided() throws Exception {
+        mvc.perform(
+                get(dc.getApiBasePath() + "/permissions")
         ).andExpect(status().isUnauthorized());
     }
 
