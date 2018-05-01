@@ -18,8 +18,8 @@ import { GmsCoreModule } from './core/core.module';
   ],
   imports: [
     BrowserModule,
-    GmsCoreModule.forRoot(),
     NgbModule.forRoot(),
+    GmsCoreModule.forRoot(),
     HomeModule,
     AppRoutingModule,
     SharedModule
