@@ -378,4 +378,12 @@ public class UserServiceTest {
                 StringUtil.EXAMPLE_NAME + random.nextString(), StringUtil.EXAMPLE_LAST_NAME + random.nextString(),
                 StringUtil.EXAMPLE_PASSWORD + random.nextString());
     }
+
+    @Test
+    public void getEntityIdByUserWithNoRoles() {
+        EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+
+        assertNull(userService.getEntityIdByUser(u));
+    }
 }

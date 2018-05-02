@@ -20,7 +20,7 @@ public class GmsError {
     @Setter
     private Map<String, List<String>> errors;
 
-    private static final String OTHERS = "others";
+    public static final String OTHERS = "others";
 
     GmsError() {
         this.errors = new HashMap<>();
@@ -51,17 +51,25 @@ public class GmsError {
     }
 
     /**
-     * Removes all errors set a <code>field</code>.
+     * Removes all errors fo a <code>field</code>.
      * @param field Field to ve removed the errors from.
      */
-    public void removeError(String field) {
+    public void removeErrors(String field) {
         errors.remove(field);
     }
 
     /**
+     * Removes an error.
+     * @param error Error to be removed.
+     */
+    public void removeError(String error) {
+        errors.get(OTHERS).remove(error);
+    }
+
+    /**
      * Removes a <code>message</code> error set in a <code>field</code>.
-     * @param field Field to ve removed the errors from.
-     * @param message Message to be removed.
+     * @param field Field to ve removed the error from.
+     * @param message Error to be removed.
      */
     public void removeError(String field, String message) {
         if (errors.get(field) != null) {

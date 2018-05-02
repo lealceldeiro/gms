@@ -37,12 +37,18 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class ConfigurationServiceTest {
 
-    @Autowired ConfigurationService configurationService;
-    @Autowired BConfigurationRepository configurationRepository;
-    @Autowired EOwnedEntityRepository entityRepository;
-    @Autowired EUserRepository userRepository;
-    @Autowired BAuthorizationRepository authRepository;
-    @Autowired DefaultConst dc;
+    @Autowired
+    ConfigurationService configurationService;
+    @Autowired
+    BConfigurationRepository configurationRepository;
+    @Autowired
+    EOwnedEntityRepository entityRepository;
+    @Autowired
+    EUserRepository userRepository;
+    @Autowired
+    BAuthorizationRepository authRepository;
+    @Autowired
+    DefaultConst dc;
 
     private final String keyUserRegistrationAllowed = ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString();
     private final String keyMultiEntityApp = ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString();
@@ -129,7 +135,7 @@ public class ConfigurationServiceTest {
                     value.toString().equals(c.getValue()));
         } catch (NotFoundEntityException e) {
             e.printStackTrace();
-            fail("Configuration with key " + c.getKey() + " not found despite it was saved via repository.");
+            fail("Configuration with key " + c.getKey() + " not found despite it was saved via repository." );
         }
 
         configurationRepository.deleteById(c.getId());
@@ -153,7 +159,7 @@ public class ConfigurationServiceTest {
         } catch (NotFoundEntityException e) {
             e.printStackTrace();
             fail("Configuration with key " + c.getKey() + " for user with id" + u.getId() +
-                    " not found despite it was saved via repository.");
+                    " not found despite it was saved via repository." );
         }
     }
 
@@ -174,7 +180,7 @@ public class ConfigurationServiceTest {
         assertNotNull(configs.get(keyLang));
         assertNotNull(configs.get(keyLastAccessedEntity));
 
-        assertTrue("Configuration values (language) do not match", configs.get(keyLang).equals("es"));
+        assertTrue("Configuration values (language) do not match", configs.get(keyLang).equals("es" ));
         assertTrue("Configuration values (last accessed entity) do not match",
                 configs.get(keyLastAccessedEntity).equals(e.getId().toString()));
     }
@@ -199,10 +205,10 @@ public class ConfigurationServiceTest {
             assertTrue(cR.getValue().equals(Boolean.toString(true)));
         } catch (NotFoundEntityException e) {
             e.printStackTrace();
-            fail("At least one of the keys was not found.");
+            fail("At least one of the keys was not found." );
         } catch (GmsGeneralException e) {
             e.printStackTrace();
-            fail("The provided user key was not valid");
+            fail("The provided user key was not valid" );
         }
 
         // re-set config values
@@ -215,13 +221,13 @@ public class ConfigurationServiceTest {
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
         assertNotNull(u);
         Map<String, Object> configs = new HashMap<>();
-        configs.put(keyLang, "fr");
+        configs.put(keyLang, "fr" );
         configs.put(keyLastAccessedEntity, e.getId());
         try {
             configurationService.saveConfig(configs, u.getId());
         } catch (NotFoundEntityException e1) {
             e1.printStackTrace();
-            fail("At least one of the keys was not found.");
+            fail("At least one of the keys was not found." );
         }
     }
 
@@ -233,7 +239,7 @@ public class ConfigurationServiceTest {
         BConfiguration c = configurationRepository.findFirstByKey(keyUserRegistrationAllowed);
         assertNotNull(c);
         assertTrue(c.getValue().equals(Boolean.toString(true)));
-        assertTrue(ReflectionTestUtils.getField(configurationService, "userRegistrationAllowed").toString().equals(Boolean.toString(true)));
+        assertTrue(ReflectionTestUtils.getField(configurationService, "userRegistrationAllowed" ).toString().equals(Boolean.toString(true)));
 
         restoreAllServerConfig(list);
     }
@@ -246,7 +252,7 @@ public class ConfigurationServiceTest {
         BConfiguration c = configurationRepository.findFirstByKey(keyMultiEntityApp);
         assertNotNull(c);
         assertTrue(c.getValue().equals(Boolean.toString(true)));
-        assertTrue(ReflectionTestUtils.getField(configurationService, "multiEntity").toString().equals(Boolean.toString(true)));
+        assertTrue(ReflectionTestUtils.getField(configurationService, "multiEntity" ).toString().equals(Boolean.toString(true)));
 
         restoreAllServerConfig(list);
     }
@@ -279,14 +285,14 @@ public class ConfigurationServiceTest {
     @Test
     public void isMultiEntity() {
         //getter method
-        String multiEntityString = ReflectionTestUtils.getField(configurationService, "multiEntity").toString();
+        String multiEntityString = ReflectionTestUtils.getField(configurationService, "multiEntity" ).toString();
         assertTrue(configurationService.isMultiEntity() == Boolean.parseBoolean(multiEntityString));
     }
 
     @Test
     public void isUserRegistrationAllowed() {
         //getter method
-        String userRegistrationAllowedString = ReflectionTestUtils.getField(configurationService, "userRegistrationAllowed").toString();
+        String userRegistrationAllowedString = ReflectionTestUtils.getField(configurationService, "userRegistrationAllowed" ).toString();
         assertTrue(configurationService.isUserRegistrationAllowed() == Boolean.parseBoolean(userRegistrationAllowedString));
     }
 
@@ -311,5 +317,46 @@ public class ConfigurationServiceTest {
             }
         }
         return true;
+    }
+
+    @Test
+    public void getConfigInServerNotFound() {
+        boolean success = false;
+        try {
+            configurationService.getConfig(random.nextString() + ConfigurationService.IN_SERVER);
+        } catch (NotFoundEntityException e) {
+            assertTrue(e.getMessage().equals(ConfigurationService.CONFIG_NOT_FOUND));
+            success = true;
+        }
+        assertTrue(success);
+    }
+
+    @Test
+    public void getConfigNotFound() {
+        boolean success = false;
+        try {
+            configurationService.getConfig(random.nextString().replace(ConfigurationService.IN_SERVER, "" ));
+        } catch (NotFoundEntityException e) {
+            assertTrue(e.getMessage().equals(ConfigurationService.CONFIG_NOT_FOUND));
+            success = true;
+        }
+        assertTrue(success);
+    }
+
+
+    @Test
+    public void saveConfigKeyNotFound() {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(random.nextString(), random.nextString());
+        boolean success = false;
+        try {
+            configurationService.saveConfig(configs);
+        } catch (GmsGeneralException e) {
+            e.printStackTrace();
+            fail("There was not provided user and the test still failed because of it" );
+        } catch (Exception e) {
+            success = true;
+        }
+        assertTrue(success);
     }
 }

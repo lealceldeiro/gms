@@ -40,6 +40,7 @@ public class RoleServiceTest {
     @Autowired private DefaultConst dc;
 
     private GMSRandom random = new GMSRandom();
+    private static final long INVALID_ID = -99999999999L;
 
     @Before
     public void setUp() {
@@ -77,6 +78,36 @@ public class RoleServiceTest {
             e.printStackTrace();
             fail("Could not add permissions to  role");
         }
+    }
+
+    @Test
+    public void addPermissionsNotFoundToRole() {
+        BRole r = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        assertNotNull(r);
+
+        List<Long> pIDs = new LinkedList<>();
+        pIDs.add(INVALID_ID);
+
+        boolean success = false;
+        try {
+            roleService.addPermissionsToRole(r.getId(), pIDs);
+        } catch (NotFoundEntityException e) {
+            success = true;
+            assertTrue(e.getMessage().equals("role.add.permissions.found.none"));
+        }
+        assertTrue(success);
+    }
+
+    @Test
+    public void getRoleNotFound() {
+        boolean success = false;
+        try {
+            roleService.getRole(INVALID_ID);
+        } catch (NotFoundEntityException e) {
+            success = true;
+            assertTrue(e.getMessage().equals(RoleService.ROLE_NOT_FOUND));
+        }
+        assertTrue(success);
     }
 
     @Test

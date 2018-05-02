@@ -188,6 +188,14 @@ public class SecurityConfigTest {
     }
 
     @Test
+    public void failOnAccessTokenDoesNotStartProperly() throws Exception {
+        mvc.perform(
+                get(dc.getApiBasePath() + "/permissions")
+                        .header(sc.getATokenHeader(), "AnotherTypeDifferentFromBearer " + accessToken)
+        ).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void failOnNotAccessTokenHeaderProvided() throws Exception {
         mvc.perform(
                 get(dc.getApiBasePath() + "/permissions")

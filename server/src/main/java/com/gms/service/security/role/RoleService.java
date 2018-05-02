@@ -27,7 +27,7 @@ public class RoleService {
     private final BPermissionRepository permissionRepository;
     private final DefaultConst dc;
 
-    private static final String ROLE_NOT_FOUND = "role.not.found";
+    public static final String ROLE_NOT_FOUND = "role.not.found";
     private static final int ADD_PERMISSIONS = 1;
     private static final int REMOVE_PERMISSIONS = -1;
     private static final int UPDATE_PERMISSIONS = 0;
@@ -113,7 +113,7 @@ public class RoleService {
         return set;
     }
 
-    private BRole getRole(long id) throws NotFoundEntityException{
+    public BRole getRole(long id) throws NotFoundEntityException{
         Optional<BRole> r = repository.findById(id);
         if (!r.isPresent()) {
             throw new NotFoundEntityException(ROLE_NOT_FOUND);

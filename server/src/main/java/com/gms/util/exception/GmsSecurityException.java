@@ -7,9 +7,10 @@ package com.gms.util.exception;
 public class GmsSecurityException extends SecurityException{
 
     private final String path;
+    public static final String DEFAULT_MESSAGE = "security.auth.required";
 
     public GmsSecurityException(String path) {
-        super("security.auth.required");
+        super(DEFAULT_MESSAGE);
         this.path = path;
     }
 

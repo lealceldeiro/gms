@@ -32,7 +32,7 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
         final Iterator<S> iterator = it.iterator();
         S s;
         while (iterator.hasNext()) {
-            s = it.iterator().next();
+            s = iterator.next();
             persist(s);
         }
         return it;

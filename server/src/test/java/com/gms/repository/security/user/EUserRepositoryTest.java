@@ -32,6 +32,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -538,5 +540,19 @@ public class EUserRepositoryTest {
         JSONArray entities = new JSONArray(GmsSecurityUtil.getValueInJSON(valueInJSON, ResourcePath.USER));
         assertNotNull(entities);
         assertTrue(entities.length() > 0);
+    }
+
+    @Test
+    public void saveAll() {
+        List<EUser> list = new LinkedList<>();
+        EUser u;
+        for (int i = 0; i < 2; i++) {
+            u = EntityUtil.getSampleUser(random.nextString());
+            u.setEnabled(true);
+            list.add(u);
+        }
+        for (EUser userN : repository.saveAll(list)) {
+            assertTrue(list.contains(userN));
+        }
     }
 }

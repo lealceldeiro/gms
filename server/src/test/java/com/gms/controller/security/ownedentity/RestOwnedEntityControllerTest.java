@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -121,6 +122,62 @@ public class RestOwnedEntityControllerTest {
 
         if (multiEntity) {
             configService.setIsMultiEntity(true);
+        }
+    }
+
+    @Test
+    public void handleTransactionSystemException() throws Exception {
+        boolean initial = configService.isMultiEntity();
+        // allow new owned entities registration
+        if (!initial) {
+            configService.setIsMultiEntity(true);
+        }
+
+        final String r = random.nextString();
+        EOwnedEntity e = new EOwnedEntity(null, StringUtil.EXAMPLE_USERNAME + r,
+                StringUtil.EXAMPLE_DESCRIPTION + r);
+        Resource<EOwnedEntity> resource = new Resource<>(e);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+
+        // restart initial config
+        if (!initial) {
+            configService.setUserRegistrationAllowed(false);
+        }
+    }
+
+    @Test
+    public void handleDataIntegrityViolationException() throws Exception {
+        boolean initial = configService.isMultiEntity();
+        // allow new owned entities registration
+        if (!initial) {
+            configService.setIsMultiEntity(true);
+        }
+
+        final String r = random.nextString();
+        Resource<EOwnedEntity> resource = EntityUtil.getSampleEntityResource(r);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isCreated());
+
+        resource = EntityUtil.getSampleEntityResource(r);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+
+        // restart initial config
+        if (!initial) {
+            configService.setIsMultiEntity(false);
         }
     }
 }

@@ -80,9 +80,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     }
                 }
             }
-            catch (JwtException e) { //any problem with token, do not authenticate
-                return null;
-            }
+            // any problem with token, do not authenticate
+            catch (JwtException e) { return null; }
         }
         return null;
     }

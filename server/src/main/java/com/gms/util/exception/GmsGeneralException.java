@@ -10,19 +10,20 @@ public class GmsGeneralException extends Exception {
 
     private final Boolean finishedOK;
     private final HttpStatus httpStatus;
-    private static final HttpStatus DEFAULT_HTTP_STATUS = HttpStatus.BAD_REQUEST;
-    private static final String DEFAULT_MSG = "exception.general";
+    public static final HttpStatus DEFAULT_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+    public static final String DEFAULT_MSG = "exception.general";
+    public static final Boolean DEFAULT_FINISHED_OK = true;
 
 
     public GmsGeneralException() {
         super(DEFAULT_MSG);
-        this.finishedOK = true;
+        this.finishedOK = DEFAULT_FINISHED_OK;
         this.httpStatus = DEFAULT_HTTP_STATUS;
     }
 
     public GmsGeneralException(String msg) {
         super(msg);
-        this.finishedOK = true;
+        this.finishedOK = DEFAULT_FINISHED_OK;
         this.httpStatus = DEFAULT_HTTP_STATUS;
     }
 
@@ -46,13 +47,13 @@ public class GmsGeneralException extends Exception {
 
     public GmsGeneralException(HttpStatus httpStatus) {
         super(DEFAULT_MSG);
-        this.finishedOK = true;
+        this.finishedOK = DEFAULT_FINISHED_OK;
         this.httpStatus = httpStatus;
     }
 
     public GmsGeneralException(String msg, HttpStatus httpStatus) {
         super(msg);
-        this.finishedOK = true;
+        this.finishedOK = DEFAULT_FINISHED_OK;
         this.httpStatus = httpStatus;
     }
 

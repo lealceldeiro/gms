@@ -46,8 +46,8 @@ public class ConfigurationService {
     @Getter private boolean userRegistrationAllowed;
 
     private static final List<ConfigKey> KEYS = Arrays.asList(ConfigKey.values());
-    private static final String IN_SERVER = "_IN_SERVER";
-    private static final String CONFIG_NOT_FOUND = "config.not.found";
+    public static final String IN_SERVER = "_IN_SERVER";
+    public static final String CONFIG_NOT_FOUND = "config.not.found";
     private static final String CONFIG_USER_PARAM_NUMBER = "config.param.user.not.valid";
 
 

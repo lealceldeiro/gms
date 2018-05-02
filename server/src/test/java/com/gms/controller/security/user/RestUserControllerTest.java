@@ -128,12 +128,6 @@ public class RestUserControllerTest {
 
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
-        boolean initial = configService.isUserRegistrationAllowed();
-        // allow new user registration
-        if (!initial) {
-            configService.setUserRegistrationAllowed(true);
-        }
-
         String r = random.nextString();
         Resource<EUser> resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
@@ -143,13 +137,9 @@ public class RestUserControllerTest {
         ).andExpect(status().isCreated());
         resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
+                        .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
-
-        // restart initial config
-        if (!initial) {
-            configService.setUserRegistrationAllowed(false);
-        }
     }
 }

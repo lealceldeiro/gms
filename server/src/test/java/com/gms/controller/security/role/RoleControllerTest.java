@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -180,5 +181,42 @@ public class RoleControllerTest {
         permissions = new LinkedList<>();
         permissions.add(p1.getId());
         permissions.add(p2.getId());
+    }
+
+    @Test
+    public void handleTransactionSystemException() throws Exception {
+        // region possible inherited from basecontroller
+        final String r = random.nextString();
+        BRole e = new BRole(null);
+        Resource<BRole> resource = new Resource<>(e);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.ROLE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+        // endregion
+    }
+
+    @Test
+    public void handleDataIntegrityViolationException() throws Exception {
+        // region possible inherited from basecontroller
+        final String r = random.nextString();
+        Resource<BRole> resource = EntityUtil.getSampleRoleResource(r);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.ROLE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isCreated());
+
+        resource = EntityUtil.getSampleRoleResource(r);
+        mvc.perform(
+                post(apiPrefix + "/" + ResourcePath.ROLE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(resource))
+        ).andExpect(status().isUnprocessableEntity());
+        // endregion
     }
 }

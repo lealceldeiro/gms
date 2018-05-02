@@ -215,7 +215,7 @@ public class UserService implements UserDetailsService{
      * @param u {@link EUser} which is being trying to find the association to.
      * @return The identifier of the entity or <code>null</code> if none is found.
      */
-    private Long getEntityIdByUser(EUser u) {
+    public Long getEntityIdByUser(EUser u) {
         Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
         if (entityId == null) {
             BAuthorization anAuth = authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(u, true);
