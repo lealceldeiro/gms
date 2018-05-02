@@ -37,18 +37,12 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class ConfigurationServiceTest {
 
-    @Autowired
-    ConfigurationService configurationService;
-    @Autowired
-    BConfigurationRepository configurationRepository;
-    @Autowired
-    EOwnedEntityRepository entityRepository;
-    @Autowired
-    EUserRepository userRepository;
-    @Autowired
-    BAuthorizationRepository authRepository;
-    @Autowired
-    DefaultConst dc;
+    @Autowired ConfigurationService configurationService;
+    @Autowired BConfigurationRepository configurationRepository;
+    @Autowired EOwnedEntityRepository entityRepository;
+    @Autowired EUserRepository userRepository;
+    @Autowired BAuthorizationRepository authRepository;
+    @Autowired DefaultConst dc;
 
     private final String keyUserRegistrationAllowed = ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString();
     private final String keyMultiEntityApp = ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString();

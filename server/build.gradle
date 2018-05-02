@@ -101,7 +101,7 @@ task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
     group = "client tasks"
     description = "Checks all client app documentation resources are ready for deployment and copy them into the `static` folder"
     from "../client/documentation"
-    into "build/resources/main/static/appdoc"
+    into "build/resources/main/static/appdocs"
 }
 //endregion
 
