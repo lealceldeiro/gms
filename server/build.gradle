@@ -103,6 +103,13 @@ task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
     from "../client/documentation"
     into "build/resources/main/static/appdocs"
 }
+
+task cleanAll(type: Delete, dependsOn: ["clean"]) {
+    group = "build"
+    description = "Deletes de build directory from server and client modules"
+    delete '../client/documentation', '../client/dist'
+    followSymlinks = true
+}
 //endregion
 
 //region environments config
