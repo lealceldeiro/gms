@@ -8,29 +8,9 @@
 
     <div class="collapse navbar-collapse" id="sideNavBar" [ngbCollapse]="isCollapsed">
       <ul class="navbar-nav mr-auto nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/entities">
-            Owned entities <span class="sr-only" *ngIf="isLinkActive('/entities')">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/users">
-            Users <span class="sr-only" *ngIf="isLinkActive('/users')">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/roles">
-            Roles <span class="sr-only" *ngIf="isLinkActive('/roles')">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/permissions">
-            Permissions <span class="sr-only" *ngIf="isLinkActive('/permissions')">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/configuration">
-            Configuration <span class="sr-only" *ngIf="isLinkActive('/configuration')">(current)</span>
+        <li class="nav-item" *ngFor="let url of urls">
+          <a class="nav-link" routerLinkActive="active" [routerLink]=[url.path]>
+            {{url.name}} <span class="sr-only" *ngIf="isLinkActive(url.path)">(current)</span>
           </a>
         </li>
       </ul>
