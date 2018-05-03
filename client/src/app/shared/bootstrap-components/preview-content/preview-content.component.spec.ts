@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PreviewContentComponent } from './preview-content.component';
+import { RouterLinkStubDirective } from '../../mock/router-link-stub.directive';
 
 describe('PreviewContentComponent', () => {
   let component: PreviewContentComponent;
@@ -8,7 +9,7 @@ describe('PreviewContentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreviewContentComponent ]
+      declarations: [ PreviewContentComponent, RouterLinkStubDirective ]
     })
     .compileComponents();
   }));

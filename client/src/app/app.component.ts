@@ -9,11 +9,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
-  /**
-   * The client app title.
-   *
-   * @type {string}
-   */
-  title = 'General Management System';
 }

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GmsJumbotronComponent } from './jumbotron.component';
+import { RouterLinkStubDirective } from '../../mock/router-link-stub.directive';
 
 describe('GmsJumbotronComponent', () => {
   let component: GmsJumbotronComponent;
@@ -8,7 +9,7 @@ describe('GmsJumbotronComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GmsJumbotronComponent ]
+      declarations: [ GmsJumbotronComponent, RouterLinkStubDirective ]
     })
     .compileComponents();
   }));

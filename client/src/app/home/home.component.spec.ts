@@ -1,14 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
+import { Component } from '@angular/core';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
+  // region mocks
+  @Component({selector: 'gms-jumbotron', template: ''})
+  class JumbotronStubComponent {}
+
+  @Component({selector: 'gms-preview-content', template: ''})
+  class PreviewContentStubComponent {}
+  // endregion
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      declarations: [ HomeComponent, JumbotronStubComponent, PreviewContentStubComponent ]
     })
     .compileComponents();
   }));
