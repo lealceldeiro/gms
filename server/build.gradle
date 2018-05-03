@@ -107,7 +107,7 @@ task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
 task cleanAll(type: Delete, dependsOn: ["clean"]) {
     group = "build"
     description = "Deletes de build directory from server and client modules"
-    delete '../client/documentation', '../client/dist'
+    delete '../client/documentation', '../client/dist', '../client/coverage'
     followSymlinks = true
 }
 //endregion
