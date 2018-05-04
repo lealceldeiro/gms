@@ -18,11 +18,11 @@ export class SideMenuComponent implements OnInit {
   isCollapsed = true;
 
   urls = [
-    {path: '/entities',       name: 'Owned Entities' },
-    {path: '/users',          name: 'Users' },
-    {path: '/roles',          name: 'Roles' },
-    {path: '/permissions',    name: 'Permissions' },
-    {path: '/configuration',  name: 'Configuration' },
+    { path: '/entities',       name: 'Owned Entities' },
+    { path: '/users',          name: 'Users' },
+    { path: '/roles',          name: 'Roles' },
+    { path: '/permissions',    name: 'Permissions' },
+    { path: '/configuration',  name: 'Configuration' },
   ];
 
   /**
