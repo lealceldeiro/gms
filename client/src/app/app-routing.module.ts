@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const  routes: Routes = [
-  { path: '**', loadChildren: 'app/page-not-found/page-not-found.module#PageNotFoundModule'}
+  { path: '**', loadChildren: './page-not-found/page-not-found.module#PageNotFoundModule'}
 ];
 
 @NgModule({
