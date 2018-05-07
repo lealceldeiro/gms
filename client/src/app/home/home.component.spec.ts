@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -9,7 +9,7 @@ describe('HomeComponent', () => {
 
   // region mocks
   @Component({selector: 'gms-jumbotron', template: ''})
-  class JumbotronStubComponent {}
+  class JumbotronStubComponent { @Input() header: string; }
 
   @Component({selector: 'gms-preview-content', template: ''})
   class PreviewContentStubComponent {}
