@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 /**
@@ -16,6 +16,33 @@ export class NavBarComponent implements OnInit {
    * @type {boolean}
    */
   isCollapsed = true;
+
+  /**
+   * Indicates whether the nav bar search form is active or not.
+   * @type {boolean}
+   */
+  @Input() isSearchActive = true;
+
+  /**
+   * Search input placeholder.
+   * @type {string}
+   */
+  @Input() searchPlaceholder = 'Type anything to search';
+
+  /**
+   * Search button text.
+   * @type {string}
+   */
+  @Input() searchText = 'Search';
+
+  /**
+   * URLs where the nav bar can navigate to.
+   * @type {{}[]}
+   */
+  urls = [
+    { path: '/help',  name: 'Help' },
+    { path: '/about', name: 'About' }
+  ];
 
   /**
    * Component constructor

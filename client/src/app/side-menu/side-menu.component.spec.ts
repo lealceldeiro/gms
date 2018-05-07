@@ -1,23 +1,32 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SideMenuComponent } from './side-menu.component';
-import { RouterLinkStubDirective } from '../shared/mock/router-link-stub.directive';
-import { NgbCollapseStubDirective } from '../shared/mock/ngb-collapse-stub.directive';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { gmsClick } from '../shared/mock/util';
+import { gmsClick } from '../shared/test-util/mouse.util';
+import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
+import { MockModule } from '../shared/mock/mock.module';
+import Spy = jasmine.Spy;
 
 describe('SideMenuComponent', () => {
   let component: SideMenuComponent;
   let fixture: ComponentFixture<SideMenuComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
-  let spy;
+  let spy: Spy;
+
+  const routes = [
+    { path: 'entities', component: DummyStubComponent },
+    { path: 'users', component: DummyStubComponent },
+    { path: 'roles', component: DummyStubComponent },
+    { path: 'permissions', component: DummyStubComponent },
+    { path: 'configuration', component: DummyStubComponent }
+  ];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideMenuComponent, RouterLinkStubDirective, NgbCollapseStubDirective ],
-      imports: [ RouterTestingModule ]
+      declarations: [ SideMenuComponent ],
+      imports: [ MockModule, RouterTestingModule.withRoutes(routes) ]
     })
       .compileComponents();
   }));
@@ -38,7 +47,7 @@ describe('SideMenuComponent', () => {
 
   it('every link should be marked as active when the component navigates to the route', () => {
     const urls = component.urls;
-    const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a ');
+    const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
     for (let i = links.length - 1; i >= 0; i--) {
       gmsClick(links.item(i) as HTMLElement);
       fixture.detectChanges();
@@ -49,7 +58,7 @@ describe('SideMenuComponent', () => {
   it('every link should have the route and name specified in the urls property', () => {
     const urls = component.urls;
 
-    const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a ');
+    const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
     for (let i = links.length - 1; i >= 0; i--) {
       expect(links.item(i).getAttribute('href')).toEqual(urls[i].path);
       expect(links.item(i).textContent).toContain(urls[i].name);

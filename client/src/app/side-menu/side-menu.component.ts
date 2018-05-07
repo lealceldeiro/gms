@@ -17,6 +17,10 @@ export class SideMenuComponent implements OnInit {
    */
   isCollapsed = true;
 
+  /**
+   * Url the nav bar can navigate to.
+   * @type {{}[]}
+   */
   urls = [
     { path: '/entities',       name: 'Owned Entities' },
     { path: '/users',          name: 'Users' },
