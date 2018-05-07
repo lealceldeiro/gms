@@ -27,7 +27,7 @@ describe('PreviewContentComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeDefined();
+    expect(component).toBeTruthy();
   });
 
   it('should create with default values', () => {

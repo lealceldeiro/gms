@@ -8,6 +8,6 @@ describe('HomeModule', () => {
   });
 
   it('should create an instance', () => {
-    expect(homeModule).toBeDefined();
+    expect(homeModule).toBeTruthy();
   });
 });

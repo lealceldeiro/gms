@@ -35,7 +35,7 @@ describe('NavBarComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeDefined();
+    expect(component).toBeTruthy();
   });
 
   it('every link should be marked as active when the component navigates to the route', () => {

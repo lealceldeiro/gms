@@ -8,6 +8,6 @@ describe('PageNotFoundModule', () => {
   });
 
   it('should create an instance', () => {
-    expect(pageNotFoundModule).toBeDefined();
+    expect(pageNotFoundModule).toBeTruthy();
   });
 });

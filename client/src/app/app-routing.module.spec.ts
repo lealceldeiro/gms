@@ -8,6 +8,6 @@ describe('AppRoutingModule', () => {
   });
 
   it('should create an instance', () => {
-    expect(appRoutingModule).toBeDefined();
+    expect(appRoutingModule).toBeTruthy();
   });
 });

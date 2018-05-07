@@ -30,6 +30,6 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', async(() => {
-    expect(component).toBeDefined();
+    expect(component).toBeTruthy();
   }));
 });
