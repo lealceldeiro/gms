@@ -18,3 +18,11 @@ export const environment = {
  * because it will have performance impact when throw error
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+
+export const api = {
+  baseUrl: 'htp://127.0.0.1:8080/api/'
+};
+
+export const appMeta = {
+  name: 'General Management System'
+};

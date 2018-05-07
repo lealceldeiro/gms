@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { appMeta } from '../../environments/environment';
 
 /**
  * Component for generating the home page of the app.
@@ -9,6 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  appName: string = appMeta.name;
 
   /**
    * Component constructor

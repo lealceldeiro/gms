@@ -6,3 +6,11 @@
 export const environment = {
   production: true
 };
+
+export const api = {
+  url: 'htp://127.0.0.1/api/'
+};
+
+export const meta = {
+  name: 'General Management System'
+};
