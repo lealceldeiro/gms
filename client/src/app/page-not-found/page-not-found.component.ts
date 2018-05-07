@@ -26,7 +26,7 @@ export class PageNotFoundComponent implements OnInit {
   firstDigit: string;
 
   /**
-   * Speed at which the random numbers will vary.
+   * Delay for generating the random numbers in every digit in the 404 text.
    * @type {number}
    */
   private time = 30;
@@ -51,7 +51,10 @@ export class PageNotFoundComponent implements OnInit {
     this.initialize404();
   }
 
-  initialize404(): void {
+  /**
+   * Initializes the simulation of random numbers in order to show finally a 404
+   */
+  private initialize404(): void {
     let i = 0;
     const first4 = setInterval(() => {
       if (i++ > 40) {
