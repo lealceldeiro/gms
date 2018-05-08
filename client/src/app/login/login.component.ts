@@ -11,6 +11,21 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
 
   /**
+   * User's username or email used for login.
+   */
+  usernameOrEmail: string;
+
+  /**
+   * User's password used for login.
+   */
+  password: string;
+
+  /**
+   * Whether the credentials should be stored or not.
+   */
+  rememberMe = true;
+
+  /**
    * Component constructor
    */
   constructor() { }
@@ -19,6 +34,10 @@ export class LoginComponent implements OnInit {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
+  }
+
+  login(): void {
+
   }
 
 }

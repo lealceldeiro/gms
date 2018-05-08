@@ -6,14 +6,17 @@
     </div>
 
     <div class="form-group">
-      <input type="email" class="form-control" id="usernameOrEmail" placeholder="Username or Email">
+      <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" placeholder="Username or Email"
+      [(ngModel)]="usernameOrEmail">
     </div>
     <div class="form-group">
-      <input type="password" class="form-control" id="password" placeholder="Password">
+      <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+      [(ngModel)]="password">
     </div>
 
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="rememberMeCheck">
+      <input type="checkbox" class="custom-control-input" id="rememberMeCheck" name="rememberMe"
+      [(ngModel)]="rememberMe">
       <label class="custom-control-label" for="rememberMeCheck">Remember me</label>
 
       <a routerLink="/recover-password" class="float-right text-primary">Forgot password</a>
@@ -21,7 +24,10 @@
 
     <hr>
 
-    <button type="button" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn">Login</button>
+    <button type="button" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn"
+    (click)="login()">
+      Login
+    </button>
     <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up">Sign up</button>
   </form>
 </div>
