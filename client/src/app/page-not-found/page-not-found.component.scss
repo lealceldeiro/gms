@@ -50,9 +50,9 @@
     margin-top: 10%;
   }
   @include media-breakpoint-up(sm) {
-    padding-top: 40px;
     height: 250px;
   }
+  padding-top: 40px;
   position: relative;
 }
 .error .container-error-404 .clip

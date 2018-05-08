@@ -19,10 +19,18 @@ export const environment = {
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
 
+/**
+ * All backend API related information.
+ * @type {{url: string}}
+ */
 export const api = {
   baseUrl: 'htp://127.0.0.1:8080/api/'
 };
 
+/**
+ * All app meta information.
+ * @type {{name: string}}
+ */
 export const appMeta = {
   name: 'General Management System'
 };

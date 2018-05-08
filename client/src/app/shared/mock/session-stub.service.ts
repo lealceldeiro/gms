@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { User } from './user.model';
+import { UserStub } from './user-stub.model';
 
 /**
- * A service for providing information about the current session.
+ * A stub service for helping in testing the component which depend upon the SessionService.
  */
 @Injectable()
-export class SessionService {
+export class SessionStubService {
 
   /**
    * Whether the user is logged in or not.
@@ -16,7 +16,7 @@ export class SessionService {
   /**
    * Session user's info (if available).
    */
-  public user?: User;
+  public user?: UserStub;
 
   /**
    * Indicates whether the session info should be kept after the user left the app without login out or not.

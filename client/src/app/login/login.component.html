@@ -1,3 +1,27 @@
-<p>
-  login works!
-</p>
+<div class="bg-white shadow-lg py-4 rounded my-sm-3 my-md-6 my-lg-7 my-xl-7 mx-auto col-sm-12 col-md-8 col-lg-4 col-xl-4">
+  <form name="loginForm" novalidate>
+
+    <div class="text-center pb-3">
+      <h3> Sign in to continue </h3>
+    </div>
+
+    <div class="form-group">
+      <input type="email" class="form-control" id="usernameOrEmail" placeholder="Username or Email">
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="rememberMeCheck">
+      <label class="custom-control-label" for="rememberMeCheck">Remember me</label>
+
+      <a routerLink="/recover-password" class="float-right text-primary">Forgot password</a>
+    </div>
+
+    <hr>
+
+    <button type="button" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn">Sign in</button>
+    <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up">Create account</button>
+  </form>
+</div>

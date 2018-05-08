@@ -52,7 +52,7 @@ export class NavBarComponent implements OnInit {
   constructor(private router: Router) { }
 
   /**
-   * Lifecycle hook that is called after data-bound properties of a directive are initialized.
+   * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
   }

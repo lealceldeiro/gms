@@ -11,6 +11,10 @@ import { appMeta } from '../../environments/environment';
 })
 export class HomeComponent implements OnInit {
 
+  /**
+   * Application name.
+   * @type {string}
+   */
   appName: string = appMeta.name;
 
   /**
@@ -19,7 +23,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   /**
-   * Lifecycle hook that is called after data-bound properties of a directive are initialized.
+   * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
   }
