@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionService } from '../core/session/session.service';
+import { LoginRequestBody } from './shared/request';
+import { LoginResponseBody } from './shared/response';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -27,8 +30,9 @@ export class LoginComponent implements OnInit {
 
   /**
    * Component constructor
+   * @param sessionService SessionService instance.
    */
-  constructor() { }
+  constructor(private sessionService: SessionService) { }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -36,8 +40,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Performs a login request using the inputs values the user has typed in as username/email and password.
+   */
   login(): void {
-
+    const payload: LoginRequestBody = { usernameOrEmail: this.usernameOrEmail, password: this.password};
+    this.sessionService.login(payload).subscribe((response: LoginResponseBody) => {
+    });
   }
 
 }
