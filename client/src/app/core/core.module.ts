@@ -2,6 +2,8 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SessionService } from './session/session.service';
+import { StorageService } from './storage/storage.service';
+import { LoginGuard } from './guard/login.guard';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
@@ -35,6 +37,14 @@ export class GmsCoreModule {
         {
           provide: SessionService,
           useClass: config && config['sessionService'] ? config['sessionService'] : SessionService
+        },
+        {
+          provide: StorageService,
+          useClass: config && config['storageService'] ? config['storageService'] : StorageService
+        },
+        {
+          provide: LoginGuard,
+          useClass: config && config['loginGuard'] ? config['loginGuard'] : LoginGuard
         }
       ]
     };

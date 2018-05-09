@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { LoginResponseBody } from '../../login/shared/response';
 import { LoginRequestBody } from '../../login/shared/request';
 import { Observable } from 'rxjs/index';
+import { StorageService } from '../storage/storage.service';
+import { tap } from 'rxjs/operators';
 
 /**
  * A service for providing information about the current session.
@@ -13,10 +15,16 @@ import { Observable } from 'rxjs/index';
 export class SessionService {
 
   /**
+   * Key under which the value `loggedIn` is stored in the StorageService.
+   * @type {string}
+   */
+  private loggedInKey = 'loggedIn';
+
+  /**
    * Whether the user is logged in or not.
    * @type {boolean}
    */
-  public loggedIn = false;
+  public loggedIn: boolean;
 
   /**
    * Session user's info (if available).
@@ -37,8 +45,9 @@ export class SessionService {
   /**
    * Service constructor.
    * @param http HttpClient dependency injection.
+   * @param storageService StorageService for storing session-related information.
    */
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private storageService: StorageService) {
     this.url = api.baseUrl;
   }
 
@@ -48,6 +57,13 @@ export class SessionService {
    * @returns {Observable<LoginResponseBody>}
    */
   login(payload: LoginRequestBody): Observable<LoginResponseBody> {
-    return this.http.post<LoginResponseBody>(this.url + 'login', payload);
+    return this.http.post<LoginResponseBody>(this.url + 'login', payload).pipe(
+      tap((response) => {
+        if (response.access_token) {
+          this.loggedIn = true;
+          this.storageService.set(this.loggedInKey, this.loggedIn);
+        }
+      })
+    );
   }
 }
