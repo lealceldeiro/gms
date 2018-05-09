@@ -40,14 +40,14 @@ public class GmsSecurityUtil {
                                                    boolean shouldIFail) throws Exception {
         final MvcResult mvcResult = createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapper, shouldIFail).andReturn();
 
-        return getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
+        return shouldIFail ? "" : getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
     }
 
     public static String createSuperAdminRefreshToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper,
                                                    boolean shouldIFail) throws Exception {
         final MvcResult mvcResult = createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapper, shouldIFail).andReturn();
 
-        return getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
+        return shouldIFail ? "" : getValueInJSON(mvcResult.getResponse().getContentAsString(), sc.getATokenHolder());
     }
 
     public static String createSuperAdminAuthToken(DefaultConst dc, SecurityConst sc, MockMvc mvc, ObjectMapper objectMapper,

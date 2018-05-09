@@ -62,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authFilter.setAllowSessionCreation(false);
         authFilter.setFilterProcessesUrl(dc.getApiBasePath() + sc.getSignInUrl());
         authFilter.setPostOnly(true);
+        authFilter.setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler(dc, sc, msg));
         http
                 .cors().and().formLogin().disable().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
