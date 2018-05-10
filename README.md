@@ -7,8 +7,8 @@
 
 ## Overview
 The project consists of two main (independent) modules:
- - [API server](./server/README.md) (located in the `server` directory).
- - [Angular application](./client/README.md) (located in the `client` directory).
+ - [API server](./server) (located in the `server` directory).
+ - [Angular application](./client) (located in the `client` directory).
   
   You can collaborate on any of them independently by modifying only the module you would like to change.
 
@@ -29,7 +29,7 @@ The project consists of two main (independent) modules:
 
 _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./gradlew` instead of `gradle` for the previous mentioned steps.
 
-## How to start developing?
+## How to start developing
 * Make a local working copy of the project (` git clone https://github.com/lealceldeiro/gms.git`).
 
 ### IntelliJ IDEA
