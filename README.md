@@ -1,12 +1,23 @@
+# Table of Contents
+* [Overview](#overview)
+* [Ready for production](#ready-for-production)
+* [How to start developing](#how-to-start-developing?)
+
+
+
 ## Overview
-The project consists of two main (independent) modules (api server and front-end resources). These are located in the **server** and **client** folder respectively. You can collaborate on any of them indepentently by modifying only the module you would like to change.
+The project consists of two main (independent) modules:
+ - [API server](./server/README.md) (located in the `server` directory).
+ - [Angular application](./client/README.md) (located in the `client` directory).
+  
+  You can collaborate on any of them independently by modifying only the module you would like to change.
 
 ## Ready for production
 * Packing as a WAR file with the API server only
   1. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
   1. You need to have [Node.js][4] installed.
-  2. From `client/` run `npm install` in order to install all client package dependencies.
+  2. From the location `client/` run `npm install` in order to install all client package dependencies.
   3. From the location `server/` run `gradle bootWar -Pclient=true`.
   4. Optionally you can generate the client app (Angular) documentation by setting also the `clientDoc` param to true like this `-PclientDoc=true`.
 * This will create a WAR file inside `server/build/libs` ready to be deployed.
