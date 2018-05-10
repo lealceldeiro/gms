@@ -24,11 +24,13 @@ Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.pr
 
 ### Documentation
 
-This uses [compodoc](https://github.com/compodoc/compodoc) for generating the app documentation. So can
+This uses [compodoc](https://github.com/compodoc/compodoc) for generating the app documentation. So you can:
 
 - Run `npm run builddoc` in order to build the documentation resources.
 - Run `npm run servedoc` once you built the documentation resources and navigate to `http://localhost:8080/`.
 - Run `npm run buildandservedoc` in order to build and serve the documentation resources. Navigate to `http://localhost:8080/`.
+
+All documentation resources are stored in the `documentation/` directory.
 
 ### Further help
 
