@@ -11,3 +11,5 @@ include::list.adoc[]
 include::get.adoc[]
 
 include::delete.adoc[]
+
+include::./search/index.adoc[]

@@ -1,0 +1,15 @@
+*Searching roles which label is equal to a provided value*
+
+A `GET` request lists all roles which label is equal to a provided value.
+
+include::../../../util/H-REQUEST.adoc[]
+
+include::../../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/b-role-repository-test/search-label/curl-request.adoc[]
+
+include::../../../util/H-RESPONSE.adoc[]
+
+include::../../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/b-role-repository-test/search-label/http-response.adoc[]

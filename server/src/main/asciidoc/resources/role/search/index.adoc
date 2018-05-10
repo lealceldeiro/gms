@@ -1,0 +1,7 @@
+[[resources-roles-search]]
+==== Searching for roles
+The following searches can be performed over the role resource.
+
+include::label.adoc[]
+
+include::label-like.adoc[]

@@ -1,6 +1,12 @@
 [[resources]]
 == Resources
 
+Below there is a description about the actions that can be performed over every one of the described resources.
+
+Regarding to theses action it must be taken into consideration that:
+
+* When search actions are being performed, if the parameter for which the search is being performed is unique for that resource, the result will be a list, but with only one item **always** because there will be always only one element which has that attribute.
+
 include::permission/index.adoc[]
 
 include::role/index.adoc[]

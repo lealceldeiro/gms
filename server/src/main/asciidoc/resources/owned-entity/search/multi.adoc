@@ -1,0 +1,15 @@
+*Searching owned entities which any of its properties is equal to a provided value*
+
+A `GET` request lists all owned entities which any of its properties is equal to a provided value.
+
+include::../../../util/H-REQUEST.adoc[]
+
+include::../../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/e-owned-entity-repository-test/search-multi/curl-request.adoc[]
+
+include::../../../util/H-RESPONSE.adoc[]
+
+include::../../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/e-owned-entity-repository-test/search-multi/http-response.adoc[]

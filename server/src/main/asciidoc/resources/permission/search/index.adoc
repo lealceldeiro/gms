@@ -1,0 +1,15 @@
+[[resources-permission-search]]
+==== Searching for permissions
+The following searches can be performed over the permission resource.
+
+include::label.adoc[]
+
+include::label-like.adoc[]
+
+include::name.adoc[]
+
+include::name-like.adoc[]
+
+include::multi.adoc[]
+
+include::multi-like.adoc[]

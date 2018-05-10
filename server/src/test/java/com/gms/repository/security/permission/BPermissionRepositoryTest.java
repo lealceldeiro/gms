@@ -68,6 +68,7 @@ public class BPermissionRepositoryTest {
     @Autowired private BRoleRepository roleRepository;
 
     private MockMvc mvc;
+    private MockMvc mvcNonDocumenter;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
@@ -89,6 +90,7 @@ public class BPermissionRepositoryTest {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc =  GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
+        mvcNonDocumenter =  GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -348,7 +350,7 @@ public class BPermissionRepositoryTest {
             paramMap.add(ResourcePath.QUERY_NAME, nameL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // region name null - label ok
@@ -356,28 +358,25 @@ public class BPermissionRepositoryTest {
             paramMap.add(ResourcePath.QUERY_LABEL, labelL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // endregion
         }
     }
 
-    private void testSearchMulti(String url, MultiValueMap<String, String> paramMap, ResultMatcher status) throws Exception {
-        final MvcResult mvcResult = mvc.perform(
+    private MvcResult testSearchMulti(String url, MultiValueMap<String, String> paramMap, boolean useMvcNonDocumenter, ResultMatcher status) throws Exception {
+        MockMvc mockMvc = useMvcNonDocumenter ? mvcNonDocumenter : mvc;
+        return mockMvc.perform(
                 get(apiPrefix + "/" + reqString + "/search/" + url)
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .params(paramMap)
         ).andExpect(status).andReturn();
-
-        if (status == status().isOk()) {
-            checkMvcResult(mvcResult);
-        }
     }
 
     private void testSearchMulti(String url, MultiValueMap<String, String> paramMap) throws Exception {
-        testSearchMulti(url, paramMap, status().isOk());
+        checkMvcResult(testSearchMulti(url, paramMap, false, status().isOk()));
     }
 
     private void checkMvcResult(MvcResult mvcResult) throws JSONException, UnsupportedEncodingException {

@@ -19,3 +19,5 @@ include::get-roles-by-entity.adoc[]
 include::add-roles.adoc[]
 
 include::remove-roles.adoc[]
+
+include::./search/index.adoc[]

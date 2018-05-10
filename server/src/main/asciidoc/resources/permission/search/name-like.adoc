@@ -1,0 +1,15 @@
+*Searching permissions which name is like a provided value*
+
+A `GET` request lists all permissions which name is like a provided value.
+
+include::../../../util/H-REQUEST.adoc[]
+
+include::../../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/b-permission-repository-test/search-name-like/curl-request.adoc[]
+
+include::../../../util/H-RESPONSE.adoc[]
+
+include::../../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/b-permission-repository-test/search-name-like/http-response.adoc[]

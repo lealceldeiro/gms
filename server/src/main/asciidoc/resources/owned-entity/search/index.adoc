@@ -1,0 +1,15 @@
+[[resources-owned-entity-search]]
+==== Searching for owned entities
+The following searches can be performed over the owned entity resource.
+
+include::username.adoc[]
+
+include::username-like.adoc[]
+
+include::name.adoc[]
+
+include::name-like.adoc[]
+
+include::multi.adoc[]
+
+include::multi-like.adoc[]

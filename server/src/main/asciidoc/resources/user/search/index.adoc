@@ -1,0 +1,23 @@
+[[resources-user-search]]
+==== Searching for users
+The following searches can be performed over the user resource.
+
+include::username.adoc[]
+
+include::username-like.adoc[]
+
+include::email.adoc[]
+
+include::email-like.adoc[]
+
+include::name.adoc[]
+
+include::name-like.adoc[]
+
+include::last-name.adoc[]
+
+include::last-name-like.adoc[]
+
+include::multi.adoc[]
+
+include::multi-like.adoc[]

@@ -19,3 +19,5 @@ include::add-permissions.adoc[]
 include::update-permissions.adoc[]
 
 include::remove-permissions.adoc[]
+
+include::./search/index.adoc[]

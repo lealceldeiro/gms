@@ -8,3 +8,5 @@ include::list.adoc[]
 include::get.adoc[]
 
 include::get-roles.adoc[]
+
+include::./search/index.adoc[]

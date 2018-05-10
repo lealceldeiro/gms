@@ -1,0 +1,15 @@
+*Searching users whose name is equal to a provided value*
+
+A `GET` request lists all users which name is equal to a provided value.
+
+include::../../../util/H-REQUEST.adoc[]
+
+include::../../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/e-user-repository-test/search-name/curl-request.adoc[]
+
+include::../../../util/H-RESPONSE.adoc[]
+
+include::../../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/e-user-repository-test/search-name/http-response.adoc[]

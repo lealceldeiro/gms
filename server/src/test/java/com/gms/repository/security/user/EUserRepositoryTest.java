@@ -66,6 +66,7 @@ public class EUserRepositoryTest {
     @Autowired private EUserRepository repository;
 
     private MockMvc mvc;
+    private MockMvc mvcNonDocumenter;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
@@ -89,6 +90,7 @@ public class EUserRepositoryTest {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc =  GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
+        mvcNonDocumenter =  GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -481,7 +483,7 @@ public class EUserRepositoryTest {
             paramMap.add(ResourcePath.QUERY_EMAIL, emailL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // region name ok - username ok - email null - lastName ok
@@ -491,7 +493,7 @@ public class EUserRepositoryTest {
             paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // region name ok - username null - email ok - lastName ok
@@ -501,7 +503,7 @@ public class EUserRepositoryTest {
             paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // region name null - username ok - email ok - lastName ok
@@ -511,28 +513,25 @@ public class EUserRepositoryTest {
             paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
-            testSearchMulti(url, paramMap, status().isBadRequest());
+            testSearchMulti(url, paramMap, true, status().isBadRequest());
             //endregion
 
             // endregion
         }
     }
 
-    private void testSearchMulti(String url, MultiValueMap<String, String> paramMap, ResultMatcher status) throws Exception {
-        final MvcResult mvcResult = mvc.perform(
+    private MvcResult testSearchMulti(String url, MultiValueMap<String, String> paramMap, boolean useMvcNonDocumenter, ResultMatcher status) throws Exception {
+        MockMvc mockMvc = useMvcNonDocumenter ? mvcNonDocumenter : mvc;
+        return mockMvc.perform(
                 get(apiPrefix + "/" + reqString + "/search/" + url)
                         .header(authHeader, tokenType + " " + accessToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .params(paramMap)
         ).andExpect(status).andReturn();
-
-        if (status == status().isOk()) {
-            checkMvcResult(mvcResult);
-        }
     }
 
     private void testSearchMulti(String url, MultiValueMap<String, String> paramMap) throws Exception {
-        testSearchMulti(url, paramMap, status().isOk());
+        checkMvcResult(testSearchMulti(url, paramMap, false, status().isOk()));
     }
 
     private void checkMvcResult(MvcResult mvcResult) throws JSONException, UnsupportedEncodingException {
