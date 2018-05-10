@@ -1,7 +1,7 @@
 # Table of Contents
 * [Overview](#overview)
 * [Ready for production](#ready-for-production)
-* [How to start developing](#how-to-start-developing?)
+* [How to start developing](#how-to-start-developing)
 
 
 
