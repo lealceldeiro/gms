@@ -1,4 +1,12 @@
 sudo: enabled
+addons:
+  apt:
+    update: true
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+      - google-chrome-beta
 
 matrix:
   include:
@@ -10,7 +18,9 @@ matrix:
         - ./gradlew test
     
     - language: node_js
-      node_js: "iojs"
+      node_js: "lts/*"
       before_script:
+        - export CHROME_BIN=/usr/bin/chromium-browser
         - cd client
+        - npm install -g @angular/cli
         - npm install
