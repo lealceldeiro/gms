@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lealceldeiro/gms.svg?branch=master)](https://travis-ci.org/lealceldeiro/gms)
+
 # Table of Contents
 * [Overview](#overview)
 * [Ready for production](#ready-for-production)
