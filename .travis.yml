@@ -1,0 +1,26 @@
+sudo: enabled
+addons:
+  apt:
+    update: true
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+      - google-chrome-beta
+
+matrix:
+  include:
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd server
+      script:
+        - ./gradlew test
+    
+    - language: node_js
+      node_js: "lts/*"
+      before_script:
+        - export CHROME_BIN=/usr/bin/chromium-browser
+        - cd client
+        - npm install -g @angular/cli
+        - npm install
