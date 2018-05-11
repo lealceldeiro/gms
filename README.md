@@ -9,7 +9,7 @@
 ## Overview
 The project consists of two main (independent) modules:
 
- - [Spring Boot application]
+ - [Spring Boot application](./server)
    - [![Coverage Status](https://coveralls.io/repos/github/lealceldeiro/gms/badge.svg?branch=master)](https://coveralls.io/github/lealceldeiro/gms?branch=master)
    
  - [Angular application](./client)
