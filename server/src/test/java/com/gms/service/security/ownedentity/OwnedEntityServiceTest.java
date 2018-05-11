@@ -4,6 +4,7 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.service.AppService;
+import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.EntityUtil;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.GmsGeneralException;
@@ -30,6 +31,7 @@ public class OwnedEntityServiceTest {
     @Autowired private EOwnedEntityRepository repository;
     @Autowired private DefaultConst dc;
     @Autowired private AppService appService;
+    @Autowired private ConfigurationService configService;
 
     @Before
     public void setUp () {
@@ -43,6 +45,10 @@ public class OwnedEntityServiceTest {
 
     @Test
     public void create() {
+        boolean initialIsM = configService.isMultiEntity();
+        if (!initialIsM) {
+            configService.setIsMultiEntity(true);
+        }
         try {
             final EOwnedEntity e = service.create(EntityUtil.getSampleEntity());
             assertNotNull(e);
@@ -55,6 +61,9 @@ public class OwnedEntityServiceTest {
         } catch (GmsGeneralException e) {
             e.printStackTrace();
             fail("Entity could not be created");
+        }
+        if (!initialIsM) {
+            configService.setIsMultiEntity(false);
         }
     }
 }
