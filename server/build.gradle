@@ -15,18 +15,24 @@ buildscript {
 	repositories {
 		mavenLocal()
 		mavenCentral()
-        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://plugins.gradle.org/m2/" }
 	}
 	dependencies {
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
 		classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
         classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
+        classpath "net.saliman:gradle-cobertura-plugin:2.3.1"
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
 	}
 }
 
 plugins {
     id "org.asciidoctor.convert" version "1.5.3"
+    // coverage reports for coveralls.io
+    id 'net.saliman.cobertura' version '2.3.1'
+    id "com.github.kt3k.coveralls" version "2.8.2"
 }
 
 apply plugin: "io.spring.dependency-management"
@@ -41,6 +47,8 @@ apply plugin: "org.springframework.boot"
 apply plugin: "war"
 apply plugin: "com.moowork.node"
 apply plugin: "org.asciidoctor.convert"
+apply plugin: "net.saliman.cobertura"
+apply plugin: "com.github.kt3k.coveralls"
 
 group = "com.gms"
 version = "0.0.1"
@@ -226,7 +234,10 @@ task processApiDocs(type: Copy, dependsOn: asciidoctor) {
     into "build/resources/main/static/" + (apiDocsFolder as String)
 }
 //endregion
+
 //endregion
+
+cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 
 resetConfigTaskState.mustRunAfter(bootRun, bootWar, clean)
 
