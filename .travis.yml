@@ -1,0 +1,16 @@
+sudo: enabled
+
+matrix:
+  include:
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd server
+      script:
+        - ./gradlew test
+    
+    - language: node_js
+      node_js: "iojs"
+      before_script:
+        - cd client
+        - npm install
