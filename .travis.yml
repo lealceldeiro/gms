@@ -28,6 +28,8 @@ matrix:
         - ./gradlew test
       services:
         - postgresql
+      after_success:
+        - ./gradlew cobertura coveralls
     
     - language: node_js
       node_js: "lts/*"
