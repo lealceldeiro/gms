@@ -23,7 +23,7 @@ matrix:
       before_script:
         - cd server
         - psql -c "create database gmstest;" -U postgres
-        - psql -c "ALTER ROLE postgres WITH password 'postgres'"; -U postgres
+        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password 'postgres'"
       script:
         - ./gradlew test
       services:
