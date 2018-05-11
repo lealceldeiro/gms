@@ -8,7 +8,8 @@
     "buildandservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
     "start": "ng serve",
     "build": "ng build --prod",
-    "test": "ng test --watch=true",
+    "test": "ng test",
+    "testwatch": "ng test --watch=true",
     "testcoverage": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e"

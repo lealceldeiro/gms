@@ -11,22 +11,20 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 import { GmsCoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 
+/**
+ * Base module, bootstrapped in the main file.
+ */
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavBarComponent,
-    SideMenuComponent
-  ],
+  declarations: [ AppComponent, NavBarComponent, SideMenuComponent ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    SharedModule,
     NgbModule.forRoot(),
     GmsCoreModule.forRoot(),
     HomeModule,
-    AppRoutingModule,
-    SharedModule
+    AppRoutingModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
