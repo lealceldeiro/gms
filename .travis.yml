@@ -7,6 +7,7 @@ addons:
     packages:
       - google-chrome-stable
       - google-chrome-beta
+  postgresql: "9.5"
 
 matrix:
   include:
@@ -14,8 +15,11 @@ matrix:
       jdk: oraclejdk8
       before_script:
         - cd server
+        - psql -c 'create database gmstest;' -U postgres
       script:
         - ./gradlew test
+      services:
+        - postgresql
     
     - language: node_js
       node_js: "lts/*"
