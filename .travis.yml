@@ -13,10 +13,17 @@ matrix:
   include:
     - language: java
       jdk: oraclejdk8
+      before_cache:
+        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        directories:
+          - $HOME/.gradle/caches/
+          - $HOME/.gradle/wrapper/
       before_script:
         - cd server
-        - psql -c 'create database gmstest;' -U postgres
-        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password 'postgres'"
+        - psql -c "create database gmstest;" -U postgres
+        - psql -c "ALTER ROLE postgres WITH password 'postgres'"; -U postgres
       script:
         - ./gradlew test
       services:
@@ -24,6 +31,9 @@ matrix:
     
     - language: node_js
       node_js: "lts/*"
+      cache:
+        directories:
+          - node_modules
       before_script:
         - export CHROME_BIN=chromium-browser
         - export DISPLAY=:99.0
