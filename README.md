@@ -6,11 +6,13 @@
 * [How to start developing](#how-to-start-developing)
 
 
-
 ## Overview
 The project consists of two main (independent) modules:
- - [API server](./server) (located in the `server` directory).
- - [Angular application](./client) (located in the `client` directory).
+
+ - [Spring Boot application]
+   - [![Coverage Status](https://coveralls.io/repos/github/lealceldeiro/gms/badge.svg?branch=master)](https://coveralls.io/github/lealceldeiro/gms?branch=master)
+   
+ - [Angular application](./client)
   
   You can collaborate on any of them independently by modifying only the module you would like to change.
 
