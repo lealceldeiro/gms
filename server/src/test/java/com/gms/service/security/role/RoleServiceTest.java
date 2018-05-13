@@ -6,7 +6,7 @@ import com.gms.domain.security.role.BRole;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.domain.NotFoundEntityException;

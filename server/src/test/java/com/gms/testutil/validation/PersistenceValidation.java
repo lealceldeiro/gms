@@ -1,4 +1,4 @@
-package com.gms.util.validation;
+package com.gms.testutil.validation;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

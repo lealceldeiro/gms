@@ -9,7 +9,7 @@ import com.gms.repository.configuration.BConfigurationRepository;
 import com.gms.repository.security.authorization.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.user.EUserRepository;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.configuration.ConfigKey;
 import com.gms.util.constant.DefaultConst;
@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -352,5 +353,16 @@ public class ConfigurationServiceTest {
             success = true;
         }
         assertTrue(success);
+    }
+
+    @Transactional
+    @Test
+    public void assignDefaultUserToEntityWithRoleDefaultUserNotFound() {
+        // Must return false when no default user is found
+        EUser defaultUser = userRepository.findFirstByUsernameOrEmail(dc.getUserAdminDefaultName(),
+                dc.getUserAdminDefaultEmail());
+        authRepository.delete(authRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(defaultUser, true));
+        userRepository.delete(defaultUser);
+        assertTrue(!configurationService.assignDefaultUserToEntityWithRole());
     }
 }

@@ -6,7 +6,11 @@ import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.ownedentity.EOwnedEntityMeta;
 import com.gms.service.AppService;
-import com.gms.util.*;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -219,7 +223,7 @@ public class EOwnedEntityRepositoryTest {
     private void searchName(boolean isLike) throws Exception {
         EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_NAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_NAME;
+        String url = isLike ? ResourcePath.NAME_LIKE : ResourcePath.NAME;
         String nameU = isLike ? e.getName().toUpperCase() : e.getName();
 
         testSearchValueOE(url, nameU);
@@ -235,7 +239,7 @@ public class EOwnedEntityRepositoryTest {
     private void searchUsername(boolean isLike) throws Exception {
         EOwnedEntity e = repository.save(EntityUtil.getSampleEntity(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_USERNAME_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_USERNAME;
+        String url = isLike ? ResourcePath.USERNAME_LIKE : ResourcePath.USERNAME;
         String usernameU = isLike ? e.getUsername().toUpperCase() : e.getUsername();
 
         testSearchValueOE(url, usernameU);
@@ -274,16 +278,16 @@ public class EOwnedEntityRepositoryTest {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         String url;
 
-        // region OWNED_ENTITY_SEARCH_MULTI_LIKE - OK
+        // region MULTI_LIKE - OK
         String notFound = random.nextString();
-        url = isLike ? ResourcePath.OWNED_ENTITY_SEARCH_MULTI_LIKE : ResourcePath.OWNED_ENTITY_SEARCH_MULTI;
+        url = isLike ? ResourcePath.MULTI_LIKE : ResourcePath.MULTI;
         String nameL = isLike ? e.getName().toLowerCase() : e.getName();
         String usernameL = isLike ? e.getUsername().toLowerCase() : e.getUsername();
 
         // region name (lower case?) - username invalid
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_NAME, nameL);
-        paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+        paramMap.add(ResourcePath.NAME, nameL);
+        paramMap.add(ResourcePath.USERNAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -291,8 +295,8 @@ public class EOwnedEntityRepositoryTest {
 
         // region name invalid - username (lower case?)
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
-        paramMap.add(ResourcePath.QUERY_NAME, notFound);
+        paramMap.add(ResourcePath.USERNAME, usernameL);
+        paramMap.add(ResourcePath.NAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -307,8 +311,8 @@ public class EOwnedEntityRepositoryTest {
 
             // region name (upper case) - username invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU);
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+            paramMap.add(ResourcePath.NAME, nameU);
+            paramMap.add(ResourcePath.USERNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -316,8 +320,8 @@ public class EOwnedEntityRepositoryTest {
 
             // region name (upper case shortened) - username invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU.substring(1, nameU.length() - 2));
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
+            paramMap.add(ResourcePath.NAME, nameU.substring(1, nameU.length() - 2));
+            paramMap.add(ResourcePath.USERNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -325,18 +329,18 @@ public class EOwnedEntityRepositoryTest {
 
             // region name invalid - username (upper case)
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameU);
-            paramMap.add(ResourcePath.QUERY_NAME, notFound);
+            paramMap.add(ResourcePath.USERNAME, usernameU);
+            paramMap.add(ResourcePath.NAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
             //endregion
 
-            // region OWNED_ENTITY_SEARCH_MULTI_LIKE - KO
+            // region MULTI_LIKE - KO
 
             // region name ok - username null
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameL);
+            paramMap.add(ResourcePath.NAME, nameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());
@@ -344,7 +348,7 @@ public class EOwnedEntityRepositoryTest {
 
             // region name null - username ok
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
+            paramMap.add(ResourcePath.USERNAME, usernameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());

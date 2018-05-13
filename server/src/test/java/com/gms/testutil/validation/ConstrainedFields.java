@@ -1,4 +1,4 @@
-package com.gms.util.validation;
+package com.gms.testutil.validation;
 
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.FieldDescriptor;

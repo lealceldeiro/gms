@@ -12,7 +12,7 @@ import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
 import com.gms.util.constant.BPermissionConst;
 import org.junit.Before;

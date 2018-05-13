@@ -9,7 +9,11 @@ import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
-import com.gms.util.*;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -230,7 +234,7 @@ public class BPermissionRepositoryTest {
     private void searchName(boolean isLike) throws Exception {
         BPermission e = repository.save(EntityUtil.getSamplePermission(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.PERMISSION_SEARCH_NAME_LIKE : ResourcePath.PERMISSION_SEARCH_NAME;
+        String url = isLike ? ResourcePath.NAME_LIKE : ResourcePath.NAME;
         String nameUpper = isLike ? e.getName().toUpperCase() : e.getName();
 
         testSearchValueP(url, nameUpper);
@@ -246,7 +250,7 @@ public class BPermissionRepositoryTest {
     private void searchLabel(boolean isLike) throws Exception {
         BPermission e = repository.save(EntityUtil.getSamplePermission(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.PERMISSION_SEARCH_LABEL_LIKE : ResourcePath.PERMISSION_SEARCH_LABEL;
+        String url = isLike ? ResourcePath.LABEL_LIKE : ResourcePath.LABEL;
         String labelUpper = isLike ? e.getLabel().toUpperCase() : e.getLabel();
 
         testSearchValueP(url, labelUpper);
@@ -285,16 +289,16 @@ public class BPermissionRepositoryTest {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         String url;
 
-        // region PERMISSION_SEARCH_MULTI_LIKE - OK
+        // region MULTI_LIKE - OK
         String notFound = random.nextString();
-        url = isLike ? ResourcePath.PERMISSION_SEARCH_MULTI_LIKE : ResourcePath.PERMISSION_SEARCH_MULTI;
+        url = isLike ? ResourcePath.MULTI_LIKE : ResourcePath.MULTI;
         String nameL = isLike ? e.getName().toLowerCase() : e.getName();
         String labelL = isLike ? e.getLabel().toLowerCase() : e.getLabel();
 
         // region name (lower case?) - label invalid
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_NAME, nameL);
-        paramMap.add(ResourcePath.QUERY_LABEL, notFound);
+        paramMap.add(ResourcePath.NAME, nameL);
+        paramMap.add(ResourcePath.LABEL, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -302,8 +306,8 @@ public class BPermissionRepositoryTest {
 
         // region name invalid - label (lower case?)
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_LABEL, labelL);
-        paramMap.add(ResourcePath.QUERY_NAME, notFound);
+        paramMap.add(ResourcePath.LABEL, labelL);
+        paramMap.add(ResourcePath.NAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -318,8 +322,8 @@ public class BPermissionRepositoryTest {
 
             // region name (upper case) - label invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU);
-            paramMap.add(ResourcePath.QUERY_LABEL, notFound);
+            paramMap.add(ResourcePath.NAME, nameU);
+            paramMap.add(ResourcePath.LABEL, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -327,8 +331,8 @@ public class BPermissionRepositoryTest {
 
             // region name (upper case shortened) - label invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU.substring(1, nameU.length() - 2));
-            paramMap.add(ResourcePath.QUERY_LABEL, notFound);
+            paramMap.add(ResourcePath.NAME, nameU.substring(1, nameU.length() - 2));
+            paramMap.add(ResourcePath.LABEL, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -336,18 +340,18 @@ public class BPermissionRepositoryTest {
 
             // region name invalid - label (upper case)
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_LABEL, labelU);
-            paramMap.add(ResourcePath.QUERY_NAME, notFound);
+            paramMap.add(ResourcePath.LABEL, labelU);
+            paramMap.add(ResourcePath.NAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
             //endregion
 
-            // region PERMISSION_SEARCH_MULTI_LIKE - KO
+            // region MULTI_LIKE - KO
 
             // region name ok - label null
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameL);
+            paramMap.add(ResourcePath.NAME, nameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());
@@ -355,7 +359,7 @@ public class BPermissionRepositoryTest {
 
             // region name null - label ok
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_LABEL, labelL);
+            paramMap.add(ResourcePath.LABEL, labelL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());

@@ -1,6 +1,7 @@
 package com.gms.repository.security.ownedentity;
 
 import com.gms.domain.security.ownedentity.EOwnedEntity;
+import com.gms.util.constant.ResourcePath;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -21,26 +22,26 @@ public interface EOwnedEntityRepository extends PagingAndSortingRepository<EOwne
     @RestResource(exported = false)
     EOwnedEntity findFirstByUsername(String username);
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_MULTI_LIKE, rel = OWNED_ENTITY_SEARCH_MULTI_LIKE)
+    @RestResource(path = ResourcePath.MULTI_LIKE, rel = ResourcePath.MULTI_LIKE)
     Page<EOwnedEntity> findByNameContainsIgnoreCaseOrUsernameContainsIgnoreCase(
-            @Param(QUERY_NAME) String name, @Param(QUERY_USERNAME) String username, Pageable pageable
+            @Param(ResourcePath.NAME) String name, @Param(ResourcePath.USERNAME) String username, Pageable pageable
     );
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_MULTI, rel = OWNED_ENTITY_SEARCH_MULTI)
+    @RestResource(path = ResourcePath.MULTI, rel = ResourcePath.MULTI)
     Page<EOwnedEntity> findByNameEqualsOrUsernameEquals(
-            @Param(QUERY_NAME) String name, @Param(QUERY_USERNAME) String username, Pageable pageable
+            @Param(ResourcePath.NAME) String name, @Param(ResourcePath.USERNAME) String username, Pageable pageable
     );
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_NAME_LIKE, rel = OWNED_ENTITY_SEARCH_NAME_LIKE)
+    @RestResource(path = ResourcePath.NAME_LIKE, rel = ResourcePath.NAME_LIKE)
     Page<EOwnedEntity> findByNameContainsIgnoreCase(@Param(QUERY_VALUE) String name, Pageable pageable);
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_NAME, rel = OWNED_ENTITY_SEARCH_NAME)
+    @RestResource(path = ResourcePath.NAME, rel = ResourcePath.NAME)
     Page<EOwnedEntity> findByNameEquals(@Param(QUERY_VALUE) String name, Pageable pageable);
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_USERNAME_LIKE, rel = OWNED_ENTITY_SEARCH_USERNAME_LIKE)
+    @RestResource(path = USERNAME_LIKE, rel = USERNAME_LIKE)
     Page<EOwnedEntity> findByUsernameContainsIgnoreCase(@Param(QUERY_VALUE) String username, Pageable pageable);
 
-    @RestResource(path = OWNED_ENTITY_SEARCH_USERNAME, rel = OWNED_ENTITY_SEARCH_USERNAME)
+    @RestResource(path = USERNAME, rel = USERNAME)
     Page<EOwnedEntity> findByUsernameEquals(@Param(QUERY_VALUE) String username, Pageable pageable);
 
 }

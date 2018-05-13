@@ -23,36 +23,34 @@ public class ResourcePath {
     public static final String PERMISSION = "permission";
 
     /**
-     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name or
-     *  label (like search).
+     *  Relative url for searching any resource by any of its properties (like search).
      */
-    public static final String PERMISSION_SEARCH_MULTI_LIKE = "multi-like";
+    public static final String MULTI_LIKE = "multi-like";
 
     /**
-     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name or
-     *  label.
+     *  Relative url for searching any resource by any of its properties.
      */
-    public static final String PERMISSION_SEARCH_MULTI = "multi";
+    public static final String MULTI = "multi";
 
     /**
-     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name (like search).
+     *  Relative url for searching any resource by name (the ones which have it) (like search).
      */
-    public static final String PERMISSION_SEARCH_NAME_LIKE = "name-like";
+    public static final String NAME_LIKE = "name-like";
 
     /**
      *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by label (like search).
      */
-    public static final String PERMISSION_SEARCH_LABEL_LIKE = "label-like";
+    public static final String LABEL_LIKE = "label-like";
 
     /**
-     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by name.
+     *  Relative url for searching any resource by name (the ones which have it).
      */
-    public static final String PERMISSION_SEARCH_NAME = "name";
+    public static final String NAME = "name";
 
     /**
-     *  Relative url for searching {@link com.gms.domain.security.permission.BPermission} resources by label.
+     *  Relative url for searching any resource by label (the ones which have it).
      */
-    public static final String PERMISSION_SEARCH_LABEL = "label";
+    public static final String LABEL = "label";
 
     // endregion
 
@@ -64,36 +62,14 @@ public class ResourcePath {
     public static final String OWNED_ENTITY = "entity";
 
     /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name or
-     * username (like search).
+     * Relative url for searching any resource by username (the ones which have it) (like search).
      */
-    public static final String OWNED_ENTITY_SEARCH_MULTI_LIKE = "multi-like";
+    public static final String USERNAME_LIKE = "username-like";
 
     /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name or
-     * username.
+     * Relative url for searching any resource by username (the ones which have it).
      */
-    public static final String OWNED_ENTITY_SEARCH_MULTI = "multi";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name (like search).
-     */
-    public static final String OWNED_ENTITY_SEARCH_NAME_LIKE = "name-like";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by username (like search).
-     */
-    public static final String OWNED_ENTITY_SEARCH_USERNAME_LIKE = "username-like";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by name.
-     */
-    public static final String OWNED_ENTITY_SEARCH_NAME = "name";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources by username.
-     */
-    public static final String OWNED_ENTITY_SEARCH_USERNAME = "username";
+    public static final String USERNAME = "username";
 
     // endregion
 
@@ -103,16 +79,6 @@ public class ResourcePath {
      * Relative url for {@link com.gms.domain.security.role.BRole} resources.
      */
     public static final String ROLE = "role";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.role.BRole} resources by label (like search).
-     */
-    public static final String ROLE_SEARCH_LABEL_LIKE = "label-like";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.role.BRole} resources by label.
-     */
-    public static final String ROLE_SEARCH_LABEL = "label";
 
     // endregion
 
@@ -124,29 +90,14 @@ public class ResourcePath {
     public static final String USER = "user";
 
     /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username.
+     * Relative url for searching any resource by email (the ones which have it).
      */
-    public static final String USER_SEARCH_USERNAME = "username";
+    public static final String EMAIL = "email";
 
     /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by email.
+     * Relative url for searching any resource by last name (the ones which have it).
      */
-    public static final String USER_SEARCH_EMAIL = "email";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by name.
-     */
-    public static final String USER_SEARCH_NAME = "name";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by last name.
-     */
-    public static final String USER_SEARCH_LASTNAME = "lastname";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username (like search).
-     */
-    public static final String USER_SEARCH_USERNAME_LIKE = "username-like";
+    public static final String LASTNAME = "lastname";
 
     /**
      * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by email (like search).
@@ -154,26 +105,9 @@ public class ResourcePath {
     public static final String USER_SEARCH_EMAIL_LIKE = "email-like";
 
     /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by name (like search).
-     */
-    public static final String USER_SEARCH_NAME_LIKE = "name-like";
-
-    /**
      * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by last name (like search).
      */
     public static final String USER_SEARCH_LASTNAME_LIKE = "lastname-like";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username, email, name or
-     * last name (like search).
-     */
-    public static final String USER_SEARCH_MULTI_LIKE = "multi-like";
-
-    /**
-     * Relative url for searching {@link com.gms.domain.security.user.EUser} resources by username, email, name or
-     * last name.
-     */
-    public static final String USER_SEARCH_MULTI = "multi";
 
     // endregion
 
@@ -192,31 +126,6 @@ public class ResourcePath {
      * Query param "value"
      */
     public static final String QUERY_VALUE = "value";
-
-    /**
-     * Query param "username"
-     */
-    public static final String QUERY_USERNAME = "username";
-
-    /**
-     * Query param "email"
-     */
-    public static final String QUERY_EMAIL = "email";
-
-    /**
-     * Query param "name"
-     */
-    public static final String QUERY_NAME = "name";
-
-    /**
-     * Query param "lastname"
-     */
-    public static final String QUERY_LASTNAME = "lastname";
-
-    /**
-     * Query param "label"
-     */
-    public static final String QUERY_LABEL = "label";
 
     // endregion
 

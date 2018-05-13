@@ -1,4 +1,4 @@
-package com.gms.util;
+package com.gms.testutil;
 
 import java.util.Arrays;
 

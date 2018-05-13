@@ -9,7 +9,7 @@ import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
 import org.junit.Before;
 import org.junit.Test;

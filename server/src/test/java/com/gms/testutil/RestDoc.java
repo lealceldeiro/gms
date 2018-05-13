@@ -1,4 +1,4 @@
-package com.gms.util;
+package com.gms.testutil;
 
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;

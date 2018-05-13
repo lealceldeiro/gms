@@ -1,5 +1,6 @@
 package com.gms.util.constant;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -147,18 +148,21 @@ public class SecurityConst {
     /**
      * Url which are not checked by the security mechanism.
      */
+    @Getter(AccessLevel.NONE)
     @Value("${gms.security.free_url_any:}")
     private String freeURLsAnyRequest;
 
     /**
      * Url which are not checked by the security mechanism when the HttpRequestMethod is POST.
      */
+    @Getter(AccessLevel.NONE)
     @Value("${gms.security.free_url_post:}")
     private String freeURLsPostRequest;
 
     /**
      * Url which are not checked by the security mechanism when the HttpRequestMethod is GET.
      */
+    @Getter(AccessLevel.NONE)
     @Value("${gms.security.free_url_get:}")
     private String freeURLsGetRequest;
 
@@ -191,15 +195,15 @@ public class SecurityConst {
      */
     public static final String USERNAME_REGEXP = "^(?!.*[-_]{2,})(?=^[^-_].*[^-_]$)[\\w-]{1,255}$";
 
-    public String [] getFreeURLsAnyRequest() {
+    public String[] getFreeURLsAnyRequest() {
         return freeURLsAnyRequest.split(";");
     }
 
-    public String [] getFreeURLsGetRequest() {
+    public String[] getFreeURLsGetRequest() {
         return freeURLsGetRequest.split(";");
     }
 
-    public String [] getFreeURLsPostRequest() {
+    public String[] getFreeURLsPostRequest() {
         return freeURLsPostRequest.split(";");
     }
 

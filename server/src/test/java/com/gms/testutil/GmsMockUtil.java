@@ -1,4 +1,4 @@
-package com.gms.util;
+package com.gms.testutil;
 
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;

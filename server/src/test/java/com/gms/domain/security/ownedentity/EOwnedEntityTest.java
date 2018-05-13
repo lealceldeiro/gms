@@ -1,10 +1,10 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.Application;
-import com.gms.util.EntityUtil;
-import com.gms.util.StringUtil;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.StringUtil;
+import com.gms.testutil.validation.PersistenceValidation;
 import com.gms.util.i18n.CodeI18N;
-import com.gms.util.validation.PersistenceValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

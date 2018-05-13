@@ -9,12 +9,16 @@ import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.service.AppService;
-import com.gms.util.*;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.testutil.validation.ConstrainedFields;
+import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
-import com.gms.util.validation.ConstrainedFields;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Before;
@@ -259,7 +263,7 @@ public class BRoleRepositoryTest {
     private void searchLabelR(boolean isLike) throws Exception {
         BRole e = repository.save(EntityUtil.getSampleRole(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.ROLE_SEARCH_LABEL_LIKE : ResourcePath.ROLE_SEARCH_LABEL;
+        String url = isLike ? ResourcePath.LABEL_LIKE : ResourcePath.LABEL;
         String labelUpper = isLike ? e.getLabel().toUpperCase() : e.getLabel();
 
         testSearchValueR(url, labelUpper);

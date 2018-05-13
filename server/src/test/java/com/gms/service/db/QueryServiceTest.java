@@ -3,7 +3,7 @@ package com.gms.service.db;
 import com.gms.Application;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.repository.security.permission.BPermissionRepository;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -4,7 +4,7 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

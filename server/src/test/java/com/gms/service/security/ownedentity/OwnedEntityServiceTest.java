@@ -5,7 +5,7 @@ import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.EntityUtil;
+import com.gms.testutil.EntityUtil;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.GmsGeneralException;
 import org.junit.Before;

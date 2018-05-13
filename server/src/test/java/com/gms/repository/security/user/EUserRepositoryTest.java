@@ -6,7 +6,11 @@ import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.user.EUser;
 import com.gms.domain.security.user.EUserMeta;
 import com.gms.service.AppService;
-import com.gms.util.*;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
@@ -271,7 +275,7 @@ public class EUserRepositoryTest {
     private void searchName(boolean isLike) throws Exception {
         EUser e = repository.save(EntityUtil.getSampleUser(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.USER_SEARCH_NAME_LIKE : ResourcePath.USER_SEARCH_NAME;
+        String url = isLike ? ResourcePath.NAME_LIKE : ResourcePath.NAME;
         String nameU = isLike ? e.getName().toUpperCase() : e.getName();
 
         testSearchValueU(url, nameU);
@@ -287,7 +291,7 @@ public class EUserRepositoryTest {
     private void searchLastName(boolean isLike) throws Exception {
         EUser e = repository.save(EntityUtil.getSampleUser(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.USER_SEARCH_LASTNAME_LIKE : ResourcePath.USER_SEARCH_LASTNAME;
+        String url = isLike ? ResourcePath.USER_SEARCH_LASTNAME_LIKE : ResourcePath.LASTNAME;
         String lastnameU = isLike ? e.getLastName().toUpperCase() : e.getLastName();
 
         testSearchValueU(url, lastnameU);
@@ -303,7 +307,7 @@ public class EUserRepositoryTest {
     private void searchUsername(boolean isLike) throws Exception {
         EUser e = repository.save(EntityUtil.getSampleUser(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.USER_SEARCH_USERNAME_LIKE : ResourcePath.USER_SEARCH_USERNAME;
+        String url = isLike ? ResourcePath.USERNAME_LIKE : ResourcePath.USERNAME;
         String usernameU = isLike ? e.getUsername().toUpperCase() : e.getUsername();
 
         testSearchValueU(url, usernameU);
@@ -319,7 +323,7 @@ public class EUserRepositoryTest {
     private void searchEmail(boolean isLike) throws Exception {
         EUser e = repository.save(EntityUtil.getSampleUser(random.nextString()));
         assertNotNull(e);
-        String url = isLike ? ResourcePath.USER_SEARCH_EMAIL_LIKE : ResourcePath.USER_SEARCH_EMAIL;
+        String url = isLike ? ResourcePath.USER_SEARCH_EMAIL_LIKE : ResourcePath.EMAIL;
         String emailU = isLike ? e.getEmail().toUpperCase() : e.getName();
 
         testSearchValueU(url, emailU);
@@ -358,9 +362,9 @@ public class EUserRepositoryTest {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         String url;
 
-        // region USER_SEARCH_MULTI_LIKE - OK
+        // region MULTI_LIKE - OK
         String notFound = random.nextString();
-        url = isLike ? ResourcePath.USER_SEARCH_MULTI_LIKE : ResourcePath.USER_SEARCH_MULTI;
+        url = isLike ? ResourcePath.MULTI_LIKE : ResourcePath.MULTI;
         String nameL = isLike ? e.getName().toLowerCase() : e.getName();
         String usernameL = isLike ? e.getUsername().toLowerCase() : e.getUsername();
         String emailL = isLike ? e.getEmail().toLowerCase() : e.getEmail();
@@ -368,10 +372,10 @@ public class EUserRepositoryTest {
 
         // region name (lower case?) - username invalid - email invalid - lastName invalid
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_NAME, nameL);
-        paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-        paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-        paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+        paramMap.add(ResourcePath.NAME, nameL);
+        paramMap.add(ResourcePath.USERNAME, notFound);
+        paramMap.add(ResourcePath.EMAIL, notFound);
+        paramMap.add(ResourcePath.LASTNAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -379,10 +383,10 @@ public class EUserRepositoryTest {
 
         // region name invalid - username (lower case?) - email invalid - lastName invalid
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
-        paramMap.add(ResourcePath.QUERY_NAME, notFound);
-        paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-        paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+        paramMap.add(ResourcePath.USERNAME, usernameL);
+        paramMap.add(ResourcePath.NAME, notFound);
+        paramMap.add(ResourcePath.EMAIL, notFound);
+        paramMap.add(ResourcePath.LASTNAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -390,10 +394,10 @@ public class EUserRepositoryTest {
 
         // region name invalid - username invalid - email (lower case?) - lastName invalid
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-        paramMap.add(ResourcePath.QUERY_NAME, notFound);
-        paramMap.add(ResourcePath.QUERY_EMAIL, emailL);
-        paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+        paramMap.add(ResourcePath.USERNAME, notFound);
+        paramMap.add(ResourcePath.NAME, notFound);
+        paramMap.add(ResourcePath.EMAIL, emailL);
+        paramMap.add(ResourcePath.LASTNAME, notFound);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -401,10 +405,10 @@ public class EUserRepositoryTest {
 
         // region name invalid - username invalid - email invalid - lastName (lower case?)
         paramMap.clear();
-        paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-        paramMap.add(ResourcePath.QUERY_NAME, notFound);
-        paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-        paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
+        paramMap.add(ResourcePath.USERNAME, notFound);
+        paramMap.add(ResourcePath.NAME, notFound);
+        paramMap.add(ResourcePath.EMAIL, notFound);
+        paramMap.add(ResourcePath.LASTNAME, lastNameL);
         paramMap.addAll(paramMapBase);
 
         testSearchMulti(url, paramMap);
@@ -421,10 +425,10 @@ public class EUserRepositoryTest {
 
             // region name (upper case) - username invalid - email invalid, lastName invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU);
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-            paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+            paramMap.add(ResourcePath.NAME, nameU);
+            paramMap.add(ResourcePath.USERNAME, notFound);
+            paramMap.add(ResourcePath.EMAIL, notFound);
+            paramMap.add(ResourcePath.LASTNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -432,10 +436,10 @@ public class EUserRepositoryTest {
 
             // region name (upper case shortened) - username invalid - email invalid, lastName invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameU.substring(1, nameU.length() - 2));
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-            paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+            paramMap.add(ResourcePath.NAME, nameU.substring(1, nameU.length() - 2));
+            paramMap.add(ResourcePath.USERNAME, notFound);
+            paramMap.add(ResourcePath.EMAIL, notFound);
+            paramMap.add(ResourcePath.LASTNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -443,10 +447,10 @@ public class EUserRepositoryTest {
 
             // region name invalid - username (upper case) - email invalid, lastName invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameU);
-            paramMap.add(ResourcePath.QUERY_NAME, notFound);
-            paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+            paramMap.add(ResourcePath.USERNAME, usernameU);
+            paramMap.add(ResourcePath.NAME, notFound);
+            paramMap.add(ResourcePath.EMAIL, notFound);
+            paramMap.add(ResourcePath.LASTNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -454,10 +458,10 @@ public class EUserRepositoryTest {
 
             // region name invalid - username invalid - email (upper case), lastName invalid
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-            paramMap.add(ResourcePath.QUERY_NAME, notFound);
-            paramMap.add(ResourcePath.QUERY_EMAIL, emailU);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, notFound);
+            paramMap.add(ResourcePath.USERNAME, notFound);
+            paramMap.add(ResourcePath.NAME, notFound);
+            paramMap.add(ResourcePath.EMAIL, emailU);
+            paramMap.add(ResourcePath.LASTNAME, notFound);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
@@ -465,22 +469,22 @@ public class EUserRepositoryTest {
 
             // region name invalid - username invalid - email invalid, lastName (upper case)
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, notFound);
-            paramMap.add(ResourcePath.QUERY_NAME, notFound);
-            paramMap.add(ResourcePath.QUERY_EMAIL, notFound);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameU);
+            paramMap.add(ResourcePath.USERNAME, notFound);
+            paramMap.add(ResourcePath.NAME, notFound);
+            paramMap.add(ResourcePath.EMAIL, notFound);
+            paramMap.add(ResourcePath.LASTNAME, lastNameU);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap);
             //endregion
 
-            // region USER_SEARCH_MULTI_LIKE - KO
+            // region MULTI_LIKE - KO
 
             // region name ok - username ok - email ok - lastName null
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameL);
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
-            paramMap.add(ResourcePath.QUERY_EMAIL, emailL);
+            paramMap.add(ResourcePath.NAME, nameL);
+            paramMap.add(ResourcePath.USERNAME, usernameL);
+            paramMap.add(ResourcePath.EMAIL, emailL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());
@@ -488,9 +492,9 @@ public class EUserRepositoryTest {
 
             // region name ok - username ok - email null - lastName ok
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameL);
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
+            paramMap.add(ResourcePath.NAME, nameL);
+            paramMap.add(ResourcePath.USERNAME, usernameL);
+            paramMap.add(ResourcePath.LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());
@@ -498,9 +502,9 @@ public class EUserRepositoryTest {
 
             // region name ok - username null - email ok - lastName ok
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_NAME, nameL);
-            paramMap.add(ResourcePath.QUERY_EMAIL, emailL);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
+            paramMap.add(ResourcePath.NAME, nameL);
+            paramMap.add(ResourcePath.EMAIL, emailL);
+            paramMap.add(ResourcePath.LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());
@@ -508,9 +512,9 @@ public class EUserRepositoryTest {
 
             // region name null - username ok - email ok - lastName ok
             paramMap.clear();
-            paramMap.add(ResourcePath.QUERY_USERNAME, usernameL);
-            paramMap.add(ResourcePath.QUERY_EMAIL, emailL);
-            paramMap.add(ResourcePath.QUERY_LASTNAME, lastNameL);
+            paramMap.add(ResourcePath.USERNAME, usernameL);
+            paramMap.add(ResourcePath.EMAIL, emailL);
+            paramMap.add(ResourcePath.LASTNAME, lastNameL);
             paramMap.addAll(paramMapBase);
 
             testSearchMulti(url, paramMap, true, status().isBadRequest());

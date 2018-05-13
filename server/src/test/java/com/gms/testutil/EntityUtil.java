@@ -1,12 +1,13 @@
-package com.gms.util;
+package com.gms.testutil;
 
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
+import com.gms.util.GMSRandom;
 import org.springframework.hateoas.Resource;
 
-import static com.gms.util.StringUtil.*;
+import static com.gms.testutil.StringUtil.*;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com

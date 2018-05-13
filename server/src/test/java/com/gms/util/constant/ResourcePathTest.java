@@ -1,0 +1,63 @@
+package com.gms.util.constant;
+
+import com.gms.Application;
+import com.gms.testutil.StaticUtil;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertNotNull;
+
+/**
+ * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
+ * @version 0.1
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+public class ResourcePathTest {
+
+    @Test
+    public void constantsAreNotNull() {
+        assertNotNull(ResourcePath.CONFIGURATION);
+        assertNotNull(ResourcePath.PERMISSION);
+        assertNotNull(ResourcePath.MULTI_LIKE);
+        assertNotNull(ResourcePath.MULTI);
+        assertNotNull(ResourcePath.NAME_LIKE);
+        assertNotNull(ResourcePath.LABEL_LIKE);
+        assertNotNull(ResourcePath.NAME);
+        assertNotNull(ResourcePath.LABEL);
+        assertNotNull(ResourcePath.OWNED_ENTITY);
+        assertNotNull(ResourcePath.MULTI);
+        assertNotNull(ResourcePath.NAME_LIKE);
+        assertNotNull(ResourcePath.USERNAME_LIKE);
+        assertNotNull(ResourcePath.NAME);
+        assertNotNull(ResourcePath.USERNAME);
+        assertNotNull(ResourcePath.ROLE);
+        assertNotNull(ResourcePath.LABEL_LIKE);
+        assertNotNull(ResourcePath.LABEL);
+        assertNotNull(ResourcePath.USER);
+        assertNotNull(ResourcePath.USERNAME);
+        assertNotNull(ResourcePath.EMAIL);
+        assertNotNull(ResourcePath.NAME);
+        assertNotNull(ResourcePath.LASTNAME);
+        assertNotNull(ResourcePath.USERNAME_LIKE);
+        assertNotNull(ResourcePath.USER_SEARCH_EMAIL_LIKE);
+        assertNotNull(ResourcePath.NAME_LIKE);
+        assertNotNull(ResourcePath.USER_SEARCH_LASTNAME_LIKE);
+        assertNotNull(ResourcePath.MULTI);
+        assertNotNull(ResourcePath.AUTHORIZATION);
+        assertNotNull(ResourcePath.QUERY_VALUE);
+        assertNotNull(ResourcePath.USERNAME);
+        assertNotNull(ResourcePath.EMAIL);
+        assertNotNull(ResourcePath.NAME);
+        assertNotNull(ResourcePath.LASTNAME);
+        assertNotNull(ResourcePath.LABEL);
+    }
+
+
+    @Test
+    public void fieldsAreNotRepeated() {
+        StaticUtil.testFieldsAreNorRepeated(ResourcePath.class);
+    }
+}

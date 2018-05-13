@@ -1,6 +1,7 @@
 package com.gms.repository.security.user;
 
 import com.gms.domain.security.user.EUser;
+import com.gms.util.constant.ResourcePath;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -30,40 +31,40 @@ public interface EUserRepository extends EUserRepositoryCustom, PagingAndSorting
     @Override
     <S extends EUser> Iterable<S> saveAll(Iterable<S> it);
 
-    @RestResource(path = USER_SEARCH_USERNAME, rel = USER_SEARCH_USERNAME)
+    @RestResource(path = ResourcePath.USERNAME, rel = ResourcePath.USERNAME)
     Page<EUser> findByUsernameEquals(@Param(QUERY_VALUE) String username, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_EMAIL, rel = USER_SEARCH_EMAIL)
+    @RestResource(path = EMAIL, rel = EMAIL)
     Page<EUser> findByEmailEquals(@Param(QUERY_VALUE) String email, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_NAME, rel = USER_SEARCH_NAME)
+    @RestResource(path = ResourcePath.NAME, rel = ResourcePath.NAME)
     Page<EUser> findByNameEquals(@Param(QUERY_VALUE) String name, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_LASTNAME, rel = USER_SEARCH_LASTNAME)
+    @RestResource(path = LASTNAME, rel = LASTNAME)
     Page<EUser> findByLastNameEquals(@Param(QUERY_VALUE) String lastName, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_USERNAME_LIKE, rel = USER_SEARCH_USERNAME_LIKE)
+    @RestResource(path = ResourcePath.USERNAME_LIKE, rel = ResourcePath.USERNAME_LIKE)
     Page<EUser> findByUsernameContainsIgnoreCase(@Param(QUERY_VALUE) String username, Pageable pageable);
 
     @RestResource(path = USER_SEARCH_EMAIL_LIKE, rel = USER_SEARCH_EMAIL_LIKE)
     Page<EUser> findByEmailContainsIgnoreCase(@Param(QUERY_VALUE) String email, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_NAME_LIKE, rel = USER_SEARCH_NAME_LIKE)
+    @RestResource(path = ResourcePath.NAME_LIKE, rel = ResourcePath.NAME_LIKE)
     Page<EUser> findByNameContainsIgnoreCase(@Param(QUERY_VALUE) String name, Pageable pageable);
 
     @RestResource(path = USER_SEARCH_LASTNAME_LIKE, rel = USER_SEARCH_LASTNAME_LIKE)
     Page<EUser> findByLastNameContainsIgnoreCase(@Param(QUERY_VALUE) String lastName, Pageable pageable);
 
-    @RestResource(path = USER_SEARCH_MULTI_LIKE, rel = USER_SEARCH_MULTI_LIKE)
+    @RestResource(path = ResourcePath.MULTI_LIKE, rel = ResourcePath.MULTI_LIKE)
     Page<EUser>
     findByUsernameContainsIgnoreCaseOrEmailContainsIgnoreCaseOrNameContainsIgnoreCaseOrLastNameContainsIgnoreCase(
-            @Param(QUERY_USERNAME) String username, @Param(QUERY_EMAIL) String email, @Param(QUERY_NAME) String name,
-            @Param(QUERY_LASTNAME) String lastName, Pageable pageable
+            @Param(ResourcePath.USERNAME) String username, @Param(ResourcePath.EMAIL) String email, @Param(ResourcePath.NAME) String name,
+            @Param(ResourcePath.LASTNAME) String lastName, Pageable pageable
     );
 
-    @RestResource(path = USER_SEARCH_MULTI, rel = USER_SEARCH_MULTI)
+    @RestResource(path = ResourcePath.MULTI, rel = ResourcePath.MULTI)
     Page<EUser> findByUsernameEqualsOrEmailEqualsOrNameEqualsOrLastNameEquals(
-            @Param(QUERY_USERNAME) String username, @Param(QUERY_EMAIL) String email, @Param(QUERY_NAME) String name,
-            @Param(QUERY_LASTNAME) String lastName, Pageable pageable
+            @Param(ResourcePath.USERNAME) String username, @Param(ResourcePath.EMAIL) String email, @Param(ResourcePath.NAME) String name,
+            @Param(ResourcePath.LASTNAME) String lastName, Pageable pageable
     );
 }
