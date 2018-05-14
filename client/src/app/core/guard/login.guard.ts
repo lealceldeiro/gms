@@ -18,7 +18,6 @@ export class LoginGuard implements CanActivateChild {
    * @returns {boolean}
    */
   canActivateChild() {
-    console.log(this.sessionService.loggedIn);
     return !this.sessionService.loggedIn;
   }
 }
