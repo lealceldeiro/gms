@@ -130,4 +130,8 @@ public class ResourcePath {
     // endregion
 
     private ResourcePath() {}
+
+    public static ResourcePath getInstance() {
+        return new ResourcePath();
+    }
 }

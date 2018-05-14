@@ -18,6 +18,11 @@ import static org.junit.Assert.assertNotNull;
 public class ResourcePathTest {
 
     @Test
+    public void constructorTest() {
+        assertNotNull(ResourcePath.getInstance());
+    }
+
+    @Test
     public void constantsAreNotNull() {
         assertNotNull(ResourcePath.CONFIGURATION);
         assertNotNull(ResourcePath.PERMISSION);

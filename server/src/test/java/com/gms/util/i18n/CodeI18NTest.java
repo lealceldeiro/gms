@@ -16,6 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = Application.class)
 public class CodeI18NTest {
 
+    @Test
+    public void constructorTest() {
+        Assert.assertNotNull(CodeI18N.getInstance());
+    }
 
     @Test
     public void constantsAreNotNull() {

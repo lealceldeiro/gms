@@ -57,6 +57,9 @@ public class SQLExceptionCode {
     public static final String EXCLUSION_VIOLATION = "23P01";
     public static final String EXTERNAL_ROUTINE_INVOCATION_EXCEPTION = "39000";
 
-    private SQLExceptionCode() {
+    private SQLExceptionCode() {}
+
+    public static SQLExceptionCode getInstance() {
+        return new SQLExceptionCode();
     }
 }

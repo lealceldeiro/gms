@@ -33,6 +33,9 @@ public class CodeI18N {
      */
     public static final String FIELD_PATTERN_INCORRECT_USERNAME = "validation.field.incorrect.pattern.username";
 
-    private CodeI18N() {
+    private CodeI18N() {}
+
+    public static CodeI18N getInstance() {
+        return new CodeI18N();
     }
 }

@@ -18,6 +18,11 @@ import static org.junit.Assert.assertNotNull;
 public class SQLExceptionCodeTest {
 
     @Test
+    public void constructorTest() {
+        assertNotNull(SQLExceptionCode.getInstance());
+    }
+
+    @Test
     public void constantsAreNotNull() {
         assertNotNull(SQLExceptionCode.NO_DATA);
         assertNotNull(SQLExceptionCode.NO_ADDITIONAL_DYNAMIC_RESULT_SETS_RETURNED);
