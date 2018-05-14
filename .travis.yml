@@ -1,18 +1,10 @@
 sudo: enabled
-addons:
-  apt:
-    update: true
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
-      - google-chrome-beta
-  postgresql: "9.5"
-
 matrix:
   include:
     - language: java
       jdk: oraclejdk8
+      addons:
+        postgresql: "9.5"
       before_cache:
         - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -33,6 +25,14 @@ matrix:
     
     - language: node_js
       node_js: "lts/*"
+      addons:
+        apt:
+          update: true
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+            - google-chrome-beta
       cache:
         directories:
           - node_modules
@@ -43,3 +43,7 @@ matrix:
         - cd client
         - npm install -g @angular/cli
         - npm install
+      script:
+        - npm run testcoverage
+      after_success:
+        - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
