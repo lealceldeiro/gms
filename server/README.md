@@ -1,5 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/github/lealceldeiro/gms/badge.svg?branch=master)](https://coveralls.io/github/lealceldeiro/gms?branch=master)
-
 # General Management System API
 
 This is a Java project which uses
