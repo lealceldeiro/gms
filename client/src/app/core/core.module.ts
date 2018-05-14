@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SessionService } from './session/session.service';
 import { StorageService } from './storage/storage.service';
 import { LoginGuard } from './guard/login.guard';
+import { SessionUserService } from './session/session-user.service';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
@@ -45,6 +46,10 @@ export class GmsCoreModule {
         {
           provide: LoginGuard,
           useClass: config && config['loginGuard'] ? config['loginGuard'] : LoginGuard
+        },
+        {
+          provide: SessionUserService,
+          useClass: config && config['userService'] ? config['userService'] : SessionUserService
         }
       ]
     };
