@@ -1,4 +1,8 @@
 sudo: enabled
+# safelist
+branches:
+  only:
+    - master
 matrix:
   include:
     - language: java
