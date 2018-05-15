@@ -1,0 +1,19 @@
+*Searching users whose username or email is equal to a provided value*
+
+A `GET` request get a user whose either his/her username or email is equal to the provided values.
+
+include::../../../util/H-REQUEST.adoc[]
+
+include::../../../util/H-REQUEST-QUERY-PARAMS.adoc[]
+
+include::{snippets}/e-user-repository-test/search-user-name-email/request-parameters.adoc[]
+
+include::../../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/e-user-repository-test/search-user-name-email/curl-request.adoc[]
+
+include::../../../util/H-RESPONSE.adoc[]
+
+include::../../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/e-user-repository-test/search-email/http-response.adoc[]

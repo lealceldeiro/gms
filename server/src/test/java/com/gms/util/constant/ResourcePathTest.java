@@ -44,6 +44,7 @@ public class ResourcePathTest {
         assertNotNull(ResourcePath.USER);
         assertNotNull(ResourcePath.USERNAME);
         assertNotNull(ResourcePath.EMAIL);
+        assertNotNull(ResourcePath.USERNAME_EMAIL);
         assertNotNull(ResourcePath.NAME);
         assertNotNull(ResourcePath.LASTNAME);
         assertNotNull(ResourcePath.USERNAME_LIKE);

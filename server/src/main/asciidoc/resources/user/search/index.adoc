@@ -2,6 +2,8 @@
 ==== Searching for users
 The following searches can be performed over the user resource.
 
+include::username-email.adoc[]
+
 include::username.adoc[]
 
 include::username-like.adoc[]

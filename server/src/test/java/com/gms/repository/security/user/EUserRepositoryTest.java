@@ -259,6 +259,26 @@ public class EUserRepositoryTest {
     }
 
     @Test
+    public void searchUserNameEmail() throws Exception {
+        EUser u = repository.save(EntityUtil.getSampleUser(random.nextString()));
+        assertNotNull(u);
+        mvc.perform(
+                get(apiPrefix + "/" + reqString + "/search/" + ResourcePath.USERNAME_EMAIL)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param(ResourcePath.USERNAME, u.getUsername())
+                        .param(ResourcePath.EMAIL, u.getEmail())
+        )
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
+                        relaxedRequestParameters(
+                                parameterWithName("username").description(EUserMeta.username).optional(),
+                                parameterWithName("email").description(EUserMeta.email).optional()
+                        ))
+                );
+    }
+
+    @Test
     public void searchLastName() throws Exception {
         searchLastName(false);
     }

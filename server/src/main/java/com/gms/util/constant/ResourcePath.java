@@ -6,16 +6,10 @@ package com.gms.util.constant;
  */
 public class ResourcePath {
 
-    // region configuration
-
     /**
      * Relative url for {@link com.gms.domain.configuration.BConfiguration} resources.
      */
     public static final String CONFIGURATION = "configuration";
-
-    // endregion
-
-    // region permission
 
     /**
      *  Relative url for {@link com.gms.domain.security.permission.BPermission} resources.
@@ -52,10 +46,6 @@ public class ResourcePath {
      */
     public static final String LABEL = "label";
 
-    // endregion
-
-    // region entity
-
     /**
      * Relative url for {@link com.gms.domain.security.ownedentity.EOwnedEntity} resources.
      */
@@ -71,18 +61,10 @@ public class ResourcePath {
      */
     public static final String USERNAME = "username";
 
-    // endregion
-
-    // region role
-
     /**
      * Relative url for {@link com.gms.domain.security.role.BRole} resources.
      */
     public static final String ROLE = "role";
-
-    // endregion
-
-    // region user
 
     /**
      * Relative url for {@link com.gms.domain.security.user.EUser} resources.
@@ -93,6 +75,11 @@ public class ResourcePath {
      * Relative url for searching any resource by email (the ones which have it).
      */
     public static final String EMAIL = "email";
+
+    /**
+     * Relative url for searching any resource by username or email (the ones which have it).
+     */
+    public static final String USERNAME_EMAIL = "username-email";
 
     /**
      * Relative url for searching any resource by last name (the ones which have it).
@@ -109,25 +96,15 @@ public class ResourcePath {
      */
     public static final String USER_SEARCH_LASTNAME_LIKE = "lastname-like";
 
-    // endregion
-
-    // region authorization
-
     /**
      * Relative url for {@link com.gms.domain.security.BAuthorization} resources.
      */
     public static final String AUTHORIZATION = "authorization";
 
-    // endregion
-
-    // region query params
-
     /**
      * Query param "value"
      */
     public static final String QUERY_VALUE = "value";
-
-    // endregion
 
     private ResourcePath() {}
 
