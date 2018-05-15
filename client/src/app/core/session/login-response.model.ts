@@ -1,7 +1,7 @@
 /**
  * Exposes the information must be provided when the login request  is performed.
  */
-export interface LoginResponseBody {
+export interface LoginResponseModel {
   /**
    * Time where the access and refresh tokens were issued at.
    */

@@ -5,6 +5,8 @@ import { SessionService } from './session/session.service';
 import { StorageService } from './storage/storage.service';
 import { LoginGuard } from './guard/login.guard';
 import { SessionUserService } from './session/session-user.service';
+import { SecurityInterceptor } from './interceptor/security.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
@@ -35,6 +37,11 @@ export class GmsCoreModule {
     return {
       ngModule: GmsCoreModule,
       providers: [
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: SecurityInterceptor,
+          multi: true
+        },
         {
           provide: SessionService,
           useClass: config && config['sessionService'] ? config['sessionService'] : SessionService

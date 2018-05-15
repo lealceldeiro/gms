@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionService } from '../core/session/session.service';
-import { LoginRequestBody } from './shared/request';
-import { LoginResponseBody } from './shared/response';
+import { LoginRequestModel } from '../../core/session/login-request.model';
+import { LoginResponseModel } from '../../core/session/login-response.model';
 import { Router } from '@angular/router';
+import { LoginService } from '../service/login.service';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -31,10 +31,10 @@ export class LoginComponent implements OnInit {
 
   /**
    * Component constructor
-   * @param sessionService SessionService instance.
+   * @param loginService LoginService for handling the login API requests.
    * @param router Router module in order to perform navigation.
    */
-  constructor(private sessionService: SessionService, private router: Router) { }
+  constructor(private loginService: LoginService, private router: Router) { }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -46,8 +46,8 @@ export class LoginComponent implements OnInit {
    * Performs a login request using the inputs values the user has typed in as username/email and password.
    */
   login(): void {
-    const payload: LoginRequestBody = { usernameOrEmail: this.usernameOrEmail, password: this.password};
-    this.sessionService.login(payload).subscribe((response: LoginResponseBody) => {
+    const payload: LoginRequestModel = { usernameOrEmail: this.usernameOrEmail, password: this.password};
+    this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
       this.router.navigateByUrl('home');
     });
   }
