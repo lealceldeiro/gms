@@ -24,11 +24,11 @@ export class SecurityInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let request;
     if (this.sessionService.isLoggedIn()) {
-      const accessToken = this.sessionService.getAuthData().access_token;
-      const header = this.sessionService.getAuthData().header_to_be_sent;
-      const tokenType = this.sessionService.getAuthData().token_type;
+      const accessToken = this.sessionService.getAccessToken();
+      const header = this.sessionService.getHeader();
+      const tokenType = this.sessionService.getTokenType();
       const iHeaders = {};
-      iHeaders[header] = tokenType + ' ' + accessToken;
+      iHeaders[header as string] = tokenType + ' ' + accessToken;
 
       request = req.clone({ setHeaders: iHeaders});
     } else {

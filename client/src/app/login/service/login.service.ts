@@ -40,11 +40,9 @@ export class LoginService {
         if (response.access_token) {
           this.sessionService.setLoggedIn(true);
           this.sessionService.setAuthData(response);
-          console.log(response);
 
           this.sessionUserService.getCurrentUser(response.username).subscribe(userPgData => {
             this.sessionService.setUser(userPgData._embedded.user[0]);
-            console.log(this.sessionService.getUser());
           });
         }
       })

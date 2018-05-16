@@ -10,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { GmsCoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CookieModule } from 'ngx-cookie';
 
 /**
  * Base module, bootstrapped in the main file.
@@ -19,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     HttpClientModule,
+    CookieModule.forRoot(),
     SharedModule,
     NgbModule.forRoot(),
     GmsCoreModule.forRoot(),
