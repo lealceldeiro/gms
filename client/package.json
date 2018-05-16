@@ -5,7 +5,7 @@
     "ng": "ng",
     "builddoc": "compodoc -p src/tsconfig.app.json",
     "servedoc": "compodoc -s",
-    "buildandservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
+    "buildservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",

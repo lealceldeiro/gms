@@ -1,9 +1,9 @@
-/**
- * Exposes the information provided by paginated data responses.
- */
 import { LinksModel } from './links.model';
 import { PageModel } from './page.model';
 
+/**
+ * Exposes the information provided by paginated data responses.
+ */
 export interface PaginatedDataModel {
 
   /**

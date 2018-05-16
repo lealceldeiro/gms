@@ -1,9 +1,9 @@
-/**
- * Exposes the information provided by paginated data responses regarding to Users.
- */
 import { User } from '../../../session/user.model';
 import { PaginatedDataModel } from '../model';
 
+/**
+ * Exposes the information provided by paginated data responses regarding to Users.
+ */
 export interface UserPdModel extends PaginatedDataModel {
 
   /**
@@ -13,12 +13,7 @@ export interface UserPdModel extends PaginatedDataModel {
     /**
      * Array of users.
      */
-    user: [
-      /**
-       * User entity data.
-       */
-      User
-      ]
+    user: [User]
   };
 
 }
