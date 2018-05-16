@@ -8,6 +8,10 @@ import deleteProperty = Reflect.deleteProperty;
 @Injectable()
 export class StorageService {
 
+  /**
+   * Prefix for all keys used for storing values (either in cookies or in localStorage)
+   * @type {string}
+   */
   pre = 'gms_ck_';
 
   /**
