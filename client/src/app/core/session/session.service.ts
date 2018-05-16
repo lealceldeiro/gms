@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import { LoginResponseModel } from './login-response.model';
 import { StorageService } from '../storage/storage.service';
+import { Observable, of } from 'rxjs/index';
+import { tap } from 'rxjs/internal/operators';
 
 /**
  * A service for providing information about the current session.
@@ -20,6 +22,11 @@ export class SessionService {
      */
     loggedIn: 'xSkd838DJdkfLo0P4J8K2K1J7juvnf38mcjdk',
     /**
+     * Key under which the value `notLoggedIn` is stored in the StorageService.
+     * @type {string}
+     */
+    notLoggedIn: 'f8H7D0f6DmajD727Dj39fMf74jfKFje729Djj29faLSk38sdJD237jd210F',
+    /**
      * Key under which the value security parameters such as `access_token` and `refresh_token` are stored in the StorageService.
      * @type {string}
      */
@@ -32,14 +39,32 @@ export class SessionService {
     /**
      * Key under which the access token is stored.
      */
-    accessToken: 'Jsj89572ANjfnAkdnKSJDn837fNdu1048NDJSF83r4f7ndLDJ'
+    accessToken: 'Jsj89572ANjfnAkdnKSJDn837fNdu1048NDJSF83r4f7ndLDJ',
+    /**
+     * Key under which the refresh token is stored.
+     */
+    refreshToken: 'jdAjs9239DSJdj5720DSJKfn8D8F0F3D9f03kvmg73Djf830sfj',
+    /**
+     * Key under which the header to be sent carrying the access token is stored.
+     */
+    headerToBeSent: 'jfUSdjdMfnfu8329DHsn82Dj9fD0D89D76D7888Dj6DnNMg76s7a82j4N47F',
+    /**
+     * Key under which the token type is stored.
+     */
+    tokenType: 'n7ND92Md7dHd88dh62Dn6DJj3Djj3jS9Kd8di8D8shh3msd'
   };
 
   /**
-   * Whether the user is logged in or not.
+   * Whether the user is logged in or not (`true` indicates the user is logged in, `false` otherwise).
    * @type {boolean}
    */
-  private loggedIn: boolean;
+  private loggedIn = false;
+
+  /**
+   * Whether the user is NOT logged he/she is (`true` indicates the user is NOT logged in, `false` otherwise).
+   * @type {boolean}
+   */
+  private notLoggedIn = true;
 
   /**
    * Session user's info (if available).
@@ -64,11 +89,23 @@ export class SessionService {
   constructor(private storageService: StorageService) { }
 
   /**
-   * Returns whether the user is logged in or not
-   * @returns {boolean}
+   * Indicates whether the user is logged in.
+   * @returns {Observable<boolean>} An observable containing `true` if the user is logged in, `false` otherwise.
+   * @see isNotLoggedIn
    */
-  isLoggedIn(): boolean {
-    return this.loggedIn != null ? this.loggedIn : this.retrieve(this.key.loggedIn);
+  isLoggedIn(): Observable<boolean> {
+    return this.loggedIn != null ? of(this.loggedIn)
+      : (this.notLoggedIn != null ? of(!this.notLoggedIn) : this.retrieve(this.key.loggedIn, false));
+  }
+
+  /**
+   * Indicates whether the user is logged in.
+   * @returns {Observable<boolean>} An observable containing `true` if the user is not logged in, `false` otherwise.
+   * @see isLoggedIn
+   */
+  isNotLoggedIn(): Observable<boolean> {
+    return this.notLoggedIn != null ? of(this.notLoggedIn)
+      : (this.loggedIn != null ? of(!this.loggedIn) : this.retrieve(this.key.notLoggedIn, false));
   }
 
   /**
@@ -77,15 +114,17 @@ export class SessionService {
    */
   setLoggedIn(value: boolean) {
     this.store(this.key.loggedIn, value, false);
+    this.store(this.key.notLoggedIn, !value, false);
     this.loggedIn = value;
+    this.loggedIn = !value;
   }
 
   /**
    * Returns the current session user's info.
-   * @returns {User}
+   * @returns {Observable<User>}
    */
-  getUser(): User {
-    return this.user != null ? this.user : this.retrieve(this.key.user, false);
+  getUser(): Observable<User> {
+    return this.user != null ? of(this.user) : this.retrieve(this.key.user, false);
   }
 
   /**
@@ -99,10 +138,10 @@ export class SessionService {
 
   /**
    * Returns the information provided by the authentication endpoint when logging in.
-   * @returns {LoginResponseModel}
+   * @returns {Observable<LoginResponseModel>}
    */
-  getAuthData(): LoginResponseModel {
-    return this.authData != null ? this.authData : this.retrieve(this.key.loginData, false);
+  getAuthData(): Observable<LoginResponseModel> {
+    return this.authData != null ? of(this.authData) : this.retrieve(this.key.loginData, false);
   }
 
   /**
@@ -112,6 +151,8 @@ export class SessionService {
   setAuthData(value: LoginResponseModel | any) {
     this.store(this.key.loginData, value as LoginResponseModel, false);
     this.store(this.key.accessToken, value.access_token); // shortcut for access token
+    this.store(this.key.refreshToken, value.refresh_token); // shortcut for refresh token
+    this.store(this.key.headerToBeSent, value.header_to_be_sent); // shortcut for refresh token
     this.authData = value;
   }
 
@@ -135,42 +176,59 @@ export class SessionService {
   /**
    * Returns the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
    * logging in.
-   * @returns {string}
+   * @returns {Observable<string>}
    */
-  getAccessToken(): String {
-    let token = this.retrieve(this.key.accessToken);
-    if (!token) {
-      token = this.getAuthData().access_token;
-      if (token) {
-        this.store(this.key.accessToken, token);
+  getAccessToken(): Observable<String> {
+    return this.retrieve(this.key.accessToken).pipe(tap((aToken) => {
+      if (!aToken) {
+        this.getAuthData().subscribe((authToken) => {
+          this.store(this.key.accessToken, authToken);
+        });
       }
-    }
-    return token;
+    }));
   }
 
   /**
    * Returns the refresh token required for requesting a new access token without performing authentication again.
    * logging in.
-   * @returns {String}
+   * @returns {Observable<String>}
    */
-  getRefreshToken(): String {
-    return this.getAuthData().refresh_token;
+  getRefreshToken(): Observable<String> {
+    return this.retrieve(this.key.refreshToken).pipe(tap((rToken) => {
+      if (!rToken) {
+        this.getAuthData().subscribe((refreshToken) => {
+          this.store(this.key.refreshToken, refreshToken);
+        });
+      }
+    }));
   }
 
   /**
    * Returns the header to be sent with the access token.
-   * @returns {String}
+   * @returns {Observable<String>}
    */
-  getHeader(): String {
-    return this.getAuthData().header_to_be_sent;
+  getHeader(): Observable<String> {
+    return this.retrieve(this.key.refreshToken).pipe(tap((rToken) => {
+      if (!rToken) {
+        this.getAuthData().subscribe((refreshToken) => {
+          this.store(this.key.refreshToken, refreshToken);
+        });
+      }
+    }));
   }
 
   /**
    * Returns the token type to be send in the header along with the access token.
-   * @returns {String}
+   * @returns {Observable<String>}
    */
-  getTokenType(): String {
-    return this.getAuthData().token_type;
+  getTokenType(): Observable<String> {
+    return this.retrieve(this.key.tokenType).pipe(tap((tType) => {
+      if (!tType) {
+        this.getAuthData().subscribe((tokenType) => {
+          this.store(this.key.tokenType, tokenType);
+        });
+      }
+    }));
   }
   // endregion
 
@@ -193,9 +251,9 @@ export class SessionService {
    * @param {string} key Key under which the value was stored.
    * @param {boolean} fromCookie Whether the value is trying to be retrieved was stored in a cookie or not (in the localStorage)
    * @param {boolean} isObject Whether the value is trying to be retrieved is an object or not when retrieving value from cookie.
-   * @returns {any}
+   * @returns {Observable<any>}
    */
-  private retrieve(key: string, fromCookie = true, isObject = false): any {
+  private retrieve(key: string, fromCookie = true, isObject = false): Observable<any> {
     return fromCookie ? this.storageService.getCookie(key, isObject) : this.storageService.get(key);
   }
 

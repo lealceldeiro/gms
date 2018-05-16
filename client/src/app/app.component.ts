@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SessionService } from './core/session/session.service';
+import { Subscription } from 'rxjs/index';
 
 /**
  * Main component which is the entry point to all other components in the app.
@@ -9,12 +10,37 @@ import { SessionService } from './core/session/session.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+
+  /**
+   * Indicates whether the user is logged in or not.
+   */
+  public loggedIn: boolean;
+
+  /**
+   * Observable for subscribing to new values returned by SessionService#isLoggedIn.
+   */
+  private loggedIn$: Subscription;
 
   /**
    * Component constructor.
    * @param {SessionService} sessionService Service which holds session-related information.
    */
-  constructor(public sessionService: SessionService) {
+  constructor(public sessionService: SessionService) { }
+
+  /**
+   * Lifecycle hook that is called after data-bound properties are initialized.
+   */
+  ngOnInit() {
+    this.loggedIn$ = this.sessionService.isNotLoggedIn().subscribe((notLogged) => {
+      this.loggedIn = !notLogged;
+    });
+  }
+
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   */
+  ngOnDestroy() {
+    this.loggedIn$.unsubscribe();
   }
 }

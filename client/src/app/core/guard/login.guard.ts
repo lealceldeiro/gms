@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivateChild, CanLoad } from '@angular/router';
 import { SessionService } from '../session/session.service';
+import { Observable } from 'rxjs/index';
 
 /**
- * Guards which determines whether the `login` route should be activated or not.
+ * Guards which determines whether the `login` route should be loadded and activated or not.
  */
 @Injectable()
 export class LoginGuard implements CanActivateChild, CanLoad {
@@ -14,19 +15,18 @@ export class LoginGuard implements CanActivateChild, CanLoad {
   constructor(private sessionService: SessionService) { }
 
   /**
-   * Return `true` if the login route can be activated, `false` otherwise.
-   * @returns {boolean}
+   * Return an observable with  `true` if the login route can be activated, `false` otherwise.
+   * @returns {Observable<boolean>}
    */
-  canActivateChild(): boolean {
-    return !this.sessionService.isLoggedIn();
+  canActivateChild(): Observable<boolean> {
+    return this.sessionService.isNotLoggedIn();
   }
 
   /**
-   * Returns `true` if the login component can be loaded, `false` otherwise.
-   * @returns {boolean}
+   * Returns an observable with `true` if the login component can be loaded, `false` otherwise.
+   * @returns {Observable<boolean>}
    */
-  canLoad(): boolean {
-    return !this.sessionService.isLoggedIn();
+  canLoad(): Observable<boolean> {
+    return this.sessionService.isNotLoggedIn();
   }
-
 }

@@ -22,19 +22,6 @@ export class SecurityInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let request;
-    if (this.sessionService.isLoggedIn()) {
-      const accessToken = this.sessionService.getAccessToken();
-      const header = this.sessionService.getHeader();
-      const tokenType = this.sessionService.getTokenType();
-      const iHeaders = {};
-      iHeaders[header as string] = tokenType + ' ' + accessToken;
-
-      request = req.clone({ setHeaders: iHeaders});
-    } else {
-      request = req;
-    }
-
-    return next.handle(request);
+    return next.handle(req);
   }
 }
