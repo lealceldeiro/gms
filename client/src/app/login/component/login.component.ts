@@ -39,15 +39,15 @@ export class LoginComponent implements OnInit {
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   /**
    * Performs a login request using the inputs values the user has typed in as username/email and password.
    */
   login(): void {
     const payload: LoginRequestModel = { usernameOrEmail: this.usernameOrEmail, password: this.password};
-    this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
+    const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
+      ls.unsubscribe();
       this.router.navigateByUrl('home');
     });
   }

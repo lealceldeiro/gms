@@ -14,8 +14,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /**
    * Indicates whether the user is logged in or not.
+   * {boolean}
    */
-  public loggedIn: boolean;
+  public loggedIn = false;
 
   /**
    * Observable for subscribing to new values returned by SessionService#isLoggedIn.
@@ -32,8 +33,9 @@ export class AppComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.loggedIn$ = this.sessionService.isNotLoggedIn().subscribe((notLogged) => {
-      this.loggedIn = !notLogged;
+    this.loggedIn$ = this.sessionService.isLoggedIn().subscribe((logged) => {
+      this.loggedIn = logged;
+      console.log('cp: ' + this.loggedIn);
     });
   }
 

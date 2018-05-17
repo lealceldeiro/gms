@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivateChild, CanLoad } from '@angular/router';
 import { SessionService } from '../session/session.service';
 import { Observable } from 'rxjs/index';
+import { first } from 'rxjs/internal/operators';
 
 /**
  * Guards which determines whether the `login` route should be loadded and activated or not.
@@ -19,7 +20,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
    * @returns {Observable<boolean>}
    */
   canActivateChild(): Observable<boolean> {
-    return this.sessionService.isNotLoggedIn();
+    return this.sessionService.isNotLoggedIn().pipe(first());
   }
 
   /**
@@ -27,6 +28,6 @@ export class LoginGuard implements CanActivateChild, CanLoad {
    * @returns {Observable<boolean>}
    */
   canLoad(): Observable<boolean> {
-    return this.sessionService.isNotLoggedIn();
+    return this.sessionService.isNotLoggedIn().pipe(first());
   }
 }

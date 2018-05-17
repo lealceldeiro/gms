@@ -12,7 +12,8 @@ export const environment = {
  * @type {{url: string}}
  */
 export const api = {
-  url: 'http://127.0.0.1/gms/api/'
+  baseUrl: 'http://127.0.0.1/gms/api/',
+  loginUrl: 'login'
 };
 
 /**

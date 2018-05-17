@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { tap } from 'rxjs/internal/operators';
-import { Observable, of } from 'rxjs/index';
+import { BehaviorSubject, Observable, of } from 'rxjs/index';
 import deleteProperty = Reflect.deleteProperty;
 
 /**
@@ -22,6 +22,12 @@ export class StorageService {
    * @type {{}}
    */
   private cache = {};
+
+  /**
+   * Observables of StorageService#cache
+   * @type {{}}
+   */
+  private cache$ = {};
 
   /**
    * Object for storing how many times StorageService#trySet function have been trying to save a particular value.
@@ -51,7 +57,8 @@ export class StorageService {
    */
   set(key: string, value: any): any {
     this.checkKey(key);
-    this.cache[this.pre + key] = value;
+    this.setCache(key, value);
+    this.trySetCount[key] = 0;
     this.trySet(key, value);
     return value;
   }
@@ -62,31 +69,40 @@ export class StorageService {
    * @param value Value to be stored
    */
   private trySet(key: string, value: any) {
-    this.trySetCount[key] = 0;
     this.localStorage.setItem(key, value).subscribe(() => {}, () => {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
+      } else {
+        console.warn('Couldn\'t set ' + value + ' under key \'' + key + '\'');
       }
     });
   }
 
   /**
-   * Gets a value specified under a key.
+   * Returns an observable which will emit the value specified under a key.
    * @param {string} key Key under which the value it's being tried to be accessed was saved previously.
    * @returns {Observable<any>} An obervable with the saved value under the specified key or `null` if no value is found under the specified
    * key.
    */
   get(key: string): Observable<any> {
     this.checkKey(key);
-    const value = this.cache[this.pre + key];
-    if (typeof value === 'undefined' || value === null) {
-      console.log('getting ' + key + ' from localstorage');
-      return this.localStorage.getItem(key).pipe(tap((val) => console.log(' --- ' + val)));
-    } else if (typeof value === 'object') {
-      console.log('gotten ' + key + ' from cache');
-      return of(JSON.parse(value));
+    const value$ = this.cache$[this.pre + key];
+    return value$ ? value$ : this.localStorage.getItem(key).pipe(tap((val) => this.setCache(key, val)));
+  }
+
+  /**
+   * Creates the cache value and the cache observable.
+   * @param key Key for looking up.
+   * @param val Value to be looked up.
+   */
+  private setCache(key, val) {
+    const subject = this.cache[this.pre + key];
+    if (!subject) {
+      this.cache[this.pre + key] = new BehaviorSubject(this.cache[this.pre + key]);
+      this.cache$[this.pre + key] = this.cache[this.pre + key].asObservable();
+    } else {
+      this.cache[this.pre + key].next(val);
     }
-    return of(value);
   }
 
   /**
@@ -94,10 +110,11 @@ export class StorageService {
    * the value.
    * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided all values are removed
    * .
-   * @returns {any} If a key is provided, the value that was saved under that key is returned or `null` if no key is provided.
+   * @returns {any} If a key is provided, the value that was saved under that key is returned wrapped inside an Observable or `null` (also
+   * wrapped inside an Observable) if no key is provided.
    */
-  clear(key?: string): any {
-    this.tryClear(key).subscribe(() => {}, () => {});
+  clear(key?: string): Observable<any> {
+    return this.tryClear(key);
   }
 
   /**
@@ -107,20 +124,22 @@ export class StorageService {
    * @returns {Observable<any>}
    */
   private tryClear(key?: string): Observable<any> {
-    const value = this.get(key);
+    const value$ = this.get(key);
+    // clear a specific value
     if (typeof key !== 'undefined' && typeof key !== null) {
       return this.localStorage.removeItem(this.pre + key).pipe(tap( () => {
+        // delete property in cache, this will trigger the next value of the observable in this.cache$[this.pre + key]
         deleteProperty(this.cache, this.pre + key);
-        return value;
+        return value$;
       }, () => {
         if (this.tryClear()[key]++ < 2) {
           this.tryClear(key);
         }
       }));
-    } else {
+    } else { // clear all
       return this.localStorage.clear().pipe(tap(() => {
         this.cache = {};
-        return null;
+        return of(null);
       }, () => {
         if (this.tryClear()[key]++ < 2) {
           this.tryClear(key);
@@ -142,7 +161,7 @@ export class StorageService {
    */
   putCookie(key: string, value: any, options?: object): any {
     this.checkKey(key);
-    this.cache[this.pre + key] = value;
+    this.setCache(key, value);
     typeof value === 'object' ? this.cookieService.putObject(this.pre + key, value, options as CookieOptions)
       : this.cookieService.put(this.pre + key, value);
     return value;
@@ -159,11 +178,13 @@ export class StorageService {
    */
   getCookie(key?: string, isObject = false): Observable<any> {
     if (key) {
-      let value = this.cache[this.pre + key];
-      if (typeof value === 'undefined' || value === null) {
-        value = isObject ? this.cookieService.getObject(this.pre + key) : this.cookieService.get(this.pre + key);
+      let value$ = this.cache$[this.pre + key];
+      if (!value$) {
+        const val = isObject ? this.cookieService.getObject(this.pre + key) : this.cookieService.get(this.pre + key);
+        this.setCache(key, val);
       }
-      return of(value);
+      value$ = this.cache$[this.pre + key];
+      return value$ ? value$ : of(null);
     } else {
       return of(this.cookieService.getAll());
     }

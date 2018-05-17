@@ -24,7 +24,8 @@ export const environment = {
  * @type {{url: string}}
  */
 export const api = {
-  baseUrl: 'http://127.0.0.1:8081/gms/api/'
+  baseUrl: 'http://127.0.0.1:8081/gms/api/',
+  loginUrl: 'login'
 };
 
 /**

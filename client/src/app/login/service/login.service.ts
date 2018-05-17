@@ -17,7 +17,11 @@ export class LoginService {
   /**
    * API base url.
    */
-  private url: string;
+  private url = api.baseUrl;
+  /**
+   * Login endpoint.
+   */
+  private loginUrl = api.loginUrl;
 
   /**
    * Service constructor.
@@ -38,11 +42,12 @@ export class LoginService {
     return this.http.post<LoginResponseModel>(this.url + 'login', payload).pipe(
       tap((response) => {
         if (response.access_token) {
-          this.sessionService.setLoggedIn(true);
           this.sessionService.setAuthData(response);
+          this.sessionService.setLoggedIn(true);
 
-          this.sessionUserService.getCurrentUser(response.username).subscribe(userPgData => {
+          const us = this.sessionUserService.getCurrentUser(response.username).subscribe(userPgData => {
             this.sessionService.setUser(userPgData._embedded.user[0]);
+            us.unsubscribe();
           });
         }
       })
