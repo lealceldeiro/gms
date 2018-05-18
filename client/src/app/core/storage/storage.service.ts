@@ -106,6 +106,17 @@ export class StorageService {
   }
 
   /**
+   * Sets all values in cache to null.
+   */
+  private clearCache() {
+    for (const k in this.cache) {
+      if (this.cache.hasOwnProperty(k)) {
+        this.cache[k].next(null);
+      }
+    }
+  }
+
+  /**
    * Clears a value under a key or all values if no key is specified. This function uses the StorageService#get function in order to return
    * the value.
    * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided all values are removed
@@ -138,7 +149,7 @@ export class StorageService {
       }));
     } else { // clear all
       return this.localStorage.clear().pipe(tap(() => {
-        this.cache = {};
+        this.clearCache();
         return of(null);
       }, () => {
         if (this.tryClear()[key]++ < 2) {
@@ -206,7 +217,7 @@ export class StorageService {
         this.cookieService.remove(this.pre + key);
       }));
     } else {
-      this.cache = {};
+      this.clearCache();
       this.cookieService.removeAll();
     }
   }
