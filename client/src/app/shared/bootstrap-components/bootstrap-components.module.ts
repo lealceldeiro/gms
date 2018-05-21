@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { GmsJumbotronComponent } from './jumbotron/jumbotron.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { GmsJumbotronComponent } from './jumbotron/jumbotron.component';
 import { PreviewContentComponent } from './preview-content/preview-content.component';
 
 @NgModule({

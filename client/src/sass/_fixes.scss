@@ -1,0 +1,7 @@
+// drop down with ng-bootstrap are not positioned properly,
+// see https://github.com/valor-software/ngx-bootstrap/issues/2984
+// and https://stackoverflow.com/questions/49841124/ngx-bootstrap-dropdown-alignment-not-working-when-setting-dynamic-class
+.dropdown-menu-right {
+  right: 0 !important;
+  left: auto !important;
+}

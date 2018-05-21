@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NgbCollapseStubDirective } from './ngb-collapse-stub.directive';
 import { RouterLinkStubDirective } from './router-link-stub.directive';
+
 import { DummyStubComponent } from './dummy-stub.component';
 
 /**

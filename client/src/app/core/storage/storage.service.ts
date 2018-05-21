@@ -3,7 +3,6 @@ import { CookieOptions, CookieService } from 'ngx-cookie';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { tap } from 'rxjs/internal/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs/index';
-import deleteProperty = Reflect.deleteProperty;
 
 /**
  * A service for providing access to the storage and cookies in client runner (browser, etc).
@@ -12,10 +11,16 @@ import deleteProperty = Reflect.deleteProperty;
 export class StorageService {
 
   /**
-   * Prefix for all keys used for storing values (either in cookies or in localStorage)
+   * Prefix for all keys used for storing values in cookies
    * @type {string}
    */
-  pre = 'gms_ck_';
+  gmsCk = 'gms_ck_';
+
+  /**
+   * Prefix for all keys used for storing values in localStorage
+   * @type {string}
+   */
+  gmsLs = 'gms_ls_';
 
   /**
    * Object which holds the stored values.
@@ -57,9 +62,10 @@ export class StorageService {
    */
   set(key: string, value: any): any {
     this.checkKey(key);
-    this.setCache(key, value);
-    this.trySetCount[key] = 0;
-    this.trySet(key, value);
+    const uk = this.gmsLs + key;
+    this.setCache(uk, value);
+    this.trySetCount[uk] = 0;
+    this.trySet(uk, value);
     return value;
   }
 
@@ -68,7 +74,7 @@ export class StorageService {
    * @param {string} key String representation of the key under which the value will be stored.
    * @param value Value to be stored
    */
-  private trySet(key: string, value: any) {
+  private trySet(key: string, value: any): void {
     this.localStorage.setItem(key, value).subscribe(() => {}, () => {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
@@ -81,13 +87,16 @@ export class StorageService {
   /**
    * Returns an observable which will emit the value specified under a key.
    * @param {string} key Key under which the value it's being tried to be accessed was saved previously.
-   * @returns {Observable<any>} An obervable with the saved value under the specified key or `null` if no value is found under the specified
+   * @returns {Observable<any>} An Observable with the saved value under the specified key or `null` if no value is
+   * found under the specified.
    * key.
    */
   get(key: string): Observable<any> {
     this.checkKey(key);
-    const value$ = this.cache$[this.pre + key];
-    return value$ ? value$ : this.localStorage.getItem(key).pipe(tap((val) => this.setCache(key, val)));
+    const uk = this.gmsLs + key;
+    const value$ = this.cache$[uk];
+    return value$ ? value$ : this.localStorage.getItem(uk).pipe(tap((val) => this.setCache(uk, val),
+      () => console.warn('Couldn\'t get value under key \'' + key + '\'')));
   }
 
   /**
@@ -95,13 +104,13 @@ export class StorageService {
    * @param key Key for looking up.
    * @param val Value to be looked up.
    */
-  private setCache(key, val) {
-    const subject = this.cache[this.pre + key];
+  private setCache(key, val): void {
+    const subject = this.cache[key];
     if (!subject) {
-      this.cache[this.pre + key] = new BehaviorSubject(this.cache[this.pre + key]);
-      this.cache$[this.pre + key] = this.cache[this.pre + key].asObservable();
+      this.cache[key] = new BehaviorSubject(this.cache[key]);
+      this.cache$[key] = this.cache[key].asObservable();
     } else {
-      this.cache[this.pre + key].next(val);
+      this.cache[key].next(val);
     }
   }
 
@@ -125,6 +134,7 @@ export class StorageService {
    * wrapped inside an Observable) if no key is provided.
    */
   clear(key?: string): Observable<any> {
+    this.tryClearCount[this.gmsLs + key] = 0;
     return this.tryClear(key);
   }
 
@@ -135,16 +145,21 @@ export class StorageService {
    * @returns {Observable<any>}
    */
   private tryClear(key?: string): Observable<any> {
-    const value$ = this.get(key);
     // clear a specific value
     if (typeof key !== 'undefined' && typeof key !== null) {
-      return this.localStorage.removeItem(this.pre + key).pipe(tap( () => {
-        // delete property in cache, this will trigger the next value of the observable in this.cache$[this.pre + key]
-        deleteProperty(this.cache, this.pre + key);
+      const value$ = this.get(key);
+      const uk = this.gmsLs + key;
+      return this.localStorage.removeItem(uk).pipe(tap( (nVal) => {
+        if (nVal !== null) {
+          // this will trigger the next value of the observable in this.cache$[uk]
+          this.cache[uk].next(null);
+        }
         return value$;
       }, () => {
-        if (this.tryClear()[key]++ < 2) {
+        if (this.tryClearCount[uk]++ < 2) {
           this.tryClear(key);
+        } else {
+          console.warn('Couldn\'t delete value under key \'' + key + '\'');
         }
       }));
     } else { // clear all
@@ -152,8 +167,11 @@ export class StorageService {
         this.clearCache();
         return of(null);
       }, () => {
-        if (this.tryClear()[key]++ < 2) {
+        if (this.tryClearCount[key]++ < 2) {
           this.tryClear(key);
+        } else {
+          console.warn('Couldn\'t delete value under key \'' + key + '\'');
+          return of(null);
         }
       }));
     }
@@ -167,14 +185,15 @@ export class StorageService {
    * @param value Value to be stored.
    * @param {object} options Additional options for cookies.
    * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
-   * <pre><code>{expires: <value> {string|Date}</code></pre>
+   * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @returns {any}
    */
   putCookie(key: string, value: any, options?: object): any {
     this.checkKey(key);
-    this.setCache(key, value);
-    typeof value === 'object' ? this.cookieService.putObject(this.pre + key, value, options as CookieOptions)
-      : this.cookieService.put(this.pre + key, value);
+    const uk = this.gmsCk + key;
+    this.setCache(uk, value);
+    typeof value === 'object' ? this.cookieService.putObject(uk, value, options as CookieOptions)
+      : this.cookieService.put(uk, value);
     return value;
   }
 
@@ -189,12 +208,13 @@ export class StorageService {
    */
   getCookie(key?: string, isObject = false): Observable<any> {
     if (key) {
-      let value$ = this.cache$[this.pre + key];
+      const uk = this.gmsCk + key;
+      let value$ = this.cache$[uk];
       if (!value$) {
-        const val = isObject ? this.cookieService.getObject(this.pre + key) : this.cookieService.get(this.pre + key);
-        this.setCache(key, val);
+        const val = isObject ? this.cookieService.getObject(uk) : this.cookieService.get(uk);
+        this.setCache(uk, val);
       }
-      value$ = this.cache$[this.pre + key];
+      value$ = this.cache$[uk];
       return value$ ? value$ : of(null);
     } else {
       return of(this.cookieService.getAll());
@@ -212,13 +232,16 @@ export class StorageService {
    */
   clearCookie(key?: string, isObject = false): Observable<any> {
     if (key) {
-      return this.getCookie(key, isObject).pipe(tap(() => {
-        deleteProperty(this.cache, this.pre + key);
-        this.cookieService.remove(this.pre + key);
+      const uk = this.gmsCk + key;
+      return this.getCookie(key, isObject).pipe(tap((nVal) => {
+        if (nVal !== null) {
+          this.cache[uk].next(null);
+        }
+        this.cookieService.remove(uk);
       }));
     } else {
       this.clearCache();
-      this.cookieService.removeAll();
+      of (this.cookieService.removeAll());
     }
   }
   // endregion

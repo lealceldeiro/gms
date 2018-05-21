@@ -15,19 +15,22 @@ import { LoginService } from '../service/login.service';
 export class LoginComponent implements OnInit {
 
   /**
-   * User's username or email used for login.
-   */
-  usernameOrEmail: string;
-
-  /**
    * User's password used for login.
+   * @type {string}
    */
   password: string;
 
   /**
    * Whether the credentials should be stored or not.
+   * @type {boolean}
    */
   rememberMe = true;
+
+  /**
+   * User's username or email used for login.
+   * @type {string}
+   */
+  usernameOrEmail: string;
 
   /**
    * Component constructor

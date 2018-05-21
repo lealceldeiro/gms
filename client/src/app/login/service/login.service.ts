@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LoginRequestModel } from '../../core/session/login-request.model';
 import { Observable } from 'rxjs/index';
 import { tap } from 'rxjs/operators';
 import { LoginResponseModel } from '../../core/session/login-response.model';
 import { HttpClient } from '@angular/common/http';
+
+import { LoginRequestModel } from '../../core/session/login-request.model';
 import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { api } from '../../../environments/environment';

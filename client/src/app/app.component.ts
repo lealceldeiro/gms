@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { SessionService } from './core/session/session.service';
 import { Subscription } from 'rxjs/index';
 
@@ -14,12 +15,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /**
    * Indicates whether the user is logged in or not.
-   * {boolean}
+   * @type {boolean}
    */
-  public loggedIn = false;
+  loggedIn = false;
 
   /**
    * Observable for subscribing to new values returned by SessionService#isLoggedIn.
+   * @type {Subscription}
    */
   private loggedIn$: Subscription;
 
@@ -33,10 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.loggedIn$ = this.sessionService.isLoggedIn().subscribe((logged) => {
-      this.loggedIn = logged;
-      console.log('cp: ' + this.loggedIn);
-    });
+    this.loggedIn$ = this.sessionService.isLoggedIn().subscribe((logged) => this.loggedIn = logged);
   }
 
   /**

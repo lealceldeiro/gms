@@ -37,8 +37,7 @@ export class SideMenuComponent implements OnInit {
   /**
    * Lifecycle hook that is called after data-bound properties of a directive are initialized.
    */
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   /**
    * Indicates whether the provided link is the one active or not.

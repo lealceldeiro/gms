@@ -200,6 +200,57 @@ export class SessionService {
     this.rememberMe = value;
   }
 
+  /**
+   * Deletes all session-related user information
+   */
+  closeSession(): void {
+    this.loggedIn.next(false);
+    this.notLoggedIn.next(true);
+    this.authData.next({});
+    this.user.next(null);
+
+    const lis = this.storageService.clear(this.key.loggedIn).subscribe(() => {
+      if (lis) {
+        lis.unsubscribe();
+      }
+    });
+    const nlis = this.storageService.clear(this.key.notLoggedIn).subscribe(() => {
+      if (nlis) {
+        nlis.unsubscribe();
+      }
+    });
+    const lds = this.storageService.clear(this.key.loginData).subscribe(() => {
+      if (lds) {
+        lds.unsubscribe();
+      }
+    });
+    const ats = this.storageService.clearCookie(this.key.accessToken).subscribe(() => {
+      if (ats) {
+        ats.unsubscribe();
+      }
+    });
+    const rts = this.storageService.clearCookie(this.key.refreshToken).subscribe(() => {
+      if (rts) {
+        rts.unsubscribe();
+      }
+    });
+    const htbss = this.storageService.clearCookie(this.key.headerToBeSent).subscribe(() => {
+      if (htbss) {
+        htbss.unsubscribe();
+      }
+    });
+    const tts = this.storageService.clearCookie(this.key.tokenType).subscribe(() => {
+      if (tts) {
+        tts.unsubscribe();
+      }
+    });
+    const us = this.storageService.clear(this.key.user).subscribe(() => {
+      if (us) {
+        us.unsubscribe();
+      }
+    });
+  }
+
   // region shortcuts
   /**
    * Returns the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
@@ -318,7 +369,7 @@ export class SessionService {
    * @param {string} key Key under which the value will be saved.
    * @param {boolean} inCookie Whether the value should be stored as a cookie or in the localStorage
    * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
-   * <pre><code>{expires: <value> {string|Date}</code></pre>
+   * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @param value Value to be stored.
    */
   private store(key: string, value: any, inCookie = true, options?: object) {

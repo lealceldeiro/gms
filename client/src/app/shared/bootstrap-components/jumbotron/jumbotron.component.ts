@@ -17,12 +17,6 @@ export class GmsJumbotronComponent implements OnInit {
   @Input() header: string;
 
   /**
-   * The text to be shown.
-   * @type {string}
-   */
-  @Input() text: string;
-
-  /**
    * The path to which the button will be linked to.
    * @type {string}
    */
@@ -39,6 +33,12 @@ export class GmsJumbotronComponent implements OnInit {
    * @type {string}
    */
   @Input() sizeClass = 'btn-lg';
+
+  /**
+   * The text to be shown.
+   * @type {string}
+   */
+  @Input() text: string;
 
   /**
    * The bootstrap class which gives the button its color style.

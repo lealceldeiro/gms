@@ -11,19 +11,22 @@ import { Component, OnInit } from '@angular/core';
 export class PageNotFoundComponent implements OnInit {
 
   /**
-   * Third digit in the 404 text.
+   * First digit in the 404 text.
+   * @type {string}
    */
-  thirdDigit: string;
+  firstDigit: string;
 
   /**
    * Second digit in the 404 text.
+   * @type {string}
    */
   secondDigit: string;
 
   /**
-   * First digit in the 404 text.
+   * Third digit in the 404 text.
+   * @type {string}
    */
-  firstDigit: string;
+  thirdDigit: string;
 
   /**
    * Delay for generating the random numbers in every digit in the 404 text.
