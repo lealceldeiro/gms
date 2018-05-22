@@ -1,11 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { NavBarComponent } from './nav-bar.component';
 import { MockModule } from '../shared/mock/mock.module';
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
-import { RouterTestingModule } from '@angular/router/testing';
 import { gmsClick } from '../shared/test-util/mouse.util';
-import { DebugElement } from '@angular/core';
+import { Observable, of } from 'rxjs/index';
+import { SessionService } from '../core/session/session.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { User } from '../core/session/user.model';
+import { userMock } from '../core/session/user.mock.model';
 import Spy = jasmine.Spy;
 
 describe('NavBarComponent', () => {
@@ -13,14 +18,28 @@ describe('NavBarComponent', () => {
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
   let fixture: ComponentFixture<NavBarComponent>;
-  let spy: Spy;
+  let spyIsActive: Spy;
+  let spyCloseSession: Spy;
 
-  const routes = [ { path: 'help', component: DummyStubComponent }, { path: 'about', component: DummyStubComponent } ];
+  // region mocks
+  const sessionServiceStub = {
+    isNotLoggedIn: function (): Observable<boolean> { return of(true); },
+    isLoggedIn: function (): Observable<boolean> { return of(false); },
+    getUser: function (): Observable<User> { return of(userMock); },
+    closeSession: function () { }
+  };
+
+  const routes = [
+    { path: 'help', component: DummyStubComponent },
+    { path: 'about', component: DummyStubComponent }
+  ];
+  // endregion
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ NavBarComponent ],
-      imports: [ MockModule, RouterTestingModule.withRoutes(routes) ]
+      imports: [ MockModule, RouterTestingModule.withRoutes(routes), NgbModule.forRoot() ],
+      providers: [ { provide: SessionService, useValue: sessionServiceStub } ]
     })
       .compileComponents();
   }));
@@ -31,7 +50,8 @@ describe('NavBarComponent', () => {
     componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
-    spy = spyOn((<any>component).router, 'isActive');
+    spyIsActive = spyOn((<any>component).router, 'isActive');
+    spyCloseSession = spyOn((<any>component).sessionService, 'closeSession');
   });
 
   it('should create', () => {
@@ -44,7 +64,7 @@ describe('NavBarComponent', () => {
     for (let i = leftLinks.length - 1; i >= 0; i--) {
       gmsClick(leftLinks.item(i) as HTMLElement);
       fixture.detectChanges();
-      expect(spy.calls.all()[i].args[0]).toEqual(urls[i].path);
+      expect(spyIsActive.calls.all()[i].args[0]).toEqual(urls[i].path);
     }
   });
 
@@ -82,11 +102,11 @@ describe('NavBarComponent', () => {
       .toEqual(sampleSearchText.trim(), '`searchText` is incorrect');
   });
 
-  function getSearchForm(): HTMLElement {
+  function getSearchForm(): HTMLElement | any {
     return componentEl.querySelector('form[name=nav-bar-search-form]');
   }
 
-  function getSearchInput(): HTMLElement {
+  function getSearchInput(): HTMLElement | any {
     return componentEl.querySelector('form[name=nav-bar-search-form] div input[type=search]');
   }
 });

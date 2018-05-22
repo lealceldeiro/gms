@@ -20,19 +20,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @type {boolean}
    */
   isCollapsed = true;
-
   /**
    * Indicates whether the user is logged in or not.
    * @type {boolean}
    */
   loggedIn = false;
-
   /**
    * Session user's info.
    * @type {User}
    */
   user: User;
-
   // region @Input
   /**
    * Indicates whether the nav bar search form is active or not.
@@ -50,7 +47,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
    */
   @Input() searchText = 'Search';
   // endregion
-
   /**
    * URLs where the nav bar can navigate to.
    * @type {{}[]}
