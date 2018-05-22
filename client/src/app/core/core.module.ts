@@ -1,6 +1,4 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { SessionService } from './session/session.service';
 import { StorageService } from './storage/storage.service';
 import { LoginGuard } from './guard/login.guard';
@@ -9,9 +7,7 @@ import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
-  imports: [CommonModule, FormsModule],
   declarations: [],
-  exports: [CommonModule, FormsModule]
 })
 export class GmsCoreModule {
 
@@ -22,7 +18,8 @@ export class GmsCoreModule {
    */
   constructor(@Optional() @SkipSelf() parentModule: GmsCoreModule) {
     if (parentModule) {
-      throw new Error('GmsCoreModule is already loaded. Import it in the AppModule only');
+      console.warn('GmsCoreModule is already loaded. Consider import it in the AppModule only if you are only' +
+        'using its providers');
     }
   }
 

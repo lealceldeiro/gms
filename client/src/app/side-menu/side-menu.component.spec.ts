@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SideMenuComponent } from './side-menu.component';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { gmsClick } from '../shared/test-util/mouse.util';
+
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { MockModule } from '../shared/mock/mock.module';
+import { gmsClick } from '../shared/test-util/mouse.util';
+import { SideMenuComponent } from './side-menu.component';
 import Spy = jasmine.Spy;
 
 describe('SideMenuComponent', () => {
@@ -26,7 +26,8 @@ describe('SideMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SideMenuComponent ],
-      imports: [ MockModule, RouterTestingModule.withRoutes(routes) ]
+      imports: [ MockModule, RouterTestingModule.withRoutes(routes) ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
       .compileComponents();
   }));

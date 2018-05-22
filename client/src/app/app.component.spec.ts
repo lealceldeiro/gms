@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
 import { Component } from '@angular/core';
 import { SessionService } from './core/session/session.service';
 import { Observable, of } from 'rxjs/index';
+
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -18,7 +19,10 @@ describe('AppComponent', () => {
   @Component({selector: 'router-outlet', template: ''})  // tslint:disable-line
   class RouterOutletStubComponent {}
 
-  const sessionServiceStub = { isNotLoggedIn: function (): Observable<boolean> { return of(false); } };
+  const sessionServiceStub = {
+    isNotLoggedIn: function (): Observable<boolean> { return of(false); },
+    isLoggedIn: function (): Observable<boolean> { return of(true); },
+  };
   // endregion
 
   beforeEach(async(() => {

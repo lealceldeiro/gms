@@ -40,9 +40,8 @@ export class PreviewContentComponent implements OnInit {
   constructor() { }
 
   /**
-   * Lifecycle hook that is called after data-bound properties of a directive are initialized.
+   * Lifecycle hook that is called after data-bound properties are initialized.
    */
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }
