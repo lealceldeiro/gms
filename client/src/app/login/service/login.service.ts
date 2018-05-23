@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
-import { api } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 /**
  * A service for providing handling the login/logout processes.
@@ -18,11 +18,11 @@ export class LoginService {
   /**
    * API base url.
    */
-  private url = api.baseUrl;
+  private url = environment.apiBaseUrl;
   /**
    * Login endpoint.
    */
-  private loginUrl = api.loginUrl;
+  private loginUrl = environment.apiLoginUrl;
 
   /**
    * Service constructor.
@@ -30,9 +30,8 @@ export class LoginService {
    * @param sessionService SessionService for storing/retrieving session-related information.
    * @param sessionUserService SessionUserService for storing/retrieving session user-related information.
    */
-  constructor(private http: HttpClient, private sessionService: SessionService, private sessionUserService: SessionUserService) {
-    this.url = api.baseUrl;
-  }
+  constructor(private http: HttpClient, private sessionService: SessionService,
+              private sessionUserService: SessionUserService) { }
 
   /**
    * Performs a login request.
@@ -40,7 +39,7 @@ export class LoginService {
    * @returns {Observable<LoginResponseModel>}
    */
   login(payload: LoginRequestModel): Observable<LoginResponseModel> {
-    return this.http.post<LoginResponseModel>(this.url + 'login', payload).pipe(
+    return this.http.post<LoginResponseModel>(this.url + this.loginUrl, payload).pipe(
       tap((response) => {
         if (response.access_token) {
           this.sessionService.setAuthData(response);

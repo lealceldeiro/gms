@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { appMeta } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 /**
  * Component for generating the home page of the app.
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
    * Application name.
    * @type {string}
    */
-  appName: string = appMeta.name;
+  appName: string = environment.metaName;
 
   /**
    * Component constructor
@@ -25,7 +25,6 @@ export class HomeComponent implements OnInit {
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }

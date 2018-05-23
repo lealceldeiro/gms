@@ -8,7 +8,11 @@
  * @type {{production: boolean}}
  */
 export const environment = {
-  production: false
+  production: false,
+
+  apiBaseUrl: 'http://127.0.0.1:8081/gms/api/',
+  apiLoginUrl: 'login',
+  metaName: 'General Management System'
 };
 
 /*
@@ -18,20 +22,3 @@ export const environment = {
  * because it will have performance impact when throw error
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
-
-/**
- * All backend API related information.
- * @type {{url: string}}
- */
-export const api = {
-  baseUrl: 'http://127.0.0.1:8081/gms/api/',
-  loginUrl: 'login'
-};
-
-/**
- * All app meta information.
- * @type {{name: string}}
- */
-export const appMeta = {
-  name: 'General Management System'
-};

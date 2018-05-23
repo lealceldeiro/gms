@@ -11,9 +11,9 @@ describe('LoginService', () => {
     TestBed.configureTestingModule({
       providers: [
         LoginService,
-        {provide: HttpClient, useClass: HttpClientTestingModule},
-        { provide: SessionService, useValue: {}},
-        { provide: SessionUserService, useValue: {}}
+        { provide: HttpClient, useClass: HttpClientTestingModule },
+        { provide: SessionService, useValue: {} },
+        { provide: SessionUserService, useValue: {} }
         ]
     });
   });

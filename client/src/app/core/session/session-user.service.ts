@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/index';
-import { api } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
 
 /**
@@ -13,14 +13,12 @@ export class SessionUserService {
   /**
    * API base url.
    */
-  private url: string;
+  private url = environment.apiBaseUrl;
 
   /**
    * Service's constructor
    */
-  constructor(private http: HttpClient) {
-    this.url = api.baseUrl;
-  }
+  constructor(private http: HttpClient) { }
 
   /**
    * Gets the information related to the user active in the current session.
