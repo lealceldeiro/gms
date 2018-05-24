@@ -17,6 +17,7 @@ export class SessionUserService {
 
   /**
    * Service's constructor
+   * @param {HttpClient} http HttpClient for performing api requests.
    */
   constructor(private http: HttpClient) { }
 

@@ -1,8 +1,8 @@
-/**
- * Domain object which represents a user.
- */
 import { User } from './user.model';
 
+/**
+ * Instance of a User
+ */
 export const userMock = new User();
 userMock.username = 'name';
 userMock.email = 'email';

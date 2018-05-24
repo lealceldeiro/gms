@@ -14,13 +14,13 @@ export class StorageService {
    * Prefix for all keys used for storing values in cookies
    * @type {string}
    */
-  gmsCk = 'gms_ck_';
+  private gmsCk = 'gms_ck_';
 
   /**
    * Prefix for all keys used for storing values in localStorage
    * @type {string}
    */
-  gmsLs = 'gms_ls_';
+  private gmsLs = 'gms_ls_';
 
   /**
    * Object which holds the stored values.
@@ -101,10 +101,10 @@ export class StorageService {
 
   /**
    * Creates the cache value and the cache observable.
-   * @param key Key for looking up.
-   * @param val Value to be looked up.
+   * @param {string} key Key for looking up.
+   * @param {any} val Value to be looked up.
    */
-  private setCache(key, val): void {
+  private setCache(key: string, val: any): void {
     const subject = this.cache[key];
     if (!subject) {
       this.cache[key] = new BehaviorSubject(this.cache[key]);
