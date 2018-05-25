@@ -23,7 +23,7 @@ export class StorageService {
   private gmsLs = 'gms_ls_';
 
   /**
-   * Object which holds the stored values.
+   * Object which holds the stored values for localStorage.
    * @type {{}}
    */
   private cache = {};
@@ -33,6 +33,18 @@ export class StorageService {
    * @type {{}}
    */
   private cache$ = {};
+
+  /**
+   * Object which holds the stored values for cookies.
+   * @type {{}}
+   */
+  private cacheCk = {};
+
+  /**
+   * Observables of StorageService#cacheCk
+   * @type {{}}
+   */
+  private cacheCk$ = {};
 
   /**
    * Object for storing how many times StorageService#trySet function have been trying to save a particular value.
@@ -103,24 +115,44 @@ export class StorageService {
    * Creates the cache value and the cache observable.
    * @param {string} key Key for looking up.
    * @param {any} val Value to be looked up.
+   * @param {boolean} isCookie Whether to set the value in the cookie cache or the localStorage cache.
    */
-  private setCache(key: string, val: any): void {
-    const subject = this.cache[key];
+  private setCache(key: string, val: any, isCookie = false): void {
+    let subject = isCookie ? this.cacheCk[key] : this.cache[key];
     if (!subject) {
-      this.cache[key] = new BehaviorSubject(this.cache[key]);
-      this.cache$[key] = this.cache[key].asObservable();
+      subject = new BehaviorSubject(val);
+      if (isCookie) {
+        this.cacheCk[key] = subject;
+        this.cacheCk$[key] = this.cacheCk[key].asObservable();
+      } else {
+        this.cache[key] = subject;
+        this.cache$[key] = this.cache[key].asObservable();
+      }
     } else {
-      this.cache[key].next(val);
+      if (isCookie) {
+        this.cacheCk[key].next(val);
+      } else {
+        this.cache[key].next(val);
+      }
     }
   }
 
   /**
    * Sets all values in cache to null.
+   * @param {boolean} isCookie Whether the cache is going to be cleared is the cookie or localStorage cache.
    */
-  private clearCache() {
-    for (const k in this.cache) {
-      if (this.cache.hasOwnProperty(k)) {
-        this.cache[k].next(null);
+  private clearCache(isCookie = false) {
+    if (isCookie) {
+      for (const k in this.cacheCk) {
+        if (this.cacheCk.hasOwnProperty(k)) {
+          this.cacheCk[k].next(null);
+        }
+      }
+    } else {
+      for (const k in this.cache) {
+        if (this.cache.hasOwnProperty(k)) {
+          this.cache[k].next(null);
+        }
       }
     }
   }
@@ -191,7 +223,7 @@ export class StorageService {
   putCookie(key: string, value: any, options?: object): any {
     this.checkKey(key);
     const uk = this.gmsCk + key;
-    this.setCache(uk, value);
+    this.setCache(uk, value, true);
     typeof value === 'object' ? this.cookieService.putObject(uk, value, options as CookieOptions)
       : this.cookieService.put(uk, value);
     return value;
@@ -209,12 +241,12 @@ export class StorageService {
   getCookie(key?: string, isObject = false): Observable<any> {
     if (key) {
       const uk = this.gmsCk + key;
-      let value$ = this.cache$[uk];
+      let value$ = this.cacheCk$[uk];
       if (!value$) {
         const val = isObject ? this.cookieService.getObject(uk) : this.cookieService.get(uk);
-        this.setCache(uk, val);
+        this.setCache(uk, val, true);
       }
-      value$ = this.cache$[uk];
+      value$ = this.cacheCk$[uk];
       return value$ ? value$ : of(null);
     } else {
       return of(this.cookieService.getAll());
@@ -235,13 +267,20 @@ export class StorageService {
       const uk = this.gmsCk + key;
       return this.getCookie(key, isObject).pipe(tap((nVal) => {
         if (nVal !== null) {
-          this.cache[uk].next(null);
+          this.cacheCk[uk].next(null);
         }
         this.cookieService.remove(uk);
       }));
     } else {
-      this.clearCache();
-      of (this.cookieService.removeAll());
+      this.clearCache(true);
+      let hasAny = 0;
+      for (const k in this.cacheCk) {
+        if (this.cacheCk.hasOwnProperty(k)) {
+          hasAny++;
+          break;
+        }
+      }
+      return hasAny ? this.cacheCk$[0] : of(null);
     }
   }
   // endregion
