@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs/index';
+import { BehaviorSubject, Observable } from 'rxjs/index';
 
 import { SessionService } from './session.service';
 import { StorageService } from '../storage/storage.service';
@@ -13,23 +13,46 @@ describe('SessionService', () => {
   let storageServiceSetSpy: Spy;
   let storageServicePutCookieSpy: Spy;
   let storageServiceClearSpy: Spy;
+  let storageServiceClearCookieSpy: Spy;
   let sessionService: SessionService;
   let storageService: StorageService;
 
   // region values for simulating a fresh store service
-  const subjectNull = new BehaviorSubject<any>(null);
-  const subjectEmpty = new BehaviorSubject<any>({});
+  const subjectNull$ = new BehaviorSubject(null).asObservable();
+  const subjectEmpty$ = new BehaviorSubject({}).asObservable();
+  const trueVal$ = new BehaviorSubject(true).asObservable();
+  const testSpy = {
+    set: function(a, b, c) {},
+    clear: function(a, b, c) {},
+    putCookie: function (a, b, c) {},
+    clearCookie: function (a, b, c) {}
+  };
 
-  function dummyFn(): Observable<any> { return subjectNull.asObservable(); }
+  function dSet(): Observable<any> {
+    testSpy.set(arguments[0], arguments[1], arguments[2]);
+    return subjectNull$;
+  }
+  function dClear(): Observable<boolean> {
+    testSpy.clear(arguments[0], arguments[1], arguments[2]);
+    return trueVal$;
+  }
+  function dPutCookie(): Observable<any> {
+    testSpy.putCookie(arguments[0], arguments[1], arguments[2]);
+    return subjectNull$;
+  }
+  function d(): Observable<any> { return subjectNull$; }
+  function dClearCookie(): Observable<boolean> {
+    testSpy.clearCookie(arguments[0], arguments[1], arguments[2]);
+    return trueVal$;
+  }
+
   const storageServiceStub = {
-    set: dummyFn,
-    get: dummyFn,
-    clear: function (): Observable<any> {
-      return of(null);
-    },
-    putCookie: dummyFn,
-    getCookie: dummyFn,
-    clearCookie: dummyFn,
+    set: dSet,
+    get: d,
+    clear: dClear,
+    putCookie: dPutCookie,
+    getCookie: d,
+    clearCookie: dClearCookie,
   };
   // endregion
 
@@ -40,9 +63,10 @@ describe('SessionService', () => {
     });
     sessionService = TestBed.get(SessionService);
     storageService = TestBed.get(StorageService);
-    storageServiceSetSpy = spyOn(storageService, 'set');
-    storageServicePutCookieSpy = spyOn(storageService, 'putCookie');
-    storageServiceClearSpy = spyOn(storageService, 'clear');
+    storageServiceSetSpy = spyOn(testSpy, 'set');
+    storageServicePutCookieSpy = spyOn(testSpy, 'putCookie');
+    storageServiceClearSpy = spyOn(testSpy, 'clear');
+    storageServiceClearCookieSpy = spyOn(testSpy, 'clearCookie');
   });
 
   it('should be created', inject([SessionService], (service: SessionService) => {
@@ -68,7 +92,7 @@ describe('SessionService', () => {
   });
 
   it('default value for getAuthData should be `{}`', () => {
-    storageService.get = function(): Observable<any> { return subjectEmpty.asObservable(); };
+    storageService.get = function(): Observable<any> { return subjectEmpty$; };
     sessionService.getAuthData().subscribe((data: LoginResponseModel) => {
       expect(data).toEqual({}, '');
     });
@@ -155,5 +179,55 @@ describe('SessionService', () => {
     expect(sessionService['rememberMe']).toBeTruthy();
     sessionService.setRememberMe(false);
     expect(sessionService['rememberMe']).toBeFalsy();
+  });
+
+  it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session' +
+    ' user as `null`', () => {
+    sessionService.closeSession();
+
+    // region check session service vars
+    expect(sessionService['loggedIn'].getValue())
+      .toBeFalsy('`loggedIn` subject value was not set properly');
+    expect(sessionService['notLoggedIn'].getValue())
+      .toBeTruthy('`notLoggedIn` subject value was not set properly');
+    expect(sessionService['authData'].getValue())
+      .toEqual({}, '`authData` subject value was not set properly');
+    expect(sessionService['user'].getValue())
+      .toBeNull('`user` subject value was not set properly');
+    // endregion
+
+    // region check args calls
+    // region clear
+    const allArgs = storageServiceClearSpy.calls.allArgs();
+
+    expect(allArgs[0][0]).toEqual(sessionService['key']['loggedIn'],
+      'incorrect key for `loggedIn`');
+
+    expect(allArgs[1][0]).toEqual(sessionService['key']['notLoggedIn'],
+      'incorrect key for `notLoggedIn`');
+
+    expect(allArgs[2][0]).toEqual(sessionService['key']['loginData'],
+      'incorrect key for `authData`');
+
+    expect(allArgs[3][0]).toEqual(sessionService['key']['user'],
+      'incorrect key for `user`');
+    // endregion
+
+    // region clearCookie
+    const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
+
+    expect(allArgsCk[0][0]).toEqual(sessionService['key']['accessToken'],
+      'incorrect key for `accessToken`');
+
+    expect(allArgsCk[1][0]).toEqual(sessionService['key']['refreshToken'],
+      'incorrect key for `refreshToken`');
+
+    expect(allArgsCk[2][0]).toEqual(sessionService['key']['headerToBeSent'],
+      'incorrect key for `headerToBeSent`');
+
+    expect(allArgsCk[3][0]).toEqual(sessionService['key']['tokenType'],
+      'incorrect key for `tokenType`');
+    // endregion
+    // endregion
   });
 });

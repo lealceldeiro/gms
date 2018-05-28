@@ -23,6 +23,12 @@ export class StorageService {
   private gmsLs = 'gms_ls_';
 
   /**
+   * Prefix keys for values saved under a private key.
+   * @type {string}
+   */
+  private gmsPriv = 'priv_';
+
+  /**
    * Object which holds the stored values for localStorage.
    * @type {{}}
    */
@@ -45,6 +51,20 @@ export class StorageService {
    * @type {{}}
    */
   private cacheCk$ = {};
+
+  /**
+   * Utility subject for geenrating an observable for returning in function in order to wait until the end of
+   * the operation.
+   * @type {BehaviorSubject<boolean>}
+   * @see booleanSubj$
+   */
+  private booleanSubj = new BehaviorSubject<boolean>(true);
+
+  /**
+   * Utility observable for returning in function in order to wait until the end of the operation.
+   * @type {Observable<boolean>}
+   */
+  private booleanSubj$ = this.booleanSubj.asObservable();
 
   /**
    * Object for storing how many times StorageService#trySet function have been trying to save a particular value.
@@ -82,7 +102,8 @@ export class StorageService {
   }
 
   /**
-   * Tries to save a value under a key in the client local storage. If the method fails it will retry 3 times more to save it.
+   * Tries to save a value under a key in the client local storage. If the method fails it will retry 3 times more to
+   * save it.
    * @param {string} key String representation of the key under which the value will be stored.
    * @param value Value to be stored
    */
@@ -158,38 +179,35 @@ export class StorageService {
   }
 
   /**
-   * Clears a value under a key or all values if no key is specified. This function uses the StorageService#get function in order to return
-   * the value.
-   * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided all values are removed
-   * .
-   * @returns {any} If a key is provided, the value that was saved under that key is returned wrapped inside an Observable or `null` (also
-   * wrapped inside an Observable) if no key is provided.
+   * Clears a value under a key or all values if no key is specified. This function uses the StorageService#get function
+   * in order to return the value.
+   * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided
+   * all values are removed.
+   * @returns {Observable<boolean>}
    */
-  clear(key?: string): Observable<any> {
+  clear(key?: string): Observable<boolean> {
     this.tryClearCount[this.gmsLs + key] = 0;
     return this.tryClear(key);
   }
 
   /**
-   * Tries to clear a value under a key or all values if no key is specified. This function uses the StorageService#get function in order to
-   * return the value. If the method fails it will retry 3 times more to clear the value.
+   * Tries to clear a value under a key or all values if no key is specified. This function uses the StorageService#get
+   * function in order to return the value. If the method fails it will retry 3 times more to clear the value.
    * @param {string} key
-   * @returns {Observable<any>}
+   * @returns {Observable<boolean>}
    */
-  private tryClear(key?: string): Observable<any> {
+  private tryClear(key?: string): Observable<boolean> {
     // clear a specific value
     if (typeof key !== 'undefined' && typeof key !== null) {
-      const value$ = this.get(key);
       const uk = this.gmsLs + key;
       return this.localStorage.removeItem(uk).pipe(tap( (nVal) => {
         if (nVal !== null) {
           // this will trigger the next value of the observable in this.cache$[uk]
           this.cache[uk].next(null);
         }
-        return value$;
       }, () => {
         if (this.tryClearCount[uk]++ < 2) {
-          this.tryClear(key);
+          return this.tryClear(key);
         } else {
           console.warn('Couldn\'t delete value under key \'' + key + '\'');
         }
@@ -197,13 +215,11 @@ export class StorageService {
     } else { // clear all
       return this.localStorage.clear().pipe(tap(() => {
         this.clearCache();
-        return of(null);
       }, () => {
         if (this.tryClearCount[key]++ < 2) {
-          this.tryClear(key);
+          return this.tryClear(key);
         } else {
           console.warn('Couldn\'t delete value under key \'' + key + '\'');
-          return of(null);
         }
       }));
     }
@@ -231,16 +247,16 @@ export class StorageService {
 
   /**
    * Gets a cookie value (or all values if no key is provided) specified under a key stored in cookie.
-   * @param {string} key Key under which the value it's being tried to be accessed was saved previously. If not key is provided or a falsy
-   * value, this returns all cookies.
+   * @param {string} key Key under which the value it's being tried to be accessed was saved previously.If not key is
+   * provided or a falsy value, this returns all cookies.
    * @param {boolean} isObject Whether the value is trying to be retrieved is an object or not.
-   * @returns {Observable<any>} An Observable with the saved value under the specified key (or all values if no key is provided) or `null`
-   * if no value is found under the
-   * specified key.
+   * @returns {Observable<any>} An Observable with the saved value under the specified key (or all values if no key is
+   * provided) or `null` if no value is found under the specified key.
    */
   getCookie(key?: string, isObject = false): Observable<any> {
+    let uk;
     if (key) {
-      const uk = this.gmsCk + key;
+      uk = this.gmsCk + key;
       let value$ = this.cacheCk$[uk];
       if (!value$) {
         const val = isObject ? this.cookieService.getObject(uk) : this.cookieService.get(uk);
@@ -249,39 +265,39 @@ export class StorageService {
       value$ = this.cacheCk$[uk];
       return value$ ? value$ : of(null);
     } else {
-      return of(this.cookieService.getAll());
+      uk = this.gmsPriv + this.gmsCk + key;
+      const subject = this.cacheCk[uk];
+      const all = this.cookieService.getAll();
+      if (!subject) {
+        this.cacheCk[uk] = new BehaviorSubject<Object>(all);
+        this.cacheCk$[uk] = this.cacheCk[uk].asObservable();
+      } else {
+        this.cacheCk[uk].next(all);
+      }
+      return this.cacheCk$[uk];
     }
   }
 
   /**
-   * Clears a value under a key or all values if no key is specified or its value is falsy. This function uses the StorageService#getCookie
-   * function in order to return the value.
-   * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided all values are removed
-   * .
-   * @param {boolean} isObject Whether the value is being tried to be cleared is an object or not. If no key is provided, then this can not
-   * be provided.
-   * @returns {any} If a key is provided, the value that was saved under that key is returned.
+   * Clears a value under a key or all values if no key is specified or its value is falsy. This function uses the
+   * StorageService#getCookie function in order to return the value.
+   * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided
+   * all values are removed.
+   * provided, then this can not be provided.
+   * @returns {Observable<boolean>} An Observable to wait the end of the operation.
    */
-  clearCookie(key?: string, isObject = false): Observable<any> {
+  clearCookie(key?: string): Observable<boolean> {
     if (key) {
       const uk = this.gmsCk + key;
-      return this.getCookie(key, isObject).pipe(tap((nVal) => {
-        if (nVal !== null) {
-          this.cacheCk[uk].next(null);
-        }
-        this.cookieService.remove(uk);
-      }));
+      this.cookieService.remove(uk);
+      const subject = this.cacheCk[uk];
+      if (subject) {
+        this.cacheCk[uk].next(null);
+      }
     } else {
       this.clearCache(true);
-      let hasAny = 0;
-      for (const k in this.cacheCk) {
-        if (this.cacheCk.hasOwnProperty(k)) {
-          hasAny++;
-          break;
-        }
-      }
-      return hasAny ? this.cacheCk$[0] : of(null);
     }
+    return this.booleanSubj$;
   }
   // endregion
 

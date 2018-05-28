@@ -210,42 +210,42 @@ export class SessionService {
     this.user.next(null);
 
     const lis = this.storageService.clear(this.key.loggedIn).subscribe(() => {
-      if (lis) {
+      if (lis) { // check for testing purposes
         lis.unsubscribe();
       }
     });
     const nlis = this.storageService.clear(this.key.notLoggedIn).subscribe(() => {
-      if (nlis) {
+      if (nlis) { // check for testing purposes
         nlis.unsubscribe();
       }
     });
     const lds = this.storageService.clear(this.key.loginData).subscribe(() => {
-      if (lds) {
+      if (lds) { // check for testing purposes
         lds.unsubscribe();
       }
     });
     const ats = this.storageService.clearCookie(this.key.accessToken).subscribe(() => {
-      if (ats) {
+      if (ats) { // check for testing purposes
         ats.unsubscribe();
       }
     });
     const rts = this.storageService.clearCookie(this.key.refreshToken).subscribe(() => {
-      if (rts) {
+      if (rts) { // check for testing purposes
         rts.unsubscribe();
       }
     });
     const htbss = this.storageService.clearCookie(this.key.headerToBeSent).subscribe(() => {
-      if (htbss) {
+      if (htbss) { // check for testing purposes
         htbss.unsubscribe();
       }
     });
     const tts = this.storageService.clearCookie(this.key.tokenType).subscribe(() => {
-      if (tts) {
+      if (tts) { // check for testing purposes
         tts.unsubscribe();
       }
     });
     const us = this.storageService.clear(this.key.user).subscribe(() => {
-      if (us) {
+      if (us) { // check for testing purposes
         us.unsubscribe();
       }
     });
@@ -340,25 +340,25 @@ export class SessionService {
     // load data
     const oli = this.retrieve(this.key.loggedIn, false).subscribe((val) => {
       this.loggedIn.next(val === true);
-      if (oli) {
+      if (oli) { // check for testing purposes
         oli.unsubscribe();
       }
     });
     const onli = this.retrieve(this.key.notLoggedIn, false).subscribe((val) => {
       this.notLoggedIn.next(val === true || val === null);
-      if (onli) {
+      if (onli) { // check for testing purposes
         onli.unsubscribe();
       }
     });
     const ou = this.retrieve(this.key.user, false).subscribe((val) => {
       this.user.next(val);
-      if (ou) {
+      if (ou) { // check for testing purposes
         ou.unsubscribe();
       }
     });
     const oad = this.retrieve(this.key.loginData, false).subscribe((val) => {
       this.authData.next(val ? val : {});
-      if (oad) {
+      if (oad) { // check for testing purposes
         oad.unsubscribe();
       }
     });

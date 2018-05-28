@@ -16,7 +16,7 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 
 ### Running unit tests
 
-Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run testwatch` in order to watch for changes while running the tests.
+Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run testwatch` in order to watch for changes while running the tests. With `npm run testcoverage` it can be generated a coverage report.
 
 ### Running end-to-end tests
 
@@ -28,7 +28,7 @@ This uses [compodoc](https://github.com/compodoc/compodoc) for generating the ap
 
 - Run `npm run builddoc` in order to build the documentation resources.
 - Run `npm run servedoc` once you built the documentation resources and navigate to `http://localhost:8080/`.
-- Run `npm run buildandservedoc` in order to build and serve the documentation resources. Navigate to `http://localhost:8080/`.
+- Run `npm run buildservedoc` in order to build and serve the documentation resources. Navigate to `http://localhost:8080/`.
 
 All documentation resources are stored in the `documentation/` directory.
 
