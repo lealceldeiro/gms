@@ -41,6 +41,11 @@ describe('SecurityInterceptor', () => {
     httpClient = TestBed.get(HttpClient);
   });
 
+  afterEach(() => {
+    // After every test, assert that there are no more pending requests.
+    httpCtrl.verify();
+  });
+
   it('should be created', inject([SecurityInterceptor], (service: SecurityInterceptor) => {
     expect(service).toBeTruthy();
   }));
@@ -66,6 +71,5 @@ describe('SecurityInterceptor', () => {
       !request.headers.has(header) || (request.headers.get(header) !== tokenType + ' ' + accessToken)
     );
     testRequest.flush({ data: 'test' });
-    httpCtrl.verify();
   });
 });
