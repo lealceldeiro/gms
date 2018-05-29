@@ -128,8 +128,7 @@ export class StorageService {
     this.checkKey(key);
     const uk = this.gmsLs + key;
     const value$ = this.cache$[uk];
-    return value$ ? value$ : this.localStorage.getItem(uk).pipe(tap((val) => this.setCache(uk, val),
-      () => console.warn('Couldn\'t get value under key \'' + key + '\'')));
+    return value$ ? value$ : this.localStorage.getItem(uk).pipe(tap((val) => this.setCache(uk, val)));
   }
 
   /**
@@ -200,28 +199,18 @@ export class StorageService {
     // clear a specific value
     if (typeof key !== 'undefined' && typeof key !== null) {
       const uk = this.gmsLs + key;
-      return this.localStorage.removeItem(uk).pipe(tap( (nVal) => {
-        if (nVal !== null) {
-          // this will trigger the next value of the observable in this.cache$[uk]
-          this.cache[uk].next(null);
+      return this.localStorage.removeItem(uk).pipe(tap(
+        (removed) => { if (removed) { this.cache[uk].next(null); } }, // null for next value in this.cache$[uk]
+        () => { // just in case, for now LocalStorage will never trow an error while removing an item
+          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for ' + key);
         }
-      }, () => {
-        if (this.tryClearCount[uk]++ < 2) {
-          return this.tryClear(key);
-        } else {
-          console.warn('Couldn\'t delete value under key \'' + key + '\'');
-        }
-      }));
+      ));
     } else { // clear all
-      return this.localStorage.clear().pipe(tap(() => {
-        this.clearCache();
-      }, () => {
-        if (this.tryClearCount[key]++ < 2) {
-          return this.tryClear(key);
-        } else {
-          console.warn('Couldn\'t delete value under key \'' + key + '\'');
-        }
-      }));
+      return this.localStorage.clear().pipe(tap(
+        () => this.clearCache(),
+        () => {
+          this.tryClearCount[key]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key );
+        }));
     }
   }
   // endregion
@@ -231,7 +220,6 @@ export class StorageService {
    * Puts a new value under a key in a cookie.
    * @param {string} key String representation of the key under which the value will be stored.
    * @param value Value to be stored.
-   * @param {object} options Additional options for cookies.
    * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
    * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @returns {any}
@@ -284,9 +272,11 @@ export class StorageService {
    * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided
    * all values are removed.
    * provided, then this can not be provided.
+   * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
+   * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @returns {Observable<boolean>} An Observable to wait the end of the operation.
    */
-  clearCookie(key?: string): Observable<boolean> {
+  clearCookie(key?: string, options?: any): Observable<boolean> {
     if (key) {
       const uk = this.gmsCk + key;
       this.cookieService.remove(uk);
@@ -296,6 +286,7 @@ export class StorageService {
       }
     } else {
       this.clearCache(true);
+      this.cookieService.removeAll(options as CookieOptions);
     }
     return this.booleanSubj$;
   }
