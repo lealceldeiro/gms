@@ -102,7 +102,7 @@ export class StorageService {
   }
 
   /**
-   * Tries to save a value under a key in the client local storage. If the method fails it will retry 3 times more to
+   * Tries to save a value under a key in the client local storage. If the method fails it will retry 2 times more to
    * save it.
    * @param {string} key String representation of the key under which the value will be stored.
    * @param value Value to be stored
@@ -141,7 +141,7 @@ export class StorageService {
   private setCache(key: string, val: any, isCookie = false): void {
     let subject = isCookie ? this.cacheCk[key] : this.cache[key];
     if (!subject) {
-      subject = new BehaviorSubject(val);
+      subject = new BehaviorSubject<any>(val);
       if (isCookie) {
         this.cacheCk[key] = subject;
         this.cacheCk$[key] = this.cacheCk[key].asObservable();
@@ -192,7 +192,7 @@ export class StorageService {
 
   /**
    * Tries to clear a value under a key or all values if no key is specified. This function uses the StorageService#get
-   * function in order to return the value. If the method fails it will retry 3 times more to clear the value.
+   * function in order to return the value. If the method fails it will retry 2 times more to clear the value.
    * @param {string} key
    * @returns {Observable<boolean>}
    */
