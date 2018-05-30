@@ -20,7 +20,7 @@ The project consists of two main (independent) modules:
 * Packing as a WAR file with the API server only
   1. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
-  1. You need to have [Node.js][4] installed.
+  1. You need to have [Node.js][4] 8.9 or higher, together with [NPM][7] 5.5.1 or higher installed.
   2. From the location `client/` run `npm install` in order to install all client package dependencies.
   3. From the location `server/` run `gradle bootWar -Pclient=true`.
   4. Optionally you can generate the client app (Angular) documentation by setting also the `clientDoc` param to true like this `-PclientDoc=true`.
@@ -59,3 +59,4 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 [4]: https://nodejs.org/en/
 [5]: https://www.postgresql.org/
 [6]: https://gradle.org/
+[7]: https://www.npmjs.com/get-npm
