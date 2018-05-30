@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { SessionService } from './core/session/session.service';
-import { Observable, of } from 'rxjs/index';
+import { of } from 'rxjs/index';
 
 import { AppComponent } from './app.component';
 
@@ -20,8 +20,8 @@ describe('AppComponent', () => {
   class RouterOutletStubComponent {}
 
   const sessionServiceStub = {
-    isNotLoggedIn: function (): Observable<boolean> { return of(false); },
-    isLoggedIn: function (): Observable<boolean> { return of(true); },
+    isNotLoggedIn: () => of(false),
+    isLoggedIn: () => of(true),
   };
   // endregion
 

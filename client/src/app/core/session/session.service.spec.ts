@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BehaviorSubject, Observable } from 'rxjs/index';
+import { BehaviorSubject } from 'rxjs/index';
 
 import { SessionService } from './session.service';
 import { StorageService } from '../storage/storage.service';
@@ -36,37 +36,18 @@ describe('SessionService', () => {
   const subjectEmpty$ = new BehaviorSubject({}).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
   const testSpy = {
-    set: function(a, b, c) {},
-    clear: function(a, b, c) {},
-    putCookie: function (a, b, c) {},
-    clearCookie: function (a, b, c) {}
+    set:          (a, b, c) => {},
+    clear:        (a, b, c) => {},
+    putCookie:    (a, b, c) => {},
+    clearCookie:  (a, b, c) => {}
   };
-
-  function dSet(): Observable<any> {
-    testSpy.set(arguments[0], arguments[1], arguments[2]);
-    return subjectNull$;
-  }
-  function dClear(): Observable<boolean> {
-    testSpy.clear(arguments[0], arguments[1], arguments[2]);
-    return trueVal$;
-  }
-  function dPutCookie(): Observable<any> {
-    testSpy.putCookie(arguments[0], arguments[1], arguments[2]);
-    return subjectNull$;
-  }
-  function d(): Observable<any> { return subjectNull$; }
-  function dClearCookie(): Observable<boolean> {
-    testSpy.clearCookie(arguments[0], arguments[1], arguments[2]);
-    return trueVal$;
-  }
-
   const storageServiceStub = {
-    set: dSet,
-    get: d,
-    clear: dClear,
-    putCookie: dPutCookie,
-    getCookie: d,
-    clearCookie: dClearCookie,
+    set:          (a, b, c) => { testSpy.set(a, b, c); return subjectNull$; },
+    get:          () => subjectNull$,
+    clear:        (a, b, c) => { testSpy.clear(a, b, c); return trueVal$; },
+    putCookie:    (a, b, c) => { testSpy.putCookie(a, b, c); return subjectNull$; },
+    getCookie:    () => subjectNull$,
+    clearCookie:  (a, b, c) => { testSpy.clearCookie(a, b, c); return trueVal$; },
   };
   // endregion
 
@@ -106,7 +87,7 @@ describe('SessionService', () => {
   });
 
   it('default value for getAuthData should be `{}`', () => {
-    storageService.get = function(): Observable<any> { return subjectEmpty$; };
+    storageService.get = () => subjectEmpty$;
     sessionService.getAuthData().subscribe((data: LoginResponseModel) => {
       expect(data).toEqual({}, '');
     });

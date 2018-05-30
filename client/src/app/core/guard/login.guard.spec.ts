@@ -3,14 +3,14 @@ import { inject, TestBed } from '@angular/core/testing';
 import { LoginGuard } from './login.guard';
 import { SessionService } from '../session/session.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BehaviorSubject, Observable } from 'rxjs/index';
+import { BehaviorSubject } from 'rxjs/index';
 import { first } from 'rxjs/internal/operators';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;
   const isNotLoggedInSb = new BehaviorSubject<boolean>(false);
 
-  const sessionServiceStub = { isNotLoggedIn: function (): Observable<boolean> { return isNotLoggedInSb.asObservable(); } };
+  const sessionServiceStub = { isNotLoggedIn: () => isNotLoggedInSb.asObservable() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({

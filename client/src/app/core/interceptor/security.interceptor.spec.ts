@@ -1,7 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs/index';
+import { BehaviorSubject, of } from 'rxjs/index';
 
 import { SecurityInterceptor } from './security.interceptor';
 import { SessionService } from '../session/session.service';
@@ -12,18 +12,10 @@ describe('SecurityInterceptor', () => {
   const accessToken = 'accessToken';
   const liBS = new BehaviorSubject<boolean>(true);
   const sessionServiceStub = {
-    isLoggedIn: function(): Observable<Boolean> {
-      return liBS.asObservable();
-    },
-    getHeader: function(): Observable<String>  {
-      return of(header);
-    },
-    getTokenType: function(): Observable<String>  {
-      return of(tokenType);
-    },
-    getAccessToken: function(): Observable<String>  {
-      return of(accessToken);
-    }
+    isLoggedIn: () => liBS.asObservable(),
+    getHeader: () => of(header),
+    getTokenType: () => of(tokenType),
+    getAccessToken: () => of(accessToken)
   };
   let httpCtrl: HttpTestingController;
   let httpClient: HttpClient;

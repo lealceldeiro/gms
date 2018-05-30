@@ -8,7 +8,7 @@ import { LoginService } from '../service/login.service';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  const loginServiceStub = { login: function() {} };
+  const loginServiceStub = { login: () => {} };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

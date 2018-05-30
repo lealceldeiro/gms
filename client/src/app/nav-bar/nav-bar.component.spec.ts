@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable, of } from 'rxjs/index';
+import { of } from 'rxjs/index';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { NavBarComponent } from './nav-bar.component';
@@ -9,7 +9,6 @@ import { MockModule } from '../shared/mock/mock.module';
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SessionService } from '../core/session/session.service';
-import { User } from '../core/session/user.model';
 import { userMock } from '../core/session/user.mock.model';
 import Spy = jasmine.Spy;
 
@@ -23,10 +22,10 @@ describe('NavBarComponent', () => {
 
   // region mocks
   const sessionServiceStub = {
-    isNotLoggedIn: function (): Observable<boolean> { return of(true); },
-    isLoggedIn: function (): Observable<boolean> { return of(false); },
-    getUser: function (): Observable<User> { return of(userMock); },
-    closeSession: function () { }
+    isNotLoggedIn: () => of(true),
+    isLoggedIn: () => of(false),
+    getUser: () => of(userMock),
+    closeSession: () => { }
   };
 
   const routes = [
