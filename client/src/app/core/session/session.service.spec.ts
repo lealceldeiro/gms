@@ -1,22 +1,23 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BehaviorSubject } from 'rxjs/index';
+import { BehaviorSubject, Observable } from 'rxjs/index';
 
 import { SessionService } from './session.service';
 import { StorageService } from '../storage/storage.service';
 import { User } from './user.model';
 import { LoginResponseModel } from './login-response.model';
 import { userMock } from './user.mock.model';
-import Spy = jasmine.Spy;
 
 describe('SessionService', () => {
-  let storageServiceSetSpy: Spy;
-  let storageServicePutCookieSpy: Spy;
-  let storageServiceClearSpy: Spy;
-  let storageServiceClearCookieSpy: Spy;
+  let storageServiceSetSpy: jasmine.Spy;
+  let storageServicePutCookieSpy: jasmine.Spy;
+  let storageServiceClearSpy: jasmine.Spy;
+  let storageServiceClearCookieSpy: jasmine.Spy;
   let sessionService: SessionService;
   let storageService: StorageService;
-  let spyGetAuthData: Spy;
+  let spyGetAuthData: jasmine.Spy;
+
+  let consoleWarnSpy: jasmine.Spy;
 
   const mockLoginResponse: LoginResponseModel = {
     access_token: 'atMock',
@@ -30,10 +31,10 @@ describe('SessionService', () => {
     username: 'userSample',
   };
   const authData$ = new BehaviorSubject<LoginResponseModel>(mockLoginResponse).asObservable();
+  const error$ = Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
 
   // region values for simulating a fresh store service
   const subjectNull$ = new BehaviorSubject(null).asObservable();
-  const subjectEmpty$ = new BehaviorSubject({}).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
   const testSpy = {
     set:          (a, b, c) => {},
@@ -62,6 +63,8 @@ describe('SessionService', () => {
     storageServicePutCookieSpy = spyOn(testSpy, 'putCookie');
     storageServiceClearSpy = spyOn(testSpy, 'clear');
     storageServiceClearCookieSpy = spyOn(testSpy, 'clearCookie');
+
+    consoleWarnSpy = spyOn(console, 'warn');
   });
 
   it('should be created', inject([SessionService], (service: SessionService) => {
@@ -73,6 +76,28 @@ describe('SessionService', () => {
       expect(logged).toBeFalsy('');
     });
   });
+
+  it('when there is an error with the observable, isLoggedIn should warn in console', fakeAsync(() => {
+    let threw = false;
+    sessionService['loggedIn$'] = error$;
+    sessionService.isLoggedIn().subscribe(() => {}, () => {
+      threw = true;
+      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    });
+    tick();
+    expect(threw).toBeTruthy();
+  }));
+
+  it('when there is an error with the observable, isNotLoggedIn should warn in console', fakeAsync(() => {
+    let threw = false;
+    sessionService['notLoggedIn$'] = error$;
+    sessionService.isNotLoggedIn().subscribe(() => {}, () => {
+      threw = true;
+      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    });
+    tick();
+    expect(threw).toBeTruthy();
+  }));
 
   it('default value for isNotLoggedIn should be `true`', () => {
     sessionService.isNotLoggedIn().subscribe((notLogged: boolean) => {
@@ -87,7 +112,6 @@ describe('SessionService', () => {
   });
 
   it('default value for getAuthData should be `{}`', () => {
-    storageService.get = () => subjectEmpty$;
     sessionService.getAuthData().subscribe((data: LoginResponseModel) => {
       expect(data).toEqual({}, '');
     });

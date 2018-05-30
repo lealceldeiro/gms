@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import { LoginResponseModel } from './login-response.model';
 import { StorageService } from '../storage/storage.service';
-import { BehaviorSubject, Observable } from 'rxjs/index';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/index';
 import { tap } from 'rxjs/internal/operators';
 
 /**
@@ -209,46 +209,14 @@ export class SessionService {
     this.authData.next({});
     this.user.next(null);
 
-    const lis = this.storageService.clear(this.key.loggedIn).subscribe(() => {
-      if (lis) { // check for testing purposes
-        lis.unsubscribe();
-      }
-    });
-    const nlis = this.storageService.clear(this.key.notLoggedIn).subscribe(() => {
-      if (nlis) { // check for testing purposes
-        nlis.unsubscribe();
-      }
-    });
-    const lds = this.storageService.clear(this.key.loginData).subscribe(() => {
-      if (lds) { // check for testing purposes
-        lds.unsubscribe();
-      }
-    });
-    const ats = this.storageService.clearCookie(this.key.accessToken).subscribe(() => {
-      if (ats) { // check for testing purposes
-        ats.unsubscribe();
-      }
-    });
-    const rts = this.storageService.clearCookie(this.key.refreshToken).subscribe(() => {
-      if (rts) { // check for testing purposes
-        rts.unsubscribe();
-      }
-    });
-    const htbss = this.storageService.clearCookie(this.key.headerToBeSent).subscribe(() => {
-      if (htbss) { // check for testing purposes
-        htbss.unsubscribe();
-      }
-    });
-    const tts = this.storageService.clearCookie(this.key.tokenType).subscribe(() => {
-      if (tts) { // check for testing purposes
-        tts.unsubscribe();
-      }
-    });
-    const us = this.storageService.clear(this.key.user).subscribe(() => {
-      if (us) { // check for testing purposes
-        us.unsubscribe();
-      }
-    });
+    const lis = this.storageService.clear(this.key.loggedIn).subscribe(() => this.doUnsubscribe(lis));
+    const nlis = this.storageService.clear(this.key.notLoggedIn).subscribe(() => this.doUnsubscribe(nlis));
+    const lds = this.storageService.clear(this.key.loginData).subscribe(() => this.doUnsubscribe(lds));
+    const ats = this.storageService.clearCookie(this.key.accessToken).subscribe(() => this.doUnsubscribe(ats));
+    const rts = this.storageService.clearCookie(this.key.refreshToken).subscribe(() => this.doUnsubscribe(rts));
+    const htbss = this.storageService.clearCookie(this.key.headerToBeSent).subscribe(() => this.doUnsubscribe(htbss));
+    const tts = this.storageService.clearCookie(this.key.tokenType).subscribe(() => this.doUnsubscribe(tts));
+    const us = this.storageService.clear(this.key.user).subscribe(() => this.doUnsubscribe(us));
   }
 
   // region shortcuts
@@ -263,9 +231,7 @@ export class SessionService {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
           if (data && data.access_token) {
             this.store(this.key.accessToken, data.access_token);
-            if (o$) {
-              o$.unsubscribe();
-            }
+            this.doUnsubscribe(o$);
           }
         });
       }
@@ -283,9 +249,7 @@ export class SessionService {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
           if (data && data.refresh_token) {
             this.store(this.key.refreshToken, data.refresh_token);
-            if (o$) {
-              o$.unsubscribe();
-            }
+            this.doUnsubscribe(o$);
           }
         });
       }
@@ -302,9 +266,7 @@ export class SessionService {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
           if (data && data.header_to_be_sent) {
             this.store(this.key.headerToBeSent, data.header_to_be_sent);
-            if (o$) {
-              o$.unsubscribe();
-            }
+            this.doUnsubscribe(o$);
           }
         });
       }
@@ -321,9 +283,7 @@ export class SessionService {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
           if (data && data.token_type) {
             this.store(this.key.tokenType, data.token_type);
-            if (o$) {
-              o$.unsubscribe();
-            }
+            this.doUnsubscribe(o$);
           }
         });
       }
@@ -340,27 +300,19 @@ export class SessionService {
     // load data
     const oli = this.retrieve(this.key.loggedIn, false).subscribe((val) => {
       this.loggedIn.next(val === true);
-      if (oli) { // check for testing purposes
-        oli.unsubscribe();
-      }
+      this.doUnsubscribe(oli);
     });
     const onli = this.retrieve(this.key.notLoggedIn, false).subscribe((val) => {
       this.notLoggedIn.next(val === true || val === null);
-      if (onli) { // check for testing purposes
-        onli.unsubscribe();
-      }
+      this.doUnsubscribe(onli);
     });
     const ou = this.retrieve(this.key.user, false).subscribe((val) => {
       this.user.next(val);
-      if (ou) { // check for testing purposes
-        ou.unsubscribe();
-      }
+      this.doUnsubscribe(ou);
     });
     const oad = this.retrieve(this.key.loginData, false).subscribe((val) => {
       this.authData.next(val ? val : {});
-      if (oad) { // check for testing purposes
-        oad.unsubscribe();
-      }
+      this.doUnsubscribe(oad);
     });
   }
 
@@ -385,6 +337,16 @@ export class SessionService {
    */
   private retrieve(key: string, fromCookie = true, isObject = false): Observable<any> {
     return fromCookie ? this.storageService.getCookie(key, isObject) : this.storageService.get(key);
+  }
+
+  /**
+   * Tries to unsubscribe a given subscription.
+   * @param {Subscription} subscription Subscription to unsubscribe from.
+   */
+  private doUnsubscribe(subscription: Subscription) {
+    if (subscription) { // when performing unitary tests, subscription can be undefined sometimes by mocked values
+      subscription.unsubscribe();
+    }
   }
 
   // endregion

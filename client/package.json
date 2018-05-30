@@ -10,6 +10,7 @@
     "build": "ng build --prod",
     "test": "ng test",
     "testwatch": "ng test --watch=true",
+    "testwatchnosourcemap": "ng test --watch=true --sourceMap=false",
     "testcoverage": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e"

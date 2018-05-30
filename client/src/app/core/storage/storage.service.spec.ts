@@ -1,9 +1,9 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-
-import { StorageService } from './storage.service';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs/index';
 import { LocalStorage } from '@ngx-pwa/local-storage';
+
+import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
   let storageService: StorageService;
