@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { tap } from 'rxjs/internal/operators';
-import { BehaviorSubject, Observable, of } from 'rxjs/index';
+import { BehaviorSubject, Observable } from 'rxjs/index';
 
 /**
  * A service for providing access to the storage and cookies in client runner (browser, etc).
@@ -251,9 +251,9 @@ export class StorageService {
         this.setCache(uk, val, true);
       }
       value$ = this.cacheCk$[uk];
-      return value$ ? value$ : of(null);
+      return value$;
     } else {
-      uk = this.gmsPriv + this.gmsCk + key;
+      uk = this.gmsPriv + this.gmsCk;
       const subject = this.cacheCk[uk];
       const all = this.cookieService.getAll();
       if (!subject) {
