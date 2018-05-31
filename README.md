@@ -39,19 +39,51 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 
 ### IntelliJ IDEA
 #### API Server module
-* Open (import) the folder **server** in the working copy of the project (`File > Open`).
+* Open (import) the folder **server** in the working copy of the project.
+
+![Image: Open server folder](./help/images/1-server-open-home.idea.png)
+
+![Image: Select server folder](./help/images/2-server-select-folder.idea.png)
+
 * Configure the [gradle][1] options.
+
+![Image: Configure gradle options](./help/images/3-server-gradle-config.png)
+
   1. Select the distribution of gradle to be used. The default option is "_Use default gradle wrapper_", but if you like you can check the "_Use local gradle distribution_" if you have gradle installed on your PC (in which case you must set the "Gradle home" directory.
   2. Select the JVM.
   3. Select the project format (`.idea (directory based)` in this case).
-* This will create an IntelliJ IDEA project with one module (_server_).
+* This will create an IntelliJ IDEA project with one module (_server_). Here you should choose to add the root directory to the VCS.
+
+![Image: Server module ready](./help/images/4-server-module-ready.png)
+
 #### Client module
 * `Open Module Settings` (F4) and add a new module (+ green sign) and select the `Import Module` option.
+
+![Image: Open module settings](./help/images/5-client-add-module.png)
+
+![Image: Add new module](./help/images/6-client-import-module.png)
+
 * Select the folder `client` in the same level of the `server` folder.
+
+![Image: Select client folder](./help/images/7-client-select-folder.png)
+
 * Select the option "_Create module from existing source_".
+
+![Image: Select options create module from existing source](./help/images/8-client-create-module.png)
+
 * _Next_.
+* In the window "Import Module", keep the checkbox checked and click "Next";
+
+![Image: Select next in the Import Module option](./help/images/9-client-import-sources.png)
+
 * _Finish_ (this will search for the [Angular CLI][2] framework) installed through the [angular-cli node package][3].
+
+![Image: Select options create module from existing source](./help/images/10-client-finish-import.png)
+
 * This will create another module on the project (_client_).
+
+![Image: Select options create module from existing source](./help/images/11-client-done.png)
+
 #### At this point the project should contain two modules (_server_ and _client_)
 
 [1]: https://gradle.org/
