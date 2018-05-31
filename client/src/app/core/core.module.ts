@@ -25,9 +25,12 @@ export class GmsCoreModule {
 
   /**
    * Method for getting a module's instance with providers.
-   * @param config Optional configuration object with custom providers to be used. The following attributes can be set in the object in
-   * order to set custom providers:
-   * <p>- `sessionService` for providing a SessionService instance</p>
+   * @param config Optional configuration object with custom providers to be used. The following attributes can be set
+   * in the object in order to set custom providers classes:
+   * <p>- `sessionService` for providing a class instead of the default SessionService</p>
+   * <p>- `storageService` for providing a class instead of the default StorageService</p>
+   * <p>- `loginGuard` for providing a class instead of the default LoginGuard</p>
+   * <p>- `sessionUserService` for providing a class instead of the default SessionUserService</p>
    * <p>Example of configuration object: { sessionService: MySessionService } </p>
    */
   static forRoot(config?: any): ModuleWithProviders {
@@ -53,7 +56,7 @@ export class GmsCoreModule {
         },
         {
           provide: SessionUserService,
-          useClass: config && config['userService'] ? config['userService'] : SessionUserService
+          useClass: config && config['sessionUserService'] ? config['sessionUserService'] : SessionUserService
         }
       ]
     };

@@ -38,8 +38,6 @@ describe('SessionUserService', () => {
   }));
 
   it('should get the proper value for current user and return it as a `UserPdModel`', () => {
-    const href = 'hrefTest';
-    const numbVal = 24;
     sessionUserService.getCurrentUser('test').subscribe((data: PaginatedDataModel) => {
       const val = (data as UserPdModel)._embedded.user;
       expect(val.length > 0).toBeTruthy('failed to fetch the user returned in the response data');
@@ -56,6 +54,8 @@ describe('SessionUserService', () => {
     const req = httpTestingController
       .expectOne(r => r.method === 'GET' && r.url === baseUrl + 'user/search/username-email');
 
+    const href = 'hrefTest';
+    const numbVal = 24;
     const selfModel: SelfModel = { href: href };
     const linksModel: LinksModel = { self: selfModel };
     const pageModel: PageModel = { size: numbVal, totalElements: numbVal, totalPages: numbVal, number: numbVal };

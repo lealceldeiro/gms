@@ -8,6 +8,7 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { environment } from '../../../environments/environment';
+import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 
 /**
  * A service for providing handling the login/logout processes.
@@ -44,8 +45,7 @@ export class LoginService {
         if (response.access_token) {
           this.sessionService.setAuthData(response);
           this.sessionService.setLoggedIn(true);
-
-          const us = this.sessionUserService.getCurrentUser(response.username).subscribe(userPgData => {
+          const us = this.sessionUserService.getCurrentUser(response.username).subscribe((userPgData: UserPdModel) => {
             this.sessionService.setUser(userPgData._embedded.user[0]);
             us.unsubscribe();
           });

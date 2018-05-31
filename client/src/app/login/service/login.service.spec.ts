@@ -1,24 +1,110 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
 import { LoginService } from './login.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { LoginResponseModel } from '../../core/session/login-response.model';
+import { Subject } from 'rxjs/internal/Subject';
+import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
+import { PageModel } from '../../core/response/paginated-data/page.model';
+import { LinksModel } from '../../core/response/paginated-data/links.model';
+import { SelfModel } from '../../core/response/paginated-data/self.model';
+import { userMock } from '../../core/session/user.mock.model';
 
 describe('LoginService', () => {
+  let httpClient: HttpClient;
+  let httpTestingController: HttpTestingController;
+  let sessionUserService: SessionUserService;
+  let sessionService: SessionService;
+  let loginService: LoginService;
+  const api = environment.apiBaseUrl;
+  const url = environment.apiLoginUrl;
+
+  const spy = { sus: { getCurrentUser: (a) => {} }, ss: { setUser: (a) => {} } };
+  const sessionServiceStub = {
+    setAuthData : (a) => {}, setLoggedIn: (a) => {},
+    setUser: (a) => { spy.ss.setUser(a); return new Subject().asObservable(); }
+  };
+
+  // region user paginated data mock
+  const self: SelfModel = { href: 'test' };
+  const linkM: LinksModel = { self: self };
+  const page: PageModel = { totalPages: 1, number: 1, size: 1, totalElements: 1 };
+  const value = { page: page, _links: linkM, _embedded: { user: [userMock] } };
+  const userModelSubject = new Subject<UserPdModel>();
+  // endregion
+
+  const sessionUserServiceStub = {
+    getCurrentUser: (a) => {
+      spy.sus.getCurrentUser(a);
+      return userModelSubject.asObservable();
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        LoginService,
-        { provide: HttpClient, useClass: HttpClientTestingModule },
-        { provide: SessionService, useValue: {} },
-        { provide: SessionUserService, useValue: {} }
-        ]
+      imports: [HttpClientTestingModule],
+      providers: [LoginService, { provide: SessionService, useValue: sessionServiceStub },
+        { provide: SessionUserService, useValue: sessionUserServiceStub }]
     });
+    httpClient = TestBed.get(HttpClient);
+    httpTestingController = TestBed.get(HttpTestingController);
+    sessionUserService = TestBed.get(SessionUserService);
+    sessionService = TestBed.get(SessionService);
+    loginService = TestBed.get(LoginService);
+  });
+
+  afterEach(() => {
+    // After every test, assert that there are no more pending requests.
+    httpTestingController.verify();
   });
 
   it('should be created', inject([LoginService], (service: LoginService) => {
     expect(service).toBeTruthy();
   }));
+
+  it('should post a `LoginRequestModel` payload to the login url and, if it succeeds, set the auth data  in ' +
+    'SessionService and call the getUserMethod in the SessionUserService in order to retrieve the current User info',
+    fakeAsync(() => {
+        let ticked = false;
+        // mocks and spies
+        const setAuthDataSpy = spyOn(sessionServiceStub, 'setAuthData');
+        const setLoggedInSpy = spyOn(sessionServiceStub, 'setLoggedIn');
+        const setUserSpy = spyOn(spy.ss, 'setUser');
+        const getCurrentUserSpy = spyOn(spy.sus, 'getCurrentUser');
+        const mockUserName = 'mockUsernameTest';
+        const body = { usernameOrEmail: mockUserName, password: 'test' };
+        const response: LoginResponseModel = { access_token: 'access_tokenS', username: mockUserName };
+
+        // actual call
+        loginService.login(body).subscribe((data: LoginResponseModel) => {
+          expect(data).toBeTruthy('data is not ok');
+          expect(data.access_token).toBeTruthy('access token is not ok');
+          if (ticked) {
+            expect(setAuthDataSpy).toHaveBeenCalledTimes(1);
+            expect(setLoggedInSpy).toHaveBeenCalledTimes(1);
+            expect(getCurrentUserSpy).toHaveBeenCalledTimes(1);
+            expect(getCurrentUserSpy.calls.first().args[0]).toBe(mockUserName, 'username used for calling ' +
+              'the `getCurrentUser` service is not the same as the one which came in the response');
+            expect(setUserSpy).toHaveBeenCalledTimes(1);
+            expect(setUserSpy.calls.first().args[0]).toEqual(data.username, 'sessionUserService not ' +
+              'called with the correct username');
+          }
+        });
+
+        // request mock
+        const req = httpTestingController.match(r => r.url === api + url && r.method === 'POST'
+          && r.body === body);
+        expect(req.length).toBeGreaterThan(0, 'no request was found');
+        req[0].flush(response);
+
+        userModelSubject.next(value);
+
+        tick();
+        ticked = true;
+      }
+    ));
 });

@@ -13,7 +13,7 @@ export interface UserPdModel extends PaginatedDataModel {
     /**
      * Array of users.
      */
-    user: [User]
+    user: User[]
   };
 
 }
