@@ -16,6 +16,8 @@ describe('StorageService', () => {
   const boolObs$ = new BehaviorSubject(true).asObservable();
   const error$ = Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
   let setItemFn;
+  let removeItemFn;
+  let clearFn;
   let getCookieNotNull;
   let getCookieObjectNotNull;
 
@@ -39,8 +41,8 @@ describe('StorageService', () => {
   const localStorageMock = {
     setItem:    (a, b) => { spies.ls.set(a, b); return setItemFn(); },
     getItem:    (a) => { spies.ls.get(a); return objectValue$; },
-    clear:      () => { spies.ls.clear(); return boolObs$; },
-    removeItem: (a) => { spies.ls.removeItem(a); return boolObs$; },
+    clear:      () => { spies.ls.clear(); return clearFn(); },
+    removeItem: (a) => { spies.ls.removeItem(a); return removeItemFn(); },
   };
   const cookiesMock = {
     put:        (a, b, c) => { spies.ck.put(a, b, c); },
@@ -80,10 +82,12 @@ describe('StorageService', () => {
     });
     storageService = TestBed.get(StorageService);
     setItemFn = (a, b) => { spies.ls.set(a, b); return boolObs$; };
+    removeItemFn = (a) => { spies.ls.removeItem(a); return boolObs$; };
+    clearFn = () => { spies.ls.clear(); return boolObs$; };
     getCookieNotNull = () => stringValue;
     getCookieObjectNotNull = () => objectValue;
 
-    // spies
+    // region spies
     setItemSpy = spyOn(spies.ls, 'set');
     getItemSpy = spyOn(spies.ls, 'get');
     clearItemSpy = spyOn(spies.ls, 'clear');
@@ -98,6 +102,7 @@ describe('StorageService', () => {
     removeAllSpy = spyOn(spies.ck, 'removeAll');
 
     consoleWarnSpy = spyOn(console, 'warn');
+    // endregion
   });
 
   it('should be created', inject([StorageService], (service: StorageService) => {
@@ -202,6 +207,37 @@ describe('StorageService', () => {
     });
     expect(removeItemSpy).toHaveBeenCalled();
   });
+
+  it('should console warn if when trying to clear the element saved under a key localStorage service fails',
+    fakeAsync(() => {
+      let threw = false;
+      // mock error
+      removeItemFn = () => error$;
+      const uk = storageService['gmsLs'] + key;
+      storageService.clear(key).subscribe(() => {}, () => {
+        threw = true;
+        if (storageService['tryClearCount'][uk] >= 2) {
+          expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+        }
+      });
+      tick();
+      expect(threw).toBeTruthy();
+    }));
+
+  it('should console warn if when trying to clear all elements localStorage service fails', fakeAsync(() => {
+    let threw = false;
+    // mock error
+    clearFn = () => error$;
+    const uk = storageService['gmsLs'];
+    storageService.clear().subscribe(() => {}, () => {
+      threw = true;
+      if (storageService['tryClearCount'][uk] >= 2) {
+        expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+      }
+    });
+    tick();
+    expect(threw).toBeTruthy();
+  }));
   // endregion
 
   // region cookies
@@ -267,12 +303,12 @@ describe('StorageService', () => {
   it('should get an Observable with all the values (no key provided) (values are in cached, cache is updated ' +
     'with a new value (mocked one)',
     () => {
-    const uk = storageService['gmsPriv'] + storageService['gmsCk'];
-    storageService['cacheCk'][uk] = new BehaviorSubject<object>({ testKey: 'testVal' });
-    storageService['cacheCk$'][uk] = storageService['cacheCk'][uk].asObservable();
-    storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
-    expect(getAllSpy).toHaveBeenCalled();
-  });
+      const uk = storageService['gmsPriv'] + storageService['gmsCk'];
+      storageService['cacheCk'][uk] = new BehaviorSubject<object>({ testKey: 'testVal' });
+      storageService['cacheCk$'][uk] = storageService['cacheCk'][uk].asObservable();
+      storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
+      expect(getAllSpy).toHaveBeenCalled();
+    });
 
   it('should get an Observable with the `null` value when there is no specified value(string) under the key ' +
     '(and it is NOT cached)', () => {

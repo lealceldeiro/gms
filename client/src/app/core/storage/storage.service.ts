@@ -185,7 +185,8 @@ export class StorageService {
    * @returns {Observable<boolean>}
    */
   clear(key?: string): Observable<boolean> {
-    this.tryClearCount[this.gmsLs + key] = 0;
+    const uk = typeof key !== 'undefined' && key !== null ? (this.gmsLs + key) : this.gmsLs;
+    this.tryClearCount[uk] = 0;
     return this.tryClear(key);
   }
 
@@ -197,11 +198,11 @@ export class StorageService {
    */
   private tryClear(key?: string): Observable<boolean> {
     // clear a specific value
+    const uk = typeof key !== 'undefined' && key !== null ? (this.gmsLs + key) : this.gmsLs;
     if (typeof key !== 'undefined' && typeof key !== null) {
-      const uk = this.gmsLs + key;
       return this.localStorage.removeItem(uk).pipe(tap(
         (removed) => { if (removed) { this.cache[uk].next(null); } }, // null for next value in this.cache$[uk]
-        () => { // just in case, for now LocalStorage will never trow an error while removing an item
+        () => {
           this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for ' + key);
         }
       ));
@@ -209,7 +210,7 @@ export class StorageService {
       return this.localStorage.clear().pipe(tap(
         () => this.clearCache(),
         () => {
-          this.tryClearCount[key]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key );
+          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key );
         }));
     }
   }
