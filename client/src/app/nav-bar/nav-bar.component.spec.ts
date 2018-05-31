@@ -30,7 +30,8 @@ describe('NavBarComponent', () => {
 
   const routes = [
     { path: 'help', component: DummyStubComponent },
-    { path: 'about', component: DummyStubComponent }
+    { path: 'about', component: DummyStubComponent },
+    { path: 'home', component: DummyStubComponent }
   ];
   // endregion
 
@@ -99,6 +100,14 @@ describe('NavBarComponent', () => {
     expect(getSearchInput().getAttribute('aria-label')).toEqual(samplePlaceHolder, '`aria-label` is incorrect');
     expect(componentEl.querySelector('form[name=nav-bar-search-form] div div button[type=button]').textContent.trim())
       .toEqual(sampleSearchText.trim(), '`searchText` is incorrect');
+  });
+
+  it('should call sessionService#closeSession when click on `logout` link', () => {
+    component.loggedIn = true;
+    fixture.detectChanges();
+    gmsClick(componentEl.querySelector<HTMLElement>('#sign-out'));
+    fixture.detectChanges();
+    expect(spyCloseSession).toHaveBeenCalled();
   });
 
   function getSearchForm(): HTMLElement | any {
