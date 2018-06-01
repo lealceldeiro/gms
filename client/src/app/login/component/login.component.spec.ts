@@ -12,6 +12,7 @@ import { MockModule } from '../../shared/mock/mock.module';
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
+import { SessionService } from '../../core/session/session.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -19,22 +20,27 @@ describe('LoginComponent', () => {
   let componentDe: DebugElement;
   let fixture: ComponentFixture<LoginComponent>;
   let loginSpy: jasmine.Spy;
-  let navigatedByUrlSpy: jasmine.Spy;
+  let navigateByUrlSpy: jasmine.Spy;
 
   const routes = [ { path : 'home', component: DummyStubComponent }];
   const text = 'sampleText';
   const sampleReq: LoginRequestModel = { password: text, usernameOrEmail: text };
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
-  const ret = (req: LoginRequestModel) => subjectLRM.asObservable();
-  const spy = { login: (a) => {} };
+  const ret = () => subjectLRM.asObservable();
+  const spy = { login: () => {} };
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
+  const s = new Subject<boolean>();
+  const sessionServiceStub = { isLoggedIn: () =>  s.asObservable()};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ LoginComponent ],
       imports: [ MockModule, SharedModule, RouterTestingModule.withRoutes(routes) ],
-      providers: [ { provide: LoginService, useValue: loginServiceStub }]
+      providers: [
+        { provide: LoginService, useValue: loginServiceStub },
+        { provide: SessionService, useValue: sessionServiceStub }
+      ]
     })
       .compileComponents();
   }));
@@ -46,7 +52,7 @@ describe('LoginComponent', () => {
     componentDe = fixture.debugElement;
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
-    navigatedByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
+    navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
   });
 
   it('should create', () => {
@@ -67,8 +73,15 @@ describe('LoginComponent', () => {
       subjectLRM.next(sampleRes);
       tick();
       // observable arrived from login service
-      expect(navigatedByUrlSpy).toHaveBeenCalled();
-      expect(navigatedByUrlSpy.calls.allArgs()[0][0]).toEqual('home',
+      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
+      expect(navigateByUrlSpy.calls.first().args[0]).toEqual('home',
         'should navigate to `home` once user is logged in');
+    }));
+
+  it('should navigate to `home` if sessionService#isLoggedIn returned observable brings `true',
+    fakeAsync(() => {
+      s.next(true);
+      tick();
+      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
     }));
 });

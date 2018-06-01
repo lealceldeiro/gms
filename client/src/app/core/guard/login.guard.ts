@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivateChild, CanLoad } from '@angular/router';
-import { SessionService } from '../session/session.service';
 import { Observable } from 'rxjs/index';
 import { first } from 'rxjs/internal/operators';
+
+import { SessionService } from '../session/session.service';
 
 /**
  * Guards which determines whether the `login` route should be loadded and activated or not.

@@ -1,10 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
-
-import { LoginGuard } from './login.guard';
-import { SessionService } from '../session/session.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BehaviorSubject } from 'rxjs/index';
 import { first } from 'rxjs/internal/operators';
+
+import { LoginGuard } from './login.guard';
+import { SessionService } from '../session/session.service';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;

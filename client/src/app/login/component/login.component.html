@@ -1,5 +1,5 @@
 <div class="bg-white shadow-lg py-4 rounded my-sm-3 my-md-6 my-lg-7 my-xl-7 mx-auto col-sm-12 col-md-8 col-lg-4 col-xl-4">
-  <form name="loginForm" novalidate>
+  <form #loginForm="ngForm" novalidate (ngSubmit) = "login()">
 
     <div class="text-center pb-3">
       <h3> Sign in to continue </h3>
@@ -7,16 +7,16 @@
 
     <div class="form-group">
       <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" placeholder="Username or Email"
-      [(ngModel)]="usernameOrEmail">
+             autocomplete="username email" [(ngModel)]="usernameOrEmail">
     </div>
     <div class="form-group">
       <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-      [(ngModel)]="password">
+             autocomplete="current-password" [(ngModel)]="password">
     </div>
 
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="rememberMeCheck" name="rememberMe"
-      [(ngModel)]="rememberMe">
+             [(ngModel)]="rememberMe">
       <label class="custom-control-label" for="rememberMeCheck">Remember me</label>
 
       <a routerLink="/recover-password" class="float-right text-primary">Forgot password</a>
@@ -24,10 +24,10 @@
 
     <hr>
 
-    <button type="button" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn"
-    (click)="login()">
+    <button type="submit" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn" [disabled]="loginForm.submitted">
       Login
     </button>
-    <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up">Sign up</button>
+    <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up"
+            [disabled]="loginForm.submitted">Sign up</button>
   </form>
 </div>

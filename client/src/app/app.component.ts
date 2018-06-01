@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Observable for subscribing to new values returned by SessionService#isLoggedIn.
    * @type {Subscription}
    */
-  private loggedIn$: Subscription;
+  private loggedInSub: Subscription;
 
   /**
    * Component constructor.
@@ -35,13 +35,15 @@ export class AppComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.loggedIn$ = this.sessionService.isLoggedIn().subscribe((logged) => this.loggedIn = logged);
+    this.loggedInSub = this.sessionService.isLoggedIn().subscribe((logged) => {
+      this.loggedIn = logged;
+    });
   }
 
   /**
    * Lifecycle hook that is called when the component is destroyed.
    */
   ngOnDestroy() {
-    this.loggedIn$.unsubscribe();
+    this.loggedInSub.unsubscribe();
   }
 }
