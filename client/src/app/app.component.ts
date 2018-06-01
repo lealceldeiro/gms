@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 
 import { SessionService } from './core/session/session.service';
 import { Subscription } from 'rxjs/index';
@@ -24,6 +24,16 @@ export class AppComponent implements OnInit, OnDestroy {
    * @type {Subscription}
    */
   private loggedInSub: Subscription;
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    this.sessionService.isRememberMe().subscribe((r: boolean) => {
+      // TODO: wait for the values to be deleted from session in order to leave
+      if (!r) {
+        this.sessionService.closeSession();
+      }
+    });
+  }
 
   /**
    * Component constructor.

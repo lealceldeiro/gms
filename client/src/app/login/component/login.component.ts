@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
     const payload: LoginRequestModel = { usernameOrEmail: this.usernameOrEmail, password: this.password };
     const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
       ls.unsubscribe();
+      this.sessionService.setRememberMe(this.rememberMe);
       this.router.navigateByUrl('home');
     });
   }
