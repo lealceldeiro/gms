@@ -3,6 +3,7 @@ import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs/index';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { By } from '@angular/platform-browser';
 
 import { NavBarComponent } from './nav-bar.component';
 import { MockModule } from '../shared/mock/mock.module';
@@ -10,15 +11,14 @@ import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SessionService } from '../core/session/session.service';
 import { userMock } from '../core/session/user.mock.model';
-import Spy = jasmine.Spy;
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
   let fixture: ComponentFixture<NavBarComponent>;
-  let spyIsActive: Spy;
-  let spyCloseSession: Spy;
+  let spyIsActive: jasmine.Spy;
+  let spyCloseSession: jasmine.Spy;
 
   // region mocks
   const sessionServiceStub = {
@@ -60,9 +60,9 @@ describe('NavBarComponent', () => {
 
   it('every link should be marked as active when the component navigates to the route', () => {
     const urls = component.urls;
-    const leftLinks: NodeListOf<Element> = componentEl.querySelectorAll('ul#nav-left-list li a');
+    const leftLinks: DebugElement[] = componentDe.queryAll(By.css('ul#nav-left-list li a'));
     for (let i = leftLinks.length - 1; i >= 0; i--) {
-      gmsClick(leftLinks.item(i) as HTMLElement);
+      gmsClick(leftLinks[i]);
       fixture.detectChanges();
       expect(spyIsActive.calls.all()[i].args[0]).toEqual(urls[i].path);
     }

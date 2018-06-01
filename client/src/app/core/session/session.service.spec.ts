@@ -117,9 +117,10 @@ describe('SessionService', () => {
     });
   });
 
-  it('default value for isRememberMe should be `false`', () => {
-    expect(sessionService.isRememberMe()).toBeFalsy();
-  });
+  it('default value for isRememberMe should be `false`', fakeAsync(() => {
+    sessionService.isRememberMe().subscribe((r: boolean) => expect((r)).toBe(false));
+    tick();
+  }));
 
   it('isLoggedIn should return the proper value regarding to `loggedIn$` observable', () => {
     sessionService['loggedIn'].next(true);
@@ -177,19 +178,35 @@ describe('SessionService', () => {
     expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse, 'set for authData did not work');
   });
 
-  it('isRememberMe should return the proper value regarding to `rememberMe` value', () => {
-    sessionService['rememberMe'] = true;
-    expect(sessionService.isRememberMe()).toBeTruthy();
-    sessionService['rememberMe'] = false;
-    expect(sessionService.isRememberMe()).toBeFalsy();
-  });
+  it('isRememberMe should return the proper value regarding to `rememberMe$` observable', fakeAsync(() => {
+    sessionService['rememberMe$'] = trueVal$;
+    sessionService.isRememberMe().subscribe((r: boolean) => expect(r).toBeTruthy());
+    tick();
+  }));
 
-  it('setRememberMe should set the proper value regarding to `rememberMe` value', () => {
+  it('setRememberMe should set the proper value regarding to `rememberMe` value (`true`)', fakeAsync(() => {
+    let ticked = false;
+    sessionService['rememberMe$'].subscribe((r: boolean) => {
+      if (ticked) {
+        expect(r).toBeTruthy();
+      }
+    });
     sessionService.setRememberMe(true);
-    expect(sessionService['rememberMe']).toBeTruthy();
+    ticked = true;
+    tick();
+  }));
+
+  it('setRememberMe should set the proper value regarding to `rememberMe` value (`false`)', fakeAsync(() => {
+    let ticked = false;
+    sessionService['rememberMe$'].subscribe((r: boolean) => {
+      if (ticked) {
+        expect(r).toBeTruthy();
+      }
+    });
     sessionService.setRememberMe(false);
-    expect(sessionService['rememberMe']).toBeFalsy();
-  });
+    ticked = true;
+    tick();
+  }));
 
   it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session' +
     ' user as `null`', () => {

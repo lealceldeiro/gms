@@ -52,7 +52,11 @@ export class SessionService {
     /**
      * Key under which the token type is stored.
      */
-    tokenType: 'tTn7ND92Md7dHd88dh62Dn6DJj3Djj3jS9Kd8di8D8shh3msd'
+    tokenType: 'tTn7ND92Md7dHd88dh62Dn6DJj3Djj3jS9Kd8di8D8shh3msd',
+    /**
+     * Key under which the "remember me" is stored.
+     */
+    rememberMe: 'rMjfDj39fj2dsje38dJd3hfKfj3820ddF7fhS7Fh7D8che8jue'
   };
 
   /**
@@ -106,7 +110,13 @@ export class SessionService {
    * Indicates whether the session info should be kept after the user left the app without login out or not.
    * @type {boolean}
    */
-  private rememberMe = false;
+  private rememberMe = new BehaviorSubject<boolean>(false);
+
+  /**
+   * Observable holding the remember me info.
+   * @type {Observable<boolean>}
+   */
+  private rememberMe$ = this.rememberMe.asObservable();
   // endregion
 
   /**
@@ -186,10 +196,10 @@ export class SessionService {
 
   /**
    * Returns whether the credentials should be stored or not when logging in.
-   * @returns {boolean}
+   * @returns {Observable<boolean>}
    */
-  isRememberMe(): boolean {
-    return this.rememberMe;
+  isRememberMe(): Observable<boolean> {
+    return this.rememberMe$;
   }
 
   /**
@@ -197,7 +207,8 @@ export class SessionService {
    * @param {boolean} value
    */
   setRememberMe(value: boolean) {
-    this.rememberMe = value;
+    this.store(this.key.rememberMe, value, true);
+    this.rememberMe.next(value);
   }
 
   /**
@@ -313,6 +324,10 @@ export class SessionService {
     const oad = this.retrieve(this.key.loginData, false).subscribe((val) => {
       this.authData.next(val ? val : {});
       this.doUnsubscribe(oad);
+    });
+    const rm = this.retrieve(this.key.rememberMe, true).subscribe((r) => {
+      this.rememberMe.next(r === true);
+      this.doUnsubscribe(rm);
     });
   }
 
