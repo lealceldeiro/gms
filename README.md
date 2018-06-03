@@ -19,13 +19,16 @@ The project consists of two main (independent) modules:
 
 ## Ready for production
 * Packing as a WAR file with the API server only
-  1. From the location `server/` run `gradle bootWar`.
+  1. You need Java 8 in order to generate the WAR and a servlet container (such as Apache Tomcat)
+  2. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
   1. You need to have [Node.js][4] 8.9 or higher, together with [NPM][7] 5.5.1 or higher installed.
   2. Consider modifying the file `client/src/environments/environment.prod.ts`, by setting the value `apiBaseUrl` to the value of the API base url. This takes as default `http://127.0.0.1/gms/api/`.
   3. From the location `client/` run `npm install` in order to install all client package dependencies.
   4. From the location `server/` run `gradle bootWar -Pclient=true`.
   5. Optionally you can generate the client app (Angular) documentation by setting also the `clientDoc` param to true like this `-PclientDoc=true`.
+  
+  An example of build with both params enabled to true would be `gradle bootWar -Pclient=true -PclientDoc=true`
 * This will create a WAR file inside `server/build/libs` ready to be deployed.
 * Database configuration
   1. Create a [PostgreSQL][5] database.
