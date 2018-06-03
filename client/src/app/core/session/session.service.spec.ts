@@ -71,7 +71,7 @@ describe('SessionService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('default value for isLoggedIn be `false`', () => {
+  it('default value for isLoggedIn should be `false`', () => {
     sessionService.isLoggedIn().subscribe((logged: boolean) => {
       expect(logged).toBeFalsy('');
     });

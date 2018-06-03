@@ -30,7 +30,7 @@ describe('LoginComponent', () => {
   const spy = { login: (a) => {} };
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const s = new Subject<boolean>();
-  const sessionServiceStub = { isLoggedIn: () =>  s.asObservable()};
+  const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -49,6 +49,8 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     componentEl = fixture.nativeElement;
     componentDe = fixture.debugElement;
+    component.rememberMe = false;
+    s.next(false);
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
     navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');

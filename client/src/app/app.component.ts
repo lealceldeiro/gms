@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   loggedIn = false;
 
   /**
-   * Observable for subscribing to new values returned by SessionService#isLoggedIn.
+   * Subscription to new values returned by SessionService#isLoggedIn.
    * @type {Subscription}
    */
   private loggedInSub: Subscription;
@@ -28,7 +28,6 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
     this.sessionService.isRememberMe().subscribe((r: boolean) => {
-      // TODO: wait for the values to be deleted from session in order to leave
       if (!r) {
         this.sessionService.closeSession();
       }
