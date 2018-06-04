@@ -7,11 +7,11 @@
 
     <div class="form-group">
       <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" placeholder="Username or Email"
-             autocomplete="username email" [(ngModel)]="usernameOrEmail">
+             autocomplete="username email" required [(ngModel)]="usernameOrEmail">
     </div>
     <div class="form-group">
       <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-             autocomplete="current-password" [(ngModel)]="password">
+             autocomplete="current-password" required [(ngModel)]="password">
     </div>
 
     <div class="custom-control custom-checkbox">
@@ -24,10 +24,10 @@
 
     <hr>
 
-    <button type="submit" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn" [disabled]="loginForm.submitted">
-      Login
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up"
-            [disabled]="loginForm.submitted" ngbTooltip="Create account and sign in">Sign up</button>
+    <button type="submit" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn" name="signInBtn"
+            [disabled]="loginForm.submitted && loginForm.valid">Login</button>
+    <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" name="signUpBtn"
+            routerLink="/sign-up" [disabled]="loginForm.submitted && loginForm.valid"
+            ngbTooltip="Create account and sign in">Sign up</button>
   </form>
 </div>

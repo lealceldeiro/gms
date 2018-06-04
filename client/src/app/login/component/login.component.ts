@@ -56,14 +56,17 @@ export class LoginComponent implements OnInit {
 
   /**
    * Performs a login request using the inputs values the user has typed in as username/email and password.
+   * @param loginForm {NgForm | any} Form which is going to be submitted.
    */
   login(loginForm: NgForm | any): void {
-    const payload: LoginRequestModel = { usernameOrEmail: this.usernameOrEmail, password: this.password };
-    const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
-      ls.unsubscribe();
-      this.sessionService.setRememberMe(this.rememberMe);
-      this.router.navigateByUrl('home');
-    }, () => <NgForm>loginForm.resetForm({ rememberMe: this.rememberMe }));
+    if (loginForm.valid) {
+      const payload: LoginRequestModel = {usernameOrEmail: this.usernameOrEmail, password: this.password};
+      const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
+        ls.unsubscribe();
+        this.sessionService.setRememberMe(this.rememberMe);
+        this.router.navigateByUrl('home');
+      }, () => <NgForm>loginForm.resetForm({rememberMe: this.rememberMe}));
+    }
   }
 
 }
