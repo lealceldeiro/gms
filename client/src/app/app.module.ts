@@ -21,8 +21,8 @@ import { GmsCoreModule } from './core/core.module';
     BrowserModule,
     HttpClientModule,
     CookieModule.forRoot(),
-    SharedModule,
     NgbModule.forRoot(),
+    SharedModule,
     GmsCoreModule.forRoot(),
     HomeModule,
     AppRoutingModule

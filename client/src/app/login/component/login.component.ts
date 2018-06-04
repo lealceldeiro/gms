@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
-import { Router } from '@angular/router';
 import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
 

@@ -17,7 +17,7 @@
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="rememberMeCheck" name="rememberMe"
              [(ngModel)]="rememberMe">
-      <label class="custom-control-label" for="rememberMeCheck">Remember me</label>
+      <label class="custom-control-label" for="rememberMeCheck" ngbTooltip="Keep me logged in">Remember me</label>
 
       <a routerLink="/recover-password" class="float-right text-primary">Forgot password</a>
     </div>
@@ -28,6 +28,6 @@
       Login
     </button>
     <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" routerLink="/sign-up"
-            [disabled]="loginForm.submitted">Sign up</button>
+            [disabled]="loginForm.submitted" ngbTooltip="Create account and sign in">Sign up</button>
   </form>
 </div>
