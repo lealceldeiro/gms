@@ -19,7 +19,7 @@ The project consists of two main (independent) modules:
 
 ## Ready for production
 * Packing as a WAR file with the API server only
-  1. You need Java 8 in order to generate the WAR and a servlet container (such as Apache Tomcat)
+  1. You need Java 8 in order to generate the WAR and a servlet container (such as [Apache Tomcat][8]) in order to deploy it.
   2. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
   1. You need to have [Node.js][4] 8.9 or higher, together with [NPM][7] 5.5.1 or higher installed.
@@ -97,3 +97,4 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 [5]: https://www.postgresql.org/
 [6]: https://gradle.org/
 [7]: https://www.npmjs.com/get-npm
+[8]: http://tomcat.apache.org/
