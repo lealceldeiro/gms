@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
@@ -56,13 +57,13 @@ export class LoginComponent implements OnInit {
   /**
    * Performs a login request using the inputs values the user has typed in as username/email and password.
    */
-  login(): void {
+  login(loginForm: NgForm | any): void {
     const payload: LoginRequestModel = { usernameOrEmail: this.usernameOrEmail, password: this.password };
     const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
       ls.unsubscribe();
       this.sessionService.setRememberMe(this.rememberMe);
       this.router.navigateByUrl('home');
-    });
+    }, () => <NgForm>loginForm.resetForm({ rememberMe: this.rememberMe }));
   }
 
 }

@@ -12,6 +12,7 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
+import { Observable } from 'rxjs/index';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -26,7 +27,7 @@ describe('LoginComponent', () => {
   const sampleReq: LoginRequestModel = { password: text, usernameOrEmail: text };
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
-  const ret = (a) => subjectLRM.asObservable();
+  let ret = (a) => subjectLRM.asObservable();
   const spy = { login: (a) => {} };
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const s = new Subject<boolean>();
@@ -76,10 +77,22 @@ describe('LoginComponent', () => {
         'should navigate to `home` once user is logged in');
     }));
 
-  it('should navigate to `home` if sessionService#isLoggedIn returned observable brings `true',
+  it('should navigate to `home` if sessionService#isLoggedIn returned observable brings `true`',
     fakeAsync(() => {
       s.next(true);
       tick();
       expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
+    }));
+
+  it('should not navigate to `home` if sessionService#isLoggedIn resolved to an error (i.e.: 401 error)',
+    fakeAsync(() => {
+      // change the fake observable to return an error instead of a success response
+      ret = () => Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
+
+      componentDe.query(By.css('form')).triggerEventHandler('submit', null);
+      fixture.detectChanges();
+      expect(loginSpy).toHaveBeenCalledTimes(1);
+      tick();
+      expect(navigateByUrlSpy).not.toHaveBeenCalled(); // login error, code for error handling executed
     }));
 });
