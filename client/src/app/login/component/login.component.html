@@ -7,16 +7,18 @@
 
     <div class="form-group">
       <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" placeholder="Username or Email"
-             autocomplete="username email" required [(ngModel)]="usernameOrEmail">
+             aria-label="Username or Email" autocomplete="username email" required [(ngModel)]="usernameOrEmail">
+      <div class="invalid-feedback">Username or email required</div>
     </div>
     <div class="form-group">
       <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-             autocomplete="current-password" required [(ngModel)]="password">
+             aria-label="Password" autocomplete="current-password" required [(ngModel)]="password">
+      <div class="invalid-feedback">Password required</div>
     </div>
 
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="rememberMeCheck" name="rememberMe"
-             [(ngModel)]="rememberMe">
+             aria-label="Keep me logged in" [(ngModel)]="rememberMe">
       <label class="custom-control-label" for="rememberMeCheck" ngbTooltip="Keep me logged in">Remember me</label>
 
       <a routerLink="/recover-password" class="float-right text-primary">Forgot password</a>
@@ -27,7 +29,6 @@
     <button type="submit" class="btn btn-sm btn-primary btn-lg btn-block" id="signInBtn" name="signInBtn"
             [disabled]="loginForm.submitted && loginForm.valid">Login</button>
     <button type="button" class="btn btn-sm btn-secondary btn-lg btn-block" id="signUpBtn" name="signUpBtn"
-            routerLink="/sign-up" [disabled]="loginForm.submitted && loginForm.valid"
-            ngbTooltip="Create account and sign in">Sign up</button>
+            routerLink="/sign-up" ngbTooltip="Create account and sign in">Sign up</button>
   </form>
 </div>

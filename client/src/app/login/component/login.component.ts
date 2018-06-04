@@ -65,7 +65,9 @@ export class LoginComponent implements OnInit {
         ls.unsubscribe();
         this.sessionService.setRememberMe(this.rememberMe);
         this.router.navigateByUrl('home');
-      }, () => <NgForm>loginForm.resetForm({rememberMe: this.rememberMe}));
+      }, () => loginForm.resetForm({rememberMe: this.rememberMe}));
+    } else {
+      loginForm.resetForm({rememberMe: this.rememberMe});
     }
   }
 
