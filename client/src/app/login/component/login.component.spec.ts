@@ -3,6 +3,8 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs/internal/Subject';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Observable } from 'rxjs/index';
+import { ToastrService } from 'ngx-toastr';
 
 import { LoginComponent } from './login.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -12,7 +14,6 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
-import { Observable } from 'rxjs/index';
 import { FormHelperService } from '../../core/form/form-helper.service';
 
 describe('LoginComponent', () => {
@@ -22,6 +23,7 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let loginSpy: jasmine.Spy;
   let navigateByUrlSpy: jasmine.Spy;
+  let warnToastrStub: jasmine.Spy;
 
   const routes = [ { path : 'home', component: DummyStubComponent }];
   const text = 'sampleText';
@@ -29,11 +31,12 @@ describe('LoginComponent', () => {
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
   let ret = (a) => subjectLRM.asObservable();
-  const spy = { login: (a) => {} };
+  const spy = { login: (a) => {}, warning: (a, b) => {} };
   const s = new Subject<boolean>();
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
   const formHelperStub = { markFormElementsAsTouched: () => {} };
+  const toastrStub = { warning: (a, b) => { spy.warning(a, b); } };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,7 +45,8 @@ describe('LoginComponent', () => {
       providers: [
         { provide: LoginService, useValue: loginServiceStub },
         { provide: SessionService, useValue: sessionServiceStub },
-        { provide: FormHelperService, useValue: formHelperStub }
+        { provide: FormHelperService, useValue: formHelperStub },
+        { provide: ToastrService, useValue: toastrStub }
       ]
     }).compileComponents();
   }));
@@ -57,6 +61,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
     navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
+    warnToastrStub = spyOn(spy, 'warning');
   });
 
   it('should create', () => {
@@ -105,6 +110,7 @@ describe('LoginComponent', () => {
       expect(loginSpy).toHaveBeenCalledTimes(1);
       tick();
       expect(navigateByUrlSpy).not.toHaveBeenCalled(); // login error, code for error handling executed
+      expect(warnToastrStub).toHaveBeenCalled();
     }));
 
   /**

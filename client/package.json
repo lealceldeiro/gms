@@ -31,6 +31,7 @@
     "bootstrap": "^4.0.0",
     "core-js": "^2.5.4",
     "ngx-cookie": "^3.0.1",
+    "ngx-toastr": "^8.7.3",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

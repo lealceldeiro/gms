@@ -6,6 +6,7 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
+import { ToastrService } from 'ngx-toastr';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -34,10 +35,11 @@ export class LoginComponent implements OnInit {
    * @param sessionService SessionService for storing/retrieving session-related information.
    * @param router Router module in order to perform navigation.
    * @param fb FormBuilder A form builder for generating the login form.
-   * @param formHelperService FormHelperService
+   * @param formHelperService FormHelperService.
+   * @param toastr ToastrService Service for showing notifications to the user.
    */
   constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
-              private fb: FormBuilder, private formHelperService: FormHelperService) {
+              private fb: FormBuilder, private formHelperService: FormHelperService, private toastr: ToastrService) {
     this.createLoginForm();
   }
 
@@ -68,6 +70,7 @@ export class LoginComponent implements OnInit {
         this.sessionService.setRememberMe(rm);
         this.router.navigateByUrl('home');
       }, () => {
+        this.toastr.warning('', 'Login Failed');
         this.loginForm.reset({rememberMe: rm});
         this.submitted = false;
       });
