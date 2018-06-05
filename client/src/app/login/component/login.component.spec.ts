@@ -13,6 +13,7 @@ import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
 import { Observable } from 'rxjs/index';
+import { FormHelperService } from '../../core/form/form-helper.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -29,9 +30,10 @@ describe('LoginComponent', () => {
   const subjectLRM = new Subject<LoginResponseModel>();
   let ret = (a) => subjectLRM.asObservable();
   const spy = { login: (a) => {} };
-  const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const s = new Subject<boolean>();
+  const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
+  const formHelperStub = { markFormElementsAsTouched: () => {} };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -39,10 +41,10 @@ describe('LoginComponent', () => {
       imports: [ MockModule, SharedModule, RouterTestingModule.withRoutes(routes) ],
       providers: [
         { provide: LoginService, useValue: loginServiceStub },
-        { provide: SessionService, useValue: sessionServiceStub }
+        { provide: SessionService, useValue: sessionServiceStub },
+        { provide: FormHelperService, useValue: formHelperStub }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -50,7 +52,7 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     componentEl = fixture.nativeElement;
     componentDe = fixture.debugElement;
-    component.rememberMe = false;
+    component.loginForm.controls['rememberMe'].setValue(false);
     s.next(false);
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
@@ -63,11 +65,11 @@ describe('LoginComponent', () => {
 
   it('should call the sessionService#loging and navigate to the `/home` route when login action is performed',
     fakeAsync(() => {
-      component.usernameOrEmail = sampleReq.usernameOrEmail;
-      component.password = sampleReq.password;
+      setForm();
       componentDe.query(By.css('form')).triggerEventHandler('submit', null);
       fixture.detectChanges();
 
+      expect(component.loginForm.valid).toBeTruthy('the login form should be valid');
       expect(loginSpy).toHaveBeenCalledTimes(1);
       subjectLRM.next(sampleRes);
       tick();
@@ -76,6 +78,14 @@ describe('LoginComponent', () => {
       expect(navigateByUrlSpy.calls.first().args[0]).toEqual('home',
         'should navigate to `home` once user is logged in');
     }));
+
+  it('should mark all controls as untouched under the login form if it is invalid', () => {
+    componentDe.query(By.css('form')).triggerEventHandler('submit', null);
+    fixture.detectChanges();
+
+    expect(component.loginForm.invalid).toBeTruthy('the login form should be invalid');
+    expect(loginSpy).not.toHaveBeenCalled();
+  });
 
   it('should navigate to `home` if sessionService#isLoggedIn returned observable brings `true`',
     fakeAsync(() => {
@@ -86,6 +96,7 @@ describe('LoginComponent', () => {
 
   it('should not navigate to `home` if sessionService#isLoggedIn resolved to an error (i.e.: 401 error)',
     fakeAsync(() => {
+      setForm();
       // change the fake observable to return an error instead of a success response
       ret = () => Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
 
@@ -95,4 +106,12 @@ describe('LoginComponent', () => {
       tick();
       expect(navigateByUrlSpy).not.toHaveBeenCalled(); // login error, code for error handling executed
     }));
+
+  /**
+   * Sets some sample values in the login form
+   */
+  function setForm() {
+    component.loginForm.controls['usernameOrEmail'].setValue(sampleReq.usernameOrEmail);
+    component.loginForm.controls['password'].setValue(sampleReq.password);
+  }
 });

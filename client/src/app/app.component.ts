@@ -25,6 +25,11 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   private loggedInSub: Subscription;
 
+  /**
+   * Listens for the app when is being leaved and tries to remove the login data if the user has not chosen to be
+   * remembered.
+   * @param $event
+   */
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
     this.sessionService.isRememberMe().subscribe((r: boolean) => {

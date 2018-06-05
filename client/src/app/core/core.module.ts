@@ -5,6 +5,7 @@ import { LoginGuard } from './guard/login.guard';
 import { SessionUserService } from './session/session-user.service';
 import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormHelperService } from './form/form-helper.service';
 
 @NgModule({
   declarations: [],
@@ -57,6 +58,10 @@ export class GmsCoreModule {
         {
           provide: SessionUserService,
           useClass: config && config['sessionUserService'] ? config['sessionUserService'] : SessionUserService
+        },
+        {
+          provide: FormHelperService,
+          useClass: config && config['formHelperService'] ? config['formHelperService'] : FormHelperService
         }
       ]
     };

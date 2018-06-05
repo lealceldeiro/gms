@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
 
 import { LoginRequestModel } from '../../core/session/login-request.model';
-import { LoginResponseModel } from '../../core/session/login-response.model';
 import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
+import { FormHelperService } from '../../core/form/form-helper.service';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -18,30 +18,28 @@ import { SessionService } from '../../core/session/session.service';
 export class LoginComponent implements OnInit {
 
   /**
-   * User's password used for login.
-   * @type {string}
+   * Form for handling the login data inputted by the user.
    */
-  password: string;
+  loginForm: FormGroup;
 
   /**
-   * Whether the credentials should be stored or not.
+   * Whether the login form was submitted or not.
    * @type {boolean}
    */
-  rememberMe = true;
-
-  /**
-   * User's username or email used for login.
-   * @type {string}
-   */
-  usernameOrEmail: string;
+  submitted = false;
 
   /**
    * Component constructor
    * @param loginService LoginService for handling the login API requests.
    * @param sessionService SessionService for storing/retrieving session-related information.
    * @param router Router module in order to perform navigation.
+   * @param fb FormBuilder A form builder for generating the login form.
+   * @param formHelperService FormHelperService
    */
-  constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router) { }
+  constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
+              private fb: FormBuilder, private formHelperService: FormHelperService) {
+    this.createLoginForm();
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -56,19 +54,46 @@ export class LoginComponent implements OnInit {
 
   /**
    * Performs a login request using the inputs values the user has typed in as username/email and password.
-   * @param loginForm {NgForm | any} Form which is going to be submitted.
    */
-  login(loginForm: NgForm | any): void {
-    if (loginForm.valid) {
-      const payload: LoginRequestModel = {usernameOrEmail: this.usernameOrEmail, password: this.password};
-      const ls = this.loginService.login(payload).subscribe((response: LoginResponseModel) => {
+  login(): void {
+    const rm = this.formValueOf('rememberMe');
+    if (this.loginForm.valid) {
+      this.submitted = true;
+      const payload: LoginRequestModel = {
+        usernameOrEmail: this.formValueOf('usernameOrEmail'),
+        password: this.formValueOf('password')
+      };
+      const ls = this.loginService.login(payload).subscribe(() => {
         ls.unsubscribe();
-        this.sessionService.setRememberMe(this.rememberMe);
+        this.sessionService.setRememberMe(rm);
         this.router.navigateByUrl('home');
-      }, () => loginForm.resetForm({rememberMe: this.rememberMe}));
+      }, () => {
+        this.loginForm.reset({rememberMe: rm});
+        this.submitted = false;
+      });
     } else {
-      loginForm.resetForm({rememberMe: this.rememberMe});
+      this.formHelperService.markFormElementsAsTouched(this.loginForm);
     }
+  }
+
+  /**
+   * Creates the login (reactive) form.
+   */
+  private createLoginForm() {
+    this.loginForm = this.fb.group({
+      usernameOrEmail: [ null, Validators.required ],
+      password: [ null, Validators.required ],
+      rememberMe: true
+    });
+  }
+
+  /**
+   * Returns the value set for a form control in the login form.
+   * @param {string} name
+   * @returns {any}
+   */
+  private formValueOf(name: string): any {
+    return this.loginForm.get(name).value;
   }
 
 }
