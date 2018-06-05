@@ -3,6 +3,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieModule } from 'ngx-cookie';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,8 +14,6 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 import { SharedModule } from './shared/shared.module';
 import { GmsCoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
 
 /**
  * Base module, bootstrapped in the main file.
@@ -22,6 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     BrowserModule,
     HttpClientModule,
+    NgHttpLoaderModule,
     BrowserAnimationsModule,  // required by toastr
     ToastrModule.forRoot({ preventDuplicates: true, autoDismiss: true, enableHtml: true }),
     CookieModule.forRoot(),

@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
-import { SessionService } from './core/session/session.service';
+import { Component, Input } from '@angular/core';
 import { of, Subject } from 'rxjs/index';
 
+import { SessionService } from './core/session/session.service';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -22,6 +22,9 @@ describe('AppComponent', () => {
   @Component({selector: 'router-outlet', template: ''})  // tslint:disable-line
   class RouterOutletStubComponent {}
 
+  @Component({selector: 'spinner', template: ''})  // tslint:disable-line
+  class SpinnerStubComponent { @Input() spinner: any; }
+
   const spy = { isRememberMe: () => {}, closeSession: () => {} };
   const subject = new Subject();
 
@@ -35,7 +38,8 @@ describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppComponent, NavBarStubComponent, SideMenuStubComponent, RouterOutletStubComponent ],
+      declarations: [ AppComponent, NavBarStubComponent, SideMenuStubComponent, RouterOutletStubComponent,
+        SpinnerStubComponent ],
       providers: [ { provide: SessionService, useValue: sessionServiceStub}]
     }).compileComponents();
   }));
