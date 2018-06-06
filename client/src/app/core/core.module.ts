@@ -6,6 +6,8 @@ import { SessionUserService } from './session/session-user.service';
 import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormHelperService } from './form/form-helper.service';
+import { ErrorInterceptor } from './interceptor/error.interceptor';
+import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
 
 @NgModule({
   declarations: [],
@@ -38,6 +40,15 @@ export class GmsCoreModule {
     return {
       ngModule: GmsCoreModule,
       providers: [
+        {
+          provide: InterceptorHelperService,
+          useClass: InterceptorHelperService
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: ErrorInterceptor,
+          multi: true
+        },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: SecurityInterceptor,

@@ -9,6 +9,7 @@ import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { environment } from '../../../environments/environment';
 import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
+import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
 
 /**
  * A service for providing handling the login/logout processes.
@@ -30,9 +31,12 @@ export class LoginService {
    * @param http HttpClient dependency injection.
    * @param sessionService SessionService for storing/retrieving session-related information.
    * @param sessionUserService SessionUserService for storing/retrieving session user-related information.
+   * @param intHelperService InterceptorHelperService for sharing information with the rest of the services.
    */
   constructor(private http: HttpClient, private sessionService: SessionService,
-              private sessionUserService: SessionUserService) { }
+              private sessionUserService: SessionUserService, private intHelperService: InterceptorHelperService) {
+    this.intHelperService.addExcludedFromErrorHandling(this.loginUrl);
+  }
 
   /**
    * Performs a login request.

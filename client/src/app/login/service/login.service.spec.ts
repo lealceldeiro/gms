@@ -1,18 +1,19 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs/internal/Subject';
+import { environment } from '../../../environments/environment';
 
 import { LoginService } from './login.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SessionService } from '../../core/session/session.service';
 import { SessionUserService } from '../../core/session/session-user.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { LoginResponseModel } from '../../core/session/login-response.model';
-import { Subject } from 'rxjs/internal/Subject';
 import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 import { PageModel } from '../../core/response/paginated-data/page.model';
 import { LinksModel } from '../../core/response/paginated-data/links.model';
 import { SelfModel } from '../../core/response/paginated-data/self.model';
 import { userMock } from '../../core/session/user.mock.model';
+import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
 
 describe('LoginService', () => {
   let httpClient: HttpClient;
@@ -23,11 +24,14 @@ describe('LoginService', () => {
   const api = environment.apiBaseUrl;
   const url = environment.apiLoginUrl;
 
+  let spyAddEFEH: jasmine.Spy;
+
   const spy = { sus: { getCurrentUser: (a) => {} }, ss: { setUser: (a) => {} } };
   const sessionServiceStub = {
     setAuthData : (a) => {}, setLoggedIn: (a) => {},
     setUser: (a) => { spy.ss.setUser(a); return new Subject().asObservable(); }
   };
+  const intHelperServiceStub = { addExcludedFromErrorHandling: () => {} };
 
   // region user paginated data mock
   const self: SelfModel = { href: 'test' };
@@ -45,10 +49,12 @@ describe('LoginService', () => {
   };
 
   beforeEach(() => {
+    spyAddEFEH = spyOn(intHelperServiceStub, 'addExcludedFromErrorHandling');
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [LoginService, { provide: SessionService, useValue: sessionServiceStub },
-        { provide: SessionUserService, useValue: sessionUserServiceStub }]
+        { provide: SessionUserService, useValue: sessionUserServiceStub },
+        { provide: InterceptorHelperService, useValue: intHelperServiceStub}]
     });
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
@@ -65,6 +71,10 @@ describe('LoginService', () => {
   it('should be created', inject([LoginService], (service: LoginService) => {
     expect(service).toBeTruthy();
   }));
+
+  it('should call InterceptorHelperService#addExcludedFromErrorHandling on init', () => {
+    expect(spyAddEFEH).toHaveBeenCalledTimes(1);
+  });
 
   it('should post a `LoginRequestModel` payload to the login url and, if it succeeds, set the auth data  in ' +
     'SessionService and call the getUserMethod in the SessionUserService in order to retrieve the current User info',
