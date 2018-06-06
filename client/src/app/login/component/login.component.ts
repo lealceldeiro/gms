@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { HttpResponseBase } from '@angular/common/http';
 
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
-import { ToastrService } from 'ngx-toastr';
+import { HTTP_STATUS_UNAUTHORIZED } from '../../core/response/http-status';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -69,8 +71,10 @@ export class LoginComponent implements OnInit {
         ls.unsubscribe();
         this.sessionService.setRememberMe(rm);
         this.router.navigateByUrl('home');
-      }, () => {
-        this.toastr.warning('', 'Login Failed');
+      }, (response: HttpResponseBase) => {
+        if (response.status === HTTP_STATUS_UNAUTHORIZED) {
+          this.toastr.error('Wrong credentials', 'Login Failed');
+        }
         this.loginForm.reset({rememberMe: rm});
         this.submitted = false;
       });

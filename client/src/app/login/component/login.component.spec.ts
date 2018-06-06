@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/index';
 import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginComponent } from './login.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -15,6 +16,7 @@ import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
+import { HTTP_STATUS_UNAUTHORIZED } from '../../core/response/http-status';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -31,12 +33,12 @@ describe('LoginComponent', () => {
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
   let ret = (a) => subjectLRM.asObservable();
-  const spy = { login: (a) => {}, warning: (a, b) => {} };
+  const spy = { login: (a) => {}, error: (a, b) => {} };
   const s = new Subject<boolean>();
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
   const formHelperStub = { markFormElementsAsTouched: () => {} };
-  const toastrStub = { warning: (a, b) => { spy.warning(a, b); } };
+  const toastrStub = { error: (a, b) => { spy.error(a, b); } };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -61,7 +63,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
     navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
-    warnToastrStub = spyOn(spy, 'warning');
+    warnToastrStub = spyOn(spy, 'error');
   });
 
   it('should create', () => {
@@ -103,7 +105,10 @@ describe('LoginComponent', () => {
     fakeAsync(() => {
       setForm();
       // change the fake observable to return an error instead of a success response
-      ret = () => Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
+      ret = () => Observable.create(observer => {
+        observer.error(new HttpErrorResponse({ status: HTTP_STATUS_UNAUTHORIZED, error: 'test error'}));
+        observer.complete();
+      });
 
       componentDe.query(By.css('form')).triggerEventHandler('submit', null);
       fixture.detectChanges();
