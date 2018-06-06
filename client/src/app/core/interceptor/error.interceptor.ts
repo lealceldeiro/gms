@@ -26,30 +26,30 @@ export class ErrorInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.intHelperService.isExcludedFromErrorHandling(req.url)) {
-      return next.handle(req).pipe(tap(
-        () => {},
-        (event) => {
-          if (event instanceof HttpErrorResponse) {
-            let message = '';
-            if (event.error) {
-              if (event.error['error']) {
-                message += event.error['error'] + ': ';
-              }
-              if (event.error['message']) {
-                message += event.error['message'];
-              }
+    return next.handle(req).pipe(tap(
+      () => {},
+      (event) => {
+        if (!this.intHelperService.isExcludedFromErrorHandling(req.url) && event instanceof HttpErrorResponse) {
+          let message = '';
+          let title = 'Error';
+          if (event.error) {
+            if (event.error['error']) {
+              message += event.error['error'] + ': ';
             }
-            switch (event.status) {
-              case HTTP_STATUS_UNAUTHORIZED:
-                this.toastr.error(message, 'Unauthorized');
-                break;
+            if (event.error['message']) {
+              message += event.error['message'];
             }
           }
+          switch (event.status) {
+            case HTTP_STATUS_UNAUTHORIZED:
+              title = 'Unauthorized';
+              break;
+            default:
+              break;
+          }
+          this.toastr.error(message, title);
         }
-      ));
-    } else {
-      return next.handle(req);
-    }
+      }
+    ));
   }
 }

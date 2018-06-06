@@ -28,10 +28,10 @@ export class LoginService {
 
   /**
    * Service constructor.
-   * @param http HttpClient dependency injection.
+   * @param http HttpClient for making http requests.
    * @param sessionService SessionService for storing/retrieving session-related information.
    * @param sessionUserService SessionUserService for storing/retrieving session user-related information.
-   * @param intHelperService InterceptorHelperService for sharing information with the rest of the services.
+   * @param intHelperService InterceptorHelperService for sharing information with the interceptors.
    */
   constructor(private http: HttpClient, private sessionService: SessionService,
               private sessionUserService: SessionUserService, private intHelperService: InterceptorHelperService) {
