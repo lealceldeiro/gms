@@ -16,7 +16,7 @@ import { LoginResponseModel } from '../../core/session/login-response.model';
 import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
-import { HTTP_STATUS_UNAUTHORIZED } from '../../core/response/http-status';
+import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -106,7 +106,7 @@ describe('LoginComponent', () => {
       setForm();
       // change the fake observable to return an error instead of a success response
       ret = () => Observable.create(observer => {
-        observer.error(new HttpErrorResponse({ status: HTTP_STATUS_UNAUTHORIZED, error: 'test error'}));
+        observer.error(new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, error: 'test error'}));
         observer.complete();
       });
 

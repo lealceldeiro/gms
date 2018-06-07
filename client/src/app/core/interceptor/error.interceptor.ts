@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap } from 'rxjs/operators';
-import { HTTP_STATUS_UNAUTHORIZED } from '../response/http-status';
 import { ToastrService } from 'ngx-toastr';
+
 import { InterceptorHelperService } from './interceptor-helper.service';
+import { HttpStatusCode } from '../response/http-status-code.enum';
 
 /**
  * Interceptor for catching all response errors and take action according to every specific error.
@@ -41,7 +42,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
           }
           switch (event.status) {
-            case HTTP_STATUS_UNAUTHORIZED:
+            case HttpStatusCode.UNAUTHORIZED:
               title = 'Unauthorized';
               break;
             default:

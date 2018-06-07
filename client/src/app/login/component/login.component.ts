@@ -8,7 +8,7 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
-import { HTTP_STATUS_UNAUTHORIZED } from '../../core/response/http-status';
+import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
         this.sessionService.setRememberMe(rm);
         this.router.navigateByUrl('home');
       }, (response: HttpResponseBase) => {
-        if (response.status === HTTP_STATUS_UNAUTHORIZED) {
+        if (response.status === HttpStatusCode.UNAUTHORIZED) {
           this.toastr.error('Wrong credentials', 'Login Failed');
         }
         this.loginForm.reset({rememberMe: rm});

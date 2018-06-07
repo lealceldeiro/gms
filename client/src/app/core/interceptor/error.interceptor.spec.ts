@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { ErrorInterceptor } from './error.interceptor';
 import { InterceptorHelperService } from './interceptor-helper.service';
-import { HTTP_STATUS_UNAUTHORIZED } from '../response/http-status';
+import { HttpStatusCode } from '../response/http-status-code.enum';
 
 describe('ErrorInterceptor', () => {
   let spyIsExcludedFromErrorHandling: jasmine.Spy;
@@ -111,7 +111,7 @@ describe('ErrorInterceptor', () => {
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
-      status: HTTP_STATUS_UNAUTHORIZED, statusText: 'Server Error', url: url
+      status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url
     });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
