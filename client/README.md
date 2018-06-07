@@ -1,3 +1,6 @@
+<a href="https://david-dm.org/lealceldeiro/gms?path=client"><img src="https://david-dm.org/lealceldeiro/gms.svg" alt="dependency status"></a>&nbsp;&nbsp;
+<a href="https://david-dm.org/lealceldeiro/gms?path=client&type=dev"><img src="https://david-dm.org/lealceldeiro/gms/dev-status.svg" alt="devDependency status"></a>
+
 ## General Management System Client
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
