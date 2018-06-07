@@ -28,6 +28,7 @@
     "@angular/router": "^6.0.4",
     "@ng-bootstrap/ng-bootstrap": "2.0.0",
     "@ngx-pwa/local-storage": "^6.0.0-rc.0",
+    "@swimlane/ngx-datatable": "^13.0.1",
     "bootstrap": "^4.0.0",
     "core-js": "^2.5.7",
     "ng-http-loader": "^2.2.0",
