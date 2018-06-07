@@ -17,16 +17,19 @@ describe('InterceptorHelperService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should (for `isExcludedFromErrorHandling`) return true if the argument is inside the private var ' +
-    '`excludedFromErrorHandling`', () => {
+  it('should (for `isExcludedFromErrorHandling`) return `true` if the argument is inside the private var ' +
+    '`excludedFromErrorHandling`, `false` otherwise', () => {
     (<string[]>intHelpService['excludedFromErrorHandling']).push(sampleUrl);
     expect(intHelpService.isExcludedFromErrorHandling(sampleUrl)).toBeTruthy();
+    expect(intHelpService.isExcludedFromErrorHandling('another-sample')).toBeFalsy();
   });
 
   it('should (for `addExcludedFromErrorHandling`) add the argument inside the private var ' +
-    '`excludedFromErrorHandling`', () => {
-    intHelpService.addExcludedFromErrorHandling(sampleUrl);
+    '`excludedFromErrorHandling` if the url was not already there (returns `true`, `false` otherwise)', () => {
+    expect(intHelpService.addExcludedFromErrorHandling(sampleUrl)).toBeTruthy();
     expect((<string[]>intHelpService['excludedFromErrorHandling']).indexOf(sampleUrl) !== -1).toBeTruthy();
+    // url already there
+    expect(intHelpService.addExcludedFromErrorHandling(sampleUrl)).toBeFalsy();
   });
 
   it('should (for `removeExcludedFromErrorHandling`) remove the argument inside the private var ' +

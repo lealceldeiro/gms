@@ -37,9 +37,16 @@ export class InterceptorHelperService {
   /**
    * Adds a url to the excluded urls collection in order to not be caught by the interceptor.
    * @param {string} url New url to be excluded.
+   * @return {boolean} Returns `false` if the url argument was already in the excluded collection (and thus, not added
+   * again), `true` otherwise.
    */
-  addExcludedFromErrorHandling(url: string): void {
-    this.excludedFromErrorHandling.push(url);
+  addExcludedFromErrorHandling(url: string): boolean {
+    const i = this.excludedFromErrorHandling.indexOf(url);
+    if (i === -1) {
+      this.excludedFromErrorHandling.push(url);
+      return true;
+    }
+    return false;
   }
 
   /**
