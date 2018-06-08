@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { HttpResponseBase } from '@angular/common/http';
 
 import { LoginRequestModel } from '../../core/session/login-request.model';
@@ -9,6 +8,7 @@ import { LoginService } from '../service/login.service';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
 import { HttpStatusCode } from '../../core/response/http-status-code.enum';
+import { NotificationService } from '../../core/messages/notification.service';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -38,10 +38,11 @@ export class LoginComponent implements OnInit {
    * @param router Router module in order to perform navigation.
    * @param fb FormBuilder A form builder for generating the login form.
    * @param formHelperService FormHelperService.
-   * @param toastr ToastrService Service for showing notifications to the user.
+   * @param notificationService {NotificationService} Service for showing the messages.
    */
   constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
-              private fb: FormBuilder, private formHelperService: FormHelperService, private toastr: ToastrService) {
+              private fb: FormBuilder, private formHelperService: FormHelperService,
+              private notificationService: NotificationService) {
     this.createLoginForm();
   }
 
@@ -73,7 +74,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('home');
       }, (response: HttpResponseBase) => {
         if (response.status === HttpStatusCode.UNAUTHORIZED) {
-          this.toastr.error('Wrong credentials', 'Login Failed');
+          this.notificationService.error('Wrong credentials', 'Login Failed');
         }
         this.loginForm.reset({rememberMe: rm});
         this.submitted = false;

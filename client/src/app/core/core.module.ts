@@ -8,6 +8,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormHelperService } from './form/form-helper.service';
 import { ErrorInterceptor } from './interceptor/error.interceptor';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
+import { NotificationService } from './messages/notification.service';
 
 @NgModule({
   declarations: [],
@@ -43,6 +44,10 @@ export class GmsCoreModule {
         {
           provide: InterceptorHelperService,
           useClass: InterceptorHelperService
+        },
+        {
+          provide: NotificationService,
+          useClass: config && config['notificationService'] ? config['notificationService'] : NotificationService
         },
         {
           provide: HTTP_INTERCEPTORS,

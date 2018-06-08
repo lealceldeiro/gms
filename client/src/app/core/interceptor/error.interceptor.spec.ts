@@ -1,15 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 
 import { ErrorInterceptor } from './error.interceptor';
 import { InterceptorHelperService } from './interceptor-helper.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
+import { NotificationService } from '../messages/notification.service';
 
 describe('ErrorInterceptor', () => {
   let spyIsExcludedFromErrorHandling: jasmine.Spy;
-  let spyToastrError: jasmine.Spy;
+  let spyMessageServiceError: jasmine.Spy;
 
   const url = 'sample-url-nk-9fj92md9';
   const errMock = { error: 'error message', message: 'body message', status: 500 };
@@ -23,7 +23,7 @@ describe('ErrorInterceptor', () => {
       spy.isExcludedFromErrorHandling(); return isExcludedFromErrorHandlingReal();
     }
   };
-  const toastrStub = { error: (a, b) => { spy.err(a, b); } };
+  const notificationService = { error: (a, b) => { spy.err(a, b); } };
 
   let httpTestingController: HttpTestingController;
   let httpClient: HttpClient;
@@ -35,7 +35,7 @@ describe('ErrorInterceptor', () => {
       providers: [
         ErrorInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        { provide: ToastrService, useValue: toastrStub },
+        { provide: NotificationService, useValue: notificationService },
         { provide: InterceptorHelperService, useValue: intHelperServiceStub }
       ]
     });
@@ -43,7 +43,7 @@ describe('ErrorInterceptor', () => {
     httpClient = TestBed.get(HttpClient);
 
     spyIsExcludedFromErrorHandling = spyOn(spy, 'isExcludedFromErrorHandling');
-    spyToastrError = spyOn(spy, 'err');
+    spyMessageServiceError = spyOn(spy, 'err');
   });
 
   afterEach(() => {
@@ -59,7 +59,7 @@ describe('ErrorInterceptor', () => {
     httpClient.get(url).subscribe((response: any) => {
       expect(response).toBeTruthy();
       expect(spyIsExcludedFromErrorHandling).not.toHaveBeenCalled();
-      expect(spyToastrError).not.toHaveBeenCalled();
+      expect(spyMessageServiceError).not.toHaveBeenCalled();
     });
     httpTestingController.expectOne(url).flush({ data: 'ok' });
   });
@@ -70,7 +70,7 @@ describe('ErrorInterceptor', () => {
       httpClient.get(url).subscribe(() => {}, (error) => {
         expect(error).toBeTruthy();
         expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-        expect(spyToastrError).not.toHaveBeenCalled();
+        expect(spyMessageServiceError).not.toHaveBeenCalled();
       });
       // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
       httpTestingController.expectOne(url).flush(errMock, httpErr);
@@ -81,7 +81,7 @@ describe('ErrorInterceptor', () => {
       httpClient.get(url).subscribe(() => {}, (error) => {
         expect(error).toBeTruthy();
         expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-        expect(spyToastrError).not.toHaveBeenCalled();
+        expect(spyMessageServiceError).not.toHaveBeenCalled();
       });
       /*
       flush response with something different from and HttpErrorResponse in order to NOT meet
@@ -95,9 +95,9 @@ describe('ErrorInterceptor', () => {
     httpClient.get(url).subscribe(() => {}, (error) => {
       expect(error).toBeTruthy();
       expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-      expect(spyToastrError).toHaveBeenCalled();
-      expect(spyToastrError.calls.first().args[0]).toBe('');
-      expect(spyToastrError.calls.first().args[1]).toBe('Error');
+      expect(spyMessageServiceError).toHaveBeenCalled();
+      expect(spyMessageServiceError.calls.first().args[0]).toBe('');
+      expect(spyMessageServiceError.calls.first().args[1]).toBe('Error');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({status: errMock.status, statusText: 'Server Error', url: url});
@@ -107,7 +107,7 @@ describe('ErrorInterceptor', () => {
 
   it('should show as `title` "Unauthorized" when status is "Unauthorized"', () => {
     httpClient.get(url).subscribe(() => {}, (error) => {
-      expect(spyToastrError.calls.first().args[1]).toBe('Unauthorized');
+      expect(spyMessageServiceError.calls.first().args[1]).toBe('Unauthorized');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
@@ -122,9 +122,9 @@ describe('ErrorInterceptor', () => {
     httpClient.get(url).subscribe(() => {}, (error) => {
       expect(error).toBeTruthy();
       expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-      expect(spyToastrError).toHaveBeenCalled();
-      expect(spyToastrError.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
-      expect(spyToastrError.calls.first().args[1]).toBe('Error');
+      expect(spyMessageServiceError).toHaveBeenCalled();
+      expect(spyMessageServiceError.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
+      expect(spyMessageServiceError.calls.first().args[1]).toBe('Error');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
     httpTestingController.expectOne(url).flush(errMock, httpErr);

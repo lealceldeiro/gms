@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs/internal/Subject';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/index';
-import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginComponent } from './login.component';
@@ -17,6 +16,7 @@ import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
 import { HttpStatusCode } from '../../core/response/http-status-code.enum';
+import { NotificationService } from '../../core/messages/notification.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -25,7 +25,7 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let loginSpy: jasmine.Spy;
   let navigateByUrlSpy: jasmine.Spy;
-  let warnToastrStub: jasmine.Spy;
+  let warnNotificationStub: jasmine.Spy;
 
   const routes = [ { path : 'home', component: DummyStubComponent }];
   const text = 'sampleText';
@@ -38,7 +38,7 @@ describe('LoginComponent', () => {
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
   const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
   const formHelperStub = { markFormElementsAsTouched: () => {} };
-  const toastrStub = { error: (a, b) => { spy.error(a, b); } };
+  const notificationStub = { error: (a, b) => { spy.error(a, b); } };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -48,7 +48,7 @@ describe('LoginComponent', () => {
         { provide: LoginService, useValue: loginServiceStub },
         { provide: SessionService, useValue: sessionServiceStub },
         { provide: FormHelperService, useValue: formHelperStub },
-        { provide: ToastrService, useValue: toastrStub }
+        { provide: NotificationService, useValue: notificationStub }
       ]
     }).compileComponents();
   }));
@@ -63,7 +63,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     loginSpy = spyOn(spy, 'login');
     navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
-    warnToastrStub = spyOn(spy, 'error');
+    warnNotificationStub = spyOn(spy, 'error');
   });
 
   it('should create', () => {
@@ -115,7 +115,7 @@ describe('LoginComponent', () => {
       expect(loginSpy).toHaveBeenCalledTimes(1);
       tick();
       expect(navigateByUrlSpy).not.toHaveBeenCalled(); // login error, code for error handling executed
-      expect(warnToastrStub).toHaveBeenCalled();
+      expect(warnNotificationStub).toHaveBeenCalled();
     }));
 
   /**
