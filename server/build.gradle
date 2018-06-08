@@ -1,7 +1,7 @@
 buildscript {
-	ext {
-		springBootVersion = "2.0.2.RELEASE"
-		nodePluginVersion = "1.2.0"
+    ext {
+        springBootVersion = "2.0.2.RELEASE"
+        nodePluginVersion = "1.2.0"
         propdepsPluginVersion = "0.0.9.RELEASE"
         jwtVersion = "0.9.0"
         lombokVersion = "1.16.20"
@@ -11,21 +11,21 @@ buildscript {
         buildPropertiesFilePath = "./build/resources/main/application.properties"
         snippetsDir = file("build/generated-snippets")
         apiDocsFolder = "apidocs"
-	}
-	repositories {
-		mavenLocal()
-		mavenCentral()
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-	}
-	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-		classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
         classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
         classpath "net.saliman:gradle-cobertura-plugin:2.3.1"
         classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-	}
+    }
 }
 
 plugins {
@@ -55,8 +55,8 @@ version = "0.0.1"
 sourceCompatibility = 1.8
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 node {
@@ -66,21 +66,21 @@ node {
 
 dependencies {
     compile ("org.springframework.boot:spring-boot-starter-hateoas")
-	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile ("org.springframework.boot:spring-boot-starter-data-jpa")
     compile ("org.springframework.boot:spring-boot-starter-data-rest")
-	compile ("org.springframework.boot:spring-boot-starter-mail")
-	compile ("org.springframework.boot:spring-boot-starter-security")
-	compile ("io.jsonwebtoken:jjwt:${jwtVersion}")
-	compile ("org.springframework.boot:spring-boot-starter-web")
-	compile ("org.reflections:reflections:${refVersion}")
+    compile ("org.springframework.boot:spring-boot-starter-mail")
+    compile ("org.springframework.boot:spring-boot-starter-security")
+    compile ("io.jsonwebtoken:jjwt:${jwtVersion}")
+    compile ("org.springframework.boot:spring-boot-starter-web")
+    compile ("org.reflections:reflections:${refVersion}")
     compile ("org.flywaydb:flyway-core:${flywayVersion}")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
-	runtime ("org.springframework.boot:spring-boot-devtools")
-	runtime ("org.postgresql:postgresql")
+    runtime ("org.springframework.boot:spring-boot-devtools")
+    runtime ("org.postgresql:postgresql")
     testCompile ("com.jayway.jsonpath:json-path")
-	testCompile ("org.springframework.boot:spring-boot-starter-test")
-	testCompile ("org.springframework.restdocs:spring-restdocs-mockmvc")
-	testCompile ("org.springframework.security:spring-security-test")
+    testCompile ("org.springframework.boot:spring-boot-starter-test")
+    testCompile ("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testCompile ("org.springframework.security:spring-security-test")
     optional ("org.springframework.boot:spring-boot-configuration-processor")
 }
 
@@ -260,10 +260,10 @@ bootWar {
 compileJava.dependsOn(processResources)
 
 private boolean buildClient() {
-    return project.getProperties().get("client")
+    return Boolean.parseBoolean(project.getProperties().get("client").toString())
 }
 private boolean buildDocClient() {
-    return project.getProperties().get("clientDoc")
+    return Boolean.parseBoolean(project.getProperties().get("clientDoc").toString())
 }
 
 private String getAppName() {
