@@ -29,7 +29,7 @@
 | Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
 
 | `404 Not Found`
-| The server can not find requested resource. This can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client.
+| The server can not find requested resource. This can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This app specifically redirects to "/" (or index.html) for keeping consistency with the living (Angular) client application in the WAR artifact.
 
 | `405 Method Not Allowed`
 | The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid `DELETE`-ing a resource. The two mandatory methods, `GET` and `HEAD`, must never be disabled and should not return this error code.

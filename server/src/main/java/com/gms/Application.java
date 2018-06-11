@@ -5,8 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.ErrorPageRegistrar;
+import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
@@ -49,6 +53,19 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ErrorPageRegistrar errorPageRegistrar() {
+        return new IndexRedirectionPageRegistrar();
+    }
+
+    // used by bean
+    private static class IndexRedirectionPageRegistrar implements ErrorPageRegistrar {
+        @Override
+        public void registerErrorPages(ErrorPageRegistry registry) {
+            registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"));
+        }
     }
 
     //endregion
