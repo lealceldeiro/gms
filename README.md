@@ -24,11 +24,15 @@ The project consists of two main (independent) modules:
 * API + Angular Client
   1. You need to have [Node.js][4] 8.9 or higher, together with [NPM][7] 5.5.1 or higher installed.
   2. Consider modifying the file `client/src/environments/environment.prod.ts`, by setting the value `apiBaseUrl` to the value of the API base url. This takes as default `http://127.0.0.1/gms/api/`.
-  3. From the location `client/` run `npm install` in order to install all client package dependencies.
-  4. From the location `server/` run `gradle bootWar -Pclient=true`.
-  5. Optionally you can generate the client app (Angular) documentation by setting also the `clientDoc` param to true like this `-PclientDoc=true`.
-  
-  An example of build with both params enabled to true would be `gradle bootWar -Pclient=true -PclientDoc=true`
+  3. From the location `server/` run `gradle bootWar -Pclient=true`.
+  4. Optionally you can modify other behaviors for the client app while generating the WAR using the following commands:
+    * `client`, use `-Pclient=true` for generating the client Angular app.
+    * `clientDoc`, use `-PclientDoc=true` for generating the client app documentation.
+    * `clientDependencies`, use `-PclientDependencies=true` for (re)installing all node dependencies before creating the WAR. Use this options if it is the first time you create the WAR file. Once the dependencies have been installed this can be safely skipped next time.
+    * `clientDeployUrl`, use `-PclientDeployUrl=<deploy-url>` for specifying the base url were the WAR will be deployed. This is where the static resources will be allocated by the Angular app. For example, supposing the WAR is deployed under a domain `www.example.com` under the sub-domain `sub1` (full path would be `www.example.com/sub1`), you should set as `<deploy-url>` the value `/sub1/`
+    
+      * An example of build with the first two parameters enabled to true would be `gradle bootWar -Pclient=true -PclientDoc=true`.
+      
 * This will create a WAR file inside `server/build/libs` ready to be deployed.
 * Database configuration
   1. Create a [PostgreSQL][5] database.
