@@ -295,5 +295,6 @@ private String getAppName() {
 private String getClientDeployUrl() {
     String defaultUrl = "/${getAppName()}-${version}/"
     String configUrl  = project.getProperties().get("clientDeployUrl")
-    return configUrl ? configUrl : defaultUrl
+    return (configUrl || configUrl.toString() == "<default>") ?
+           (configUrl.toString() == "<default>" ? "" : configUrl) : defaultUrl
 }
