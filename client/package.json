@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.0.0",
   "config": {
-    "deployUrl" : "/gms/"
+    "deployUrl" : ""
   },
   "scripts": {
     "ng": "ng",
@@ -10,7 +10,7 @@
     "servedoc": "compodoc -s",
     "buildservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
     "start": "ng serve",
-    "build": "ng build --prod --base-href ./ --deploy-url $npm_package_config_deployUrl || /gms/",
+    "build": "ng build --prod --base-href ./ --deploy-url $npm_package_config_deployUrl || \"\"",
     "test": "ng test",
     "testwatch": "ng test --watch=true",
     "testwatchnosourcemap": "ng test --watch=true --sourceMap=false",
