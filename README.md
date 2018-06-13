@@ -29,7 +29,8 @@ The project consists of two main (independent) modules:
     * `client`, use `-Pclient=true` for generating the client Angular app.
     * `clientDoc`, use `-PclientDoc=true` for generating the client app documentation.
     * `clientDependencies`, use `-PclientDependencies=true` for (re)installing all node dependencies before creating the WAR. Use this options if it is the first time you create the WAR file. Once the dependencies have been installed this can be safely skipped next time.
-    * `clientDeployUrl`, use `-PclientDeployUrl=<deploy-url>` for specifying the base url were the WAR will be deployed. This is where the static resources will be allocated by the Angular app. For example, supposing the WAR is deployed under a domain `www.example.com` under the sub-domain `sub1` (full path would be `www.example.com/sub1`), you should set as `<deploy-url>` the value `/sub1/`
+    * `clientDeployUrl`, use `-PclientDeployUrl=<deploy-url>` for specifying the base url were the WAR will be deployed. This is where the static resources will be allocated by the Angular app. For example, supposing the WAR is deployed under a domain `www.example.com` under the sub-domain `sub1` (full path would be `www.example.com/sub1`), you should set as `<deploy-url>` the value `/sub1/`.
+    * `clientBaseUrl`, use `-PclientBaseUrl=<base-url>` for specifying the base url for resolving all the resources (js, css, images, etc). Generally it can be set to the same value as the `<deploy-url>` and its default values is `./`.
     
       * An example of build with the first two parameters enabled to true would be `gradle bootWar -Pclient=true -PclientDoc=true`.
       
