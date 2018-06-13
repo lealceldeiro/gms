@@ -9,6 +9,7 @@ import { FormHelperService } from './form/form-helper.service';
 import { ErrorInterceptor } from './interceptor/error.interceptor';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
 import { NotificationService } from './messages/notification.service';
+import { PageNotFoundService } from './navigation/page-not-found.service';
 
 @NgModule({
   declarations: [],
@@ -41,10 +42,7 @@ export class GmsCoreModule {
     return {
       ngModule: GmsCoreModule,
       providers: [
-        {
-          provide: InterceptorHelperService,
-          useClass: InterceptorHelperService
-        },
+        InterceptorHelperService,
         {
           provide: NotificationService,
           useClass: config && config['notificationService'] ? config['notificationService'] : NotificationService
@@ -78,7 +76,8 @@ export class GmsCoreModule {
         {
           provide: FormHelperService,
           useClass: config && config['formHelperService'] ? config['formHelperService'] : FormHelperService
-        }
+        },
+        PageNotFoundService
       ]
     };
   }

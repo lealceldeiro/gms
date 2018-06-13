@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { PageNotFoundService } from '../core/navigation/page-not-found.service';
 
 /**
  * Component for generating a (404) not found page. This is used when the user requests a path which is not defined in the routing.
@@ -45,13 +48,28 @@ export class PageNotFoundComponent implements OnInit {
   /**
    * Component constructor
    */
-  constructor() { }
+  constructor(private router: Router, private pageNotFoundService: PageNotFoundService) { }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.initialize404();
+    if (this.pageNotFoundService.wasNotFound(this.router.url)) {
+      this.initialize404();
+    } else {
+      this.pageNotFoundService.addUrl(this.router.url);
+      const i = this.router.url.lastIndexOf('/');
+      if (i !== -1) {
+        const sub = this.router.url.substring(0, i);
+        if (sub === '') {
+          this.initialize404();
+        } else {
+          this.router.navigateByUrl(`/${sub}`);
+        }
+      } else {
+        this.router.navigateByUrl('/');
+      }
+    }
   }
 
   /**
