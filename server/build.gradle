@@ -87,16 +87,22 @@ dependencies {
 //region custom tasks
 
 //region client task
-task clientBuild(type: NpmTask, dependsOn: ["copyClientDocBuild", "npmInstall", "configPackageJson"]) {
+task clientBuild(type: NpmTask, dependsOn: ["npmInstall", "copyClientDocBuild",  "configPackageJsonDeployUrl", "configPackageJsonBaseUrl"]) {
     group = "client tasks"
     description = "Compiles client side folder for production"
     args = ["run", "build"]
 }
 
-task configPackageJson(type: NpmTask) {
+task configPackageJsonDeployUrl(type: NpmTask) {
     group = "client tasks"
-    description = "Sets the configuration variables required in the package.json#config for setting some parameters to the npm task"
+    description = "Sets the configuration variable 'deployUrl' in the package.json#config"
     args = ["config", "set", "client:deployUrl", getClientDeployUrl()]
+}
+
+task configPackageJsonBaseUrl(type: NpmTask) {
+    group = "client tasks"
+    description = "Sets the configuration variable 'baseUrl' in the package.json#config"
+    args = ["config", "set", "client:baseUrl", getClientBaseUrl()]
 }
 
 task copyClientBuild(type: Copy, dependsOn: ["clientBuild"]) {
@@ -295,6 +301,11 @@ private String getAppName() {
 private String getClientDeployUrl() {
     String defaultUrl = "/${getAppName()}-${version}/"
     String configUrl  = project.getProperties().get("clientDeployUrl")
-    return (configUrl || configUrl.toString() == "<default>") ?
-           (configUrl.toString() == "<default>" ? "" : configUrl) : defaultUrl
+    return (configUrl || configUrl == "<default>") ? (configUrl == "<default>" ? "" : configUrl) : defaultUrl
+}
+
+private String getClientBaseUrl() {
+    String defaultUrl = "/${getAppName()}-${version}/"
+    String configUrl  = project.getProperties().get("clientBaseUrl")
+    return configUrl ? configUrl : defaultUrl
 }
