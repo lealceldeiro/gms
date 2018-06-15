@@ -10,7 +10,7 @@
     "builddoc": "compodoc -p src/tsconfig.app.json",
     "servedoc": "compodoc -s",
     "buildservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n 'GMS Angular Client Documentation'",
-    "start": "ng serve",
+    "start": "ng serve --watch=true",
     "build": "ng build --prod --deploy-url $npm_package_config_deployUrl --base-href $npm_package_config_baseUrl",
     "test": "ng test",
     "testwatch": "ng test --watch=true",

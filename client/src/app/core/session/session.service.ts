@@ -326,7 +326,7 @@ export class SessionService {
       this.doUnsubscribe(oad);
     });
     const rm = this.retrieve(this.key.rememberMe, true).subscribe((r) => {
-      this.rememberMe.next(r === true);
+      this.rememberMe.next(r === true || r === 'true');
       this.doUnsubscribe(rm);
     });
   }
