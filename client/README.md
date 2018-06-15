@@ -1,5 +1,5 @@
-<a href="https://david-dm.org/lealceldeiro/gms?path=client" target="_blank"><img src="https://david-dm.org/lealceldeiro/gms.svg" alt="dependency status"></a>&nbsp;&nbsp;
-<a href="https://david-dm.org/lealceldeiro/gms?path=client&type=dev" target="_blank"><img src="https://david-dm.org/lealceldeiro/gms/dev-status.svg" alt="devDependency status"></a>
+<a href="https://david-dm.org/lealceldeiro/gms?path=client" target="_blank"><img src="https://david-dm.org/lealceldeiro/gms/status.svg?path=client" alt="dependency status"></a>&nbsp;&nbsp;
+<a href="https://david-dm.org/lealceldeiro/gms?path=client&type=dev" target="_blank"><img src="https://david-dm.org/lealceldeiro/gms/dev-status.svg?path=client" alt="devDependency status"></a>
 
 ## General Management System Client
 
