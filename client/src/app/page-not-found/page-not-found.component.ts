@@ -54,7 +54,6 @@ export class PageNotFoundComponent implements OnInit {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    console.log('heo: ', this.router.url);
     if (this.pageNotFoundService.wasNotFound(this.router.url)) {
       this.initialize404();
     } else {

@@ -5,18 +5,22 @@ import { first } from 'rxjs/internal/operators';
 
 import { LoginGuard } from './login.guard';
 import { SessionService } from '../session/session.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;
   const isNotLoggedInSb = new BehaviorSubject<boolean>(false);
+  let navigatedByUrlSpy: jasmine.Spy;
 
   const sessionServiceStub = { isNotLoggedIn: () => isNotLoggedInSb.asObservable() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ RouterTestingModule],
       providers: [ LoginGuard, HttpClientTestingModule, { provide: SessionService, useValue: sessionServiceStub } ]
     });
     guard = TestBed.get(LoginGuard);
+    navigatedByUrlSpy = spyOn((<any>guard).router, 'navigateByUrl');
   });
 
   it('should be created', inject([LoginGuard], (service: LoginGuard) => {
@@ -27,6 +31,7 @@ describe('LoginGuard', () => {
     isNotLoggedInSb.next(false);
     guard.canActivateChild().pipe(first()).subscribe((activate: boolean) => {
       expect<boolean>(activate).toBeFalsy();
+      expect(navigatedByUrlSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -41,6 +46,7 @@ describe('LoginGuard', () => {
     isNotLoggedInSb.next(false);
     guard.canLoad().pipe(first()).subscribe((load: boolean) => {
       expect<boolean>(load).toBeFalsy();
+      expect(navigatedByUrlSpy).toHaveBeenCalledTimes(1);
     });
   });
 

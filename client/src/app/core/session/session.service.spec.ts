@@ -227,32 +227,32 @@ describe('SessionService', () => {
     // region clear
     const allArgs = storageServiceClearSpy.calls.allArgs();
 
-    expect(allArgs[0][0]).toEqual(sessionService['key']['loggedIn'],
-      'incorrect key for `loggedIn`');
-
-    expect(allArgs[1][0]).toEqual(sessionService['key']['notLoggedIn'],
-      'incorrect key for `notLoggedIn`');
-
-    expect(allArgs[2][0]).toEqual(sessionService['key']['loginData'],
+    expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'],
       'incorrect key for `authData`');
 
-    expect(allArgs[3][0]).toEqual(sessionService['key']['user'],
+    expect(allArgs[1][0]).toEqual(sessionService['key']['user'],
       'incorrect key for `user`');
     // endregion
 
     // region clearCookie
     const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
 
-    expect(allArgsCk[0][0]).toEqual(sessionService['key']['accessToken'],
+    expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'],
+      'incorrect key for `loggedIn`');
+
+    expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'],
+      'incorrect key for `notLoggedIn`');
+
+    expect(allArgsCk[2][0]).toEqual(sessionService['key']['accessToken'],
       'incorrect key for `accessToken`');
 
-    expect(allArgsCk[1][0]).toEqual(sessionService['key']['refreshToken'],
+    expect(allArgsCk[3][0]).toEqual(sessionService['key']['refreshToken'],
       'incorrect key for `refreshToken`');
 
-    expect(allArgsCk[2][0]).toEqual(sessionService['key']['headerToBeSent'],
+    expect(allArgsCk[4][0]).toEqual(sessionService['key']['headerToBeSent'],
       'incorrect key for `headerToBeSent`');
 
-    expect(allArgsCk[3][0]).toEqual(sessionService['key']['tokenType'],
+    expect(allArgsCk[5][0]).toEqual(sessionService['key']['tokenType'],
       'incorrect key for `tokenType`');
     // endregion
     // endregion

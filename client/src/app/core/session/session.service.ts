@@ -150,8 +150,8 @@ export class SessionService {
    * @param {boolean} value
    */
   setLoggedIn(value: boolean) {
-    this.store(this.key.loggedIn, value, false);
-    this.store(this.key.notLoggedIn, !value, false);
+    this.store(this.key.loggedIn, value);
+    this.store(this.key.notLoggedIn, !value);
     this.loggedIn.next(value);
     this.notLoggedIn.next(!value);
   }
@@ -220,8 +220,8 @@ export class SessionService {
     this.authData.next({});
     this.user.next(null);
 
-    const lis = this.storageService.clear(this.key.loggedIn).subscribe(() => this.doUnsubscribe(lis));
-    const nlis = this.storageService.clear(this.key.notLoggedIn).subscribe(() => this.doUnsubscribe(nlis));
+    const lis = this.storageService.clearCookie(this.key.loggedIn).subscribe(() => this.doUnsubscribe(lis));
+    const nlis = this.storageService.clearCookie(this.key.notLoggedIn).subscribe(() => this.doUnsubscribe(nlis));
     const lds = this.storageService.clear(this.key.loginData).subscribe(() => this.doUnsubscribe(lds));
     const ats = this.storageService.clearCookie(this.key.accessToken).subscribe(() => this.doUnsubscribe(ats));
     const rts = this.storageService.clearCookie(this.key.refreshToken).subscribe(() => this.doUnsubscribe(rts));
@@ -309,12 +309,12 @@ export class SessionService {
    */
   private loadInitialData() {
     // load data
-    const oli = this.retrieve(this.key.loggedIn, false).subscribe((val) => {
-      this.loggedIn.next(val === true);
+    const oli = this.retrieve(this.key.loggedIn).subscribe((val) => {
+      this.loggedIn.next(val === true || val === 'true');
       this.doUnsubscribe(oli);
     });
-    const onli = this.retrieve(this.key.notLoggedIn, false).subscribe((val) => {
-      this.notLoggedIn.next(val === true || val === null);
+    const onli = this.retrieve(this.key.notLoggedIn).subscribe((val) => {
+      this.notLoggedIn.next(val === true || val === 'true' || val === null || val === undefined);
       this.doUnsubscribe(onli);
     });
     const ou = this.retrieve(this.key.user, false).subscribe((val) => {

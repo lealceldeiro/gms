@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpResponseBase } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
 import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 import { NotificationService } from '../../core/messages/notification.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 /**
  * Generates a login component in order to allow users to login into the system
@@ -18,7 +19,7 @@ import { NotificationService } from '../../core/messages/notification.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   /**
    * Form for handling the login data inputted by the user.
@@ -30,6 +31,11 @@ export class LoginComponent implements OnInit {
    * @type {boolean}
    */
   submitted = false;
+
+  /**
+   * Subscription to the isLoggedIn Observable
+   */
+  ili: Subscription;
 
   /**
    * Component constructor
@@ -50,11 +56,18 @@ export class LoginComponent implements OnInit {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.sessionService.isLoggedIn().subscribe(logged => {
+    this.ili = this.sessionService.isLoggedIn().subscribe(logged => {
       if (logged) {
         this.router.navigateByUrl('home');
       }
     });
+  }
+
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   */
+  ngOnDestroy() {
+    if (this.ili) { this.ili.unsubscribe(); }
   }
 
   /**
