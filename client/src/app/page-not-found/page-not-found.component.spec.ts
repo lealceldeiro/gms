@@ -10,14 +10,15 @@ describe('PageNotFoundComponent', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
-  let wasNotFoundFake = (): boolean => false;
+  let c = 0;
 
   @Component({selector: 'gms-dummy', template: ''})
   class DummyComponent {}
 
-  const pageNotFoundServiceStub = { wasNotFound: () => wasNotFoundFake(), addUrl: () => {} };
+  const pageNotFoundServiceStub = { wasNotFound: () => true, addUrl: () => {} };
 
   beforeEach(async(() => {
+    pageNotFoundServiceStub.wasNotFound = (): boolean => c++ % 2 === 0; // alternate btween true and false
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([{ path: 'test', component: DummyComponent }])],
       declarations: [ PageNotFoundComponent, DummyComponent ],
@@ -37,8 +38,13 @@ describe('PageNotFoundComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create with default values if the router url is added to the collection of 404 in pageNotFoundService', () => {
-    wasNotFoundFake = (): boolean => true;
+  it('should create with default values if the router url is ' + ((c - 1 % 2 !== 0) ? 'NOT' : '') +
+    'added to the collection of 404 in pageNotFoundService', () => {
+    checkItWasRendered();
+  });
+
+  it('should create with default values if the router url is ' + ((c - 1 % 2 !== 0) ? 'NOT' : '') +
+    'added to the collection of 404 in pageNotFoundService', () => {
     checkItWasRendered();
   });
 
