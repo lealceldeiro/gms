@@ -30,4 +30,5 @@ public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCus
     public List<BRole> getRolesForUserOverEntity(long userId, long entityId) {
         return bAuthorizationDAO.getRolesForUserOverEntity(userId, entityId);
     }
+
 }

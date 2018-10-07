@@ -38,4 +38,5 @@ public class CodeI18N {
     public static CodeI18N getInstance() {
         return new CodeI18N();
     }
+
 }

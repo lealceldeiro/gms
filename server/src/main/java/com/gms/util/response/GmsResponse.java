@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class GmsResponse {
+
     private String message = "";
     private final ResponseData[] data;
+
 }

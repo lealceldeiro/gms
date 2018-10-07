@@ -38,4 +38,5 @@ public class MessageResolver {
     public String getMessage(String code) {
         return getMessage(code, new String[0]);
     }
+
 }

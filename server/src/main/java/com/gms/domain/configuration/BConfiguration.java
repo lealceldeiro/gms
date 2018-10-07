@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-public class BConfiguration extends GmsEntity{
+public class BConfiguration extends GmsEntity {
 
     /**
      * Key under the configuration is saved.

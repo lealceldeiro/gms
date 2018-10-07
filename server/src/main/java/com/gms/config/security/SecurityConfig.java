@@ -30,6 +30,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -119,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             addUrl(free, s);
         }
 
-        return free.toArray(new String[free.size()]);
+        return free.toArray(new String[0]);
     }
 
     private void addUrl(List<String> urlList, String url) {
@@ -140,22 +141,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * For JUnit Tests purposes only!
-     * @return Array of {@link HashMap}. Each HashMap contains the required parameters for executing the post request.
+     * @return Array of {@link Map}. Each Map contains the required parameters for executing the post request.
      */
-    @SuppressWarnings({"unused", "unchecked"})
-    private HashMap<String, String>[] getListOfParametersForFreePostUrl() {
-        HashMap<String, String>[] r = new HashMap[3];
+    @SuppressWarnings("unused")
+    private Map<String, String>[] getListOfParametersForFreePostUrl() {
+        @SuppressWarnings("unchecked")
+        final Map<String, String>[] r = new HashMap[3];
         Field[] fields;
 
-        //sign-up
+        // region sign-up
         r[0] = new HashMap<>();
         final Class<EUser> eUserClass = EUser.class;
         fields = eUserClass.getDeclaredFields();
         for (Field f : fields) {
             r[0].put(f.getName(), "1");
         }
+        // endregion
 
-        //access token
+        // region access token
         r[1] = new HashMap<>();
         final Class<RefreshTokenPayload> rTPayloadClass = RefreshTokenPayload.class;
         fields = rTPayloadClass.getDeclaredFields();
@@ -167,11 +170,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 r[1].put(f.getName(), "1");
             }
         }
+        // endregion
 
-        //sign-in
+        // region sign-in
         r[2] = new HashMap<>();
         r[2].put(sc.getReqUsernameHolder(), dc.getUserAdminDefaultUsername());
         r[2].put(sc.getReqPasswordHolder(), dc.getUserAdminDefaultPassword());
+        // endregion
 
         return r;
     }

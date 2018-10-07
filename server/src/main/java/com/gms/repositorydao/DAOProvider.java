@@ -64,4 +64,5 @@ public class DAOProvider {
                 throw new NullPointerException(NOT_IMPLEMENTED_YET);
         }
     }
+
 }

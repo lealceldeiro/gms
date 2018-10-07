@@ -44,4 +44,5 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
         }
         entityManager.persist(u);
     }
+
 }

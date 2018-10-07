@@ -69,4 +69,5 @@ public interface EUserRepository extends EUserRepositoryCustom, PagingAndSorting
             @Param(USERNAME) String username, @Param(EMAIL) String email, @Param(NAME) String name,
             @Param(LASTNAME) String lastName, Pageable pageable
     );
+
 }

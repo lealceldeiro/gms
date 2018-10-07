@@ -33,4 +33,5 @@ public interface BAuthorizationRepositoryCustom {
      * entity which identifier matches with the provided as second parameter.
      */
     List<BRole> getRolesForUserOverEntity(long userId, long entityId);
+
 }

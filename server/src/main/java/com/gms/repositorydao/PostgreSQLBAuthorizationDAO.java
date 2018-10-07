@@ -67,4 +67,5 @@ class PostgreSQLBAuthorizationDAO extends BAuthorizationDAO {
 
         return r;
     }
+
 }

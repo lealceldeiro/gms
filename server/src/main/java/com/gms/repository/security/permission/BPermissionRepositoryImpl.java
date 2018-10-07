@@ -31,4 +31,5 @@ public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {
     public List<BPermission> findPermissionsByUserIdAndEntityId(long userId, long entityId) {
         return permissionDAO.findPermissionsByUserIdAndEntityId(userId, entityId);
     }
+
 }

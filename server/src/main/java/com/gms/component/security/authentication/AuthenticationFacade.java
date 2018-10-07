@@ -11,4 +11,5 @@ public interface AuthenticationFacade {
     Authentication getAuthentication();
 
     void setAuthentication(Authentication authentication);
+
 }

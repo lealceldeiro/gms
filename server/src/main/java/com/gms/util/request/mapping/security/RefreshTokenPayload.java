@@ -18,4 +18,5 @@ public class RefreshTokenPayload {
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     private final String refreshToken;
+
 }

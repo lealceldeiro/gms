@@ -11,7 +11,6 @@ import java.util.Random;
 @SuppressWarnings("WeakerAccess")
 public class GMSRandom {
 
-
     /**
      * Generate a random string.
      */
@@ -63,6 +62,5 @@ public class GMSRandom {
     public GMSRandom() {
         this(21);
     }
-
 
 }

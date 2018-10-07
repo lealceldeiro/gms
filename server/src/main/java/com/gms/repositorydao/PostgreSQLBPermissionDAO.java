@@ -49,4 +49,5 @@ class PostgreSQLBPermissionDAO extends BPermissionDAO {
 
         return query.getResultList();
     }
+
 }

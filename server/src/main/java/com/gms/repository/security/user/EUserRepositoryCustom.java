@@ -11,4 +11,5 @@ public interface EUserRepositoryCustom {
     <S extends EUser> S save(S s);
 
     <S extends EUser> Iterable<S> saveAll(Iterable<S> it);
+
 }

@@ -62,4 +62,5 @@ public class SQLExceptionCode {
     public static SQLExceptionCode getInstance() {
         return new SQLExceptionCode();
     }
+
 }

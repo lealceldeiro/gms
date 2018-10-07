@@ -55,4 +55,5 @@ public class QueryService {
     public Query createNativeQuery(String sql, Class clazz) {
         return entityManager.createNativeQuery(sql, clazz);
     }
+
 }

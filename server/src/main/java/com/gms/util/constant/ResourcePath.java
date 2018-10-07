@@ -111,4 +111,5 @@ public class ResourcePath {
     public static ResourcePath getInstance() {
         return new ResourcePath();
     }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.String.valueOf;
 
@@ -19,7 +20,7 @@ import static java.lang.String.valueOf;
  * Utility service for generating jwt.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
 @SuppressWarnings("WeakerAccess")
 @RequiredArgsConstructor
@@ -68,8 +69,7 @@ public class JWTService {
      * @return {@link String} The token with the information received as parameters.
      */
     public String createToken(String subject) {
-        JwtBuilder builder = getBuilder(subject);
-        return builder.compact();
+        return getBuilder(subject).compact();
     }
 
     /**
@@ -79,8 +79,7 @@ public class JWTService {
      * @return {@link String} The token with the information received as parameters.
      */
     public String createToken(String subject, long expiresIn) {
-        JwtBuilder builder = getBuilder(subject, expiresIn);
-        return builder.compact();
+        return getBuilder(subject, expiresIn).compact();
     }
 
     /**
@@ -91,8 +90,7 @@ public class JWTService {
      * @return {@link String} The token with the information received as parameters.
      */
     public String createToken(String subject, String authorities) {
-        JwtBuilder builder = getBuilder(subject, authorities);
-        return builder.compact();
+        return getBuilder(subject, authorities).compact();
     }
 
     /**
@@ -105,8 +103,7 @@ public class JWTService {
      * @return {@link String} The token with the information received as parameters.
      */
     public String createRefreshToken(String subject, String authorities) {
-        JwtBuilder builder = getBuilder(subject, authorities, getRTokenExpirationTime());
-        return builder.compact();
+        return getBuilder(subject, authorities, getRTokenExpirationTime()).compact();
     }
 
     /**
@@ -130,8 +127,8 @@ public class JWTService {
      *            to try to retrieve a new claim under the same key.
      * @return Map with all the required information.
      */
-    public Map getClaims(String claimsJwt, String... key) {
-        Map<Object, Object> r = new HashMap<>();
+    public Map<String, Object> getClaims(String claimsJwt, String... key) {
+        Map<String, Object> r = new HashMap<>();
         processClaimsJWT(claimsJwt, r, key);
         return r;
     }
@@ -146,7 +143,7 @@ public class JWTService {
      * @param refreshToken Refresh token generated in this request.
      * @return Map with all this information set under the key defined in {@link SecurityConst} intended for that.
      */
-    public Map createLoginData(String subject, String accessToken, Date issuedAt,
+    public Map<String, Object> createLoginData(String subject, String accessToken, Date issuedAt,
                                String authoritiesString, String refreshToken) {
         HashMap<String, Object> returnMap = new HashMap<>();
         returnMap.put(SecurityConst.USERNAME_HOLDER, subject);
@@ -175,8 +172,8 @@ public class JWTService {
      * @return Map with all the required information.
      * @see Claims
      */
-    public Map getClaimsExtended(String claimsJwt, String... key) {
-        Map<Object, Object> r = new HashMap<>();
+    public Map<String, Object> getClaimsExtended(String claimsJwt, String... key) {
+        Map<String, Object> r = new HashMap<>();
         Claims claims = processClaimsJWT(claimsJwt, r, key);
 
         r.put(AUDIENCE, claims.getAudience());
@@ -190,15 +187,17 @@ public class JWTService {
         return r;
     }
 
-    private Claims processClaimsJWT(String claimsJwt, Map<Object, Object> claims, String... key) {
+    private Claims processClaimsJWT(String claimsJwt, Map<String, Object> claims, String... key) {
         Claims pClaims = Jwts.parser()
                 .setSigningKey(sc.getSecret().getBytes())
                 .requireIssuer(sc.getIssuer())
-                .parseClaimsJws(claimsJwt)
+                .parseClaimsJws(Objects.requireNonNull(claimsJwt))
                 .getBody();
-        for (String k : key) {
-            if (!(k != null && k.trim().equals(""))){
-                claims.put(k, pClaims.get(k));
+        if (claims != null) {
+            for (String k : key) {
+                if (!(k != null && k.trim().equals(""))) {
+                    claims.put(k, pClaims.get(k));
+                }
             }
         }
         return pClaims;
@@ -249,11 +248,12 @@ public class JWTService {
 
         return Jwts.builder()
                 .setId(random.nextString() + "_" + valueOf(System.currentTimeMillis()))
-                .setSubject(subject)
+                .setSubject(Objects.requireNonNull(subject))
                 .setExpiration(new Date(currentMillis + expiresIn))
                 .setIssuedAt(new Date(currentMillis))
                 .setIssuer(sc.getIssuer())
                 .signWith(SignatureAlgorithm.HS512, sc.getSecret().getBytes())
                 .claim(sc.getATokenExpiresInHolder(), expiresIn);
     }
+
 }

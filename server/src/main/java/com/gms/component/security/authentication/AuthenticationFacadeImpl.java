@@ -20,4 +20,5 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     public void setAuthentication(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
 }

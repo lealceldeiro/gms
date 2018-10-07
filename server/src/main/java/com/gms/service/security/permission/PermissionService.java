@@ -50,4 +50,5 @@ public class PermissionService {
     public List<BPermission> findPermissionsByUserIdAndEntityId(long userId, long entityId) {
         return repository.findPermissionsByUserIdAndEntityId(userId, entityId);
     }
+
 }

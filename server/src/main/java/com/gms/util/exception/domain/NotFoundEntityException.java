@@ -15,4 +15,5 @@ public class NotFoundEntityException extends NotFoundException {
     public NotFoundEntityException(String msg, Exception e) {
         super(msg, e);
     }
+
 }

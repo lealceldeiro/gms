@@ -24,7 +24,6 @@ public class OwnedEntityService {
     private final DefaultConst dc;
     private final ConfigurationService configService;
 
-
     //region default entity
 
     /**
@@ -50,4 +49,5 @@ public class OwnedEntityService {
         }
         throw new GmsGeneralException("entity.add.not_allowed", true, HttpStatus.CONFLICT);
     }
+
 }

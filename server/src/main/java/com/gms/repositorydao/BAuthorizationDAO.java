@@ -28,4 +28,5 @@ public abstract class BAuthorizationDAO {
             r.add(role);
         }
     }
+
 }
