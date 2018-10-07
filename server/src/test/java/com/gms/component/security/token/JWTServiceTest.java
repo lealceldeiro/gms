@@ -29,20 +29,24 @@ public class JWTServiceTest {
 
     @Before
     public void setUp() {
-        ReflectionTestUtils.setField(sc, "aTokenExpirationTime", -10);
-        ReflectionTestUtils.setField(sc, "rTokenExpirationTime", -10);
-
         jwtService = new JWTService(sc);
     }
 
     @Test
     public void getATokenExpirationTime() {
+        long prev = Long.parseLong(ReflectionTestUtils.getField(sc, "aTokenExpirationTime").toString());
+        ReflectionTestUtils.setField(sc, "aTokenExpirationTime", -10);
         assertTrue("Expiration time for access token must be greater than zero", jwtService.getATokenExpirationTime() > 0);
+        ReflectionTestUtils.setField(sc, "aTokenExpirationTime", prev);
     }
 
     @Test
     public void getRTokenExpirationTime() {
+        long prev = Long.parseLong(ReflectionTestUtils.getField(sc, "rTokenExpirationTime").toString());
+        ReflectionTestUtils.setField(sc, "rTokenExpirationTime", -10);
         assertTrue("Expiration time for refresh token must be greater than zero", jwtService.getRTokenExpirationTime() > 0);
+        // restore value
+        ReflectionTestUtils.setField(sc, "rTokenExpirationTime", prev);
     }
 
     @Test

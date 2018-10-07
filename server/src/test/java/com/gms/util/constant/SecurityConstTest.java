@@ -10,7 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -306,33 +307,5 @@ public class SecurityConstTest {
 
     private void cleanEntity() {
         entity = new SecurityConst();
-        assertEntityValidity(entity);
-    }
-
-    private void assertEntityValidity(SecurityConst entity) {
-        assertNull(ReflectionTestUtils.getField(entity, "reqUsernameHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "reqPasswordHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "secret"));
-        assertNull(ReflectionTestUtils.getField(entity, "issuedTimeHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "authoritiesHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "issuer"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenType"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenTypeHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenHeader"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenHeaderToBeSentHolder"));
-        assertEquals(0L, ReflectionTestUtils.getField(entity, "aTokenExpirationTime"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenExpirationTimeHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "aTokenExpiresInHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "rTokenHolder"));
-        assertEquals(0L, ReflectionTestUtils.getField(entity, "rTokenExpirationTime"));
-        assertNull(ReflectionTestUtils.getField(entity, "rTokenExpirationTimeHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "rTokenExpiresInHolder"));
-        assertNull(ReflectionTestUtils.getField(entity, "signUpUrl"));
-        assertNull(ReflectionTestUtils.getField(entity, "signInUrl"));
-        assertNull(ReflectionTestUtils.getField(entity, "freeURLsAnyRequest"));
-        assertNull(ReflectionTestUtils.getField(entity, "freeURLsPostRequest"));
-        assertNull(ReflectionTestUtils.getField(entity, "freeURLsGetRequest"));
-        assertNull(ReflectionTestUtils.getField(entity, "usernameHolder"));
     }
 }
