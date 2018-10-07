@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 import static com.gms.testutil.EntityUtil.getSampleUserResource;
 import static com.gms.testutil.StringUtil.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class BaseControllerTest {
+public class DefaultControllerAdviceTest {
 
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
@@ -127,9 +128,9 @@ public class BaseControllerTest {
 
     private void checkResult(MvcResult mvcResult) throws UnsupportedEncodingException, JSONException {
         JSONObject res = new JSONObject(mvcResult.getResponse().getContentAsString());
-        assertTrue("HttpStatuses do not match.", res.getInt("status") == HttpStatus.UNAUTHORIZED.value());
-        assertTrue("Error messages do not match.", res.getString("error").equals(msg.getMessage("security.unauthorized")));
-        assertTrue("Paths do not match.", res.getString("path").equals(dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL));
+        assertEquals("HttpStatuses do not match.", res.getInt("status"), HttpStatus.UNAUTHORIZED.value());
+        assertEquals("Error messages do not match.", res.getString("error"), msg.getMessage("security.unauthorized"));
+        assertEquals("Paths do not match.", res.getString("path"), dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
     }
 
     private MvcResult doRequest(RefreshTokenPayload payload) throws Exception {

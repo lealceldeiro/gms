@@ -1,6 +1,5 @@
 package com.gms.controller.security.user;
 
-import com.gms.controller.BaseController;
 import com.gms.domain.security.role.BRole;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.ResourcePath;
@@ -18,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(ResourcePath.USER)
-public class UserController extends BaseController{
+public class UserController {
 
     private final UserService userService;
 

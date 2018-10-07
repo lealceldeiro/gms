@@ -1,6 +1,5 @@
 package com.gms.controller.configuration;
 
-import com.gms.controller.BaseController;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.GmsGeneralException;
@@ -18,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(ResourcePath.CONFIGURATION)
-public class ConfigurationController extends BaseController{
+public class ConfigurationController {
 
     private final ConfigurationService configService;
 

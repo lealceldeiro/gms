@@ -1,4 +1,4 @@
-package com.gms.controller;
+package com.gms.config;
 
 import com.gms.component.security.authentication.AuthenticationFacade;
 import com.gms.util.constant.DefaultConst;
@@ -7,32 +7,33 @@ import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Base controller for defining common actions to all controllers in the app.
+ * Default controller for handling exceptions in the app.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
-@RestController
-@RestControllerAdvice
-public class BaseController extends ResponseEntityExceptionHandler {
+@RequiredArgsConstructor
+@Controller
+@ControllerAdvice
+public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @Autowired protected MessageResolver msg;
-    @Autowired private AuthenticationFacade authenticationFacade;
-    @Autowired protected DefaultConst dc;
+    private final MessageResolver msg;
+    private final AuthenticationFacade authenticationFacade;
+    private final DefaultConst dc;
 
     //region exceptions handling
 
@@ -44,7 +45,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(NotFoundEntityException.class)
-    protected ResponseEntity<Object> handleNotFoundEntityException(NotFoundEntityException ex, WebRequest req) {
+    public ResponseEntity<Object> handleNotFoundEntityException(NotFoundEntityException ex, WebRequest req) {
         Object resBody = ExceptionUtil.createResponseBodyAsMap(msg.getMessage(ex.getMessage()), dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
     }
@@ -57,7 +58,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(GmsSecurityException.class)
-    protected ResponseEntity<Object> handleGmsSecurityException(GmsSecurityException ex, WebRequest req) {
+    public ResponseEntity<Object> handleGmsSecurityException(GmsSecurityException ex, WebRequest req) {
         authenticationFacade.setAuthentication(null);
         Object resBody = ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNAUTHORIZED, req);
@@ -71,7 +72,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(GmsGeneralException.class)
-    protected ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
+    public ResponseEntity<Object> handleGmsGeneralException(GmsGeneralException ex, WebRequest req) {
         Object resBody = ExceptionUtil.getResponseBodyForGmsGeneralException(ex, msg, dc);
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), ex.getHttpStatus(), req);
     }
@@ -86,7 +87,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(TransactionSystemException.class)
-    protected ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex, WebRequest req) {
+    public ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex, WebRequest req) {
         return handleConstraintViolationException(ex, req);
     }
 
@@ -99,7 +100,7 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
-    protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest req) {
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest req) {
         return handleConstraintViolationException(ex, req);
     }
 
@@ -112,8 +113,8 @@ public class BaseController extends ResponseEntityExceptionHandler {
      * containing detailed information about the exception.
      */
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    protected ResponseEntity<Object> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex,
-                                                                              WebRequest req) {
+    public ResponseEntity<Object> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex,
+                                                                           WebRequest req) {
         return handleExceptionInternal(ex,
                 ExceptionUtil.createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, req);

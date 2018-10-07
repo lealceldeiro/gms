@@ -1,7 +1,6 @@
 package com.gms.controller.security;
 
 import com.gms.component.security.token.JWTService;
-import com.gms.controller.BaseController;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.SecurityConst;
@@ -32,7 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @BasePathAwareController
-public class SecurityController extends BaseController{
+public class SecurityController {
 
     private final UserService userService;
     private final SecurityConst sc;
