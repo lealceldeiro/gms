@@ -6,6 +6,8 @@ package com.gms.util.constant;
  */
 public class ResourcePath {
 
+    private static final ResourcePath INSTANCE = new ResourcePath();
+
     /**
      * Relative url for {@link com.gms.domain.configuration.BConfiguration} resources.
      */
@@ -109,7 +111,7 @@ public class ResourcePath {
     private ResourcePath() {}
 
     public static ResourcePath getInstance() {
-        return new ResourcePath();
+        return INSTANCE;
     }
 
 }

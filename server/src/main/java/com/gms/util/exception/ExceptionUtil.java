@@ -18,9 +18,7 @@ import java.util.*;
  */
 public class ExceptionUtil {
 
-    private ExceptionUtil() {
-
-    }
+    private ExceptionUtil() {}
 
     /**
      * Creates the response body for exceptions of type {@link GmsGeneralException}

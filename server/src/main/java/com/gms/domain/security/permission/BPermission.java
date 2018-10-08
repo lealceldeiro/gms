@@ -52,4 +52,5 @@ public class BPermission extends GmsEntity {
      */
     @ManyToMany(mappedBy = "permissions")
     private Set<BRole> roles;
+
 }

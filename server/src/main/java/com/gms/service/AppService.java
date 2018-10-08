@@ -24,7 +24,7 @@ public class AppService {
      private final RoleService roleService;
      private final UserService userService;
      private final OwnedEntityService oeService;
-     private Boolean initialLoadOK = null;
+     private Boolean initialLoadOK;
 
     /**
      * Returns whether the application started successfully or not. In order to start the application successfully there

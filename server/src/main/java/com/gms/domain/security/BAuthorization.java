@@ -53,4 +53,5 @@ public class BAuthorization implements Serializable {
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private BRole role;
+
 }

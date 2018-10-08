@@ -6,6 +6,8 @@ package com.gms.util.i18n;
  */
 public class CodeI18N {
 
+    private static final CodeI18N INSTANCE = new CodeI18N();
+
     /**
      * Code for the message indicating a field must not be blank.
      */
@@ -36,7 +38,7 @@ public class CodeI18N {
     private CodeI18N() {}
 
     public static CodeI18N getInstance() {
-        return new CodeI18N();
+        return INSTANCE;
     }
 
 }

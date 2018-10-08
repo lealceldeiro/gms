@@ -27,8 +27,8 @@ public class Application extends SpringBootServletInitializer {
     }
 
     /** Extends SpringBootServletInitializer and overrides the configure method (See:
-     * https://stackoverflow.com/questions/39567434/spring-boot-application-gives-404-when-deployed-to-tomcat-but-works-with-embedde)
-     * and officially here: https://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#howto-create-a-deployable-war-file
+     * https://stackoverflow.com/q/39567434/5640649) and officially here:
+     * https://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#howto-create-a-deployable-war-file
      * @param builder SpringApplicationBuilder
      * @return SpringApplicationBuilder
      */

@@ -61,4 +61,5 @@ public class BConfiguration extends GmsEntity {
         this.value = value;
         this.userId = userId;
     }
+
 }

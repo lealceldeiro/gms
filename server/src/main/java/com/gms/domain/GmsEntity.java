@@ -22,4 +22,5 @@ public class GmsEntity implements Serializable {
 
     @Version
     protected Integer version;
+
 }

@@ -3,6 +3,7 @@ package com.gms.repositorydao;
 import com.gms.domain.security.role.BRole;
 import com.gms.service.db.QueryService;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,9 @@ public abstract class BAuthorizationDAO {
     public abstract Map<String, List<BRole>> getRolesForUserOverAllEntities(long userId);
     public abstract List<BRole> getRolesForUserOverEntity(long userId, long entityId);
 
-    void processRolesVal(List<Object[]> rawVal, List<BRole> r) {
+    List<BRole> getRolesListFrom(List<Object[]> rawVal) {
         BRole role;
+        List<BRole> r = new LinkedList<>();
         for (Object[] oVal : rawVal) {
             role = new BRole(oVal[2].toString());
             role.setId(Long.valueOf(oVal[0].toString()));
@@ -27,6 +29,7 @@ public abstract class BAuthorizationDAO {
             role.setDescription(oVal[3].toString());
             r.add(role);
         }
+        return r;
     }
 
 }

@@ -38,7 +38,7 @@ public class EUser extends GmsEntity implements UserDetails {
      * For emails, max length  as here:
      * http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
      * explained here:
-     * https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address/574698#574698
+     * https://stackoverflow.com/a/574698/5640649
      */
     @Size(max = 254, message = CodeI18N.FIELD_SIZE)
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)

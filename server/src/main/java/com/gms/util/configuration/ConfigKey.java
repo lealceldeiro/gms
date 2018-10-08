@@ -24,4 +24,5 @@ public enum ConfigKey {
      * Specifies the id of the last accessed entity by a user
      */
     LAST_ACCESSED_ENTITY
+
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +38,13 @@ class PostgreSQLBAuthorizationDAO extends BAuthorizationDAO {
 
         Query queryR;
         List<Object[]> result;
-        List<BRole> rl;
         for (String OEUsername : oEntitiesUsernames) {
             queryR = queryService.createNativeQuery("SELECT r.id, r.version, r.label, r.description, r.enabled" +
                     " FROM brole r INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_entity e ON" +
                     " auth.entity_id = e.id WHERE e.username = :eUsername AND auth.user_id = :userId");
             queryR.setParameter("eUsername", OEUsername).setParameter(USER_ID_PARAM, userId);
             result = queryR.getResultList();
-            rl = new LinkedList<>();
-            processRolesVal(result, rl);
-            r.put(OEUsername, rl);
+            r.put(OEUsername, getRolesListFrom(result));
         }
         return r;
     }
@@ -61,11 +57,7 @@ class PostgreSQLBAuthorizationDAO extends BAuthorizationDAO {
                 " auth.entity_id = e.id WHERE e.id = :entityId AND auth.user_id = :userId");
         queryR.setParameter("entityId", entityId).setParameter(USER_ID_PARAM, userId);
         List<Object[]> rawVal = queryR.getResultList();
-        List<BRole> r = new LinkedList<>();
-
-        processRolesVal(rawVal, r);
-
-        return r;
+        return getRolesListFrom(rawVal);
     }
 
 }

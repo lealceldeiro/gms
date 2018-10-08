@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
@@ -23,10 +25,7 @@ public class DAOProvider {
 
     @Autowired
     public DAOProvider(QueryService queryService) {
-        if (queryService == null) {
-            throw new NullPointerException("QueryService not found");
-        }
-        this.queryService = queryService;
+        this.queryService = Objects.requireNonNull(queryService);
     }
 
     /**
