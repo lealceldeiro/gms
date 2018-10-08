@@ -18,8 +18,8 @@ public class DAOProvider {
 
     private final QueryService queryService;
 
-    private static final String NOT_IMPLEMENTED_YET = "Whether the `spring.datasource.url` property has not been specified or " +
-            "support for the specified one has not been implemented yet";
+    private static final String NOT_IMPLEMENTED_YET = "Whether the `spring.datasource.url` property has not been" +
+            "specified or support for the specified one has not been implemented yet";
 
     @Autowired
     public DAOProvider(QueryService queryService) {
