@@ -2,10 +2,10 @@ package com.gms.domain.configuration;
 
 import com.gms.domain.GmsEntity;
 import com.gms.util.i18n.CodeI18N;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,8 +19,10 @@ import javax.validation.constraints.Size;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Entity
 public class BConfiguration extends GmsEntity {
 
@@ -31,7 +33,7 @@ public class BConfiguration extends GmsEntity {
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
-    @Getter @Setter private String key;
+    private String key;
 
     /**
      * String representation of the configuration value.
@@ -40,26 +42,17 @@ public class BConfiguration extends GmsEntity {
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = 255)
-    @Getter @Setter private String value;
+    private String value;
 
     /**
      * User's identifier. Some configurations are user-specific. In those cases the identifier of the user is saved too.
      */
-    @Getter @Setter private Long userId;
-
-    public BConfiguration() {}
+    private Long userId;
 
     public BConfiguration(String key, String value) {
         super();
         this.key = key;
         this.value = value;
-    }
-
-    public BConfiguration(String key, String value, long userId) {
-        super();
-        this.key = key;
-        this.value = value;
-        this.userId = userId;
     }
 
 }

@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true, exclude = "description")
+@ToString(exclude = "description")
 @Entity
 public class EOwnedEntity extends GmsEntity {
 

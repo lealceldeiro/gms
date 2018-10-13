@@ -23,7 +23,7 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
-@ToString(callSuper = true, exclude = {"password", "authorities"})
+@ToString(of = {"username", "email", "name", "lastName"})
 @Entity
 public class EUser extends GmsEntity implements UserDetails {
 
@@ -85,7 +85,7 @@ public class EUser extends GmsEntity implements UserDetails {
     // user authorities are handled via jjwt, this attribute is kept for compatibility with Spring Security
     @SuppressWarnings("JpaAttributeTypeInspection")
     @Getter(AccessLevel.NONE)
-    private HashSet<GrantedAuthority> authorities = null;
+    private HashSet<GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

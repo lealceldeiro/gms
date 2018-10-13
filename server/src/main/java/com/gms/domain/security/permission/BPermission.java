@@ -24,7 +24,7 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "roles")
-@ToString(callSuper = true, exclude = "roles")
+@ToString(exclude = "roles")
 @Entity
 public class BPermission extends GmsEntity {
 

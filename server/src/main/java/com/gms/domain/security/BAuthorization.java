@@ -6,6 +6,7 @@ import com.gms.domain.security.user.EUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
+@ToString(of = {"user", "entity", "role"})
 @Entity
 public class BAuthorization implements Serializable {
 
