@@ -26,7 +26,7 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @EqualsAndHashCode(callSuper = true, exclude = "roles")
 @ToString(exclude = "roles")
 @Entity
-public class BPermission extends GmsEntity {
+public final class BPermission extends GmsEntity {
 
     /**
      * Name to be used for authenticating the user.

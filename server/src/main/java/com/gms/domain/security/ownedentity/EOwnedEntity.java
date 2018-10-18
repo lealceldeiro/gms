@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = "description")
 @Entity
-public class EOwnedEntity extends GmsEntity {
+public final class EOwnedEntity extends GmsEntity {
 
     /**
      * Natural name which is used commonly for referring to the entity.

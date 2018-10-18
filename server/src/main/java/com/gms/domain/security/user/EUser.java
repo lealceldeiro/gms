@@ -25,7 +25,7 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
 @ToString(of = {"username", "email", "name", "lastName"})
 @Entity
-public class EUser extends GmsEntity implements UserDetails {
+public final class EUser extends GmsEntity implements UserDetails {
 
     @Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
