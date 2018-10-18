@@ -31,7 +31,7 @@ public class PermissionService {
         final BPermissionConst[] constPermissions = BPermissionConst.values();
         for (BPermissionConst p : constPermissions) {
             ok = ok && repository.save(
-                    new BPermission(
+                    new com.gms.domain.security.permission.BPermission(
                             p.toString(), p.toString().replaceAll("__", " ").replaceAll("_", " ")
                     )
             ) != null;
