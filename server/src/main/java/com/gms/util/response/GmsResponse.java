@@ -2,7 +2,6 @@ package com.gms.util.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
  */
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class GmsResponse {
 
     private String message = "";

@@ -3,7 +3,10 @@ package com.gms.domain.security.role;
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.util.i18n.CodeI18N;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,7 +25,6 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
  */
 @Data
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "permissions")
 @ToString(of = {"label"})
 @Entity
