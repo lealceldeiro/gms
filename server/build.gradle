@@ -4,7 +4,7 @@ buildscript {
         nodePluginVersion = "1.2.0"
         propdepsPluginVersion = "0.0.9.RELEASE"
         jwtVersion = "0.9.0"
-        lombokVersion = "1.16.20"
+        lombokVersion = "1.18.2"
         refVersion = "0.9.11"
         flywayVersion = "5.0.7"
         envSet = false
