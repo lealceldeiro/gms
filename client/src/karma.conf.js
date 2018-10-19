@@ -28,7 +28,8 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] :
       [
-        'Chrome', 'Chromium',
+        'Chromium',
+        // 'Chrome',
         // 'Firefox'
       ],
     customLaunchers: process.env.TRAVIS ? {
