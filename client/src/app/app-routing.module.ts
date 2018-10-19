@@ -7,7 +7,7 @@ const  routes: Routes = [
     path: 'login', loadChildren: './login/gms-login.module#GmsLoginModule', canActivateChild: [LoginGuard],
     canLoad: [LoginGuard]
   },
-  { path: 'permissions', loadChildren: './permission/permission.module#PermissionModule'},
+  { path: 'permissions', loadChildren: './permissions/permissions.module#PermissionsModule'},
   { path: '**', loadChildren: './page-not-found/page-not-found.module#PageNotFoundModule'}
 ];
 

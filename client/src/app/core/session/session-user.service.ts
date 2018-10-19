@@ -27,7 +27,6 @@ export class SessionUserService {
    * @returns {Observable<UserPdModel>}
    */
   getCurrentUser(usernameOrEmail: string): Observable<UserPdModel> {
-    console.log(this.url + 'user/search/username-email');
     return this.http.get<UserPdModel>(this.url + 'user/search/username-email',
       { params: { username: usernameOrEmail, email: usernameOrEmail } });
   }

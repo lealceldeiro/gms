@@ -1,10 +1,10 @@
-import { PermissionModule } from './permission.module';
+import { PermissionsModule } from './permissions.module';
 
 describe('PermissionModule', () => {
-  let permissionModule: PermissionModule;
+  let permissionModule: PermissionsModule;
 
   beforeEach(() => {
-    permissionModule = new PermissionModule();
+    permissionModule = new PermissionsModule();
   });
 
   it('should create an instance', () => {

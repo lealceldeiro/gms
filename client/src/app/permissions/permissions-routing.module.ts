@@ -9,4 +9,4 @@ const routes = [
 @NgModule({
   imports: [ RouterModule.forChild(routes) ],
 })
-export class PermissionRoutingModule { }
+export class PermissionsRoutingModule { }
