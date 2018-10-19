@@ -27,7 +27,7 @@ By default _Google Chrome_/_Chromium_ is used. You can use Firefox by activating
 
 ### Running end-to-end tests
 
-You need to have installed [Chromium Web Browser](http://www.chromium.org/)
+You need to have installed either [Google Chrome](https://www.google.com/chrome/), [Chromium](http://www.chromium.org/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/).
 
 - Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
