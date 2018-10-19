@@ -19,7 +19,9 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ### Running unit tests
 
-You need to have installed [Chromium Web Browser](http://www.chromium.org/)
+You need to have installed either [Google Chrome](https://www.google.com/chrome/), [Chromium Web Browser](http://www.chromium.org/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/).
+
+By default _Google Chrome_/_Chromium is used. You can use Firefox by activating it at `./src/karma.conf.js`
 
  - Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run testwatch` in order to watch for changes while running the tests. With `npm run testcoverage` it can be generated a coverage report.
 
