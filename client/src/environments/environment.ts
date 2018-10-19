@@ -10,7 +10,7 @@
 export const environment = {
   production: false,
 
-  apiBaseUrl: 'http://127.0.0.1:8081/gms/api/',
+  apiBaseUrl: 'http://127.0.0.1:8081/api/',
   apiLoginUrl: 'login',
   metaName: 'General Management System'
 };
