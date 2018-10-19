@@ -24,6 +24,12 @@ export class PermissionService {
   constructor(private http: HttpClient) { }
 
 
+  /**
+   * Returns an observable with a list of permissions.
+   * @param {number} size Size of the page for loading permissions.
+   * @param {number} page Number of the page.
+   * @return {Observable<PermissionPd>} Containing the permissions data.
+   */
   getPermissions(size: number, page: number): Observable<PermissionPd> {
     const params = new HttpParams();
     params.append('size', String(size));
