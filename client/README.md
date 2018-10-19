@@ -21,13 +21,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 You need to have installed either [Google Chrome](https://www.google.com/chrome/), [Chromium](http://www.chromium.org/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/).
 
-By default _Google Chrome_/_Chromium_ is used. You can use Firefox by activating it (and deactivating _Chrome_/_Chromium_) at <a href= "src/karma.conf.js">karma.conf.js</a>
+By default Chromium is used. You can use Google Chrome or Firefox by activating them at <a href= "src/karma.conf.js">karma.conf.js</a>
 
  - Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run testwatch` in order to watch for changes while running the tests. With `npm run testcoverage` it can be generated a coverage report.
 
 ### Running end-to-end tests
 
 You need to have installed either [Google Chrome](https://www.google.com/chrome/), [Chromium](http://www.chromium.org/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/).
+
+By default Chromium is used. You can use Google Chrome or Firefox by activating them at <a href= "src/karma.conf.js">karma.conf.js</a>
 
 - Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
