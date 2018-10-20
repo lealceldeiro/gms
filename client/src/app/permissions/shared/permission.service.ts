@@ -7,9 +7,7 @@ import { environment } from '../../../environments/environment';
 /**
  * Service for providing permissions-related services.
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PermissionService {
 
   /**
