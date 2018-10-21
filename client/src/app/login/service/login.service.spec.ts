@@ -54,7 +54,7 @@ describe('LoginService', () => {
       imports: [HttpClientTestingModule],
       providers: [LoginService, { provide: SessionService, useValue: sessionServiceStub },
         { provide: SessionUserService, useValue: sessionUserServiceStub },
-        { provide: InterceptorHelperService, useValue: intHelperServiceStub}]
+        { provide: InterceptorHelperService, useValue: intHelperServiceStub }]
     });
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);

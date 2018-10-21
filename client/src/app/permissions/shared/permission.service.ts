@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { PermissionPd } from './permission-pd';
 import { environment } from '../../../environments/environment';
+import { ParamsService } from '../../core/request/params/params.service';
 
 /**
  * Service for providing permissions-related services.
@@ -18,8 +19,9 @@ export class PermissionService {
   /**
    * Service's constructor
    * @param {HttpClient} http HttpClient for performing api requests.
+   * @param {ParamsService} paramsService ParamsService for getting request params formatted properly.
    */
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private paramsService: ParamsService) { }
 
 
   /**
@@ -29,9 +31,9 @@ export class PermissionService {
    * @return {Observable<PermissionPd>} Containing the permissions data.
    */
   getPermissions(size: number, page: number): Observable<PermissionPd> {
-    const params = new HttpParams();
-    params.append('size', String(size));
-    params.append('page', String(page));
-    return this.http.get<PermissionPd>(this.url, { params: params });
+    const p = {};
+    p[ParamsService.SIZE] = size;
+    p[ParamsService.PAGE] = page;
+    return this.http.get<PermissionPd>(this.url, { params: this.paramsService.getHttpParams(p) });
   }
 }
