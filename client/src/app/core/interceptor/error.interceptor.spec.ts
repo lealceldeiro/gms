@@ -1,4 +1,4 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
@@ -77,7 +77,7 @@ describe('ErrorInterceptor', () => {
     });
 
   it('should do nothing when `event instanceof HttpErrorResponse` is `false`',
-    () => {
+    fakeAsync(() => {
       httpClient.get(url).subscribe(() => {}, (error) => {
         expect(error).toBeTruthy();
         expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
@@ -89,7 +89,8 @@ describe('ErrorInterceptor', () => {
       */
       const errRes: HttpResponse<any> = new HttpResponse({ status: 204, statusText: 'Another Error', url: url });
       httpTestingController.expectOne(url).flush(errRes);
-    });
+      tick();
+    }));
 
   it('should show as `title` "Error" as default and an empty string as `message`', () => {
     httpClient.get(url).subscribe(() => {}, (error) => {

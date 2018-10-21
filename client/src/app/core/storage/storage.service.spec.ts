@@ -1,6 +1,6 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { CookieService } from 'ngx-cookie';
-import { BehaviorSubject, Observable } from 'rxjs/index';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 
 import { StorageService } from './storage.service';
@@ -210,33 +210,27 @@ describe('StorageService', () => {
 
   it('should console warn if when trying to clear the element saved under a key localStorage service fails',
     fakeAsync(() => {
-      let threw = false;
       // mock error
       removeItemFn = () => error$;
       const uk = storageService['gmsLs'] + key;
       storageService.clear(key).subscribe(() => {}, () => {
-        threw = true;
         if (storageService['tryClearCount'][uk] >= 2) {
           expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
         }
       });
       tick();
-      expect(threw).toBeTruthy();
     }));
 
   it('should console warn if when trying to clear all elements localStorage service fails', fakeAsync(() => {
-    let threw = false;
     // mock error
     clearFn = () => error$;
     const uk = storageService['gmsLs'];
     storageService.clear().subscribe(() => {}, () => {
-      threw = true;
       if (storageService['tryClearCount'][uk] >= 2) {
         expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
       }
     });
     tick();
-    expect(threw).toBeTruthy();
   }));
   // endregion
 

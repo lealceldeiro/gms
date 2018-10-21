@@ -3,7 +3,7 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs/internal/Subject';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginComponent } from './login.component';

@@ -1,6 +1,6 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BehaviorSubject, Observable } from 'rxjs/index';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { SessionService } from './session.service';
 import { StorageService } from '../storage/storage.service';
@@ -86,14 +86,10 @@ describe('SessionService', () => {
   }));
 
   it('when there is an error with the observable, isNotLoggedIn should warn in console', fakeAsync(() => {
-    let threw = false;
     sessionService['notLoggedIn$'] = error$;
-    sessionService.isNotLoggedIn().subscribe(() => {}, () => {
-      threw = true;
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    });
+    sessionService.isNotLoggedIn().toPromise().then(() => {}, e => expect(e).toEqual(sampleError));
     tick();
-    expect(threw).toBeTruthy();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('default value for isNotLoggedIn should be `true`', () => {
@@ -181,29 +177,19 @@ describe('SessionService', () => {
     tick();
   }));
 
-  it('setRememberMe should set the proper value regarding to `rememberMe` value (`true`)', fakeAsync(() => {
-    let ticked = false;
-    sessionService['rememberMe$'].subscribe((r: boolean) => {
-      if (ticked) {
-        expect(r).toBeTruthy();
-      }
-    });
+  it('setRememberMe should set the proper value regarding to `rememberMe` value (`true`)', () => {
     sessionService.setRememberMe(true);
-    ticked = true;
-    tick();
-  }));
-
-  it('setRememberMe should set the proper value regarding to `rememberMe` value (`false`)', fakeAsync(() => {
-    let ticked = false;
     sessionService['rememberMe$'].subscribe((r: boolean) => {
-      if (ticked) {
-        expect(r).toBeTruthy();
-      }
+        expect(r).toEqual(true);
     });
+  });
+
+  it('setRememberMe should set the proper value regarding to `rememberMe` value (`false`)', () => {
     sessionService.setRememberMe(false);
-    ticked = true;
-    tick();
-  }));
+    sessionService['rememberMe$'].subscribe((r: boolean) => {
+        expect(r).toEqual(false);
+    });
+  });
 
   it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session' +
     ' user as `null`', () => {
