@@ -28,7 +28,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   page: { total: number, size: number, current: number, totalPages } = {
     total: 0,
     totalPages: 0,
-    size: 10,
+    size: 8,
     current: 0
   };
 

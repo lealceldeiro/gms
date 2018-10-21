@@ -1,14 +1,14 @@
-<table>
+<table class="table table-hover">
   <thead>
   <tr>
-    <th>Name</th>
-    <th>Label</th>
+    <th scope="col">Label</th>
+    <th scope="col">Name</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let p of permissionList">
-    <td>{{p.name}}</td>
     <td>{{p.label}}</td>
+    <td>{{p.name}}</td>
   </tr>
   </tbody>
 </table>
