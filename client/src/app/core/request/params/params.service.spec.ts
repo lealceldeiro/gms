@@ -31,7 +31,7 @@ describe('ParamsService', () => {
     for (const k in paramsObj) {
       if (paramsObj.hasOwnProperty(k)) {
         expect(httpParams.has(k)).toBeTruthy('HttpParams doesn\'t have key: ' + k);
-        expect(paramsObj[k].toString()).toBe(httpParams.get(k), 'Params for key ' + k + '  don\'t match');
+        expect(paramsObj[k].toString()).toEqual(httpParams.get(k), 'Params for key ' + k + '  don\'t match');
       }
     }
   });

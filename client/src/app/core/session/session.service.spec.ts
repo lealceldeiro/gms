@@ -30,8 +30,9 @@ describe('SessionService', () => {
     token_type: 'typeTMock',
     username: 'userSample',
   };
+  const sampleError = new Error('test error');
   const authData$ = new BehaviorSubject<LoginResponseModel>(mockLoginResponse).asObservable();
-  const error$ = Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
+  const error$ = Observable.create(observer => { observer.error(sampleError); observer.complete(); });
 
   // region values for simulating a fresh store service
   const subjectNull$ = new BehaviorSubject(null).asObservable();
@@ -78,14 +79,10 @@ describe('SessionService', () => {
   });
 
   it('when there is an error with the observable, isLoggedIn should warn in console', fakeAsync(() => {
-    let threw = false;
     sessionService['loggedIn$'] = error$;
-    sessionService.isLoggedIn().subscribe(() => {}, () => {
-      threw = true;
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    });
+    sessionService.isLoggedIn().toPromise().then(() => {}, e => expect(e).toEqual(sampleError));
     tick();
-    expect(threw).toBeTruthy();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('when there is an error with the observable, isNotLoggedIn should warn in console', fakeAsync(() => {
