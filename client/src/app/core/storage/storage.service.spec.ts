@@ -207,31 +207,6 @@ describe('StorageService', () => {
     });
     expect(removeItemSpy).toHaveBeenCalled();
   });
-
-  it('should console warn if when trying to clear the element saved under a key localStorage service fails',
-    fakeAsync(() => {
-      // mock error
-      removeItemFn = () => error$;
-      const uk = storageService['gmsLs'] + key;
-      storageService.clear(key).subscribe(() => {}, () => {
-        if (storageService['tryClearCount'][uk] >= 2) {
-          expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-        }
-      });
-      tick();
-    }));
-
-  it('should console warn if when trying to clear all elements localStorage service fails', fakeAsync(() => {
-    // mock error
-    clearFn = () => error$;
-    const uk = storageService['gmsLs'];
-    storageService.clear().subscribe(() => {}, () => {
-      if (storageService['tryClearCount'][uk] >= 2) {
-        expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-      }
-    });
-    tick();
-  }));
   // endregion
 
   // region cookies
