@@ -1,7 +1,7 @@
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { Subject } from 'rxjs/internal/Subject';
+import { Subject } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -32,7 +32,7 @@ describe('LoginComponent', () => {
   const sampleReq: LoginRequestModel = { password: text, usernameOrEmail: text };
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
-  let ret = (a) => subjectLRM.asObservable();
+  let ret;
   const spy = { login: (a) => {}, error: (a, b) => {} };
   const s = new Subject<boolean>();
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
@@ -54,6 +54,7 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
+    ret = (a) => subjectLRM.asObservable();
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     componentEl = fixture.nativeElement;
