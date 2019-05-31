@@ -1,6 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/index';
-import { Spinkit } from 'ng-http-loader';
 
 import { SessionService } from './core/session/session.service';
 
@@ -13,12 +12,6 @@ import { SessionService } from './core/session/session.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
-  /**
-   * Object holding the spinner type to be shown.
-   * @type {}
-   */
-  public spinkit = Spinkit;
 
   /**
    * Indicates whether the user is logged in or not.
