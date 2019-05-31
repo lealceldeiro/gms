@@ -36,6 +36,7 @@
     "core-js": "^2.5.7",
     "ngx-cookie": "^4.0.2",
     "ngx-toastr": "^10.0.4",
+    "ngx-ui-loader": "^7.2.2",
     "rxjs": "^6.5.2",
     "zone.js": "^0.9.1"
   },

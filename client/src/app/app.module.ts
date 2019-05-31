@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +23,8 @@ import { HomeModule } from './home/home.module';
   imports: [
     BrowserModule,
     HttpClientModule,
-
+    NgxUiLoaderModule,        // "loader" (spinner) component
+    NgxUiLoaderHttpModule,    // show loader for every http request
     BrowserAnimationsModule,  // required by toastr
     ToastrModule.forRoot({ preventDuplicates: true, autoDismiss: true, enableHtml: true }),
     CookieModule.forRoot(),
