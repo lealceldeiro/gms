@@ -24,7 +24,6 @@ import { HomeModule } from './home/home.module';
     BrowserModule,
     HttpClientModule,
     NgxUiLoaderModule,        // "loader" (spinner) component
-    NgxUiLoaderHttpModule,    // show loader for every http request
     BrowserAnimationsModule,  // required by toastr
     ToastrModule.forRoot({ preventDuplicates: true, autoDismiss: true, enableHtml: true }),
     CookieModule.forRoot(),

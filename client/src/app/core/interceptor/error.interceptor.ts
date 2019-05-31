@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs/';
 import { tap } from 'rxjs/operators';
 
 import { InterceptorHelperService } from './interceptor-helper.service';
@@ -15,8 +15,8 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   /**
    * Interceptor constructor.
-   * @param notificationService {NotificationService} Service for showing the messages.
-   * @param intHelperService InterceptorHelperService for sharing information with the rest of the services.
+   * @param {NotificationService} notificationService Service for showing the messages.
+   * @param {InterceptorHelperService} intHelperService for sharing information with the rest of the services.
    */
   constructor(private notificationService: NotificationService, private intHelperService: InterceptorHelperService) { }
 
