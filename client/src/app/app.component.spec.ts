@@ -22,8 +22,8 @@ describe('AppComponent', () => {
   @Component({selector: 'router-outlet', template: ''})  // tslint:disable-line
   class RouterOutletStubComponent {}
 
-  @Component({selector: 'spinner', template: ''})  // tslint:disable-line
-  class SpinnerStubComponent { @Input() spinner: any; }
+  @Component({selector: 'ngx-ui-loader', template: ''})  // tslint:disable-line
+  class LoadingIndicatorComponent { }
 
   const spy = { isRememberMe: () => {}, closeSession: () => {} };
   const subject = new Subject();
@@ -39,7 +39,7 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AppComponent, NavBarStubComponent, SideMenuStubComponent, RouterOutletStubComponent,
-        SpinnerStubComponent ],
+        LoadingIndicatorComponent ],
       providers: [ { provide: SessionService, useValue: sessionServiceStub}]
     }).compileComponents();
   }));
