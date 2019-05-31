@@ -6,6 +6,18 @@
 * [Overview](#overview)
 * [Ready for production](#ready-for-production)
 * [How to start developing](#how-to-start-developing)
+    1. [Using IntelliJ IDEA](#1-using-intellij-idea)
+
+        1.1. [API Server module](#11-api-server-module)
+
+        1.2. [Client module](#12-client-module)
+    2. [Using Eclipse](#2-using-eclipse)
+
+        2.1. [Additional tools](#21-additional-tools)
+
+        2.2. [API Server module](#22-api-server-module)
+
+        2.3. [Client module](#23-client-module)
 
 
 ## Overview
@@ -46,8 +58,8 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 ## How to start developing
 * Make a local working copy of the project (` git clone https://github.com/lealceldeiro/gms.git`).
 
-### IntelliJ IDEA
-#### API Server module
+### 1. Using IntelliJ IDEA
+#### 1.1. API Server module
 * Open (import) the folder **server** in the working copy of the project.
 
 ![Image: Open server folder](./help/images/1-server-open-home.idea.png)
@@ -65,7 +77,7 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 
 ![Image: Server module ready](./help/images/4-server-module-ready.png)
 
-#### Client module
+#### 1.2. Client module
 * `Open Module Settings` (F4) and add a new module (+ green sign) and select the `Import Module` option.
 
 ![Image: Open module settings](./help/images/5-client-add-module.png)
@@ -95,6 +107,64 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 
 #### At this point the project should contain two modules (_server_ and _client_)
 
+### 2. Using Eclipse
+#### 2.1. Additional tools
+
+These tools are not really mandatory, but in order to get an increased productivity they are recommended.
+
+* [Spring Tools 4 - for Spring Boot (aka Spring Tool Suite 4)][9]
+* [CodeMix][10]
+
+#### 2.2. API Server module
+
+* Go to _File_ > _Import_.
+
+![Image: Import](./help/images/eclipse-1-import.png)
+
+* Select the wizard for "_Existing Gradle Project_"
+
+![Image: Select the wizard for Existing Gradle Project](./help/images/eclipse-2-import-server-gradle-wizard.png)
+
+* Select the _server_ folder location (where you ckecked out the project from github)
+
+![Image: Select the server folder location](./help/images/eclipse-3-select-folder-location.png)
+
+* Specify the [gradle][1] and Java options. The recommended way is to leave it as it is by default for gradle: use the wrapper. Nevertheless you can customize all these parameters as desired.
+
+![Image: Specify the Gradle and Java options](./help/images/eclipse-4-select-gradle-and-java-options.png)
+
+* Check that all parameters are the correct ones for the import in the "_Import Preview_" step and click _Finish_.
+
+![Image: Import Preview](./help/images/eclipse-5-finish-server-import.png)
+
+* The _server_ module should be imported at this point and shown similar to this:
+
+![Image: Import Preview](./help/images/eclipse-6-server-imported.png)
+
+#### 2.3. Client module
+
+* Go to _File_ > _Import_.
+
+![Image: Import](./help/images/eclipse-1-import.png)
+
+* Select the wizard for "_Angular Project_"
+
+![Image: Select the wizard for Angular Project](./help/images/eclipse-7-import-client-angular-wizard.png)
+
+* Select the _client_ folder location (where you ckecked out the project from github)
+
+![Image: Select the server folder location](./help/images/eclipse-8-select-folder-location.png)
+
+* Check that all parameters are the correct ones for the import in the "_Configure NPM and Angular CLI Commands_" step and click _Finish_.
+
+![Image: Configure NPM and Angular CLI Commands](./help/images/eclipse-9-finish-client-import.png)
+
+* The _client_ module should be imported at this point and shown similar to this:
+
+![Image: Import Preview](./help/images/eclipse-10-client-imported.png)
+
+#### At this point in the workspace should be two projects (_server_ and _client_)
+
 [1]: https://gradle.org/
 [2]: https://cli.angular.io/
 [3]: https://www.npmjs.com/package/angular-cli
@@ -103,3 +173,5 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 [6]: https://gradle.org/
 [7]: https://www.npmjs.com/get-npm
 [8]: http://tomcat.apache.org/
+[9]: https://marketplace.eclipse.org/content/spring-tools-4-spring-boot-aka-spring-tool-suite-4
+[10]: https://marketplace.eclipse.org/content/codemix-3
