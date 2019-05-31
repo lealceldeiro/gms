@@ -23,11 +23,11 @@ import { HomeModule } from './home/home.module';
   imports: [
     BrowserModule,
     HttpClientModule,
-    NgHttpLoaderModule,
+    NgHttpLoaderModule.forRoot(),
     BrowserAnimationsModule,  // required by toastr
     ToastrModule.forRoot({ preventDuplicates: true, autoDismiss: true, enableHtml: true }),
     CookieModule.forRoot(),
-    NgbModule.forRoot(),
+    NgbModule,
     SharedModule,
     GmsCoreModule.forRoot(),
     HomeModule,

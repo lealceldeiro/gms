@@ -16,15 +16,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /**
    * Object holding the spinner type to be shown.
-   * @type {}}
+   * @type {}
    */
-  spinkit = Spinkit;
+  public spinkit = Spinkit;
 
   /**
    * Indicates whether the user is logged in or not.
    * @type {boolean}
    */
-  loggedIn = false;
+  public loggedIn = false;
 
   /**
    * Subscription to new values returned by SessionService#isLoggedIn.
