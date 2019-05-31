@@ -78,3 +78,6 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+# Other dynamic generate contents
+/WEB-INF/
