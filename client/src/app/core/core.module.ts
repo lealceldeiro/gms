@@ -7,6 +7,7 @@ import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormHelperService } from './form/form-helper.service';
 import { ErrorInterceptor } from './interceptor/error.interceptor';
+import { AllRequestsInterceptor } from './interceptor/all-requests.interceptor.service';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
 import { NotificationService } from './messages/notification.service';
 import { PageNotFoundService } from './navigation/page-not-found.service';
@@ -46,6 +47,11 @@ export class GmsCoreModule {
         {
           provide: NotificationService,
           useClass: config && config['notificationService'] ? config['notificationService'] : NotificationService
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AllRequestsInterceptor,
+          multi: true
         },
         {
           provide: HTTP_INTERCEPTORS,
