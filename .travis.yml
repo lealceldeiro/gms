@@ -49,5 +49,6 @@ matrix:
         - npm install
       script:
         - npm run testcoverage
+        - npm run e2e
       after_success:
         - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
