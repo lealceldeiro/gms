@@ -31,6 +31,7 @@ export class SecurityInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // TODO: rewrite logic. This is somehow storing the requests and calling them all over again!
     const info$ = zip(
       this.sessionService.isLoggedIn(),
       this.sessionService.getHeader(),

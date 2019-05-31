@@ -49,9 +49,8 @@ export class LoginService {
         if (response.access_token) {
           this.sessionService.setAuthData(response);
           this.sessionService.setLoggedIn(true);
-          const us = this.sessionUserService.getCurrentUser(response.username).subscribe((userPgData: UserPdModel) => {
+          this.sessionUserService.getCurrentUser(response.username).subscribe((userPgData: UserPdModel) => {
             this.sessionService.setUser(userPgData._embedded.user[0]);
-            us.unsubscribe();
           });
         }
       })

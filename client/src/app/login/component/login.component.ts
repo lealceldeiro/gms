@@ -81,8 +81,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         usernameOrEmail: this.formValueOf('usernameOrEmail'),
         password: this.formValueOf('password')
       };
-      const ls = this.loginService.login(payload).subscribe(() => {
-        ls.unsubscribe();
+      this.loginService.login(payload).subscribe(() => {
         this.sessionService.setRememberMe(rm);
         this.router.navigateByUrl('home');
       }, (response: HttpResponseBase) => {
