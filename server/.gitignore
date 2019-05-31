@@ -80,4 +80,4 @@ local.properties
 .worksheet
 
 # Other dynamic generate contents
-/WEB-INF/
+WEB-INF/
