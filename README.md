@@ -113,7 +113,7 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 These tools are not really mandatory, but in order to get an increased productivity they are recommended.
 
 * [Spring Tools 4 - for Spring Boot (aka Spring Tool Suite 4)][9]
-* [CodeMix][10]
+* [TypeScript IDE][10]
 
 #### 2.2. API Server module
 
@@ -174,4 +174,4 @@ These tools are not really mandatory, but in order to get an increased productiv
 [7]: https://www.npmjs.com/get-npm
 [8]: http://tomcat.apache.org/
 [9]: https://marketplace.eclipse.org/content/spring-tools-4-spring-boot-aka-spring-tool-suite-4
-[10]: https://marketplace.eclipse.org/content/codemix-3
+[10]: https://marketplace.eclipse.org/content/typescript-ide
