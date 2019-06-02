@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivateChild, CanLoad, Router } from '@angular/router';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 
 import { SessionService } from '../session/session.service';

@@ -1,4 +1,5 @@
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered"
+	*ngIf="permissionList?.length">
 	<thead>
 		<tr>
 			<th scope="col">Label</th>
@@ -15,5 +16,5 @@
 
 <ngb-pagination [(page)]="page.current" [collectionSize]="page.total"
 	[pageSize]="page.size" [maxSize]="page.maxSize" [boundaryLinks]="true"
-	class="d-flex justify-content-center" (pageChange)="loadList($event)">
-</ngb-pagination>
+	class="d-flex justify-content-center" (pageChange)="loadList($event)"
+	*ngIf="permissionList?.length"> </ngb-pagination>
