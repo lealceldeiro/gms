@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 /**
- * Interceptor for setting/unsetting the loading indicator while doing all requests to the backend API.
+ * Interceptor for setting/un-setting the loading indicator while doing all requests to the backend API.
  */
 @Injectable()
 export class AllRequestsInterceptor implements HttpInterceptor {
@@ -67,7 +67,7 @@ export class AllRequestsInterceptor implements HttpInterceptor {
     }
 
     /**
-     * Decreases the requests count and stop the loader indicator.
+     * Decreases the requests count and stop the loader indicator if there are not more pending requests.
      */
     private stopRequest(): void {
         if (--this.requests <= 0) {
