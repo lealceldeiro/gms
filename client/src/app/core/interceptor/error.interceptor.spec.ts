@@ -1,4 +1,4 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
@@ -16,7 +16,7 @@ describe('ErrorInterceptor', () => {
   const httpErr: HttpErrorResponse = new HttpErrorResponse({
     error: { error: errMock.error, message: errMock.message }, status: errMock.status, statusText: 'Server Error', url: url
   });
-  const spy = { isExcludedFromErrorHandling: () => {}, err: (a, b) => {} };
+  const spy = { isExcludedFromErrorHandling: () => { }, err: (a, b) => { } };
   let isExcludedFromErrorHandlingReal = () => false;
   const intHelperServiceStub = {
     isExcludedFromErrorHandling: (): boolean => {
@@ -31,7 +31,7 @@ describe('ErrorInterceptor', () => {
   beforeEach(() => {
     isExcludedFromErrorHandlingReal = () => false;
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [HttpClientTestingModule],
       providers: [
         ErrorInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -64,36 +64,32 @@ describe('ErrorInterceptor', () => {
     httpTestingController.expectOne(url).flush({ data: 'ok' });
   });
 
-  it('should do nothing when InterceptorHelperService#isExcludedFromErrorHandling returns `true`',
-    () => {
-      isExcludedFromErrorHandlingReal = () => true;
-      httpClient.get(url).subscribe(() => {}, (error) => {
-        expect(error).toBeTruthy();
-        expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-        expect(spyMessageServiceError).not.toHaveBeenCalled();
-      });
-      // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-      httpTestingController.expectOne(url).flush(errMock, httpErr);
+  it('should do nothing when InterceptorHelperService#isExcludedFromErrorHandling returns `true`', () => {
+    isExcludedFromErrorHandlingReal = () => true;
+    httpClient.get(url).subscribe(() => { }, (error) => {
+      expect(error).toBeTruthy();
+      expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
+      expect(spyMessageServiceError).not.toHaveBeenCalled();
     });
+    // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
+    httpTestingController.expectOne(url).flush(errMock, httpErr);
+  });
 
-  it('should do nothing when `event instanceof HttpErrorResponse` is `false`',
-    fakeAsync(() => {
-      httpClient.get(url).subscribe(() => {}, (error) => {
-        expect(error).toBeTruthy();
-        expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-        expect(spyMessageServiceError).not.toHaveBeenCalled();
-      });
-      /*
-      flush response with something different from and HttpErrorResponse in order to NOT meet
-      second condition: event instanceof HttpErrorResponse
-      */
-      const errRes: HttpResponse<any> = new HttpResponse({ status: 204, statusText: 'Another Error', url: url });
-      httpTestingController.expectOne(url).flush(errRes);
-      tick();
-    }));
+  it('should do nothing when `event instanceof HttpErrorResponse` is `false`', () => {
+    httpClient.get(url).subscribe((res) => {
+      expect(res).toBeTruthy();
+      expect(spyMessageServiceError).not.toHaveBeenCalled();
+    });
+    /*
+    flush response with something different from and HttpErrorResponse in order to NOT meet
+    second condition: event instanceof HttpErrorResponse
+    */
+    const errRes: HttpResponse<any> = new HttpResponse({ status: 204, statusText: 'Another Error', url: url });
+    httpTestingController.expectOne(url).flush(errRes);
+  });
 
   it('should show as `title` "Error" as default and an empty string as `message`', () => {
-    httpClient.get(url).subscribe(() => {}, (error) => {
+    httpClient.get(url).subscribe(() => { }, (error) => {
       expect(error).toBeTruthy();
       expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
       expect(spyMessageServiceError).toHaveBeenCalled();
@@ -101,13 +97,13 @@ describe('ErrorInterceptor', () => {
       expect(spyMessageServiceError.calls.first().args[1]).toBe('Error');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({status: errMock.status, statusText: 'Server Error', url: url});
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: errMock.status, statusText: 'Server Error', url: url });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 
   it('should show as `title` "Unauthorized" when status is "Unauthorized"', () => {
-    httpClient.get(url).subscribe(() => {}, (error) => {
+    httpClient.get(url).subscribe(() => { }, (error) => {
       expect(spyMessageServiceError.calls.first().args[1]).toBe('Unauthorized');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
@@ -120,14 +116,14 @@ describe('ErrorInterceptor', () => {
 
   it('should show as title `Error` as default and add `title` and message if error object is present with ' +
     'both values inside it', () => {
-    httpClient.get(url).subscribe(() => {}, (error) => {
-      expect(error).toBeTruthy();
-      expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
-      expect(spyMessageServiceError).toHaveBeenCalled();
-      expect(spyMessageServiceError.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
-      expect(spyMessageServiceError.calls.first().args[1]).toBe('Error');
+      httpClient.get(url).subscribe(() => { }, (error) => {
+        expect(error).toBeTruthy();
+        expect(spyIsExcludedFromErrorHandling).toHaveBeenCalled();
+        expect(spyMessageServiceError).toHaveBeenCalled();
+        expect(spyMessageServiceError.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
+        expect(spyMessageServiceError.calls.first().args[1]).toBe('Error');
+      });
+      // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
+      httpTestingController.expectOne(url).flush(errMock, httpErr);
     });
-    // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-    httpTestingController.expectOne(url).flush(errMock, httpErr);
-  });
 });
