@@ -1,9 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, zip } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { SessionService } from '../session/session.service';
-import { switchMap } from 'rxjs/internal/operators';
 
 /**
  * Interceptor for setting on every request made the authorization header if the user has being logged in previously.
@@ -17,11 +16,36 @@ export class SecurityInterceptor implements HttpInterceptor {
   private sessionService: SessionService;
 
   /**
+   * Indicates whether the user is logged in or not.
+   */
+  private isLoggedIn = false;
+
+  /**
+   * Holds the authentication header.
+   */
+  private header: string;
+
+  /**
+   * Holds the token type.
+   */
+  private tokenType: string;
+
+  /**
+   * Holds the access token.
+   */
+  private accessToken: string;
+
+
+  /**
    * Interceptor constructor.
    * @param {Injector} injector Angular injector for retrieving the service dependencies properly.
    */
   constructor(private injector: Injector) {
     this.sessionService = this.injector.get(SessionService);
+    this.sessionService.isLoggedIn().subscribe((ili: boolean) => this.isLoggedIn = ili);
+    this.sessionService.getHeader().subscribe((h: string) => this.header = h);
+    this.sessionService.getTokenType().subscribe((tt: string) => this.tokenType = tt);
+    this.sessionService.getAccessToken().subscribe((at: string) => this.accessToken = at);
   }
 
   /**
@@ -31,22 +55,12 @@ export class SecurityInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // TODO: rewrite logic. This is somehow storing the requests and calling them all over again!
-    const info$ = zip(
-      this.sessionService.isLoggedIn(),
-      this.sessionService.getHeader(),
-      this.sessionService.getTokenType(),
-      this.sessionService.getAccessToken()
-    );
-    return info$.pipe(switchMap(result => {
-      if (result[0] && result[1] && result[2] && result[3]) { // logged in and all necessary data is here already
-        const iHeaders = {};
-        // Auth-header = 'TokenType AccessToken'
-        iHeaders[result[1] as string] = result[2] + ' ' + result[3];
-        return next.handle(req.clone({ setHeaders: iHeaders}));
-      } else {
-        return next.handle(req);
-      }
-    }));
+    if (this.isLoggedIn && this.header && this.tokenType && this.accessToken) { // logged in and all necessary data is here already
+      const iHeaders = {};
+      iHeaders[this.header] = this.tokenType + ' ' + this.accessToken;
+      return next.handle(req.clone({ setHeaders: iHeaders }));
+    } else {
+      return next.handle(req);
+    }
   }
 }

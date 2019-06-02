@@ -1,11 +1,12 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { SessionService } from './session/session.service';
 import { StorageService } from './storage/storage.service';
 import { LoginGuard } from './guard/login.guard';
 import { SessionUserService } from './session/session-user.service';
-import { SecurityInterceptor } from './interceptor/security.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormHelperService } from './form/form-helper.service';
+import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { ErrorInterceptor } from './interceptor/error.interceptor';
 import { AllRequestsInterceptor } from './interceptor/all-requests.interceptor.service';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
@@ -50,17 +51,17 @@ export class GmsCoreModule {
         },
         {
           provide: HTTP_INTERCEPTORS,
+          useClass: SecurityInterceptor,
+          multi: true
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
           useClass: AllRequestsInterceptor,
           multi: true
         },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: ErrorInterceptor,
-          multi: true
-        },
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: SecurityInterceptor,
           multi: true
         },
         {
