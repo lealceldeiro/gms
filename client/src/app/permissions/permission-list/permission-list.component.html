@@ -1,14 +1,19 @@
 <table class="table table-hover table-bordered">
-  <thead>
-  <tr>
-    <th scope="col">Label</th>
-    <th scope="col">Name</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let p of permissionList">
-    <td>{{p.label}}</td>
-    <td>{{p.name}}</td>
-  </tr>
-  </tbody>
+	<thead>
+		<tr>
+			<th scope="col">Label</th>
+			<th scope="col">Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let p of permissionList">
+			<td>{{p.label}}</td>
+			<td>{{p.name}}</td>
+		</tr>
+	</tbody>
 </table>
+
+<ngb-pagination [(page)]="page.current" [collectionSize]="page.total"
+	[pageSize]="page.size" [maxSize]="page.maxSize" [boundaryLinks]="true"
+	class="d-flex justify-content-center" (pageChange)="loadList($event)">
+</ngb-pagination>

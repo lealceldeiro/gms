@@ -19,29 +19,19 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   /**
    * List of permissions' subscription
    */
-  listSubscription: Subscription;
+  private listSubscription: Subscription;
 
   /**
    * Contains all API pagination information.
    * @type {{total: number; size: number; current: number}}
    */
-  page: { total: number, size: number, current: number, totalPages } = {
+  page: { total: number, size: number, current: number, totalPages: number, maxSize: number, previous: number } = {
     total: 0,
-    totalPages: 0,
     size: 8,
-    current: 0
-  };
-
-  /**
-   * Contains all angular-bootstrap component pagination information
-   * @type {{current: number; maxSize: number; rotate: boolean; ellipses: boolean; boundaryLinks: boolean}}
-   */
-  ubPagination: { current: number, maxSize: number, rotate: boolean, ellipses: boolean, boundaryLinks: boolean } = {
-    current: 0,
-    maxSize: 7,
-    rotate: true,
-    ellipses: false,
-    boundaryLinks: true
+    current: 1,
+    totalPages: 0,
+    maxSize: 10,
+    previous: 0
   };
 
   /**
@@ -65,15 +55,18 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   /**
    * Loads the permission list
-   * @param {number} toPage number of page to which the list will move
+   * @param {number} toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
-  loadList(toPage: number) {
-    this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage).subscribe((permissionPd: PermissionPd) => {
-      this.permissionList = permissionPd._embedded.permission;
-      this.page.total = permissionPd.page.totalElements;
-      this.page.totalPages = permissionPd.page.totalPages;
-      this.page.current = permissionPd.page.number;
-    });
+  loadList(toPage: number): void {
+    if (toPage !== this.page.previous) {
+      this.page.previous = toPage;
+      this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage - 1).subscribe((permissionPd: PermissionPd) => {
+        this.permissionList = permissionPd._embedded.permission;
+        this.page.total = permissionPd.page.totalElements;
+        this.page.totalPages = permissionPd.page.totalPages;
+        this.page.current = permissionPd.page.number + 1;
+      });
+    }
   }
 
 }

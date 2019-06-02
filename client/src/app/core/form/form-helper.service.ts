@@ -13,7 +13,7 @@ export class FormHelperService {
   constructor() { }
 
   /**
-   * Marks all constrols in a form as touched.
+   * Marks all controls in a form as touched.
    * @param {FormGroup | NgForm} form
    */
   markFormElementsAsTouched(form: FormGroup | NgForm): void {
