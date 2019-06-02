@@ -1,7 +1,7 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/internal/Subject';
+import { Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { LoginService } from './login.service';

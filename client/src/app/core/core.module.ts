@@ -8,7 +8,7 @@ import { SessionUserService } from './session/session-user.service';
 import { FormHelperService } from './form/form-helper.service';
 import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { ErrorInterceptor } from './interceptor/error.interceptor';
-import { AllRequestsInterceptor } from './interceptor/all-requests.interceptor.service';
+import { AllRequestsInterceptor } from './interceptor/all-requests.interceptor';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
 import { NotificationService } from './messages/notification.service';
 import { PageNotFoundService } from './navigation/page-not-found.service';

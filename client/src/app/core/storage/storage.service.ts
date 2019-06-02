@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { tap } from 'rxjs/internal/operators';
+import { tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs/index';
 
 /**

@@ -3,7 +3,7 @@ import { User } from './user.model';
 import { LoginResponseModel } from './login-response.model';
 import { StorageService } from '../storage/storage.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/index';
-import { tap } from 'rxjs/internal/operators';
+import { tap } from 'rxjs/operators';
 
 /**
  * A service for providing information about the current session.

@@ -9,7 +9,7 @@ import { SessionService } from '../../core/session/session.service';
 import { FormHelperService } from '../../core/form/form-helper.service';
 import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 import { NotificationService } from '../../core/messages/notification.service';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Subscription } from 'rxjs';
 
 /**
  * Generates a login component in order to allow users to login into the system

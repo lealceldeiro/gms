@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionPd } from '../shared/permission-pd';
 import { Permission } from '../shared/permission.model';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'gms-permission-list',

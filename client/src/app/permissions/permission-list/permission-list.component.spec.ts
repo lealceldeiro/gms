@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PermissionListComponent } from './permission-list.component';
 import { PermissionService } from '../shared/permission.service';
 import { SharedModule } from '../../shared/shared.module';
-import { Subject } from 'rxjs/internal/Subject';
+import { Subject } from 'rxjs';
 import { PermissionPd } from '../shared/permission-pd';
 
 describe('PermissionListComponent', () => {
