@@ -75,13 +75,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Object principal = authResult.getPrincipal();
         String authorities = userService.getUserAuthoritiesForToken(((EUser)principal).getUsername(), SecurityConst.AUTHORITIES_SEPARATOR);
 
-        Map returnMap;
+        Map<String, Object> returnMap;
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
         if (authorities.length() > 0) { // user login was correct
             String sub = ((EUser) principal).getUsername();
 
             String accessToken = jwtService.createToken(sub, authorities);
-            Map claims = jwtService.getClaimsExtended(accessToken);
+            Map<String, Object> claims = jwtService.getClaimsExtended(accessToken);
             Date iat = (Date) claims.get(JWTService.ISSUED_AT);
 
             String refreshToken = jwtService.createRefreshToken(sub, authorities);

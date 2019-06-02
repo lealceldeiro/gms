@@ -39,8 +39,8 @@ public class ExceptionUtil {
      * @param dc {@link DefaultConst} in order to get the variable placeholders.
      * @return Object with the response data.
      */
-    public static Map getResponseBodyForGmsSecurityException(GmsSecurityException ex, MessageResolver msg, DefaultConst dc) {
-        HashMap<String, Object> additionalData = new HashMap<>();
+    public static Map<String, Object> getResponseBodyForGmsSecurityException(GmsSecurityException ex, MessageResolver msg, DefaultConst dc) {
+        Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("timestamp", System.currentTimeMillis());
         additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
         additionalData.put("error", msg.getMessage("security.unauthorized"));

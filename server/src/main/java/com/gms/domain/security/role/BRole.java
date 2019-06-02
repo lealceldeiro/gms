@@ -29,6 +29,11 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 public final class BRole extends GmsEntity{
 
     /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = -4748551801572430779L;
+
+	/**
      * Label to which the role can be referred to.
      */
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)

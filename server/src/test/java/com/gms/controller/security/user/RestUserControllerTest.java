@@ -1,20 +1,14 @@
 package com.gms.controller.security.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.Application;
-import com.gms.domain.security.user.EUser;
-import com.gms.domain.security.user.EUserMeta;
-import com.gms.service.AppService;
-import com.gms.service.configuration.ConfigurationService;
-import com.gms.testutil.EntityUtil;
-import com.gms.testutil.GmsMockUtil;
-import com.gms.testutil.GmsSecurityUtil;
-import com.gms.testutil.RestDoc;
-import com.gms.testutil.validation.ConstrainedFields;
-import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import static com.gms.testutil.StringUtil.EXAMPLE_EMAIL;
+import static com.gms.testutil.StringUtil.EXAMPLE_LAST_NAME;
+import static com.gms.testutil.StringUtil.EXAMPLE_NAME;
+import static com.gms.testutil.StringUtil.EXAMPLE_PASSWORD;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,11 +25,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.gms.testutil.StringUtil.*;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gms.Application;
+import com.gms.domain.security.user.EUser;
+import com.gms.domain.security.user.EUserMeta;
+import com.gms.service.AppService;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.testutil.validation.ConstrainedFields;
+import com.gms.util.GMSRandom;
+import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.ResourcePath;
+import com.gms.util.constant.SecurityConst;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -59,7 +62,6 @@ public class RestUserControllerTest {
     @Autowired private DefaultConst dc;
 
     @Autowired private AppService appService;
-    @Autowired private ConfigurationService configService;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();

@@ -52,7 +52,7 @@ public class QueryService {
      * @param clazz Domain class to which the result will be mapped to.
      * @return An executable {@link Query}
      */
-    public Query createNativeQuery(String sql, Class clazz) {
+    public Query createNativeQuery(String sql, Class<?> clazz) {
         return entityManager.createNativeQuery(sql, clazz);
     }
 

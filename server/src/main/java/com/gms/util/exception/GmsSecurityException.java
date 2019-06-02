@@ -6,7 +6,11 @@ package com.gms.util.exception;
  */
 public class GmsSecurityException extends SecurityException{
 
-    private final String path;
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 4679170124696702679L;
+	private final String path;
     public static final String DEFAULT_MESSAGE = "security.auth.required";
 
     public GmsSecurityException(String path) {

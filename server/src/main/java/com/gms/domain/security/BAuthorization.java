@@ -26,12 +26,23 @@ import java.io.Serializable;
 @Entity
 public class BAuthorization implements Serializable {
 
-    @Data
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 2509372584237875468L;
+
+	@Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Embeddable
     public static class BAuthorizationPk implements Serializable {
-        @Column(nullable = false, updatable = false, name = "user_id")
+
+        /**
+		 * Version number for a Serializable class.
+		 */
+		private static final long serialVersionUID = -6695307982823733462L;
+
+		@Column(nullable = false, updatable = false, name = "user_id")
         private long userId;
 
         @Column(nullable = false, updatable = false, name = "entity_id")

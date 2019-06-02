@@ -42,7 +42,7 @@ public class ConfigurationController {
 
     @GetMapping("{id}")
     @ResponseBody
-    public Map getConfigByUser(@PathVariable(value = "id") Long id) {
+    public Map<String, Object> getConfigByUser(@PathVariable(value = "id") Long id) {
         return configService.getConfigByUser(id);
     }
 

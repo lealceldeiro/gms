@@ -8,7 +8,12 @@ import javassist.NotFoundException;
  */
 public class NotFoundEntityException extends NotFoundException {
 
-    public NotFoundEntityException(String msg) {
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 4851392880749714321L;
+
+	public NotFoundEntityException(String msg) {
         super(msg);
     }
 

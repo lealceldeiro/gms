@@ -46,11 +46,11 @@ public class SecurityController {
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public ResponseEntity<EUser> signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), false);
         if (u != null) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<EUser>(HttpStatus.CREATED);
         }
         else throw new GmsGeneralException("user.add.error", false, HttpStatus.CONFLICT);
     }
@@ -63,12 +63,12 @@ public class SecurityController {
      */
     @PostMapping(SecurityConst.ACCESS_TOKEN_URL)
     @ResponseBody
-    public Map refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
+    public Map<String, Object> refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
         String oldRefreshToken = payload.getRefreshToken();
         if (oldRefreshToken != null) {
             try {
                 String[] keys = {sc.getAuthoritiesHolder()};
-                Map claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
+                Map<String, Object> claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
                 String sub = claims.get(JWTService.SUBJECT).toString();
                 String authorities = claims.get(keys[0]).toString();
                 Date iat = (Date) claims.get(JWTService.ISSUED_AT);

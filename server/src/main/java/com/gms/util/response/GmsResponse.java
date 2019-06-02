@@ -14,6 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class GmsResponse {
 
     private String message = "";
-    private final ResponseData[] data;
+    private final ResponseData<?>[] data;
 
 }

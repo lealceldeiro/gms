@@ -123,7 +123,7 @@ public class ConfigurationService {
      * @return A {@link Map} with all the configuration where every key is the configuration key and every value is the
      * configuration value.
      */
-    public Map getConfig() {
+    public Map<String, String> getConfig() {
         List<BConfiguration> configs = configurationRepository.findAllByKeyEndingWith(IN_SERVER);
         Map<String, String> map = new HashMap<>();
         for (BConfiguration c: configs) {
@@ -183,7 +183,7 @@ public class ConfigurationService {
      * @see BConfiguration#userId
      * @see BConfiguration#value
      */
-    public Map getConfigByUser(long userId) {
+    public Map<String, Object> getConfigByUser(long userId) {
         final List<BConfiguration> configs = configurationRepository.findAllByUserId(userId);
         Map<String, Object> map = new HashMap<>();
         for (BConfiguration c: configs) {

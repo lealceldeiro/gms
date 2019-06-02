@@ -26,9 +26,14 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @EqualsAndHashCode(callSuper = true, exclude = "roles")
 @ToString(exclude = "roles")
 @Entity
-public final class BPermission extends GmsEntity {
+public class BPermission extends GmsEntity {
 
-    /**
+	/**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = -1246329856397933423L;
+
+	/**
      * Name to be used for authenticating the user.
      */
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)

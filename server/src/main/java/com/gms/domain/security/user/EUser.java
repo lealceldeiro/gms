@@ -25,9 +25,14 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
 @ToString(of = {"username", "email", "name", "lastName"})
 @Entity
-public final class EUser extends GmsEntity implements UserDetails {
+public class EUser extends GmsEntity implements UserDetails {
 
-    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 2382305768933278544L;
+
+	@Size(max = 255, message = CodeI18N.FIELD_SIZE)
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Pattern(regexp = USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
@@ -35,7 +40,7 @@ public final class EUser extends GmsEntity implements UserDetails {
     private final String username;
 
     /**
-     * For emails, max length  as here:
+     * For emails, max length as here:
      * http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
      * explained here:
      * https://stackoverflow.com/a/574698/5640649

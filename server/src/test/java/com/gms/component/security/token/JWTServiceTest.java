@@ -106,11 +106,12 @@ public class JWTServiceTest {
         final String auth = "ROLE_1;ROLE_2";
         final String accessToken = jwtService.createToken(sub, auth);
         final String refreshToken = jwtService.createRefreshToken(sub, auth);
+        final String message = "Expiration time is not an instance of Date";
 
-        Map tokenClaims = jwtService.getClaimsExtended(accessToken);
-        Map rTokenClaims = jwtService.getClaimsExtended(refreshToken);
-        assertTrue("Expiration time is not an instance of Date", tokenClaims.get(JWTService.EXPIRATION) instanceof Date);
-        assertTrue("Expiration time is not an instance of Date", rTokenClaims.get(JWTService.EXPIRATION) instanceof Date);
+        Map<String, Object> tokenClaims = jwtService.getClaimsExtended(accessToken);
+        Map<String, Object> rTokenClaims = jwtService.getClaimsExtended(refreshToken);
+        assertTrue(message, tokenClaims.get(JWTService.EXPIRATION) instanceof Date);
+        assertTrue(message, rTokenClaims.get(JWTService.EXPIRATION) instanceof Date);
 
         if (tokenClaims.get(JWTService.EXPIRATION) instanceof Date && rTokenClaims.get(JWTService.EXPIRATION) instanceof Date) {
             assertTrue("Expiration time for refresh token must be greater than expiration time for access token when default values are used",
@@ -123,7 +124,7 @@ public class JWTServiceTest {
         final String sub = "TestSubject";
         final String auth = "ROLE_1;ROLE_2";
         final String token = jwtService.createToken(sub, auth);
-        final Map claims = jwtService.getClaims(token, JWTService.SUBJECT, sc.getAuthoritiesHolder(), JWTService.EXPIRATION);
+        final Map<String, Object> claims = jwtService.getClaims(token, JWTService.SUBJECT, sc.getAuthoritiesHolder(), JWTService.EXPIRATION);
 
         assertClaimsState(claims, sub, auth);
     }
@@ -135,7 +136,7 @@ public class JWTServiceTest {
         final long expiresIn = 99999999;
         final String token = jwtService.createToken(sub, auth, expiresIn);
         final String randomKey = "randomKey";
-        final Map claims = jwtService.getClaimsExtended(token, randomKey, sc.getAuthoritiesHolder());
+        final Map<String, Object> claims = jwtService.getClaimsExtended(token, randomKey, sc.getAuthoritiesHolder());
 
         assertClaimsState(claims, sub, auth);
 
@@ -148,7 +149,7 @@ public class JWTServiceTest {
         }
     }
 
-    private void assertClaimsState(Map claims, String subject, String authorities) {
+    private void assertClaimsState(Map<String, Object> claims, String subject, String authorities) {
         assertTrue("Claims map is empty", !claims.isEmpty());
 
         assertNotNull("Claims map is null", claims);

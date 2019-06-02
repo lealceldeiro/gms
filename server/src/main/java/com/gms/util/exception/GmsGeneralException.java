@@ -8,7 +8,11 @@ import org.springframework.http.HttpStatus;
  */
 public class GmsGeneralException extends Exception {
 
-    private final Boolean finishedOK;
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 5034123990490698557L;
+	private final Boolean finishedOK;
     private final HttpStatus httpStatus;
     public static final HttpStatus DEFAULT_HTTP_STATUS = HttpStatus.BAD_REQUEST;
     public static final String DEFAULT_MSG = "exception.general";

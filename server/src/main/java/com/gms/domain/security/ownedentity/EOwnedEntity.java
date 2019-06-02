@@ -24,7 +24,12 @@ import javax.validation.constraints.Size;
 @Entity
 public final class EOwnedEntity extends GmsEntity {
 
-    /**
+	/**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 7808731276142204983L;
+
+	/**
      * Natural name which is used commonly for referring to the entity.
      */
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)

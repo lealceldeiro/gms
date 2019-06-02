@@ -36,11 +36,11 @@ public class RestOwnedEntityController {
     @PostMapping(path = ResourcePath.OWNED_ENTITY, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity create(@Valid @RequestBody Resource<EOwnedEntity> entity)
+    public ResponseEntity<EOwnedEntity> create(@Valid @RequestBody Resource<EOwnedEntity> entity)
             throws GmsGeneralException {
         EOwnedEntity e = entityService.create(entity.getContent());
         if (e != null) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<EOwnedEntity>(HttpStatus.CREATED);
         }
         else throw new GmsGeneralException("entity.add.error", false);
     }

@@ -36,11 +36,11 @@ public class RestUserController {
     @PostMapping(path = ResourcePath.USER, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity register(@Valid @RequestBody Resource<EUser> user)
+    public ResponseEntity<EUser> register(@Valid @RequestBody Resource<EUser> user)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), true, true);
         if (u != null) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<EUser>(HttpStatus.CREATED);
         }
         else throw new GmsGeneralException("user.add.error", false);
     }

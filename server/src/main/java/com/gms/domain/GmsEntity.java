@@ -16,7 +16,12 @@ import java.io.Serializable;
 @MappedSuperclass
 public class GmsEntity implements Serializable {
 
-    @Id
+    /**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = -7947488456967226793L;
+
+	@Id
     @GeneratedValue
     protected Long id;
 

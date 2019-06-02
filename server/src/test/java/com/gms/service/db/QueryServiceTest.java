@@ -43,7 +43,7 @@ public class QueryServiceTest {
 
         final Query query = queryService.createQuery("select e from BPermission e");
         assertNotNull(query);
-        final List resultList = query.getResultList();
+        final List<?> resultList = query.getResultList();
         assertNotNull(resultList);
         assertTrue(!resultList.isEmpty());
     }
@@ -55,7 +55,7 @@ public class QueryServiceTest {
 
         final Query query = queryService.createQuery("select e from BPermission e", BPermission.class);
         assertNotNull(query);
-        final List resultList = query.getResultList();
+        final List<?> resultList = query.getResultList();
         assertNotNull(resultList);
         assertTrue(!resultList.isEmpty());
         assertTrue(resultList.contains(p));
@@ -68,7 +68,7 @@ public class QueryServiceTest {
         final Query nativeQuery = queryService.createNativeQuery("SELECT * FROM bpermission");
         assertNotNull(nativeQuery);
 
-        final List resultList = nativeQuery.getResultList();
+        final List<?> resultList = nativeQuery.getResultList();
         assertNotNull(resultList);
         assertTrue(!resultList.isEmpty());
     }
@@ -81,7 +81,7 @@ public class QueryServiceTest {
         final Query nativeQuery = queryService.createNativeQuery("SELECT * FROM bpermission", BPermission.class);
         assertNotNull(nativeQuery);
 
-        final List resultList = nativeQuery.getResultList();
+        final List<?> resultList = nativeQuery.getResultList();
         assertNotNull(resultList);
         assertTrue(resultList.contains(p));
     }

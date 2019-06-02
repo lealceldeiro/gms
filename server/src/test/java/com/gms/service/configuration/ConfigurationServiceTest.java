@@ -100,7 +100,7 @@ public class ConfigurationServiceTest {
             assertNotNull(configurationRepository.save(new BConfiguration(key, value)));
         }
 
-        Map configs = configurationService.getConfig();
+        Map<String, String> configs = configurationService.getConfig();
         Object config;
         for (int i = 0; i < keys.size(); i++) {
             config = configs.get(keys.get(i));
@@ -170,7 +170,7 @@ public class ConfigurationServiceTest {
                 new BConfiguration(keyLastAccessedEntity, e.getId().toString(), u.getId())
         );
         assertNotNull(c2);
-        Map configs = configurationService.getConfigByUser(u.getId());
+        Map<String, Object> configs = configurationService.getConfigByUser(u.getId());
 
         assertNotNull(configs.get(keyLang));
         assertNotNull(configs.get(keyLastAccessedEntity));

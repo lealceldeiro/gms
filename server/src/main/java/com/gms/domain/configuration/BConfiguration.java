@@ -26,7 +26,12 @@ import javax.validation.constraints.Size;
 @Entity
 public final class BConfiguration extends GmsEntity {
 
-    /**
+	/**
+	 * Version number for a Serializable class.
+	 */
+	private static final long serialVersionUID = 5750664701833456936L;
+
+	/**
      * Key under the configuration is saved.
      */
     @NotNull(message = CodeI18N.FIELD_NOT_NULL)

@@ -62,7 +62,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         if (token != null && token.startsWith(sc.getATokenType())) {
             try {
                 //parse the token
-                Map claims = jwtService.getClaimsExtended(
+                Map<String, Object> claims = jwtService.getClaimsExtended(
                         token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
                 );
                 String user = claims.get(JWTService.SUBJECT).toString();
