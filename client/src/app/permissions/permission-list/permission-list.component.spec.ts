@@ -1,12 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { BehaviorSubject } from 'rxjs';
 
 import { PermissionListComponent } from './permission-list.component';
 import { PermissionService } from '../shared/permission.service';
 import { SharedModule } from '../../shared/shared.module';
-import { BehaviorSubject } from 'rxjs';
 import { PermissionPd } from '../shared/permission-pd';
+import { getRandomNumber } from '../../shared/test-util/functions.util';
 
 describe('PermissionListComponent', () => {
   let component: PermissionListComponent;
@@ -36,7 +37,7 @@ describe('PermissionListComponent', () => {
   const addPermissionsToSampleData = (sampleData) => {
     const rangeBottom = 25;
     const rangeTop = 40;
-    const randomAmountValue = Math.floor(Math.random() * (rangeTop - rangeBottom + 1) + rangeBottom);
+    const randomAmountValue = getRandomNumber(rangeBottom, rangeTop);
     for (let i = 0; i < randomAmountValue; i++) {
       sampleData._embedded.permission.push({ name: 'n' + i, label: 'l' + i, id: i })
     }
