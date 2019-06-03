@@ -22,7 +22,7 @@ describe('SecurityInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [HttpClientTestingModule],
       providers: [
         SecurityInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },

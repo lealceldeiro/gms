@@ -108,7 +108,7 @@ export class StorageService {
    * @param value Value to be stored
    */
   private trySet(key: string, value: any): void {
-    this.localStorage.setItem(key, value).subscribe(() => {}, () => {
+    this.localStorage.setItem(key, value).subscribe(() => { }, () => {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
       } else {
@@ -210,7 +210,7 @@ export class StorageService {
       return this.localStorage.clear().pipe(tap(
         () => this.clearCache(),
         () => {
-          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key );
+          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key);
         }));
     }
   }

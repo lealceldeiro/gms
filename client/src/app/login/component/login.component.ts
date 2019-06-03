@@ -47,8 +47,8 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @param notificationService {NotificationService} Service for showing the messages.
    */
   constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
-              private fb: FormBuilder, private formHelperService: FormHelperService,
-              private notificationService: NotificationService) {
+    private fb: FormBuilder, private formHelperService: FormHelperService,
+    private notificationService: NotificationService) {
     this.createLoginForm();
   }
 
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (response.status === HttpStatusCode.UNAUTHORIZED) {
           this.notificationService.error('Wrong credentials', 'Login Failed');
         }
-        this.loginForm.reset({rememberMe: rm});
+        this.loginForm.reset({ rememberMe: rm });
         this.submitted = false;
       });
     } else {
@@ -101,8 +101,8 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   private createLoginForm() {
     this.loginForm = this.fb.group({
-      usernameOrEmail: [ null, Validators.required ],
-      password: [ null, Validators.required ],
+      usernameOrEmail: [null, Validators.required],
+      password: [null, Validators.required],
       rememberMe: true
     });
   }

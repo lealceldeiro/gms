@@ -11,6 +11,6 @@ const routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' }
 ];
 @NgModule({
-  imports: [ RouterModule.forChild(routes) ],
+  imports: [RouterModule.forChild(routes)],
 })
 export class PermissionsRoutingModule { }

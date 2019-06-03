@@ -4,8 +4,8 @@
     <a class="navbar-brand" routerLink="/home">GMS</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavBar"
-            aria-controls="topNavBar" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle superior navigation"
-            (click)="isCollapsed = !isCollapsed">
+      aria-controls="topNavBar" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle superior navigation"
+      (click)="isCollapsed = !isCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -20,7 +20,7 @@
       <form class="form-inline my-2 my-lg-0 mr-auto" *ngIf="isSearchActive" name="nav-bar-search-form">
         <div class="input-group">
           <input class="form-control" type="search" [placeholder]="searchPlaceholder"
-                 [attr.aria-label]="searchPlaceholder">
+            [attr.aria-label]="searchPlaceholder">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button">{{searchText}}</button>
           </div>
@@ -31,9 +31,9 @@
         <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
       </ul>
       <div class="d-inline-block" *ngIf="loggedIn" ngbDropdown #dropdownUserInfo="ngbDropdown">
-        <button class="btn btn-link text-decoration-none btn-sm dropdown-toggle text-secondary" type="button" id="dropdownUserInfo"
-                aria-expanded="false" [attr.aria-haspopup]="user?.username || user?.email"
-        ngbDropdownAnchor (focus)="dropdownUserInfo.open()">
+        <button class="btn btn-link text-decoration-none btn-sm dropdown-toggle text-secondary" type="button"
+          id="dropdownUserInfo" aria-expanded="false" [attr.aria-haspopup]="user?.username || user?.email"
+          ngbDropdownAnchor (focus)="dropdownUserInfo.open()">
           {{user?.username || user?.email}}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUserInfo" ngbDropdownMenu>

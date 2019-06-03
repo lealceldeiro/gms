@@ -34,7 +34,7 @@ export class LoginService {
    * @param intHelperService InterceptorHelperService for sharing information with the interceptors.
    */
   constructor(private http: HttpClient, private sessionService: SessionService,
-              private sessionUserService: SessionUserService, private intHelperService: InterceptorHelperService) {
+    private sessionUserService: SessionUserService, private intHelperService: InterceptorHelperService) {
     this.intHelperService.addExcludedFromErrorHandling(this.loginUrl);
   }
 

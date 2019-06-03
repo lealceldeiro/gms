@@ -7,8 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginService } from './service/login.service';
 
 @NgModule({
-  imports: [ NgbModule, GmsLoginRoutingModule, SharedModule ],
-  declarations: [ LoginComponent ],
-  providers: [ LoginService ]
+  imports: [NgbModule, GmsLoginRoutingModule, SharedModule],
+  declarations: [LoginComponent],
+  providers: [LoginService]
 })
 export class GmsLoginModule { }

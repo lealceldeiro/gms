@@ -52,8 +52,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @type {{}[]}
    */
   urls = [
-    {path: '/help', name: 'Help'},
-    {path: '/about', name: 'About'}
+    { path: '/help', name: 'Help' },
+    { path: '/about', name: 'About' }
   ];
 
   /**

@@ -16,8 +16,8 @@ describe('LoginGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule],
-      providers: [ LoginGuard, HttpClientTestingModule, { provide: SessionService, useValue: sessionServiceStub } ]
+      imports: [RouterTestingModule],
+      providers: [LoginGuard, HttpClientTestingModule, { provide: SessionService, useValue: sessionServiceStub }]
     });
     guard = TestBed.get(LoginGuard);
     navigatedByUrlSpy = spyOn((<any>guard).router, 'navigateByUrl');

@@ -11,13 +11,13 @@ describe('PageNotFoundComponent', () => {
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
-  @Component({selector: 'gms-dummy', template: ''})
-  class DummyComponent {}
+  @Component({ selector: 'gms-dummy', template: '' })
+  class DummyComponent { }
 
   let wasNotFoundFn;
   let spyWasNotFound: jasmine.Spy;
   let spyAddUrl: jasmine.Spy;
-  const spies = { wasNotFound: (a) =>  {}, addUrl: (a) => {}};
+  const spies = { wasNotFound: (a) => { }, addUrl: (a) => { } };
 
   const pageNotFoundServiceStub = {
     wasNotFound: (a) => { spies.wasNotFound(a); return wasNotFoundFn(); },
@@ -26,14 +26,14 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([ { path: 'test', component: DummyComponent } ]) ],
-      declarations: [ PageNotFoundComponent, DummyComponent ],
-      providers: [ { provide: PageNotFoundService, useValue: pageNotFoundServiceStub }]
+      imports: [RouterTestingModule.withRoutes([{ path: 'test', component: DummyComponent }])],
+      declarations: [PageNotFoundComponent, DummyComponent],
+      providers: [{ provide: PageNotFoundService, useValue: pageNotFoundServiceStub }]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    wasNotFoundFn  = () => true;
+    wasNotFoundFn = () => true;
     spyWasNotFound = spyOn(spies, 'wasNotFound');
     spyAddUrl = spyOn(spies, 'addUrl');
     fixture = TestBed.createComponent(PageNotFoundComponent);

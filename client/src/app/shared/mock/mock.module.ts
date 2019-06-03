@@ -9,7 +9,7 @@ import { DummyStubComponent } from './dummy-stub.component';
  * some specs.
  */
 @NgModule({
-  declarations: [ RouterLinkStubDirective, DummyStubComponent ],
-  exports: [ RouterLinkStubDirective, DummyStubComponent ]
+  declarations: [RouterLinkStubDirective, DummyStubComponent],
+  exports: [RouterLinkStubDirective, DummyStubComponent]
 })
 export class MockModule { }

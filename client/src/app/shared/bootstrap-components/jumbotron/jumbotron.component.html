@@ -2,10 +2,7 @@
   <h2 *ngIf="header"> {{header}} </h2>
   <p *ngIf="text" id="id-jumbotron-text">{{text}}</p>
   <p>
-    <a class="btn btn-primary btn-large"
-       *ngIf="link && linkText"
-       [ngClass]="[sizeClass, typeClass]"
-       [routerLink]="[link]"
-    >{{linkText}}</a>
+    <a class="btn btn-primary btn-large" *ngIf="link && linkText" [ngClass]="[sizeClass, typeClass]"
+      [routerLink]="[link]">{{linkText}}</a>
   </p>
 </div>

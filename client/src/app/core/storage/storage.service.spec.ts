@@ -23,35 +23,35 @@ describe('StorageService', () => {
 
   const spies = {
     ls: {
-      set:        (a, b) => {},
-      get:        (a) => {},
-      clear:      () =>  {},
-      removeItem: (a) => {}
+      set: (a, b) => { },
+      get: (a) => { },
+      clear: () => { },
+      removeItem: (a) => { }
     },
     ck: {
-      put:        (a, b, c) => {},
-      putObject:  (a, b, c) => {},
-      get:        (a) => {},
-      getAll:     () => {},
-      getObject:  (a) => {},
-      remove:     (a, b) => {},
-      removeAll:  (a) => {},
+      put: (a, b, c) => { },
+      putObject: (a, b, c) => { },
+      get: (a) => { },
+      getAll: () => { },
+      getObject: (a) => { },
+      remove: (a, b) => { },
+      removeAll: (a) => { },
     }
   };
   const localStorageMock = {
-    setItem:    (a, b) => { spies.ls.set(a, b); return setItemFn(); },
-    getItem:    (a) => { spies.ls.get(a); return objectValue$; },
-    clear:      () => { spies.ls.clear(); return clearFn(); },
+    setItem: (a, b) => { spies.ls.set(a, b); return setItemFn(); },
+    getItem: (a) => { spies.ls.get(a); return objectValue$; },
+    clear: () => { spies.ls.clear(); return clearFn(); },
     removeItem: (a) => { spies.ls.removeItem(a); return removeItemFn(); },
   };
   const cookiesMock = {
-    put:        (a, b, c) => { spies.ck.put(a, b, c); },
-    putObject:  (a, b, c) => { spies.ck.putObject(a, b, c); },
-    get:        (a) => { spies.ck.get(a); return getCookieNotNull(); },
-    getObject:  (a) => { spies.ck.getObject(a); return getCookieObjectNotNull(); },
-    getAll:     () => { spies.ck.getAll(); return objectValue; },
-    remove:     (a, b) => { spies.ck.remove(a, b); },
-    removeAll:  (a) => { spies.ck.removeAll(a); },
+    put: (a, b, c) => { spies.ck.put(a, b, c); },
+    putObject: (a, b, c) => { spies.ck.putObject(a, b, c); },
+    get: (a) => { spies.ck.get(a); return getCookieNotNull(); },
+    getObject: (a) => { spies.ck.getObject(a); return getCookieObjectNotNull(); },
+    getAll: () => { spies.ck.getAll(); return objectValue; },
+    remove: (a, b) => { spies.ck.remove(a, b); },
+    removeAll: (a) => { spies.ck.removeAll(a); },
   };
   // endregion
 
@@ -281,21 +281,21 @@ describe('StorageService', () => {
 
   it('should get an Observable with the `null` value when there is no specified value(string) under the key ' +
     '(and it is NOT cached)', () => {
-    getCookieNotNull = () => null;
-    storageService.getCookie(key).subscribe(val => expect(val).toBeNull());
+      getCookieNotNull = () => null;
+      storageService.getCookie(key).subscribe(val => expect(val).toBeNull());
 
-    const args = getSpy.calls.allArgs();
-    expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
-  });
+      const args = getSpy.calls.allArgs();
+      expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
+    });
 
   it('should get an Observable with the `null` value when there is no specified value(object) under the key ' +
     '(and it is NOT cached)', () => {
-    getCookieObjectNotNull = () => null;
-    storageService.getCookie(key, true).subscribe(val => expect(val).toBeNull());
+      getCookieObjectNotNull = () => null;
+      storageService.getCookie(key, true).subscribe(val => expect(val).toBeNull());
 
-    const args = getObjectSpy.calls.allArgs();
-    expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
-  });
+      const args = getObjectSpy.calls.allArgs();
+      expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
+    });
 
   it('should clear both cookies and the cache', () => {
     // mock values in cache

@@ -5,7 +5,7 @@ import { DebugElement } from '@angular/core';
  * @type {{}}
  */
 export const GmsButtonClickEvents = {
-  left:  { button: 0 },
+  left: { button: 0 },
   right: { button: 2 }
 };
 

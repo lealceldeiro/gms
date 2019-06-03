@@ -38,18 +38,18 @@ describe('SessionService', () => {
   const subjectNull$ = new BehaviorSubject(null).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
   const testSpy = {
-    set:          (a, b, c) => {},
-    clear:        (a, b, c) => {},
-    putCookie:    (a, b, c) => {},
-    clearCookie:  (a, b, c) => {}
+    set: (a, b, c) => { },
+    clear: (a, b, c) => { },
+    putCookie: (a, b, c) => { },
+    clearCookie: (a, b, c) => { }
   };
   const storageServiceStub = {
-    set:          (a, b, c) => { testSpy.set(a, b, c); return subjectNull$; },
-    get:          () => subjectNull$,
-    clear:        (a, b, c) => { testSpy.clear(a, b, c); return trueVal$; },
-    putCookie:    (a, b, c) => { testSpy.putCookie(a, b, c); return subjectNull$; },
-    getCookie:    () => subjectNull$,
-    clearCookie:  (a, b, c) => { testSpy.clearCookie(a, b, c); return trueVal$; },
+    set: (a, b, c) => { testSpy.set(a, b, c); return subjectNull$; },
+    get: () => subjectNull$,
+    clear: (a, b, c) => { testSpy.clear(a, b, c); return trueVal$; },
+    putCookie: (a, b, c) => { testSpy.putCookie(a, b, c); return subjectNull$; },
+    getCookie: () => subjectNull$,
+    clearCookie: (a, b, c) => { testSpy.clearCookie(a, b, c); return trueVal$; },
   };
   // endregion
 
@@ -80,14 +80,14 @@ describe('SessionService', () => {
 
   it('when there is an error with the observable, isLoggedIn should warn in console', fakeAsync(() => {
     sessionService['loggedIn$'] = error$;
-    sessionService.isLoggedIn().toPromise().then(() => {}, e => expect(e).toEqual(sampleError));
+    sessionService.isLoggedIn().toPromise().then(() => { }, e => expect(e).toEqual(sampleError));
     tick();
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('when there is an error with the observable, isNotLoggedIn should warn in console', fakeAsync(() => {
     sessionService['notLoggedIn$'] = error$;
-    sessionService.isNotLoggedIn().toPromise().then(() => {}, e => expect(e).toEqual(sampleError));
+    sessionService.isNotLoggedIn().toPromise().then(() => { }, e => expect(e).toEqual(sampleError));
     tick();
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   }));
@@ -131,45 +131,45 @@ describe('SessionService', () => {
   });
 
   it('getAuthData should return the proper value regarding to `authData$` observable', () => {
-    const mock = {access_token: 'test', header_to_be_sent: 'headerTest'};
+    const mock = { access_token: 'test', header_to_be_sent: 'headerTest' };
     sessionService['authData'].next(mock);
     sessionService.getAuthData().subscribe((val: any) => expect(val).toEqual(mock));
   });
 
-  it ('setLoggedIn should call the store service in order to save in localStorage the values regarding to' +
+  it('setLoggedIn should call the store service in order to save in localStorage the values regarding to' +
     '`loggedIn` and `notLoggedIn` and update the value of `loggedIn` and `notLoggedIn` subjects', () => {
-    sessionService.setLoggedIn(true);
-    const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
-    for (let i = 0; i < allArgs.length; i++) {
-      if (allArgs[i][0] === sessionService['key']['loggedIn']) {
-        expect(allArgs[i][1]).toBeTruthy();
-      } else if (allArgs[i][0] === sessionService['key']['notLoggedIn']) {
-        expect(allArgs[i][1]).toBeFalsy();
+      sessionService.setLoggedIn(true);
+      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      for (let i = 0; i < allArgs.length; i++) {
+        if (allArgs[i][0] === sessionService['key']['loggedIn']) {
+          expect(allArgs[i][1]).toBeTruthy();
+        } else if (allArgs[i][0] === sessionService['key']['notLoggedIn']) {
+          expect(allArgs[i][1]).toBeFalsy();
+        }
       }
-    }
-    expect(sessionService['loggedIn'].getValue()).toBeTruthy('set for loggedIn did not work');
-    expect(sessionService['notLoggedIn'].getValue()).toBeFalsy('set for notLoggedIn did not work');
-  });
+      expect(sessionService['loggedIn'].getValue()).toBeTruthy('set for loggedIn did not work');
+      expect(sessionService['notLoggedIn'].getValue()).toBeFalsy('set for notLoggedIn did not work');
+    });
 
-  it ('setUser should call the store service in order to save in localStorage the values regarding to' +
+  it('setUser should call the store service in order to save in localStorage the values regarding to' +
     '`user` and update the value of `user` subject', () => {
-    sessionService.setUser(userMock);
-    const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
-    expect(allArgs.length > 0).toBeTruthy('storageService.set expected to be called at least ' +
-      'once but, was called ' + allArgs.length + ' times');
-    expect(allArgs[0][0]).toEqual(sessionService['key']['user']);
-    expect(allArgs[0][1]).toEqual(userMock);
-    expect(sessionService['user'].getValue()).toEqual(userMock, 'set for user did not work');
-  });
+      sessionService.setUser(userMock);
+      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      expect(allArgs.length > 0).toBeTruthy('storageService.set expected to be called at least ' +
+        'once but, was called ' + allArgs.length + ' times');
+      expect(allArgs[0][0]).toEqual(sessionService['key']['user']);
+      expect(allArgs[0][1]).toEqual(userMock);
+      expect(sessionService['user'].getValue()).toEqual(userMock, 'set for user did not work');
+    });
 
-  it ('setAuthData should call the store service in order to save in localStorage the values regarding to' +
+  it('setAuthData should call the store service in order to save in localStorage the values regarding to' +
     '`loginData` and update the value of `loginData` subject', () => {
-    sessionService.setAuthData(mockLoginResponse);
-    const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
-    expect(allArgs[0][0]).toEqual(sessionService['key']['loginData']);
-    expect(allArgs[0][1]).toEqual(mockLoginResponse);
-    expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse, 'set for authData did not work');
-  });
+      sessionService.setAuthData(mockLoginResponse);
+      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      expect(allArgs[0][0]).toEqual(sessionService['key']['loginData']);
+      expect(allArgs[0][1]).toEqual(mockLoginResponse);
+      expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse, 'set for authData did not work');
+    });
 
   it('isRememberMe should return the proper value regarding to `rememberMe$` observable', fakeAsync(() => {
     sessionService['rememberMe$'] = trueVal$;
@@ -180,66 +180,66 @@ describe('SessionService', () => {
   it('setRememberMe should set the proper value regarding to `rememberMe` value (`true`)', () => {
     sessionService.setRememberMe(true);
     sessionService['rememberMe$'].subscribe((r: boolean) => {
-        expect(r).toEqual(true);
+      expect(r).toEqual(true);
     });
   });
 
   it('setRememberMe should set the proper value regarding to `rememberMe` value (`false`)', () => {
     sessionService.setRememberMe(false);
     sessionService['rememberMe$'].subscribe((r: boolean) => {
-        expect(r).toEqual(false);
+      expect(r).toEqual(false);
     });
   });
 
   it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session' +
     ' user as `null`', () => {
-    sessionService.closeSession();
+      sessionService.closeSession();
 
-    // region check session service vars
-    expect(sessionService['loggedIn'].getValue())
-      .toBeFalsy('`loggedIn` subject value was not set properly');
-    expect(sessionService['notLoggedIn'].getValue())
-      .toBeTruthy('`notLoggedIn` subject value was not set properly');
-    expect(sessionService['authData'].getValue())
-      .toEqual({}, '`authData` subject value was not set properly');
-    expect(sessionService['user'].getValue())
-      .toBeNull('`user` subject value was not set properly');
-    // endregion
+      // region check session service vars
+      expect(sessionService['loggedIn'].getValue())
+        .toBeFalsy('`loggedIn` subject value was not set properly');
+      expect(sessionService['notLoggedIn'].getValue())
+        .toBeTruthy('`notLoggedIn` subject value was not set properly');
+      expect(sessionService['authData'].getValue())
+        .toEqual({}, '`authData` subject value was not set properly');
+      expect(sessionService['user'].getValue())
+        .toBeNull('`user` subject value was not set properly');
+      // endregion
 
-    // region check args calls
-    // region clear
-    const allArgs = storageServiceClearSpy.calls.allArgs();
+      // region check args calls
+      // region clear
+      const allArgs = storageServiceClearSpy.calls.allArgs();
 
-    expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'],
-      'incorrect key for `authData`');
+      expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'],
+        'incorrect key for `authData`');
 
-    expect(allArgs[1][0]).toEqual(sessionService['key']['user'],
-      'incorrect key for `user`');
-    // endregion
+      expect(allArgs[1][0]).toEqual(sessionService['key']['user'],
+        'incorrect key for `user`');
+      // endregion
 
-    // region clearCookie
-    const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
+      // region clearCookie
+      const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
 
-    expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'],
-      'incorrect key for `loggedIn`');
+      expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'],
+        'incorrect key for `loggedIn`');
 
-    expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'],
-      'incorrect key for `notLoggedIn`');
+      expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'],
+        'incorrect key for `notLoggedIn`');
 
-    expect(allArgsCk[2][0]).toEqual(sessionService['key']['accessToken'],
-      'incorrect key for `accessToken`');
+      expect(allArgsCk[2][0]).toEqual(sessionService['key']['accessToken'],
+        'incorrect key for `accessToken`');
 
-    expect(allArgsCk[3][0]).toEqual(sessionService['key']['refreshToken'],
-      'incorrect key for `refreshToken`');
+      expect(allArgsCk[3][0]).toEqual(sessionService['key']['refreshToken'],
+        'incorrect key for `refreshToken`');
 
-    expect(allArgsCk[4][0]).toEqual(sessionService['key']['headerToBeSent'],
-      'incorrect key for `headerToBeSent`');
+      expect(allArgsCk[4][0]).toEqual(sessionService['key']['headerToBeSent'],
+        'incorrect key for `headerToBeSent`');
 
-    expect(allArgsCk[5][0]).toEqual(sessionService['key']['tokenType'],
-      'incorrect key for `tokenType`');
-    // endregion
-    // endregion
-  });
+      expect(allArgsCk[5][0]).toEqual(sessionService['key']['tokenType'],
+        'incorrect key for `tokenType`');
+      // endregion
+      // endregion
+    });
 
   it('`getAccessToken` should return an observable of `null` by default', () => {
     sessionService.getAccessToken().subscribe((val: any) => expect(val).toBeNull());
@@ -247,14 +247,14 @@ describe('SessionService', () => {
 
   it('if `getAccessToken` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the access token for the next call', () => {
-    spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-    sessionService.getAccessToken().subscribe((val: any) => {
-      expect(val).toBeNull();
-      const l = spyGetAuthData.calls.all().length;
-      expect(l)
-        .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getAccessToken().subscribe((val: any) => {
+        expect(val).toBeNull();
+        const l = spyGetAuthData.calls.all().length;
+        expect(l)
+          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      });
     });
-  });
 
   it('`getRefreshToken` should return an observable of `null` by default', () => {
     sessionService.getRefreshToken().subscribe((val: any) => expect(val).toBeNull());
@@ -262,14 +262,14 @@ describe('SessionService', () => {
 
   it('if `getRefreshToken` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the refresh token for the next call', () => {
-    spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-    sessionService.getRefreshToken().subscribe((val: any) => {
-      expect(val).toBeNull();
-      const l = spyGetAuthData.calls.all().length;
-      expect(l)
-        .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getRefreshToken().subscribe((val: any) => {
+        expect(val).toBeNull();
+        const l = spyGetAuthData.calls.all().length;
+        expect(l)
+          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      });
     });
-  });
 
   it('`getHeader` should return an observable of `null` by default', () => {
     sessionService.getHeader().subscribe((val: any) => expect(val).toBeNull());
@@ -277,14 +277,14 @@ describe('SessionService', () => {
 
   it('if `getHeader` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the header for the next call', () => {
-    spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-    sessionService.getHeader().subscribe((val: any) => {
-      expect(val).toBeNull();
-      const l = spyGetAuthData.calls.all().length;
-      expect(l)
-        .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getHeader().subscribe((val: any) => {
+        expect(val).toBeNull();
+        const l = spyGetAuthData.calls.all().length;
+        expect(l)
+          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      });
     });
-  });
 
   it('`getTokenType` should return an observable of `null` by default', () => {
     sessionService.getTokenType().subscribe((val: any) => expect(val).toBeNull());
@@ -292,12 +292,12 @@ describe('SessionService', () => {
 
   it('if `getTokenType` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the token type for the next call', () => {
-    spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-    sessionService.getTokenType().subscribe((val: any) => {
-      expect(val).toBeNull();
-      const l = spyGetAuthData.calls.all().length;
-      expect(l)
-        .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getTokenType().subscribe((val: any) => {
+        expect(val).toBeNull();
+        const l = spyGetAuthData.calls.all().length;
+        expect(l)
+          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
+      });
     });
-  });
 });

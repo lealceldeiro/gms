@@ -3,7 +3,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 /**
  * A stub (mock) directive for simulating the `[routeLink]` directive in the specs.
  */
-@Directive({selector: '[routerLink]'})    // tslint:disable-line
+@Directive({ selector: '[routerLink]' })    // tslint:disable-line
 export class RouterLinkStubDirective {
 
   /**

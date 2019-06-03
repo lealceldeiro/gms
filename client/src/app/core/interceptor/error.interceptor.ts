@@ -28,7 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(tap(
-      () => {},
+      () => { },
       (event) => {
         if (!this.intHelperService.isExcludedFromErrorHandling(req.url) && event instanceof HttpErrorResponse) {
           let message = '';

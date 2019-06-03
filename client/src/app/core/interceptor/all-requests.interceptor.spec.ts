@@ -58,7 +58,7 @@ describe('AllRequestsInterceptor', () => {
     req[1].flush({});
   });
 
-  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and a successfull response arrived', () => {
+  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and a successful response arrived', () => {
     httpClient.get(url).subscribe(() => {
       expect(startLoaderSpy).toHaveBeenCalledTimes(1);
       expect(stopLoaderSpy).toHaveBeenCalledTimes(1);
@@ -66,9 +66,9 @@ describe('AllRequestsInterceptor', () => {
     httpTestingController.expectOne(url).flush({});
   });
 
-  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and an usuccessfull response arrived', () => {
-    const error: HttpErrorResponse = new HttpErrorResponse({status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url});
-    httpClient.get(url).subscribe(() => {}, () => {
+  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and an unsuccessful response arrived', () => {
+    const error: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url });
+    httpClient.get(url).subscribe(() => { }, () => {
       // error
       expect(startLoaderSpy).toHaveBeenCalledTimes(1);
       expect(stopLoaderSpy).toHaveBeenCalledTimes(1);

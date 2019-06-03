@@ -12,10 +12,9 @@ describe('PreviewContentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreviewContentComponent ],
-      imports: [ RouterTestingModule ]
-    })
-      .compileComponents();
+      declarations: [PreviewContentComponent],
+      imports: [RouterTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

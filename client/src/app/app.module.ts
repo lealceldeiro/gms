@@ -19,7 +19,7 @@ import { HomeModule } from './home/home.module';
  * Base module, bootstrapped in the main file.
  */
 @NgModule({
-  declarations: [ AppComponent, NavBarComponent, SideMenuComponent ],
+  declarations: [AppComponent, NavBarComponent, SideMenuComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

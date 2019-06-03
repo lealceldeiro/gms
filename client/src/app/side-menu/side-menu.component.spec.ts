@@ -25,9 +25,9 @@ describe('SideMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideMenuComponent ],
-      imports: [ MockModule, RouterTestingModule.withRoutes(routes) ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      declarations: [SideMenuComponent],
+      imports: [MockModule, RouterTestingModule.withRoutes(routes)],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

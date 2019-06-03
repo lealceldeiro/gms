@@ -5,7 +5,7 @@ import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
   const from3rdParty = { error: (a, b): any => spy.error(a, b) };
-  const spy = { error: (a, b): any => {} };
+  const spy = { error: (a, b): any => { } };
   let errorSpy: jasmine.Spy;
   let notificationService: NotificationService;
 

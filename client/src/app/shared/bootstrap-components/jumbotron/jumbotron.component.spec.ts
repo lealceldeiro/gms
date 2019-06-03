@@ -12,10 +12,9 @@ describe('GmsJumbotronComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GmsJumbotronComponent ],
-      imports: [ RouterTestingModule ]
-    })
-    .compileComponents();
+      declarations: [GmsJumbotronComponent],
+      imports: [RouterTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

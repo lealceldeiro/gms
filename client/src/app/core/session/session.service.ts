@@ -133,7 +133,7 @@ export class SessionService {
    * @see isNotLoggedIn
    */
   isLoggedIn(): Observable<boolean> {
-    return this.loggedIn$.pipe(tap(() => {}, (e) => { console.warn(e); }));
+    return this.loggedIn$.pipe(tap(() => { }, (e) => { console.warn(e); }));
   }
 
   /**
@@ -142,7 +142,7 @@ export class SessionService {
    * @see isLoggedIn
    */
   isNotLoggedIn(): Observable<boolean> {
-    return this.notLoggedIn$.pipe(tap(() => {}, (e) => { console.warn(e); }));
+    return this.notLoggedIn$.pipe(tap(() => { }, (e) => { console.warn(e); }));
   }
 
   /**

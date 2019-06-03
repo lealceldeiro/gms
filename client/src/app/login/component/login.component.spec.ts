@@ -27,23 +27,23 @@ describe('LoginComponent', () => {
   let navigateByUrlSpy: jasmine.Spy;
   let warnNotificationStub: jasmine.Spy;
 
-  const routes = [ { path : 'home', component: DummyStubComponent }];
+  const routes = [{ path: 'home', component: DummyStubComponent }];
   const text = 'sampleText';
   const sampleReq: LoginRequestModel = { password: text, usernameOrEmail: text };
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
   let ret;
-  const spy = { login: (a) => {}, error: (a, b) => {} };
+  const spy = { login: (a) => { }, error: (a, b) => { } };
   const s = new Subject<boolean>();
   const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
-  const sessionServiceStub = { isLoggedIn: () =>  s.asObservable(), setRememberMe: () => {} };
-  const formHelperStub = { markFormElementsAsTouched: () => {} };
+  const sessionServiceStub = { isLoggedIn: () => s.asObservable(), setRememberMe: () => { } };
+  const formHelperStub = { markFormElementsAsTouched: () => { } };
   const notificationStub = { error: (a, b) => { spy.error(a, b); } };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
-      imports: [ MockModule, SharedModule, RouterTestingModule.withRoutes(routes) ],
+      declarations: [LoginComponent],
+      imports: [MockModule, SharedModule, RouterTestingModule.withRoutes(routes)],
       providers: [
         { provide: LoginService, useValue: loginServiceStub },
         { provide: SessionService, useValue: sessionServiceStub },
@@ -107,7 +107,7 @@ describe('LoginComponent', () => {
       setForm();
       // change the fake observable to return an error instead of a success response
       ret = () => Observable.create(observer => {
-        observer.error(new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, error: 'test error'}));
+        observer.error(new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, error: 'test error' }));
         observer.complete();
       });
 
