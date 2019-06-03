@@ -2,14 +2,7 @@
 
 * Make a local working copy of the project (`git clone https://github.com/lealceldeiro/gms.git`).
 
-## 2.1. Additional tools
-
-These tools are not really mandatory, but in order to get an increased productivity they are recommended.
-
-* [Spring Tools 4 - for Spring Boot (aka Spring Tool Suite 4)][9]
-* [TypeScript IDE][10]
-
-## 2.2. API Server module
+## 2.1. API Server module
 
 * Go to _File_ > _Import_.
 
@@ -35,7 +28,7 @@ These tools are not really mandatory, but in order to get an increased productiv
 
 ![Image: Import Preview](./images/eclipse-6-server-imported.png)
 
-## 2.3. Client module
+## 2.2. Client module
 
 * Go to _File_ > _Import_.
 
@@ -45,7 +38,7 @@ These tools are not really mandatory, but in order to get an increased productiv
 
 ![Image: Select the wizard for Angular Project](./images/eclipse-7-import-client-angular-wizard.png)
 
-* Select the _client_ folder location (where you ckecked out the project from github)
+* Select the _client_ folder location (where you checked out the project from github)
 
 ![Image: Select the server folder location](./images/eclipse-8-select-folder-location.png)
 
@@ -58,6 +51,13 @@ These tools are not really mandatory, but in order to get an increased productiv
 ![Image: Import Preview](./images/eclipse-10-client-imported.png)
 
 ### At this point in the workspace should be two projects (_server_ and _client_)
+
+## 2.3. Additional tools
+
+These tools are not really mandatory, but in order to get an increased productivity they are recommended.
+
+* [Spring Tools 4 - for Spring Boot (aka Spring Tool Suite 4)][9]
+* [TypeScript IDE][10]
 
 [1]: https://gradle.org/
 [2]: https://cli.angular.io/

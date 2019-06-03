@@ -10,8 +10,9 @@
 * [Overview](#overview)
 * [Ready for production](#ready-for-production)
 * [How to start developing](#how-to-start-developing)
-    1. [Using IntelliJ IDEA](./help/INTELLIJIDEA.md)
-    2. [Using Eclipse](./help/Eclipse.md)
+  1. [Using IntelliJ IDEA](./help/INTELLIJIDEA.md) :smile:
+  2. [Using Visual Studio Code](./help/VSCode.md) :+1:
+  3. [Using Eclipse](./help/Eclipse.md) :confused:
 
 ## Overview
 
