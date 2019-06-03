@@ -88,7 +88,6 @@ public class EUser extends GmsEntity implements UserDetails {
     private Boolean credentialsNonExpired;
 
     // user authorities are handled via jjwt, this attribute is kept for compatibility with Spring Security
-    @SuppressWarnings("JpaAttributeTypeInspection")
     @Getter(AccessLevel.NONE)
     private HashSet<GrantedAuthority> authorities;
 

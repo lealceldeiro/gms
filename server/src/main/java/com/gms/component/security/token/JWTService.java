@@ -22,7 +22,6 @@ import static java.lang.String.valueOf;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.2
  */
-@SuppressWarnings("WeakerAccess")
 @RequiredArgsConstructor
 @Component
 public class JWTService {

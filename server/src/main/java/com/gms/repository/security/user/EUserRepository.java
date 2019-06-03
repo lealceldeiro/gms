@@ -14,7 +14,6 @@ import static com.gms.util.constant.ResourcePath.*;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@SuppressWarnings("unused")
 @RepositoryRestResource(collectionResourceRel = USER, path = USER)
 public interface EUserRepository extends EUserRepositoryCustom, PagingAndSortingRepository<EUser, Long> {
 

@@ -21,7 +21,6 @@ public class MessageResolver {
      * @param args Arguments to be interpolated in the resultant message.
      * @return A {@link String} which is the message associated to the specified <code>code</code>.
      */
-    @SuppressWarnings("WeakerAccess")
     public String getMessage(String code, String... args) {
         String[] realArgs = new String[args.length];
         for (int i = 0; i < args.length; i++) {

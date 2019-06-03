@@ -62,7 +62,6 @@ public class UserControllerTest {
     @Autowired private WebApplicationContext context;
     private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired private FilterChainProxy springSecurityFilterChain;
 
     @Autowired private SecurityConst sc;
@@ -88,7 +87,6 @@ public class UserControllerTest {
 
     private final GMSRandom random = new GMSRandom();
 
-    @SuppressWarnings("Duplicates")
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());

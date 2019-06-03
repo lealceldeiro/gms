@@ -60,7 +60,6 @@ public class SecurityConfigTest {
 	private WebApplicationContext context;
 	private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
-	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
 	private FilterChainProxy springSecurityFilterChain;
 

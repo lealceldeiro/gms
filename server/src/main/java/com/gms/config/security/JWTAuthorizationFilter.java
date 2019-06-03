@@ -34,7 +34,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
      */
     private static final String PASS_HOLDER = "password";
 
-    @SuppressWarnings("WeakerAccess")
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService,
                                   AuthenticationFacade authenticationFacade) {
         super(authenticationManager);

@@ -16,7 +16,6 @@ import static com.gms.util.constant.ResourcePath.ROLE;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@SuppressWarnings("unused")
 @RepositoryRestResource(collectionResourceRel = ROLE, path = ROLE)
 public interface BRoleRepository extends PagingAndSortingRepository<BRole, Long> {
 

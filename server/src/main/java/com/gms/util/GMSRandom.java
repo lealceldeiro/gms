@@ -8,7 +8,6 @@ import java.util.Random;
 /**
  * A string random generator class borrowed from https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
  */
-@SuppressWarnings("WeakerAccess")
 public class GMSRandom {
 
     /**
