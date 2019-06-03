@@ -27,11 +27,11 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] :
-      [
-        'Chromium',
-        // 'Chrome',
-        // 'Firefox'
-      ],
+      process.platform === 'win32' ? ['Chrome'] :           // windows
+        [
+          'Chromium',
+          // 'Firefox'
+        ],
     customLaunchers: process.env.TRAVIS ? {
       Chrome_travis_ci: {
         base: 'Chrome',
