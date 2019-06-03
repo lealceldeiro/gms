@@ -30,7 +30,7 @@
     "@angular/platform-browser": "^8.0.0",
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
-    "@ng-bootstrap/ng-bootstrap": "4.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^4.2.1",
     "@ngx-pwa/local-storage": "^8.0.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.7",
