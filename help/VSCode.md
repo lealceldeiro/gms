@@ -53,5 +53,3 @@ These extensions are not required to be installed in order to develop, but they 
 * [IntelliJ IDEA Keybindings](https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings) if you come from [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 * [Visual Studio IntelliCode](https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
 * [SQLTools](https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools)
-
-These tools are not really mandatory, but in order to get an increased productivity they are highly recommended.
