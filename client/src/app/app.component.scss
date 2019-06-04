@@ -1,8 +1,11 @@
+@import "../sass/variables";
+
 #component-wrapper {
   -ms-overflow-x: hidden;
   overflow-x: hidden;
 }
 
 #content-wrapper {
+  background: $gray-80;
   min-height: 100vh !important;
 }

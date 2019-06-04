@@ -1,13 +1,17 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins/breakpoints";
+@import "../../sass/variables";
 
 #nav-wrapper {
+   nav.bg-light {
+     background: $gray-80 !important;
+   }
   @include media-breakpoint-up(lg) {
     height: 92vh;
     max-height: 92vh;
     overflow-x: hidden;
-    overflow-y: scroll;
+    border-right: 3px solid $gray-150;
     position: fixed;
     nav {
       position: absolute;
