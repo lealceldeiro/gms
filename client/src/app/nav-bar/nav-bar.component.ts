@@ -40,7 +40,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * Search input placeholder.
    * @type {string}
    */
-  @Input() searchPlaceholder = 'Type here to search';
+  @Input() searchPlaceholder = 'Type here to search ...';
   /**
    * Search button text.
    * @type {string}
