@@ -19,7 +19,7 @@
         <!--region routing-->
         <div class="container-fluid col-xs-12 col-sm-12 col-md-12"
           [ngClass]="{'offset-lg-2 offset-xl-2 col-lg-10 col-xl-10':loggedIn, 'col-md-12 col-lg-12 col-xl-12': !loggedIn}">
-          <div class="ml-lg-6 ml-xl-6">
+          <div [ngClass]="{'ml-lg-6 ml-xl-6':loggedIn}">
             <router-outlet></router-outlet>
           </div>
         </div>
