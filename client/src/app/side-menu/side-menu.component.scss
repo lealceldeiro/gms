@@ -3,9 +3,9 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 
 #nav-wrapper {
-  @include media-breakpoint-up(md) {
-    height: 87vh;
-    max-height: 87vh;
+  @include media-breakpoint-up(lg) {
+    height: 92vh;
+    max-height: 92vh;
     overflow-x: hidden;
     overflow-y: scroll;
     position: fixed;
