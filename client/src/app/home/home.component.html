@@ -1,7 +1,8 @@
 <!--Jumbotron-->
 <div class="row">
   <div class="col-md-12">
-    <gms-jumbotron header="{{appName}}" text="To do!" link="/login" linkText="Try it now"></gms-jumbotron>
+    <gms-jumbotron header="{{appName}}" text="A generic, powerful, management system" link="/login"
+      linkText="Try it now" *ngIf="!isLoggedIn"></gms-jumbotron>
   </div>
 </div>
 <!--./Jumbotron-->
