@@ -17,9 +17,9 @@
         <!--endregion-->
 
         <!--region routing-->
-        <div class="container-fluid col-xs-12 col-sm-12"
-          [ngClass]="{'offset-md-2 offset-lg-2 offset-xl-2 col-md-10 col-lg-10 col-xl-10':loggedIn, 'col-md-12 col-lg-12 col-xl-12': !loggedIn}">
-          <div class="ml-6">
+        <div class="container-fluid col-xs-12 col-sm-12 col-md-12"
+          [ngClass]="{'offset-lg-2 offset-xl-2 col-lg-10 col-xl-10':loggedIn, 'col-md-12 col-lg-12 col-xl-12': !loggedIn}">
+          <div class="ml-lg-6 ml-xl-6">
             <router-outlet></router-outlet>
           </div>
         </div>
