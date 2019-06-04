@@ -1,8 +1,8 @@
 <!--Jumbotron-->
-<div class="row">
+<div class="row" id="jmb-panel" *ngIf="!isLoggedIn">
   <div class="col-md-12">
     <gms-jumbotron header="{{appName}}" text="A generic, powerful, management system" link="/login"
-      linkText="Try it now" *ngIf="!isLoggedIn"></gms-jumbotron>
+      linkText="Try it now"></gms-jumbotron>
   </div>
 </div>
 <!--./Jumbotron-->
