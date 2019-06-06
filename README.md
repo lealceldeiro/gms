@@ -30,7 +30,7 @@ The project consists of two main (independent) modules:
   1. You need Java 8 in order to generate the WAR and a servlet container (such as [Apache Tomcat][8]) in order to deploy it.
   2. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
-  1. You need to have [Node.js][4] 8.9 or higher, together with [NPM][7] 5.5.1 or higher installed.
+  1. You need to have [Node.js][4] 10.9.0 or later, together with an [npm][7] package manager.
   2. Consider modifying the file `client/src/environments/environment.prod.ts`, by setting the value `apiBaseUrl` to the value of the API base url. This takes as default `http://127.0.0.1/gms/api/`.
   3. From the location `server/` run `gradle bootWar -Pclient=true`.
   4. Optionally you can modify other behaviors for the client app while generating the WAR using the following commands:
@@ -53,5 +53,5 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 [4]: https://nodejs.org/en/
 [5]: https://www.postgresql.org/
 [6]: https://gradle.org/
-[7]: https://www.npmjs.com/get-npm
+[7]: https://www.npmjs.com/
 [8]: http://tomcat.apache.org/
