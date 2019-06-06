@@ -53,3 +53,9 @@ These extensions are not required to be installed in order to develop, but they 
 * [IntelliJ IDEA Keybindings](https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings) if you come from [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 * [Visual Studio IntelliCode](https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
 * [SQLTools](https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools)
+
+### Miscellaneous
+
+* Express setup
+
+If you want to get the environment set up with all theses extensions and configurations described here just install [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) and use this token (`d3e4c9bdc61eca0e63dde7cce1b59820226a6df8`) to get extensions and configs in your VSCode synced.
