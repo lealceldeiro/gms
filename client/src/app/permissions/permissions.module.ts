@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { PermissionsRoutingModule } from './permissions-routing.module';
-import { PermissionListComponent } from './permission-list/permission-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { PermissionListComponent } from './permission-list/permission-list.component';
+import { PermissionsRoutingModule } from './permissions-routing.module';
 import { PermissionService } from './shared/permission.service';
 
 @NgModule({

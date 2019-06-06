@@ -1,15 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/index';
 import { tap } from 'rxjs/operators';
-import { LoginResponseModel } from '../../core/session/login-response.model';
-import { HttpClient } from '@angular/common/http';
-
-import { LoginRequestModel } from '../../core/session/login-request.model';
-import { SessionService } from '../../core/session/session.service';
-import { SessionUserService } from '../../core/session/session-user.service';
 import { environment } from '../../../environments/environment';
-import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
+import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
+import { LoginRequestModel } from '../../core/session/login-request.model';
+import { LoginResponseModel } from '../../core/session/login-response.model';
+import { SessionUserService } from '../../core/session/session-user.service';
+import { SessionService } from '../../core/session/session.service';
+
 
 /**
  * A service for providing handling the login/logout processes.

@@ -1,9 +1,9 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input } from '@angular/core';
 import { of, Subject } from 'rxjs/index';
-
-import { SessionService } from './core/session/session.service';
 import { AppComponent } from './app.component';
+import { SessionService } from './core/session/session.service';
+
 
 describe('AppComponent', () => {
   const event = new Event('beforeunload', { cancelable: true });

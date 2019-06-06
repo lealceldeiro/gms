@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PermissionPd } from './permission-pd';
 import { environment } from '../../../environments/environment';
 import { ParamsService } from '../../core/request/params/params.service';
+import { PermissionPd } from './permission-pd';
 
 /**
  * Service for providing permissions-related services.

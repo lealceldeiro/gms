@@ -1,19 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { CookieModule } from 'ngx-cookie';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CookieModule } from 'ngx-cookie';
 import { ToastrModule } from 'ngx-toastr';
-import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
-
-import { AppComponent } from './app.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { AppRoutingModule } from './app-routing.module';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { SideMenuComponent } from './side-menu/side-menu.component';
-import { SharedModule } from './shared/shared.module';
+import { AppComponent } from './app.component';
 import { GmsCoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { SharedModule } from './shared/shared.module';
+import { SideMenuComponent } from './side-menu/side-menu.component';
+
 
 /**
  * Base module, bootstrapped in the main file.

@@ -1,8 +1,8 @@
-import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { SessionService } from '../session/session.service';
+
 
 /**
  * Interceptor for setting on every request made the authorization header if the user has being logged in previously.

@@ -1,11 +1,10 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-
-import { HomeComponent } from './home.component';
-import { SessionService } from '../core/session/session.service';
-import { BehaviorSubject } from 'rxjs';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { subscribeOn } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { SessionService } from '../core/session/session.service';
+import { HomeComponent } from './home.component';
+
 
 describe('HomeComponent', () => {
   let component: HomeComponent;

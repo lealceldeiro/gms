@@ -1,17 +1,17 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
-import { SessionService } from './session/session.service';
-import { StorageService } from './storage/storage.service';
-import { LoginGuard } from './guard/login.guard';
-import { SessionUserService } from './session/session-user.service';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormHelperService } from './form/form-helper.service';
-import { SecurityInterceptor } from './interceptor/security.interceptor';
-import { ErrorInterceptor } from './interceptor/error.interceptor';
+import { LoginGuard } from './guard/login.guard';
 import { AllRequestsInterceptor } from './interceptor/all-requests.interceptor';
+import { ErrorInterceptor } from './interceptor/error.interceptor';
 import { InterceptorHelperService } from './interceptor/interceptor-helper.service';
+import { SecurityInterceptor } from './interceptor/security.interceptor';
 import { NotificationService } from './messages/notification.service';
 import { PageNotFoundService } from './navigation/page-not-found.service';
+import { SessionUserService } from './session/session-user.service';
+import { SessionService } from './session/session.service';
+import { StorageService } from './storage/storage.service';
+
 
 @NgModule({
   declarations: [],

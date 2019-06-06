@@ -1,11 +1,11 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpErrorResponse, HttpResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-
+import { inject, TestBed } from '@angular/core/testing';
+import { NotificationService } from '../messages/notification.service';
+import { HttpStatusCode } from '../response/http-status-code.enum';
 import { ErrorInterceptor } from './error.interceptor';
 import { InterceptorHelperService } from './interceptor-helper.service';
-import { HttpStatusCode } from '../response/http-status-code.enum';
-import { NotificationService } from '../messages/notification.service';
+
 
 describe('ErrorInterceptor', () => {
   let spyIsExcludedFromErrorHandling: jasmine.Spy;

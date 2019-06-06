@@ -1,12 +1,12 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-import { SessionService } from './session.service';
 import { StorageService } from '../storage/storage.service';
-import { User } from './user.model';
 import { LoginResponseModel } from './login-response.model';
+import { SessionService } from './session.service';
 import { userMock } from './user.mock.model';
+import { User } from './user.model';
+
 
 describe('SessionService', () => {
   let storageServiceSetSpy: jasmine.Spy;

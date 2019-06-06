@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-
-import { PageNotFoundComponent } from './page-not-found.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PageNotFoundService } from '../core/navigation/page-not-found.service';
+import { PageNotFoundComponent } from './page-not-found.component';
+
 
 describe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;

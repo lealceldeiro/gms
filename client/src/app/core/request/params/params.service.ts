@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 /**
  * A service for providing helper functions related to request parameters.

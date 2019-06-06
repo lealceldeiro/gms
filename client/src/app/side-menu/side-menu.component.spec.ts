@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { MockModule } from '../shared/mock/mock.module';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SideMenuComponent } from './side-menu.component';
+
 import Spy = jasmine.Spy;
 
 describe('SideMenuComponent', () => {

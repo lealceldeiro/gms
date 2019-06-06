@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/index';
 import { environment } from '../../../environments/environment';
 import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';

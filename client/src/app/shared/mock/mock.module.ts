@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
+import { DummyStubComponent } from './dummy-stub.component';
 import { RouterLinkStubDirective } from './router-link-stub.directive';
 
-import { DummyStubComponent } from './dummy-stub.component';
 
 /**
  * This module only exist for keeping the standard of declaring every component,directive, etc in a module, so the mock and stub components,

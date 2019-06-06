@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CookieOptions, CookieService } from 'ngx-cookie';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { tap } from 'rxjs/operators';
+import { CookieOptions, CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs/index';
+import { tap } from 'rxjs/operators';
 
 /**
  * A service for providing access to the storage and cookies in client runner (browser, etc).

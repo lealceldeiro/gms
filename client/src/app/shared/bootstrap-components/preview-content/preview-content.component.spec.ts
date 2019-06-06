@@ -1,8 +1,8 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DebugElement } from '@angular/core';
-
 import { PreviewContentComponent } from './preview-content.component';
+
 
 describe('PreviewContentComponent', () => {
   let component: PreviewContentComponent;

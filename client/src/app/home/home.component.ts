@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { SessionService } from '../core/session/session.service';
-import { Subscription } from 'rxjs';
 
 /**
  * Component for generating the home page of the app.

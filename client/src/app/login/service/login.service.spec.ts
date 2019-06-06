@@ -1,19 +1,19 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-import { LoginService } from './login.service';
-import { SessionService } from '../../core/session/session.service';
-import { SessionUserService } from '../../core/session/session-user.service';
-import { LoginResponseModel } from '../../core/session/login-response.model';
-import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
-import { PageModel } from '../../core/response/paginated-data/page.model';
-import { LinksModel } from '../../core/response/paginated-data/links.model';
-import { SelfModel } from '../../core/response/paginated-data/self.model';
-import { userMock } from '../../core/session/user.mock.model';
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
+import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
+import { LinksModel } from '../../core/response/paginated-data/links.model';
+import { PageModel } from '../../core/response/paginated-data/page.model';
+import { SelfModel } from '../../core/response/paginated-data/self.model';
+import { LoginResponseModel } from '../../core/session/login-response.model';
+import { SessionUserService } from '../../core/session/session-user.service';
+import { SessionService } from '../../core/session/session.service';
+import { userMock } from '../../core/session/user.mock.model';
+import { LoginService } from './login.service';
+
 
 describe('LoginService', () => {
   let httpClient: HttpClient;

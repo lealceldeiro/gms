@@ -1,13 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
-
-import { PermissionListComponent } from './permission-list.component';
-import { PermissionService } from '../shared/permission.service';
 import { SharedModule } from '../../shared/shared.module';
-import { PermissionPd } from '../shared/permission-pd';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
+import { PermissionPd } from '../shared/permission-pd';
+import { PermissionService } from '../shared/permission.service';
+import { PermissionListComponent } from './permission-list.component';
+
 
 describe('PermissionListComponent', () => {
   let component: PermissionListComponent;

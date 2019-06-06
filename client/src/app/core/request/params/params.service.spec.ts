@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-
-import { ParamsService } from './params.service';
 import { HttpParams } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
+import { ParamsService } from './params.service';
+
 
 describe('ParamsService', () => {
 

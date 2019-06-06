@@ -1,22 +1,21 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
-import { Subject } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-
-import { LoginComponent } from './login.component';
-import { SharedModule } from '../../shared/shared.module';
-import { LoginService } from '../service/login.service';
-import { MockModule } from '../../shared/mock/mock.module';
+import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Observable, Subject } from 'rxjs';
+import { FormHelperService } from '../../core/form/form-helper.service';
+import { NotificationService } from '../../core/messages/notification.service';
+import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
-import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { SessionService } from '../../core/session/session.service';
-import { FormHelperService } from '../../core/form/form-helper.service';
-import { HttpStatusCode } from '../../core/response/http-status-code.enum';
-import { NotificationService } from '../../core/messages/notification.service';
+import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
+import { MockModule } from '../../shared/mock/mock.module';
+import { SharedModule } from '../../shared/shared.module';
+import { LoginService } from '../service/login.service';
+import { LoginComponent } from './login.component';
+
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

@@ -1,16 +1,16 @@
-import { inject, TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
-
-import { SessionUserService } from './session-user.service';
-import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
-import { userMock } from './user.mock.model';
+import { inject, TestBed } from '@angular/core/testing';
 import { environment } from '../../../environments/environment';
-import { SelfModel } from '../response/paginated-data/self.model';
+import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
 import { LinksModel } from '../response/paginated-data/links.model';
 import { PaginatedDataModel } from '../response/paginated-data/model';
 import { PageModel } from '../response/paginated-data/page.model';
+import { SelfModel } from '../response/paginated-data/self.model';
+import { SessionUserService } from './session-user.service';
+import { userMock } from './user.mock.model';
+
+
 
 describe('SessionUserService', () => {
   let httpClient: HttpClient;

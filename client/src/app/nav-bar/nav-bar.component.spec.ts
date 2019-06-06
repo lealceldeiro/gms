@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs/index';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-import { NavBarComponent } from './nav-bar.component';
-import { MockModule } from '../shared/mock/mock.module';
-import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
-import { gmsClick } from '../shared/test-util/mouse.util';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { of } from 'rxjs/index';
 import { SessionService } from '../core/session/session.service';
 import { userMock } from '../core/session/user.mock.model';
+import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
+import { MockModule } from '../shared/mock/mock.module';
+import { gmsClick } from '../shared/test-util/mouse.util';
+import { NavBarComponent } from './nav-bar.component';
+
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;

@@ -1,15 +1,15 @@
+import { HttpResponseBase } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpResponseBase } from '@angular/common/http';
-
-import { LoginRequestModel } from '../../core/session/login-request.model';
-import { LoginService } from '../service/login.service';
-import { SessionService } from '../../core/session/session.service';
-import { FormHelperService } from '../../core/form/form-helper.service';
-import { HttpStatusCode } from '../../core/response/http-status-code.enum';
-import { NotificationService } from '../../core/messages/notification.service';
 import { Subscription } from 'rxjs';
+import { FormHelperService } from '../../core/form/form-helper.service';
+import { NotificationService } from '../../core/messages/notification.service';
+import { HttpStatusCode } from '../../core/response/http-status-code.enum';
+import { LoginRequestModel } from '../../core/session/login-request.model';
+import { SessionService } from '../../core/session/session.service';
+import { LoginService } from '../service/login.service';
+
 
 /**
  * Generates a login component in order to allow users to login into the system

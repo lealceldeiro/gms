@@ -1,10 +1,10 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { inject, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs/index';
-
-import { SecurityInterceptor } from './security.interceptor';
 import { SessionService } from '../session/session.service';
+import { SecurityInterceptor } from './security.interceptor';
+
 
 describe('SecurityInterceptor', () => {
   const header = 'header';
