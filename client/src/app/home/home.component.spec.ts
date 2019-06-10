@@ -43,6 +43,7 @@ describe('HomeComponent', () => {
 
   it('should call SessionService#isLoggedIn on init', () => {
     component.ngOnInit();
+    fixture.detectChanges();
     expect(spyIsLoggedIn).toHaveBeenCalledTimes(1);
   });
 
