@@ -1,4 +1,4 @@
-# 2. Using Eclipse
+# 2. How to start developing using Eclipse
 
 * Make a local working copy of the project (`git clone https://github.com/lealceldeiro/gms.git`).
 

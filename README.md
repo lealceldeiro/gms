@@ -50,6 +50,12 @@ The project consists of two main (independent) modules:
 
 _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./gradlew` instead of `gradle` for the previous mentioned steps.
 
+## How to start developing
+
+  1. Refer to [How to start developing using IntelliJ IDEA](./help/INTELLIJIDEA.md)
+  2. Refer to [How to start developing using Visual Studio Code](./help/VSCode.md)
+  3. Refer to [How to start developing using Eclipse](./help/Eclipse.md)
+
 [4]: https://nodejs.org/en/
 [5]: https://www.postgresql.org/
 [6]: https://gradle.org/

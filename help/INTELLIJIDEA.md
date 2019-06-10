@@ -1,4 +1,4 @@
-# 1. Using IntelliJ IDEA
+# 1. How to start developing using IntelliJ IDEA
 
 * Make a local working copy of the project (`git clone https://github.com/lealceldeiro/gms.git`).
 

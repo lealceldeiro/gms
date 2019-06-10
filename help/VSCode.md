@@ -1,4 +1,4 @@
-# 2. Using Visual Studio Code
+# 2. How to start developing using Visual Studio Code
 
 * Make a local working copy of the project (`git clone https://github.com/lealceldeiro/gms.git`).
 
