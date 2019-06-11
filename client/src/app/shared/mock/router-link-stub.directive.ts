@@ -8,7 +8,6 @@ export class RouterLinkStubDirective {
 
   /**
    * Url where the router navigated to.
-   * @type {string}
    */
   navigatedTo: any = null;
 
