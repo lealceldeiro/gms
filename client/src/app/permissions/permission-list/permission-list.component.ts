@@ -7,7 +7,7 @@ import { PermissionService } from '../shared/permission.service';
 @Component({
   selector: 'gms-permission-list',
   templateUrl: './permission-list.component.html',
-  styleUrls: ['./permission-list.component.css']
+  styleUrls: ['./permission-list.component.scss']
 })
 export class PermissionListComponent implements OnInit, OnDestroy {
 
@@ -25,13 +25,11 @@ export class PermissionListComponent implements OnInit, OnDestroy {
    * Contains all API pagination information.
    * @type {{total: number; size: number; current: number}}
    */
-  page: { total: number, size: number, current: number, totalPages: number, maxSize: number, previous: number } = {
+  page: { total: number, size: number, current: number, totalPages: number } = {
     total: 0,
     size: 10,
     current: 1,
     totalPages: 0,
-    maxSize: 10,
-    previous: 0
   };
 
   /**
@@ -58,15 +56,12 @@ export class PermissionListComponent implements OnInit, OnDestroy {
    * @param {number} toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
   loadList(toPage: number): void {
-    if (toPage !== this.page.previous) {
-      this.page.previous = toPage;
       this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage - 1).subscribe((permissionPd: PermissionPd) => {
         this.permissionList = permissionPd._embedded.permission;
         this.page.total = permissionPd.page.totalElements;
         this.page.totalPages = permissionPd.page.totalPages;
         this.page.current = permissionPd.page.number + 1;
       });
-    }
   }
 
 }

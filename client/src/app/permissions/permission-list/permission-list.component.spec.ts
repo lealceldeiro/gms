@@ -11,7 +11,6 @@ import { PermissionListComponent } from './permission-list.component';
 describe('PermissionListComponent', () => {
   let component: PermissionListComponent;
   let fixture: ComponentFixture<PermissionListComponent>;
-  let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
   const getSampleData = () => {
@@ -33,7 +32,7 @@ describe('PermissionListComponent', () => {
     };
   }
 
-  const addPermissionsToSampleData = (sampleData) => {
+  const addPermissionsToSampleData = (sampleData: { _embedded: any; _links?: { self: { href: string; }; }; page: any; }) => {
     const rangeBottom = 25;
     const rangeTop = 40;
     const randomAmountValue = getRandomNumber(rangeBottom, rangeTop);
@@ -48,7 +47,7 @@ describe('PermissionListComponent', () => {
 
   const subjectLRM = new BehaviorSubject<PermissionPd>(getSampleData());
   const ret = () => subjectLRM.asObservable();
-  const spy = { getPermissions: (a, b) => { } };
+  const spy = { getPermissions: (a: any, b: any) => { } };
   const permissionServiceStub = { getPermissions: (size: number, page: number) => { spy.getPermissions(size, page); return ret(); } };
 
   beforeEach(async(() => {
@@ -69,7 +68,6 @@ describe('PermissionListComponent', () => {
 
     fixture = TestBed.createComponent(PermissionListComponent);
     component = fixture.componentInstance;
-    componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
   });
@@ -91,15 +89,5 @@ describe('PermissionListComponent', () => {
 
     expect(getPermissionsSpy).toHaveBeenCalledTimes(1);
     expect(getPermissionsSpy).toHaveBeenCalledWith(component.page.size, toPage - 1);
-  });
-
-  it('should not call service for getting new permissions list when component.page.current === component.page.previouse (avoid infinite call to backend)', () => {
-    const getPermissionsSpy = spyOn(spy, 'getPermissions');
-
-    const toPage = 3;
-    component.page.previous = toPage;
-    component.loadList(toPage);
-
-    expect(getPermissionsSpy).not.toHaveBeenCalled();
   });
 });

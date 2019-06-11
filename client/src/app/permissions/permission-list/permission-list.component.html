@@ -13,6 +13,5 @@
   </tbody>
 </table>
 
-<ngb-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [maxSize]="page.maxSize"
-  [boundaryLinks]="true" class="d-flex justify-content-center" (pageChange)="loadList($event)"
-  *ngIf="permissionList?.length"> </ngb-pagination>
+<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true" (onPageChangeAction)="loadList($event)"
+  *ngIf="permissionList?.length"> </gms-pagination>
