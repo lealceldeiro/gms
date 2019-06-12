@@ -4,6 +4,9 @@ import { PermissionPd } from '../shared/permission-pd';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
 
+/**
+ * A component for showing a list with all the permissions.
+ */
 @Component({
   selector: 'gms-permission-list',
   templateUrl: './permission-list.component.html',
