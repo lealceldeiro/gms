@@ -2,7 +2,6 @@ import { DebugElement } from '@angular/core';
 
 /**
  * Useful constant which mocks the button events to pass to `DebugElement.triggerEventHandler` for RouterLink event handler.
- * @type {{}}
  */
 export const GmsButtonClickEvents = {
   left: { button: 0 },

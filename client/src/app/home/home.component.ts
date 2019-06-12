@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Indicates whether the user is logged in or not.
    * @type {boolean}
    */
-  isLoggedIn = false;
+  isLoggedIn: boolean = false;
 
   /**
    * Subscription to the logged in status.

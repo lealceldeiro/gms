@@ -1,10 +1,9 @@
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { SessionService } from '../core/session/session.service';
 import { HomeComponent } from './home.component';
-
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -38,6 +37,7 @@ describe('HomeComponent', () => {
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
@@ -47,7 +47,7 @@ describe('HomeComponent', () => {
     expect(spyIsLoggedIn).toHaveBeenCalledTimes(1);
   });
 
-  it('should not render jumbotron if the user is logged in', fakeAsync(() => {
+  it('should not render jumbotron if the user is logged in', () => {
     sessionServiceStub.isLoggedIn().subscribe((li) => {
       if (li) {
         fixture.detectChanges();
@@ -55,17 +55,14 @@ describe('HomeComponent', () => {
       }
     });
     behaviorSubject.next(true);
-    tick();
-  }));
+  });
 
-  it('should render jumbotron if the user is not logged in', fakeAsync(() => {
+  it('should render jumbotron if the user is not logged in', () => {
     sessionServiceStub.isLoggedIn().subscribe((li) => {
       if (!li) {
-        fixture.detectChanges();
         expect(componentDe.query(By.css('#jmb-panel'))).not.toBeNull();
       }
     });
     behaviorSubject.next(false);
-    tick();
-  }));
+  });
 });
