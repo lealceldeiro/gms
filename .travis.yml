@@ -51,14 +51,14 @@ matrix:
     after_success:
     - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 deploy:
-  provider: openshift
-  domain: gms-api
-  app: GMS - API
-  deployment_branch: master
-  secure: k7NI+Yrk0OJ3tK3WDEeVNKKrrqs7ovAykKWJPCfmkj7jufMpL8pM74O4YYDzXBsrgwXRy8KbJ7iiLMMdNezvnIpdqUf/tBWGKRHgG9z2VqB48gw8Wbfzw99XsIAfsPJdxA+THfpaiowx1X+msbTTJH2IHKIZiYco+1ziuTSn/SQqlsKlqgo/aTq0LzciS6FSUzu5ymOCxqBWWqmYJ6Wbiwj/QQN/QWCF38uIw/3cXZc0NkNWfNgvpfgs/iUD3pI1FXb/8LGzpmCNvQ3rw45W+1x3Tkbt5NwU9Xox2Q0L42orWqKorAvqLW4Iqx8O5gPiBtMw2MWnvwl3KuKt9JiKYHZDiqZ712fFeA7Z/Z+hP5P/Z2TJ1EcnWxpCJy8ou4+rpraq06NQqgiE7cPm0TGJCB8sQDbJ0lL7TjP4KFlvHAzqOVZZxdAxbhlF2/miNwSNccDOl9ktMYF07u+yfFmE/asgbHAMXf/aLh6oIrYW121qdEA+oYRhLc0k+zRbMWt3me2YjqMicF37qJybZmZREGa2Gp0hpC7fAGnwZahiRFdASu4QL20rGLV4Kr30xXYGKnLttYQKeI7UhxagQP+H1UjVdXCMwokpMl0v+81O48GW/N1uM6SJ1wFLaCGCAMUJ9NBraw2Bp7xLgR9n0RkmZDWleLnJJZzZph1ye+dh4v0=
-  on:
-    repo: lealceldeiro/gms
-env:
-  global:
-    # username
-    secure: FUWZYZJrslSBX2TOrs2Ul7ihCw/FGOzqEoblmZ8QvvKCOpDIOg+AGwnCj61eiFLTJD6S5zeVU4COSjRi7cNfDpGgITOcTRcUE8wceF/bRIJo6J8E3zSYlsX7sCHKEKS2X3UQKn6vDtHotBuxqFOiz/yedwYNWWZVuFn1zavuuz9+us0oWWoEFwzUJQkZm++7OMj1PbTcgmPdvwSqSp5hPfuOgidKrKEORoNtnGjnYtahNzpE39EmdIvWp4HexEr8vraTAvyplHWG7K+M9mg/3ktCtr4bSLHfXsV1FAQyieLBwopeDycorRZqDus3BJXFXUIXL9yiMKlieK8gPWFLcRvU6r6kS+2ttPZtzqlGDd9iOfxVPdoNHwoymgENk2GCAsxT6Pr+uiK9mR5fs2s+MqRAZWbFci+3d7KDAC0hlvIz35oLkb8zD3p9g0aiXRzXPpPgwOkLKrBqzdA04o5HorE+ktJBzBMCfAKOrhtTdpObjcZq+gB2nwcrbqYQE+Yp8MiKMH4kKHK3YT3IhMDuf6KzDPGjmbuLTU4wXQd6PYe1e1ckNIuM+jFVjORv6A2+Um8lXfEWhf88YotJnFIsKgDy1qI6uvmV30SowqlgCfBnDP7tQrKYeVMNZ9ubMdwMHmaiswDjJNuwYHzTU1IzrWJUtNYHEGPMvBafg0NIOFs=
+  - provider: openshift
+    user: lealceldeiro
+    password:
+      secure: Pcp4Q45XUbqwUZl7zl6aGneMppqVcKvltieeMuas8lZeqDyBPAr4nRvcXrTX1WI24EsAO/0F4Or2DbSg0ErmYXKzbtk9/cFraGyli4lnEFqwnN7sMNk5BcpjjyUr9MPHDA2PY5B4tc6VQdYErY72hwRYcAv0m4+6u9OLtPEbbr8qY5lSpYiLDjUewb03pkeeqaWtHFNkBcy1ZehrRxtu9Jsd3UnkkVBwUZNedXUY6bEnUMjV6qmsgUDDw3IV5HEPzpzxiUCTx96cbQKtxK5GG/Of4kvSzBt7c2n12pjlW2fVUUL8qcof86dgHvOXU0g3Zb/8Lizb/lBLS+Q3oUNGBidMYglxY97u60Ve98Jjvt5ixB+Sj5aDePBZaNotTFPkvtHd6SJuXeW6EqKsA+lKmUtBRcoOmkD9ZYPaA/3Vm/Oetrgk1+LP14kzdGRgBbRarHyjtGLUImdAwPQeh0ko3vVy1AcF1Fc7/CIrZw53ll9WXVw6Rd2Gm5P9ntZpZP4x05h2fdrkCVCtuMixaygIljEZTYzsoHGKnaIDwsy7kpicU1h9Ysxd9xcaXJrdZwTbnzzufcZMuDPA6zP9pfmCvGU/SDuXElgFx5GtwqMulYeQE2esG/IJr3pIn4bnmK5hW2zV1TedNdnHu4/BulNKMERWGpTU0eguFu8DnMLVGa0=
+    app: gms
+    domain: gms
+    on:
+      repo: lealceldeiro/gms
+      branch: master
+      java: 'oraclejdk8'
+      node_js: 'lts/*'
