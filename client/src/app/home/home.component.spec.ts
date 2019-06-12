@@ -1,16 +1,16 @@
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { SessionService } from '../core/session/session.service';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
-  let componentEl: HTMLElement;
   let componentDe: DebugElement;
   let fixture: ComponentFixture<HomeComponent>;
   const behaviorSubject = new BehaviorSubject<boolean>(false);
+  let subscription: Subscription;
 
   const sessionServiceStub = {
     isLoggedIn: () => { spy.isLoggedInSpyFn(); return behaviorSubject.asObservable() }
@@ -30,11 +30,16 @@ describe('HomeComponent', () => {
     behaviorSubject.next(false);
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
-    componentEl = fixture.nativeElement;
     componentDe = fixture.debugElement;
     fixture.detectChanges();
     spyIsLoggedIn = spyOn(spy, 'isLoggedInSpyFn');
   });
+
+  afterEach(() => {
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+  })
 
   it('should create', () => {
     fixture.detectChanges();
@@ -43,12 +48,11 @@ describe('HomeComponent', () => {
 
   it('should call SessionService#isLoggedIn on init', () => {
     component.ngOnInit();
-    fixture.detectChanges();
     expect(spyIsLoggedIn).toHaveBeenCalledTimes(1);
   });
 
   it('should not render jumbotron if the user is logged in', () => {
-    sessionServiceStub.isLoggedIn().subscribe((li) => {
+    subscription = sessionServiceStub.isLoggedIn().subscribe((li) => {
       if (li) {
         fixture.detectChanges();
         expect(componentDe.query(By.css('#jmb-panel'))).toBeNull();
@@ -58,9 +62,10 @@ describe('HomeComponent', () => {
   });
 
   it('should render jumbotron if the user is not logged in', () => {
-    sessionServiceStub.isLoggedIn().subscribe((li) => {
+    subscription = sessionServiceStub.isLoggedIn().subscribe((li) => {
       if (!li) {
-        expect(componentDe.query(By.css('#jmb-panel'))).not.toBeNull();
+        fixture.detectChanges();
+        expect(componentDe.query(By.css('#jmb-panel'))).not.toBeNull('Jumbotron panel should not be null');
       }
     });
     behaviorSubject.next(false);
