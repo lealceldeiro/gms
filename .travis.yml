@@ -56,6 +56,8 @@ deploy:
   app: GMS - API
   deployment_branch: master
   secure: k7NI+Yrk0OJ3tK3WDEeVNKKrrqs7ovAykKWJPCfmkj7jufMpL8pM74O4YYDzXBsrgwXRy8KbJ7iiLMMdNezvnIpdqUf/tBWGKRHgG9z2VqB48gw8Wbfzw99XsIAfsPJdxA+THfpaiowx1X+msbTTJH2IHKIZiYco+1ziuTSn/SQqlsKlqgo/aTq0LzciS6FSUzu5ymOCxqBWWqmYJ6Wbiwj/QQN/QWCF38uIw/3cXZc0NkNWfNgvpfgs/iUD3pI1FXb/8LGzpmCNvQ3rw45W+1x3Tkbt5NwU9Xox2Q0L42orWqKorAvqLW4Iqx8O5gPiBtMw2MWnvwl3KuKt9JiKYHZDiqZ712fFeA7Z/Z+hP5P/Z2TJ1EcnWxpCJy8ou4+rpraq06NQqgiE7cPm0TGJCB8sQDbJ0lL7TjP4KFlvHAzqOVZZxdAxbhlF2/miNwSNccDOl9ktMYF07u+yfFmE/asgbHAMXf/aLh6oIrYW121qdEA+oYRhLc0k+zRbMWt3me2YjqMicF37qJybZmZREGa2Gp0hpC7fAGnwZahiRFdASu4QL20rGLV4Kr30xXYGKnLttYQKeI7UhxagQP+H1UjVdXCMwokpMl0v+81O48GW/N1uM6SJ1wFLaCGCAMUJ9NBraw2Bp7xLgR9n0RkmZDWleLnJJZzZph1ye+dh4v0=
+  on:
+    repo: lealceldeiro/gms
 env:
   global:
     # username
