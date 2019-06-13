@@ -4,7 +4,6 @@ import { of, Subject } from 'rxjs/index';
 import { AppComponent } from './app.component';
 import { SessionService } from './core/session/session.service';
 
-
 describe('AppComponent', () => {
   const event = new Event('beforeunload', { cancelable: true });
   let component: AppComponent;

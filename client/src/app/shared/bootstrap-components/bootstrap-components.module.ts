@@ -6,7 +6,6 @@ import { GmsPaginationComponent } from './gms-pagination/gms-pagination.componen
 import { GmsJumbotronComponent } from './jumbotron/jumbotron.component';
 import { PreviewContentComponent } from './preview-content/preview-content.component';
 
-
 @NgModule({
   imports: [CommonModule, RouterModule, NgbModule],
   declarations: [GmsJumbotronComponent, PreviewContentComponent, GmsPaginationComponent],

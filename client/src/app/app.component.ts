@@ -2,7 +2,6 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/index';
 import { SessionService } from './core/session/session.service';
 
-
 /**
  * Main component which is the entry point to all other components in the app.
  */

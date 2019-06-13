@@ -11,12 +11,12 @@ describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   const behaviorSubject = new BehaviorSubject<boolean>(false);
   let subscription: Subscription;
-
-  const sessionServiceStub = {
-    isLoggedIn: () => { spy.isLoggedInSpyFn(); return behaviorSubject.asObservable() }
-  };
   const spy = { isLoggedInSpyFn: () => { } };
   let spyIsLoggedIn: jasmine.Spy;
+
+  const sessionServiceStub = {
+    isLoggedIn: () => { spy.isLoggedInSpyFn(); return behaviorSubject.asObservable(); }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -39,7 +39,7 @@ describe('HomeComponent', () => {
     if (subscription) {
       subscription.unsubscribe();
     }
-  })
+  });
 
   it('should create', () => {
     fixture.detectChanges();

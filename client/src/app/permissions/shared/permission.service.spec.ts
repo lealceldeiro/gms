@@ -5,18 +5,16 @@ import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { PermissionService } from './permission.service';
 
-
 describe('PermissionService', () => {
-
   const spy = { getHttpParams: (a) => { }, get: (a, b) => { } };
-  const httpParamsValue = { someRandomProperty: 'someRandomvalue' + getRandomNumber() };
+  const httpParamsValue = { someRandomProperty: 'someRandomValue' + getRandomNumber() };
   const paramsServiceStub = {
-    getHttpParams: (a) => { spy.getHttpParams(a); return httpParamsValue }
+    getHttpParams: (a) => { spy.getHttpParams(a); return httpParamsValue; }
   };
 
   const httpClientMock = {
     get: (a, b) => spy.get(a, b)
-  }
+  };
 
   let permissionService: PermissionService;
 
@@ -47,8 +45,8 @@ describe('PermissionService', () => {
     permissionService.getPermissions(size, page);
 
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledTimes(1);
-    expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params)
+    expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission', { params: httpParamsValue })
-  })
+    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission', { params: httpParamsValue });
+  });
 });

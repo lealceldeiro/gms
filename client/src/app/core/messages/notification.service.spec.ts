@@ -2,10 +2,9 @@ import { inject, TestBed } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from './notification.service';
 
-
 describe('NotificationService', () => {
-  const from3rdParty = { error: (a, b): any => spy.error(a, b) };
   const spy = { error: (a, b): any => { } };
+  const from3rdParty = { error: (a, b): any => spy.error(a, b) };
   let errorSpy: jasmine.Spy;
   let notificationService: NotificationService;
 

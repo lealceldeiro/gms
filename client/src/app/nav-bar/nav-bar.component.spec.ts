@@ -38,7 +38,7 @@ describe('NavBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
-      imports: [MockModule, RouterTestingModule.withRoutes(routes), NgbModule.forRoot()],
+      imports: [MockModule, RouterTestingModule.withRoutes(routes), NgbModule],
       providers: [{ provide: SessionService, useValue: sessionServiceStub }]
     })
       .compileComponents();

@@ -4,7 +4,6 @@ import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 
-
 describe('StorageService', () => {
   let storageService: StorageService;
 
@@ -14,7 +13,7 @@ describe('StorageService', () => {
   const objectValue = { mKey: 'mKey' };
   const objectValue$ = new BehaviorSubject(objectValue).asObservable();
   const boolObs$ = new BehaviorSubject(true).asObservable();
-  const error$ = Observable.create(observer => { observer.error(new Error('test error')); observer.complete(); });
+  const error$ = new Observable(observer => { observer.error(new Error('test error')); observer.complete(); });
   let setItemFn;
   let removeItemFn;
   let clearFn;

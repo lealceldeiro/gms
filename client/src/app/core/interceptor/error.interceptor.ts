@@ -6,7 +6,6 @@ import { NotificationService } from '../messages/notification.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
 import { InterceptorHelperService } from './interceptor-helper.service';
 
-
 /**
  * Interceptor for catching all response errors and take action according to every specific error.
  */

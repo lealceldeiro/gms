@@ -1,7 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PageNotFoundService } from './page-not-found.service';
 
-
 describe('PageNotFoundService', () => {
   const url = '/test';
   let service: PageNotFoundService;

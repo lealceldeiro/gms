@@ -10,7 +10,6 @@ import { LoginResponseModel } from '../../core/session/login-response.model';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { SessionService } from '../../core/session/session.service';
 
-
 /**
  * A service for providing handling the login/logout processes.
  */

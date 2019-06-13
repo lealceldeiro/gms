@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { SessionService } from '../session/session.service';
 
-
 /**
  * Guards which determines whether the `login` route should be loaded and activated or not.
  */

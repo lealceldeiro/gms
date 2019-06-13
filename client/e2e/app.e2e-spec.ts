@@ -1,5 +1,5 @@
-describe("Client module e2e tests", () => {
+describe('Client module e2e tests', () => {
   beforeEach(() => { });
 
-  it("placeholder test", () => { });
+  it('placeholder test', () => { });
 });

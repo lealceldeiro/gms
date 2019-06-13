@@ -5,7 +5,6 @@ import { LoginComponent } from './component/login.component';
 import { GmsLoginRoutingModule } from './gms-login-routing.module';
 import { LoginService } from './service/login.service';
 
-
 @NgModule({
   imports: [NgbModule, GmsLoginRoutingModule, SharedModule],
   declarations: [LoginComponent],

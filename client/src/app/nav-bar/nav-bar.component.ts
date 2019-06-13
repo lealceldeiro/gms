@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/index';
 import { SessionService } from '../core/session/session.service';
 import { User } from '../core/session/user.model';
 
-
 /**
  * Component for generating a Bootstrap's NavBar.
  */

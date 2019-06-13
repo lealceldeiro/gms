@@ -7,7 +7,6 @@ import { SessionService } from './session.service';
 import { userMock } from './user.mock.model';
 import { User } from './user.model';
 
-
 describe('SessionService', () => {
   let storageServiceSetSpy: jasmine.Spy;
   let storageServicePutCookieSpy: jasmine.Spy;
@@ -32,7 +31,7 @@ describe('SessionService', () => {
   };
   const sampleError = new Error('test error');
   const authData$ = new BehaviorSubject<LoginResponseModel>(mockLoginResponse).asObservable();
-  const error$ = Observable.create(observer => { observer.error(sampleError); observer.complete(); });
+  const error$ = new Observable<boolean>(observer => { observer.error(sampleError); observer.complete(); });
 
   // region values for simulating a fresh store service
   const subjectNull$ = new BehaviorSubject(null).asObservable();

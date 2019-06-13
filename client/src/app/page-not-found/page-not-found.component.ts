@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageNotFoundService } from '../core/navigation/page-not-found.service';
 
-
 /**
  * Component for generating a (404) not found page. This is used when the user requests a path which is not defined in the routing.
  */
@@ -33,7 +32,6 @@ export class PageNotFoundComponent implements OnInit {
 
   /**
    * Delay for generating the random numbers in every digit in the 404 text.
-   * @type {number}
    */
   private time = 30;
 

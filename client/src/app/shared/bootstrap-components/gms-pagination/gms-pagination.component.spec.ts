@@ -3,21 +3,21 @@ import { getRandomNumber } from '../../test-util/functions.util';
 import { GmsPaginationComponent } from './gms-pagination.component';
 import { DebugElement, Component, Input, Output, EventEmitter } from '@angular/core';
 
-
 describe('GmsPaginationComponent', () => {
 
+  // tslint:disable-next-line:component-selector
   @Component({ template: ``, selector: 'ngb-pagination' })
   class DummyNgPagination {
-    @Input() boundaryLinks: boolean = false;
-    @Input() collectionSize: number = 0;
-    @Input() directionLinks: boolean = true;
-    @Input() disabled: boolean = false;
-    @Input() ellipses: boolean = true;
-    @Input() maxSize: number = 10;
-    @Input() page: number = 1;
-    @Input() pageSize: number = 10;
-    @Input() rotate: boolean = false;
-    @Input() size: string = '-';
+    @Input() boundaryLinks = false;
+    @Input() collectionSize = 0;
+    @Input() directionLinks = true;
+    @Input() disabled = false;
+    @Input() ellipses = true;
+    @Input() maxSize = 10;
+    @Input() page = 1;
+    @Input() pageSize = 10;
+    @Input() rotate = false;
+    @Input() size = '-';
   }
 
   let component: GmsPaginationComponent;
@@ -41,7 +41,7 @@ describe('GmsPaginationComponent', () => {
     pageSize: getRandomNumber(min, max),
     rotate: getRandomNumber(min, max) > pivot,
     size: '-',
-    onPageChangeAction: (page: number) => { }
+    pageChangeAction: (page: number) => { }
   };
 
   beforeEach(async(() => {
@@ -66,7 +66,7 @@ describe('GmsPaginationComponent', () => {
     component.rotate = dummy.rotate;
     component.size = dummy.size;
 
-    spyOnEmit = spyOn(component.onPageChangeAction, 'emit');
+    spyOnEmit = spyOn(component.pageChangeAction, 'emit');
 
     fixture.detectChanges();
   });
@@ -75,7 +75,7 @@ describe('GmsPaginationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call EventEmitter(onPageChangeAction)#emit on click to a new page, different from the selected one', () => {
+  it('should call EventEmitter(pageChangeAction)#emit on click to a new page, different from the selected one', () => {
     let anotherPage = getRandomNumber();
     if (component['previous'] === anotherPage) {
       anotherPage++;
@@ -86,8 +86,8 @@ describe('GmsPaginationComponent', () => {
     expect(spyOnEmit).toHaveBeenCalledWith(anotherPage);
   });
 
-  it('should not call EventEmitter(onPageChangeAction)#emit on click to the same page', () => {
-    let anotherPage = getRandomNumber();
+  it('should not call EventEmitter(pageChangeAction)#emit on click to the same page', () => {
+    const anotherPage = getRandomNumber();
     component['previous'] = anotherPage;
     component.onPageChange(anotherPage);
     fixture.detectChanges();

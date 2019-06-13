@@ -53,28 +53,24 @@ export class StorageService {
   private cacheCk$ = {};
 
   /**
-   * Utility subject for geenrating an observable for returning in function in order to wait until the end of
+   * Utility subject for generating an observable for returning in function in order to wait until the end of
    * the operation.
-   * @type {BehaviorSubject<boolean>}
    * @see booleanSubj$
    */
   private booleanSubj = new BehaviorSubject<boolean>(true);
 
   /**
    * Utility observable for returning in function in order to wait until the end of the operation.
-   * @type {Observable<boolean>}
    */
   private booleanSubj$ = this.booleanSubj.asObservable();
 
   /**
    * Object for storing how many times StorageService#trySet function have been trying to save a particular value.
-   * @type {}
    */
   private trySetCount = {};
 
   /**
    * Object for storing how many times StorageService#tryClear function have been trying to clear a particular value.
-   * @type {}
    */
   private tryClearCount = {};
 

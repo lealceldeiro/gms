@@ -7,7 +7,6 @@ import { PermissionPd } from '../shared/permission-pd';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionListComponent } from './permission-list.component';
 
-
 describe('PermissionListComponent', () => {
   let component: PermissionListComponent;
   let fixture: ComponentFixture<PermissionListComponent>;
@@ -30,20 +29,20 @@ describe('PermissionListComponent', () => {
         totalPages: 0     // changed later
       }
     };
-  }
+  };
 
   const addPermissionsToSampleData = (sampleData: { _embedded: any; _links?: { self: { href: string; }; }; page: any; }) => {
     const rangeBottom = 25;
     const rangeTop = 40;
     const randomAmountValue = getRandomNumber(rangeBottom, rangeTop);
     for (let i = 0; i < randomAmountValue; i++) {
-      sampleData._embedded.permission.push({ name: 'n' + i, label: 'l' + i, id: i })
+      sampleData._embedded.permission.push({ name: 'n' + i, label: 'l' + i, id: i });
     }
     // re-calculate values accordingly to the random value
     sampleData.page.size = randomAmountValue - 7;
     sampleData.page.totalElements = randomAmountValue;
     sampleData.page.totalPages = Math.floor(sampleData.page.totalElements / sampleData.page.size);
-  }
+  };
 
   const subjectLRM = new BehaviorSubject<PermissionPd>(getSampleData());
   const ret = () => subjectLRM.asObservable();

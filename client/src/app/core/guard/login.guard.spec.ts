@@ -6,7 +6,6 @@ import { first } from 'rxjs/operators';
 import { SessionService } from '../session/session.service';
 import { LoginGuard } from './login.guard';
 
-
 describe('LoginGuard', () => {
   let guard: LoginGuard;
   const isNotLoggedInSb = new BehaviorSubject<boolean>(false);

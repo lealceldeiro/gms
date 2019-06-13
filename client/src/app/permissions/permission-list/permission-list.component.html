@@ -13,5 +13,5 @@
   </tbody>
 </table>
 
-<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true" (onPageChangeAction)="loadList($event)"
+<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true" (pageChangeAction)="loadList($event)"
   *ngIf="permissionList?.length"> </gms-pagination>

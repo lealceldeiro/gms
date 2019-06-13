@@ -16,7 +16,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { LoginService } from '../service/login.service';
 import { LoginComponent } from './login.component';
 
-
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let componentEl: HTMLElement;
@@ -105,7 +104,7 @@ describe('LoginComponent', () => {
     fakeAsync(() => {
       setForm();
       // change the fake observable to return an error instead of a success response
-      ret = () => Observable.create(observer => {
+      ret = () => new Observable(observer => {
         observer.error(new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, error: 'test error' }));
         observer.complete();
       });

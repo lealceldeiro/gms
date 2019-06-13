@@ -11,7 +11,6 @@ export class ParamsService {
 
   /**
    * Parameter for setting the size of the pages when requesting paginated results.
-   * @type {string}
    */
   public static SIZE = 'size';
 

@@ -18,13 +18,11 @@ export class AllRequestsInterceptor implements HttpInterceptor {
 
   /**
    * Number of pending requests.
-   * @type {number}
    */
   private requests = 0;
 
   /**
    * Indicates whether the loader is started or not.
-   * @type {boolean}
    */
   private started = false;
 
@@ -37,7 +35,7 @@ export class AllRequestsInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Intercepts all requests responses for setting/unsetting the loading indicator while doing all requests to the backend API.
+   * Intercepts all requests responses for setting/un-setting the loading indicator while doing all requests to the backend API.
    * @param {HttpRequest<any>} req Request performed.
    * @param {HttpHandler} next Next http handler.
    * @returns {Observable<HttpEvent<any>>}
