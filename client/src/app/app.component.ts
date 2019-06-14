@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Subscription to new values returned by SessionService#isLoggedIn.
    * @type {Subscription}
    */
-  private loggedInSub: Subscription;
+  private loggedInSub: Subscription = new Subscription();
 
   /**
    * Listens for the app when is being leaved and tries to remove the login data if the user has not chosen to be

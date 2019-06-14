@@ -19,7 +19,7 @@ describe('ParamsService', () => {
     const valueObject = { sample: 'sample' };
     const valueBoolean = true;
     const valueArray = [valueString, valueNumber, valueObject, valueBoolean];
-    const paramsObj = {
+    const paramsObj: { [key: string]: any } = {
       'key1': valueString,
       'key2': valueNumber,
       'key3': valueObject,

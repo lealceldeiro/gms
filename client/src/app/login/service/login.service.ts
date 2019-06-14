@@ -45,7 +45,7 @@ export class LoginService {
   login(payload: LoginRequestModel): Observable<LoginResponseModel> {
     return this.http.post<LoginResponseModel>(this.url + this.loginUrl, payload).pipe(
       tap((response) => {
-        if (response.access_token) {
+        if (response.access_token && response.username) {
           this.sessionService.setAuthData(response);
           this.sessionService.setLoggedIn(true);
           this.sessionUserService.getCurrentUser(response.username).subscribe((userPgData: UserPdModel) => {

@@ -27,13 +27,13 @@ describe('LoginService', () => {
   let spyAddEFEH: jasmine.Spy;
 
   const spy = {
-    sus: { getCurrentUser: (a) => { } },
-    ss: { setUser: (a) => { }, setAuthData: (a) => { }, setLoggedIn: (a) => { } }
+    sus: { getCurrentUser: (a: any) => { } },
+    ss: { setUser: (a: any) => { }, setAuthData: (a: any) => { }, setLoggedIn: (a: any) => { } }
   };
   const sessionServiceStub = {
-    setAuthData: (a) => { spy.ss.setAuthData(a); },
-    setLoggedIn: (a) => { spy.ss.setLoggedIn(a); },
-    setUser: (a) => { spy.ss.setUser(a); return new Subject().asObservable(); }
+    setAuthData: (a: any) => { spy.ss.setAuthData(a); },
+    setLoggedIn: (a: any) => { spy.ss.setLoggedIn(a); },
+    setUser: (a: any) => { spy.ss.setUser(a); return new Subject().asObservable(); }
   };
   const intHelperServiceStub = { addExcludedFromErrorHandling: () => { } };
 
@@ -46,7 +46,7 @@ describe('LoginService', () => {
   // endregion
 
   const sessionUserServiceStub = {
-    getCurrentUser: (a) => {
+    getCurrentUser: (a: any) => {
       spy.sus.getCurrentUser(a);
       return userModelSubject.asObservable();
     }

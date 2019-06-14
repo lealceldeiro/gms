@@ -6,7 +6,6 @@ import { HttpStatusCode } from '../response/http-status-code.enum';
 import { ErrorInterceptor } from './error.interceptor';
 import { InterceptorHelperService } from './interceptor-helper.service';
 
-
 describe('ErrorInterceptor', () => {
   let spyIsExcludedFromErrorHandling: jasmine.Spy;
   let spyMessageServiceError: jasmine.Spy;
@@ -16,14 +15,14 @@ describe('ErrorInterceptor', () => {
   const httpErr: HttpErrorResponse = new HttpErrorResponse({
     error: { error: errMock.error, message: errMock.message }, status: errMock.status, statusText: 'Server Error', url: url
   });
-  const spy = { isExcludedFromErrorHandling: () => { }, err: (a, b) => { } };
+  const spy = { isExcludedFromErrorHandling: () => { }, err: (a: any, b: any) => { } };
   let isExcludedFromErrorHandlingReal = () => false;
   const intHelperServiceStub = {
     isExcludedFromErrorHandling: (): boolean => {
       spy.isExcludedFromErrorHandling(); return isExcludedFromErrorHandlingReal();
     }
   };
-  const notificationService = { error: (a, b) => { spy.err(a, b); } };
+  const notificationService = { error: (a: any, b: any) => { spy.err(a, b); } };
 
   let httpTestingController: HttpTestingController;
   let httpClient: HttpClient;

@@ -30,13 +30,13 @@ describe('LoginComponent', () => {
   const sampleReq: LoginRequestModel = { password: text, usernameOrEmail: text };
   const sampleRes: LoginResponseModel = { username: 'testUser', token_type: 'testToken' };
   const subjectLRM = new Subject<LoginResponseModel>();
-  let ret;
-  const spy = { login: (a) => { }, error: (a, b) => { } };
+  let ret = (a: any): Observable<any> => new Observable();
+  const spy = { login: (a: any) => { }, error: (a: any, b: any) => { } };
   const s = new Subject<boolean>();
-  const loginServiceStub = { login: (a) => { spy.login(a); return ret(a); } };
+  const loginServiceStub = { login: (a: any) => { spy.login(a); return ret(a); } };
   const sessionServiceStub = { isLoggedIn: () => s.asObservable(), setRememberMe: () => { } };
   const formHelperStub = { markFormElementsAsTouched: () => { } };
-  const notificationStub = { error: (a, b) => { spy.error(a, b); } };
+  const notificationStub = { error: (a: any, b: any) => { spy.error(a, b); } };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -52,7 +52,7 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
-    ret = (a) => subjectLRM.asObservable();
+    ret = (a: any) => subjectLRM.asObservable();
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     componentEl = fixture.nativeElement;

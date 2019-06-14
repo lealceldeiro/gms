@@ -16,39 +16,33 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   /**
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
-   * @type {boolean}
    */
   isCollapsed = true;
   /**
    * Indicates whether the user is logged in or not.
-   * @type {boolean}
    */
   loggedIn = false;
   /**
    * Session user's info.
-   * @type {User}
    */
-  user: User;
+  user = new User();
   // region @Input
   /**
    * Indicates whether the nav bar search form is active or not.
-   * @type {boolean}
    */
   @Input() isSearchActive = true;
   /**
    * Search input placeholder.
-   * @type {string}
    */
   @Input() searchPlaceholder = 'Type here to search ...';
   /**
    * Search button text.
-   * @type {string}
    */
   @Input() searchText = 'Search';
   // endregion
+
   /**
    * URLs where the nav bar can navigate to.
-   * @type {{}[]}
    */
   urls = [
     { path: '/help', name: 'Help' },
@@ -58,12 +52,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
   /**
    * Observable for subscribing to new values returned by SessionService#isLoggedIn.
    */
-  private loggedIn$: Subscription;
+  private loggedInSub = new Subscription();
 
   /**
    * Observable for subscribing to new values returned by SessionService#getUser.
    */
-  private user$: Subscription;
+  private userSub = new Subscription();
 
   /**
    * Component constructor
@@ -77,16 +71,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.loggedIn$ = this.sessionService.isLoggedIn().subscribe((logged: boolean) => this.loggedIn = logged);
-    this.user$ = this.sessionService.getUser().subscribe((userInfo: User) => this.user = userInfo);
+    this.loggedInSub = this.sessionService.isLoggedIn().subscribe((logged: boolean) => this.loggedIn = logged);
+    this.userSub = this.sessionService.getUser().subscribe((userInfo: User) => this.user = userInfo);
   }
 
   /**
    * Lifecycle hook that is called when the component is destroyed.
    */
   ngOnDestroy() {
-    this.loggedIn$.unsubscribe();
-    this.user$.unsubscribe();
+    this.loggedInSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
   /**

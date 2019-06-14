@@ -10,8 +10,6 @@ import { SelfModel } from '../response/paginated-data/self.model';
 import { SessionUserService } from './session-user.service';
 import { userMock } from './user.mock.model';
 
-
-
 describe('SessionUserService', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;

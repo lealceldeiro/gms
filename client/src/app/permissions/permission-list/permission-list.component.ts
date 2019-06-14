@@ -17,12 +17,12 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   /**
    * List of permissions
    */
-  permissionList: Array<Permission>;
+  permissionList: Array<Permission> = [];
 
   /**
    * List of permissions' subscription
    */
-  private listSubscription: Subscription;
+  private listSubscription = new Subscription();
 
   /**
    * Contains all API pagination information.

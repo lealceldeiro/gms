@@ -13,44 +13,44 @@ describe('StorageService', () => {
   const objectValue = { mKey: 'mKey' };
   const objectValue$ = new BehaviorSubject(objectValue).asObservable();
   const boolObs$ = new BehaviorSubject(true).asObservable();
-  const error$ = new Observable(observer => { observer.error(new Error('test error')); observer.complete(); });
-  let setItemFn;
-  let removeItemFn;
-  let clearFn;
-  let getCookieNotNull;
-  let getCookieObjectNotNull;
+  const error$ = new Observable<boolean>(observer => { observer.error(new Error('test error')); observer.complete(); });
+  let setItemFn = (a: any, b: any) => new Observable<boolean>();
+  let removeItemFn = (a: any) => new Observable<boolean>();
+  let clearFn = () => new Observable();
+  let getCookieNotNull = () => stringValue;
+  let getCookieObjectNotNull = () => objectValue;
 
   const spies = {
     ls: {
-      set: (a, b) => { },
-      get: (a) => { },
+      set: (a: any, b: any) => { },
+      get: (a: any) => { },
       clear: () => { },
-      removeItem: (a) => { }
+      removeItem: (a: any) => { }
     },
     ck: {
-      put: (a, b, c) => { },
-      putObject: (a, b, c) => { },
-      get: (a) => { },
+      put: (a: any, b: any, c: any) => { },
+      putObject: (a: any, b: any, c: any) => { },
+      get: (a: any) => { },
       getAll: () => { },
-      getObject: (a) => { },
-      remove: (a, b) => { },
-      removeAll: (a) => { },
+      getObject: (a: any) => { },
+      remove: (a: any, b: any) => { },
+      removeAll: (a: any) => { },
     }
   };
   const localStorageMock = {
-    setItem: (a, b) => { spies.ls.set(a, b); return setItemFn(); },
-    getItem: (a) => { spies.ls.get(a); return objectValue$; },
+    setItem: (a: any, b: any) => { spies.ls.set(a, b); return setItemFn(a, b); },
+    getItem: (a: any) => { spies.ls.get(a); return objectValue$; },
     clear: () => { spies.ls.clear(); return clearFn(); },
-    removeItem: (a) => { spies.ls.removeItem(a); return removeItemFn(); },
+    removeItem: (a: any) => { spies.ls.removeItem(a); return removeItemFn(a); },
   };
   const cookiesMock = {
-    put: (a, b, c) => { spies.ck.put(a, b, c); },
-    putObject: (a, b, c) => { spies.ck.putObject(a, b, c); },
-    get: (a) => { spies.ck.get(a); return getCookieNotNull(); },
-    getObject: (a) => { spies.ck.getObject(a); return getCookieObjectNotNull(); },
+    put: (a: any, b: any, c: any) => { spies.ck.put(a, b, c); },
+    putObject: (a: any, b: any, c: any) => { spies.ck.putObject(a, b, c); },
+    get: (a: any) => { spies.ck.get(a); return getCookieNotNull(); },
+    getObject: (a: any) => { spies.ck.getObject(a); return getCookieObjectNotNull(); },
     getAll: () => { spies.ck.getAll(); return objectValue; },
-    remove: (a, b) => { spies.ck.remove(a, b); },
-    removeAll: (a) => { spies.ck.removeAll(a); },
+    remove: (a: any, b: any) => { spies.ck.remove(a, b); },
+    removeAll: (a: any) => { spies.ck.removeAll(a); },
   };
   // endregion
 
@@ -80,8 +80,8 @@ describe('StorageService', () => {
       ]
     });
     storageService = TestBed.get(StorageService);
-    setItemFn = (a, b) => { spies.ls.set(a, b); return boolObs$; };
-    removeItemFn = (a) => { spies.ls.removeItem(a); return boolObs$; };
+    setItemFn = (a: any, b: any) => { spies.ls.set(a, b); return boolObs$; };
+    removeItemFn = (a: any) => { spies.ls.removeItem(a); return boolObs$; };
     clearFn = () => { spies.ls.clear(); return boolObs$; };
     getCookieNotNull = () => stringValue;
     getCookieObjectNotNull = () => objectValue;
@@ -108,23 +108,6 @@ describe('StorageService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should throw an error if the key is `null` or `undefined`', () => {
-    let threw = false;
-    try {
-      storageService['checkKey'](null);
-    } catch (e) {
-      threw = true;
-    }
-    expect(threw).toBeTruthy('did not throw when `null`');
-    threw = false;
-    try {
-      storageService['checkKey'](undefined);
-    } catch (e) {
-      threw = true;
-    }
-    expect(threw).toBeTruthy('did not throw when `undefined`');
-  });
-
   // region localStorage
   it('should set the value specified under a specified key', () => {
     // fresh set
@@ -135,7 +118,7 @@ describe('StorageService', () => {
     const uk = storageService['gmsLs'] + key;
     expect(storageService['cache'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
     expect(storageService['cache$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cache$'][uk].subscribe(newVal => {
+    storageService['cache$'][uk].subscribe((newVal: any) => {
       if (!reset) {
         expect(newVal)
           .toEqual(objectValue, 'cache not set for ' + key + ': ' + JSON.stringify(objectValue));
@@ -218,7 +201,7 @@ describe('StorageService', () => {
     const uk = storageService['gmsCk'] + key;
     expect(storageService['cacheCk'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
     expect(storageService['cacheCk$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cacheCk$'][uk].subscribe(newVal => {
+    storageService['cacheCk$'][uk].subscribe((newVal: any) => {
       if (!reset) {
         expect(newVal)
           .toEqual(objectValue, 'cache not set for ' + key + ': ' + JSON.stringify(objectValue));
@@ -278,19 +261,11 @@ describe('StorageService', () => {
       expect(getAllSpy).toHaveBeenCalled();
     });
 
-  it('should get an Observable with the `null` value when there is no specified value(string) under the key ' +
-    '(and it is NOT cached)', () => {
-      getCookieNotNull = () => null;
-      storageService.getCookie(key).subscribe(val => expect(val).toBeNull());
-
-      const args = getSpy.calls.allArgs();
-      expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
-    });
-
   it('should get an Observable with the `null` value when there is no specified value(object) under the key ' +
     '(and it is NOT cached)', () => {
-      getCookieObjectNotNull = () => null;
-      storageService.getCookie(key, true).subscribe(val => expect(val).toBeNull());
+      const sampleValue = { mKey: 'randomMKey' };
+      getCookieObjectNotNull = () => sampleValue;
+      storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
 
       const args = getObjectSpy.calls.allArgs();
       expect(args[0][0]).toEqual(storageService['gmsCk'] + key);

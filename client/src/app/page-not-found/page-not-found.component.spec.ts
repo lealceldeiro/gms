@@ -13,14 +13,14 @@ describe('PageNotFoundComponent', () => {
   @Component({ selector: 'gms-dummy', template: '' })
   class DummyComponent { }
 
-  let wasNotFoundFn;
+  let wasNotFoundFn: { (): boolean; (): boolean; (): void; };
   let spyWasNotFound: jasmine.Spy;
   let spyAddUrl: jasmine.Spy;
-  const spies = { wasNotFound: (a) => { }, addUrl: (a) => { } };
+  const spies = { wasNotFound: (_a: any) => { }, addUrl: (_a: any) => { } };
 
   const pageNotFoundServiceStub = {
-    wasNotFound: (a) => { spies.wasNotFound(a); return wasNotFoundFn(); },
-    addUrl: (a) => { spies.addUrl(a); }
+    wasNotFound: (a: any) => { spies.wasNotFound(a); return wasNotFoundFn(); },
+    addUrl: (a: any) => { spies.addUrl(a); }
   };
 
   beforeEach(async(() => {
@@ -47,10 +47,17 @@ describe('PageNotFoundComponent', () => {
   });
 
   it('should create with default values', () => {
-    expect(componentEl.querySelector('div.msg').textContent).toContain('Sorry!',
-      'should render `Sorry!` in a div');
-    expect(componentEl.querySelector('h2').textContent).toBe('Page not found',
-      'should render `Page not found` in an <h2>');
+    const divMsg = componentEl.querySelector('div.msg');
+    expect(divMsg).not.toBeNull();
+    if (divMsg) {
+      expect(divMsg.textContent).toContain('Sorry!', 'should render `Sorry!` in a div');
+    }
+
+    const h2 = componentEl.querySelector('h2');
+    expect(h2).not.toBeNull();
+    if (h2) {
+      expect(h2.textContent).toBe('Page not found', 'should render `Page not found` in an <h2>');
+    }
   });
 
   it('should call PageNotFoundService#wasNotFound on init', () => {

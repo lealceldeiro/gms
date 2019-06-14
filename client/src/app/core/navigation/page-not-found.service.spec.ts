@@ -4,7 +4,7 @@ import { PageNotFoundService } from './page-not-found.service';
 describe('PageNotFoundService', () => {
   const url = '/test';
   let service: PageNotFoundService;
-  let collection;
+  let collection: Array<String> = [];
 
   beforeEach(() => {
     TestBed.configureTestingModule({

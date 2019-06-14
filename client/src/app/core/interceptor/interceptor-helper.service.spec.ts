@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { InterceptorHelperService } from './interceptor-helper.service';
 
 
-let intHelpService;
+let intHelpService: InterceptorHelperService;
 const sampleUrl = 'test-url-with-random-vals-9fj-df-3fdD-fdfFf3';
 
 describe('InterceptorHelperService', () => {

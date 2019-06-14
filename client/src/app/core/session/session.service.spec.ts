@@ -37,18 +37,18 @@ describe('SessionService', () => {
   const subjectNull$ = new BehaviorSubject(null).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
   const testSpy = {
-    set: (a, b, c) => { },
-    clear: (a, b, c) => { },
-    putCookie: (a, b, c) => { },
-    clearCookie: (a, b, c) => { }
+    set: (a: any, b: any, c: any) => { },
+    clear: (a: any, b: any, c: any) => { },
+    putCookie: (a: any, b: any, c: any) => { },
+    clearCookie: (a: any, b: any, c: any) => { }
   };
   const storageServiceStub = {
-    set: (a, b, c) => { testSpy.set(a, b, c); return subjectNull$; },
+    set: (a: any, b: any, c: any) => { testSpy.set(a, b, c); return subjectNull$; },
     get: () => subjectNull$,
-    clear: (a, b, c) => { testSpy.clear(a, b, c); return trueVal$; },
-    putCookie: (a, b, c) => { testSpy.putCookie(a, b, c); return subjectNull$; },
+    clear: (a: any, b: any, c: any) => { testSpy.clear(a, b, c); return trueVal$; },
+    putCookie: (a: any, b: any, c: any) => { testSpy.putCookie(a, b, c); return subjectNull$; },
     getCookie: () => subjectNull$,
-    clearCookie: (a, b, c) => { testSpy.clearCookie(a, b, c); return trueVal$; },
+    clearCookie: (a: any, b: any, c: any) => { testSpy.clearCookie(a, b, c); return trueVal$; },
   };
   // endregion
 
@@ -190,52 +190,33 @@ describe('SessionService', () => {
     });
   });
 
-  it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session' +
-    ' user as `null`', () => {
+  it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as empty and the session user as an empty user',
+    () => {
       sessionService.closeSession();
 
       // region check session service vars
-      expect(sessionService['loggedIn'].getValue())
-        .toBeFalsy('`loggedIn` subject value was not set properly');
-      expect(sessionService['notLoggedIn'].getValue())
-        .toBeTruthy('`notLoggedIn` subject value was not set properly');
-      expect(sessionService['authData'].getValue())
-        .toEqual({}, '`authData` subject value was not set properly');
-      expect(sessionService['user'].getValue())
-        .toBeNull('`user` subject value was not set properly');
+      expect(sessionService['loggedIn'].getValue()).toBeFalsy('`loggedIn` subject value was not set properly');
+      expect(sessionService['notLoggedIn'].getValue()).toBeTruthy('`notLoggedIn` subject value was not set properly');
+      expect(sessionService['authData'].getValue()).toEqual({}, '`authData` subject value was not set properly');
+      expect(sessionService['user'].getValue()).toEqual(new User(), '`user` subject value was not set properly');
       // endregion
 
       // region check args calls
       // region clear
       const allArgs = storageServiceClearSpy.calls.allArgs();
-
-      expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'],
-        'incorrect key for `authData`');
-
-      expect(allArgs[1][0]).toEqual(sessionService['key']['user'],
-        'incorrect key for `user`');
+      expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'], 'incorrect key for `authData`');
+      expect(allArgs[1][0]).toEqual(sessionService['key']['user'], 'incorrect key for `user`');
       // endregion
 
       // region clearCookie
       const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
 
-      expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'],
-        'incorrect key for `loggedIn`');
-
-      expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'],
-        'incorrect key for `notLoggedIn`');
-
-      expect(allArgsCk[2][0]).toEqual(sessionService['key']['accessToken'],
-        'incorrect key for `accessToken`');
-
-      expect(allArgsCk[3][0]).toEqual(sessionService['key']['refreshToken'],
-        'incorrect key for `refreshToken`');
-
-      expect(allArgsCk[4][0]).toEqual(sessionService['key']['headerToBeSent'],
-        'incorrect key for `headerToBeSent`');
-
-      expect(allArgsCk[5][0]).toEqual(sessionService['key']['tokenType'],
-        'incorrect key for `tokenType`');
+      expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'], 'incorrect key for `loggedIn`');
+      expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'], 'incorrect key for `notLoggedIn`');
+      expect(allArgsCk[2][0]).toEqual(sessionService['key']['accessToken'], 'incorrect key for `accessToken`');
+      expect(allArgsCk[3][0]).toEqual(sessionService['key']['refreshToken'], 'incorrect key for `refreshToken`');
+      expect(allArgsCk[4][0]).toEqual(sessionService['key']['headerToBeSent'], 'incorrect key for `headerToBeSent`');
+      expect(allArgsCk[5][0]).toEqual(sessionService['key']['tokenType'], 'incorrect key for `tokenType`');
       // endregion
       // endregion
     });

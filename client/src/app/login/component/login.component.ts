@@ -28,14 +28,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   /**
    * Whether the login form was submitted or not.
-   * @type {boolean}
    */
   submitted = false;
 
   /**
    * Subscription to the isLoggedIn Observable
    */
-  ili: Subscription;
+  ili = new Subscription();
 
   /**
    * Component constructor
@@ -49,7 +48,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
     private fb: FormBuilder, private formHelperService: FormHelperService,
     private notificationService: NotificationService) {
-    this.createLoginForm();
+
+    this.loginForm = this.fb.group({
+      usernameOrEmail: [null, Validators.required],
+      password: [null, Validators.required],
+      rememberMe: true
+    });
   }
 
   /**
@@ -97,23 +101,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Creates the login (reactive) form.
-   */
-  private createLoginForm() {
-    this.loginForm = this.fb.group({
-      usernameOrEmail: [null, Validators.required],
-      password: [null, Validators.required],
-      rememberMe: true
-    });
-  }
-
-  /**
    * Returns the value set for a form control in the login form.
    * @param {string} name
    * @returns {any}
    */
   private formValueOf(name: string): any {
-    return this.loginForm.get(name).value;
+    const ctrl = this.loginForm.get(name);
+    return ctrl ? ctrl.value : null;
   }
 
 }

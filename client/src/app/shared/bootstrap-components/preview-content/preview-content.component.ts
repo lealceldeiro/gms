@@ -12,27 +12,23 @@ export class PreviewContentComponent implements OnInit {
 
   /**
    * Heading text.
-   * @type {string}
    */
-  @Input() heading: string;
+  @Input() heading = '';
 
   /**
    * Path to be linked in the "View details" button.
-   * @type {string}
    */
-  @Input() link: string;
+  @Input() link = '';
 
   /**
    * Text to be shown in "View details" button.
-   * @type {string}
    */
   @Input() linkText = 'View details »';
 
   /**
    * Preview text.
-   * @type {string}
    */
-  @Input() text: string;
+  @Input() text = '';
 
   /**
    * Component constructor.

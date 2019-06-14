@@ -27,10 +27,10 @@ export class ParamsService {
 
   /**
    * Returns an HttpParams from the given object params.
-   * @param params
+   * @param params request parameters
    * @return {HttpParams}
    */
-  getHttpParams(params?: object): HttpParams {
+  getHttpParams(params?: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();
     for (const k in params) {
       if (params.hasOwnProperty(k)) {

@@ -31,7 +31,7 @@ export class PermissionService {
    * @return {Observable<PermissionPd>} Containing the permissions data.
    */
   getPermissions(size: number, page: number): Observable<PermissionPd> {
-    const p = {};
+    const p: { [key: string]: number } = {};
     p[ParamsService.SIZE] = size;
     p[ParamsService.PAGE] = page;
     return this.http.get<PermissionPd>(this.url, { params: this.paramsService.getHttpParams(p) });

@@ -14,21 +14,18 @@ export class PageNotFoundComponent implements OnInit {
 
   /**
    * First digit in the 404 text.
-   * @type {string}
    */
-  firstDigit: string;
+  firstDigit = '';
 
   /**
    * Second digit in the 404 text.
-   * @type {string}
    */
-  secondDigit: string;
+  secondDigit = '';
 
   /**
    * Third digit in the 404 text.
-   * @type {string}
    */
-  thirdDigit: string;
+  thirdDigit = '';
 
   /**
    * Delay for generating the random numbers in every digit in the 404 text.

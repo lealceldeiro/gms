@@ -9,7 +9,7 @@ export class PageNotFoundService {
   /**
    * Routes which resulted in a not found page.
    */
-  notFoundUrls = [];
+  notFoundUrls: Array<string> = [];
 
   /**
    * Service constructor

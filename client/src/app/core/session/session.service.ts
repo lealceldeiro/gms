@@ -61,37 +61,31 @@ export class SessionService {
 
   /**
    * Whether the user is logged in or not (`true` indicates the user is logged in, `false` otherwise).
-   * @type {boolean}
    */
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   /**
    * Whether the user is NOT logged he/she is (`true` indicates the user is NOT logged in, `false` otherwise).
-   * @type {boolean}
    */
   private notLoggedIn = new BehaviorSubject<boolean>(true);
 
   /**
    * Observable holding whether the user is logged in or not (`true` indicates the user is logged in, `false` otherwise).
-   * @type {Observable<boolean>}
    */
   private loggedIn$ = this.loggedIn.asObservable();
 
   /**
    * Observable holding whether the user is NOT logged he/she is (`true` indicates the user is NOT logged in, `false` otherwise).
-   * @type {Observable<boolean>}
    */
   private notLoggedIn$ = this.notLoggedIn.asObservable();
 
   /**
    * Session user's info (if available).
-   * @type {BehaviorSubject<User>}
    */
-  private user = new BehaviorSubject<User>(null);
+  private user = new BehaviorSubject<User>(new User());
 
   /**
    * Observable holding the session user's info (if available).
-   * @type {Observable<User>}
    */
   private user$ = this.user.asObservable();
 
@@ -102,19 +96,16 @@ export class SessionService {
 
   /**
    * Observable holding the session auth's info (if available).
-   * @type {Observable<LoginResponseModel>}
    */
   private authData$ = this.authData.asObservable();
 
   /**
    * Indicates whether the session info should be kept after the user left the app without login out or not.
-   * @type {boolean}
    */
   private rememberMe = new BehaviorSubject<boolean>(false);
 
   /**
    * Observable holding the remember me info.
-   * @type {Observable<boolean>}
    */
   private rememberMe$ = this.rememberMe.asObservable();
   // endregion
@@ -218,7 +209,7 @@ export class SessionService {
     this.loggedIn.next(false);
     this.notLoggedIn.next(true);
     this.authData.next({});
-    this.user.next(null);
+    this.user.next(new User());
 
     const lis = this.storageService.clearCookie(this.key.loggedIn).subscribe(() => this.doUnsubscribe(lis));
     const nlis = this.storageService.clearCookie(this.key.notLoggedIn).subscribe(() => this.doUnsubscribe(nlis));
@@ -236,7 +227,7 @@ export class SessionService {
    * logging in.
    * @returns {Observable<string>}
    */
-  getAccessToken(): Observable<String> {
+  getAccessToken(): Observable<string> {
     return this.retrieve(this.key.accessToken).pipe(tap((aToken) => {
       if (!aToken) {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
@@ -271,7 +262,7 @@ export class SessionService {
    * Returns the header to be sent with the access token.
    * @returns {Observable<String>}
    */
-  getHeader(): Observable<String> {
+  getHeader(): Observable<string> {
     return this.retrieve(this.key.headerToBeSent).pipe(tap((headerTbS) => {
       if (!headerTbS) {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {
@@ -288,7 +279,7 @@ export class SessionService {
    * Returns the token type to be send in the header along with the access token.
    * @returns {Observable<String>}
    */
-  getTokenType(): Observable<String> {
+  getTokenType(): Observable<string> {
     return this.retrieve(this.key.tokenType).pipe(tap((tType) => {
       if (!tType) {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {

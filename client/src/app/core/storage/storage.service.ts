@@ -12,45 +12,38 @@ export class StorageService {
 
   /**
    * Prefix for all keys used for storing values in cookies
-   * @type {string}
    */
   private gmsCk = 'gms_ck_';
 
   /**
    * Prefix for all keys used for storing values in localStorage
-   * @type {string}
    */
   private gmsLs = 'gms_ls_';
 
   /**
    * Prefix keys for values saved under a private key.
-   * @type {string}
    */
   private gmsPriv = 'priv_';
 
   /**
    * Object which holds the stored values for localStorage.
-   * @type {{}}
    */
-  private cache = {};
+  private cache: { [key: string]: any } = {};
 
   /**
    * Observables of StorageService#cache
-   * @type {{}}
    */
-  private cache$ = {};
+  private cache$: { [key: string]: any } = {};
 
   /**
    * Object which holds the stored values for cookies.
-   * @type {{}}
    */
-  private cacheCk = {};
+  private cacheCk: { [key: string]: any } = {};
 
   /**
    * Observables of StorageService#cacheCk
-   * @type {{}}
    */
-  private cacheCk$ = {};
+  private cacheCk$: { [key: string]: any } = {};
 
   /**
    * Utility subject for generating an observable for returning in function in order to wait until the end of
@@ -67,12 +60,12 @@ export class StorageService {
   /**
    * Object for storing how many times StorageService#trySet function have been trying to save a particular value.
    */
-  private trySetCount = {};
+  private trySetCount: { [key: string]: number } = {};
 
   /**
    * Object for storing how many times StorageService#tryClear function have been trying to clear a particular value.
    */
-  private tryClearCount = {};
+  private tryClearCount: { [key: string]: number } = {};
 
   /**
    * Service constructor.

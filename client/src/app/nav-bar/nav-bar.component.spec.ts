@@ -98,14 +98,25 @@ describe('NavBarComponent', () => {
 
     expect(getSearchInput().getAttribute('placeholder')).toEqual(samplePlaceHolder, '`placeholder` is incorrect');
     expect(getSearchInput().getAttribute('aria-label')).toEqual(samplePlaceHolder, '`aria-label` is incorrect');
-    expect(componentEl.querySelector('form[name=nav-bar-search-form] div div button[type=button]').textContent.trim())
-      .toEqual(sampleSearchText.trim(), '`searchText` is incorrect');
+
+    const searchTextButton = componentEl.querySelector('form[name=nav-bar-search-form] div div button[type=button]');
+    expect(searchTextButton).not.toBeNull();
+    if (searchTextButton) {
+      expect(searchTextButton.textContent).not.toBeNull();
+      if (searchTextButton.textContent) {
+        expect(searchTextButton.textContent.trim()).toEqual(sampleSearchText.trim(), '`searchText` is incorrect');
+      }
+    }
   });
 
   it('should call sessionService#closeSession when click on `logout` link', () => {
     component.loggedIn = true;
     fixture.detectChanges();
-    gmsClick(componentEl.querySelector<HTMLElement>('#sign-out'));
+    const signOutEl = componentEl.querySelector<HTMLElement>('#sign-out');
+    expect(signOutEl).not.toBeNull();
+    if (signOutEl) {
+      gmsClick(signOutEl);
+    }
     fixture.detectChanges();
     expect(spyCloseSession).toHaveBeenCalled();
   });

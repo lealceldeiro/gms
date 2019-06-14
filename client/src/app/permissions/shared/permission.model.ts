@@ -7,16 +7,16 @@ export class Permission {
   /**
    * Name to be used for authenticating the user.
    */
-  name: string;
+  name = '';
 
   /**
    * Label to be shown to the final user.
    */
-  label: string;
+  label = '';
 
   /**
    * Permission's id
    */
-  id: number;
+  id = -1;
 
 }

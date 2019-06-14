@@ -22,18 +22,17 @@ export class SecurityInterceptor implements HttpInterceptor {
   /**
    * Holds the authentication header.
    */
-  private header: string;
+  private header = '';
 
   /**
    * Holds the token type.
    */
-  private tokenType: string;
+  private tokenType = '';
 
   /**
    * Holds the access token.
    */
-  private accessToken: string;
-
+  private accessToken = '';
 
   /**
    * Interceptor constructor.
@@ -55,7 +54,7 @@ export class SecurityInterceptor implements HttpInterceptor {
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.isLoggedIn && this.header && this.tokenType && this.accessToken) { // logged in and all necessary data is here already
-      const iHeaders = {};
+      const iHeaders: { [key: string]: any } = {};
       iHeaders[this.header] = this.tokenType + ' ' + this.accessToken;
       return next.handle(req.clone({ setHeaders: iHeaders }));
     } else {

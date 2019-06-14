@@ -29,12 +29,12 @@ describe('PreviewContentComponent', () => {
   });
 
   it('should create with default values', () => {
-    expect(component.heading).toBeUndefined();
-    expect(component.text).toBeUndefined();
-    expect(component.link).toBeUndefined();
+    expect(component.heading).toEqual('');
+    expect(component.text).toEqual('');
+    expect(component.link).toEqual('');
     expect(component.linkText).toEqual('View details »');
 
-    const h2: Element = componentEl.querySelector('h2');
+    const h2: Element = componentEl.querySelector('h2') as Element;
     const p: NodeListOf<Element> = componentEl.querySelectorAll('p');
     const a: NodeListOf<Element> = componentEl.querySelectorAll('a');
 
@@ -57,11 +57,32 @@ describe('PreviewContentComponent', () => {
 
     fixture.detectChanges();
 
+    const h2 = componentEl.querySelector('h2');
+    const p = componentEl.querySelector('p');
     const a = componentEl.querySelector('p a');
 
-    expect(componentEl.querySelector('h2').textContent.trim()).toEqual(sampleHeading.trim(), 'did not bind properly `heading`');
-    expect(componentEl.querySelector('p').textContent.trim()).toEqual(sampleText.trim(), 'did not bind properly `text`');
-    expect(a.getAttribute('href')).toEqual(sampleLink, 'did not bind properly `link`');
-    expect(a.textContent.trim()).toEqual(sampleLinkText.trim(), 'did not bind properly `linkText`');
+    expect(h2).not.toBeNull();
+    if (h2) {
+      expect(h2.textContent).not.toBeNull();
+      if (h2.textContent) {
+        expect(h2.textContent.trim()).toEqual(sampleHeading.trim(), 'did not bind properly `heading`');
+      }
+    }
+
+    expect(a).not.toBeNull();
+    if (a) {
+      expect(a.getAttribute('href')).not.toBeNull();
+      if (a.getAttribute('href')) {
+        expect(a.getAttribute('href')).toEqual(sampleLink.trim(), 'did not bind properly `link`');
+      }
+    }
+
+    expect(p).not.toBeNull();
+    if (p) {
+      expect(p.textContent).not.toBeNull();
+      if (p.textContent) {
+        expect(p.textContent.trim()).toEqual(sampleText.trim(), 'did not bind properly `text`');
+      }
+    }
   });
 });

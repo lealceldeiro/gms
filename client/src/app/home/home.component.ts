@@ -15,9 +15,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Application name.
-   * @type {string}
    */
-  appName: string = environment.metaName;
+  appName = environment.metaName;
 
   /**
    * Indicates whether the user is logged in or not.
@@ -26,9 +25,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Subscription to the logged in status.
-   * @type {Subscription}
    */
-  isLoggedInSubscription: Subscription;
+  isLoggedInSubscription = new Subscription();
 
   /**
    * Component constructor

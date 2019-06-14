@@ -6,22 +6,22 @@ export class User {
   /**
    * User's username
    */
-  username: string;
+  username = '';
 
   /**
    * User's email
    */
-  email: string;
+  email = '';
 
   /**
    * User's name
    */
-  name: string;
+  name = '';
 
   /**
    * User's last name.
    */
-  lastName: string;
+  lastName = '';
 
   /**
    * User's password.

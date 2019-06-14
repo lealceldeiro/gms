@@ -6,14 +6,14 @@ import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { PermissionService } from './permission.service';
 
 describe('PermissionService', () => {
-  const spy = { getHttpParams: (a) => { }, get: (a, b) => { } };
+  const spy = { getHttpParams: (_a: any) => { }, get: (_a: any, _b: any) => { } };
   const httpParamsValue = { someRandomProperty: 'someRandomValue' + getRandomNumber() };
   const paramsServiceStub = {
-    getHttpParams: (a) => { spy.getHttpParams(a); return httpParamsValue; }
+    getHttpParams: (a: any) => { spy.getHttpParams(a); return httpParamsValue; }
   };
 
   const httpClientMock = {
-    get: (a, b) => spy.get(a, b)
+    get: (a: any, b: any) => spy.get(a, b)
   };
 
   let permissionService: PermissionService;
@@ -38,7 +38,7 @@ describe('PermissionService', () => {
     const httpClientGetSpy = spyOn(spy, 'get');
     const size = getRandomNumber(1, 200);
     const page = getRandomNumber(1, 300);
-    const params = {};
+    const params: { [key: string]: number } = {};
     params[ParamsService.SIZE] = size;
     params[ParamsService.PAGE] = page;
 
