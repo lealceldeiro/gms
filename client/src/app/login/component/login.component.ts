@@ -10,7 +10,6 @@ import { LoginRequestModel } from '../../core/session/login-request.model';
 import { SessionService } from '../../core/session/session.service';
 import { LoginService } from '../service/login.service';
 
-
 /**
  * Generates a login component in order to allow users to login into the system
  */
