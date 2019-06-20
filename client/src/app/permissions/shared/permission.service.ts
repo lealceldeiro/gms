@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ParamsService } from '../../core/request/params/params.service';
 import { PermissionPd } from './permission-pd';
+import { Permission } from './permission.model';
 
 /**
  * Service for providing permissions-related services.
@@ -23,7 +24,6 @@ export class PermissionService {
    */
   constructor(private http: HttpClient, private paramsService: ParamsService) { }
 
-
   /**
    * Returns an observable with a list of permissions.
    * @param {number} size Size of the page for loading permissions.
@@ -36,4 +36,13 @@ export class PermissionService {
     p[ParamsService.PAGE] = page;
     return this.http.get<PermissionPd>(this.url, { params: this.paramsService.getHttpParams(p) });
   }
+
+  /**
+   * Returns an observable with the info of a permission.
+   * @param id Identifier of the permissions whose info is going to be returned.
+   */
+  getPermissionInfo(id: number): Observable<Permission> {
+    return this.http.get<Permission>(this.url + '/' + id);
+  }
+
 }

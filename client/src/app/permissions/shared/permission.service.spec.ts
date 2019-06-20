@@ -49,4 +49,14 @@ describe('PermissionService', () => {
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
     expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission', { params: httpParamsValue });
   });
+
+  it('#getPermissionInfo should call HttpClient#get with the provided id as parameter', () => {
+    const httpClientGetSpy = spyOn(spy, 'get');
+    const id = getRandomNumber();
+
+    permissionService.getPermissionInfo(id);
+
+    expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
+    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission/' + id, undefined); // undefined for no params
+  });
 });
