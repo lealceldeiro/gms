@@ -1,17 +1,13 @@
 {
   "name": "client",
   "version": "0.0.0",
-  "config": {
-    "deployUrl": "",
-    "baseUrl": "./"
-  },
   "scripts": {
     "ng": "ng",
     "builddoc": "compodoc -p src/tsconfig.app.json",
     "servedoc": "compodoc -s",
     "buildservedoc": "compodoc -p src/tsconfig.app.json -s --hideGenerator -n \"GMS Angular Client Documentation\"",
     "start": "ng serve --watch=true",
-    "build": "ng build --prod --deploy-url $npm_package_config_deployUrl --base-href $npm_package_config_baseUrl",
+    "build": "ng build --prod --deploy-url \"\" --base-href \"./\"",
     "test": "ng test --watch=false",
     "testwatch": "ng test --watch=true",
     "testwatchnosourcemap": "ng test --watch=true --sourceMap=false",
