@@ -1,6 +1,6 @@
 [[overview-http-status-codes]]
 === HTTP status codes
-  GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes. See more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[HTTP response status codes, role="external", window="_blank"].
+  GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes. See more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[HTTP response status codes,role=external,window=_blank].
 
 |===
 | Status code | Usage
