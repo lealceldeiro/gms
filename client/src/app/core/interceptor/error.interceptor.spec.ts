@@ -1,6 +1,9 @@
 import { HttpClient, HttpErrorResponse, HttpResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
+import { MockModule } from '../../shared/mock/mock.module';
 import { NotificationService } from '../messages/notification.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
 import { ErrorInterceptor } from './error.interceptor';
@@ -9,6 +12,7 @@ import { InterceptorHelperService } from './interceptor-helper.service';
 describe('ErrorInterceptor', () => {
   let spyIsExcludedFromErrorHandling: jasmine.Spy;
   let spyMessageServiceError: jasmine.Spy;
+  let navigateByUrlSpy: jasmine.Spy;
 
   const url = 'sample-url-nk-9fj92md9';
   const errMock = { error: 'error message', message: 'body message', status: 500 };
@@ -30,7 +34,7 @@ describe('ErrorInterceptor', () => {
   beforeEach(() => {
     isExcludedFromErrorHandlingReal = () => false;
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MockModule, RouterTestingModule.withRoutes([{ path: '', component: DummyStubComponent }])],
       providers: [
         ErrorInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -43,6 +47,7 @@ describe('ErrorInterceptor', () => {
 
     spyIsExcludedFromErrorHandling = spyOn(spy, 'isExcludedFromErrorHandling');
     spyMessageServiceError = spyOn(spy, 'err');
+    navigateByUrlSpy = spyOn((<any>TestBed.get(ErrorInterceptor)).router, 'navigateByUrl');
   });
 
   afterEach(() => {
@@ -102,14 +107,33 @@ describe('ErrorInterceptor', () => {
   });
 
   it('should show as `title` "Unauthorized" when status is "Unauthorized"', () => {
-    httpClient.get(url).subscribe(() => { }, (error) => {
+    httpClient.get(url).subscribe(() => { }, () => {
       expect(spyMessageServiceError.calls.first().args[1]).toBe('Unauthorized');
     });
-    // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
       status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url
     });
 
+    httpTestingController.expectOne(url).flush({}, copyHttpErr);
+  });
+
+  it('should show as `title` "Not found" when status is "Not found"', () => {
+    httpClient.get(url).subscribe(() => { }, () => {
+      expect(spyMessageServiceError.calls.first().args[1]).toBe('Not found');
+    });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
+      status: HttpStatusCode.NOT_FOUND, statusText: 'Server Error', url: url
+    });
+
+    httpTestingController.expectOne(url).flush({}, copyHttpErr);
+  });
+
+  it('should navigate to base url when a "Not found" error is detected', () => {
+    httpClient.get(url).subscribe(() => { }, () => {
+      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
+      expect(navigateByUrlSpy.calls.first().args[0]).toEqual('/', 'should navigate to `home` once user is logged in');
+    });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.NOT_FOUND, statusText: '', url: url });
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 

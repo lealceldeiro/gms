@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { NotificationService } from '../messages/notification.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
 import { InterceptorHelperService } from './interceptor-helper.service';
+import { Router } from '@angular/router';
 
 /**
  * Interceptor for catching all response errors and take action according to every specific error.
@@ -16,8 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
    * Interceptor constructor.
    * @param {NotificationService} notificationService Service for showing the messages.
    * @param {InterceptorHelperService} intHelperService for sharing information with the rest of the services.
+   * @param {Router} router fir navigating to home page when there is a not found error.
    */
-  constructor(private notificationService: NotificationService, private intHelperService: InterceptorHelperService) { }
+  constructor(private notificationService: NotificationService, private intHelperService: InterceptorHelperService,
+    private router: Router) { }
 
   /**
    * Intercepts all responses in order to catch any possible error and take action accordingly.
@@ -43,6 +46,13 @@ export class ErrorInterceptor implements HttpInterceptor {
           switch (event.status) {
             case HttpStatusCode.UNAUTHORIZED:
               title = 'Unauthorized';
+              message = message || 'You don\'t have permission to access this resource';
+              this.router.navigateByUrl('/');
+              break;
+            case HttpStatusCode.NOT_FOUND:
+              title = 'Not found';
+              message = message || 'Resource not found';
+              this.router.navigateByUrl('/');
               break;
             default:
               break;
