@@ -48,7 +48,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Lifecycle hook that is called when a service is destroyed.
+   * Lifecycle hook that is called when the component is destroyed.
    */
   ngOnDestroy() {
     this.listSubscription.unsubscribe();

@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of permissionList" class="p-row">
+    <tr *ngFor="let p of permissionList" class="p-row e-item" [routerLink]="['./', p.id]">
       <td>{{p.label}}</td>
       <td>{{p.name}}</td>
     </tr>
