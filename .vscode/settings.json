@@ -13,5 +13,6 @@
             "server": "127.0.0.1",
             "username": "postgres"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
