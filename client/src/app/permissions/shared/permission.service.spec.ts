@@ -8,15 +8,10 @@ import { PermissionService } from './permission.service';
 describe('PermissionService', () => {
   const spy = { getHttpParams: (_a: any) => { }, get: (_a: any, _b: any) => { } };
   const httpParamsValue = { someRandomProperty: 'someRandomValue' + getRandomNumber() };
-  const paramsServiceStub = {
-    getHttpParams: (a: any) => { spy.getHttpParams(a); return httpParamsValue; }
-  };
-
-  const httpClientMock = {
-    get: (a: any, b: any) => spy.get(a, b)
-  };
-
+  const paramsServiceStub = { getHttpParams: (a: any) => { spy.getHttpParams(a); return httpParamsValue; } };
+  const httpClientMock = { get: (a: any, b: any) => spy.get(a, b) };
   let permissionService: PermissionService;
+  let httpClientGetSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,6 +22,7 @@ describe('PermissionService', () => {
       ]
     });
     permissionService = TestBed.get(PermissionService);
+    httpClientGetSpy = spyOn(spy, 'get');
   });
 
   it('should be created', inject([PermissionService], (service: PermissionService) => {
@@ -35,7 +31,6 @@ describe('PermissionService', () => {
 
   it('#getPermissions should call HttpClient#get with the proper parameters, retrieved from ParamsService#getHttpParams', () => {
     const paramsServiceGetParamsSpy = spyOn(spy, 'getHttpParams');
-    const httpClientGetSpy = spyOn(spy, 'get');
     const size = getRandomNumber(1, 200);
     const page = getRandomNumber(1, 300);
     const params: { [key: string]: number } = {};
@@ -51,12 +46,19 @@ describe('PermissionService', () => {
   });
 
   it('#getPermissionInfo should call HttpClient#get with the provided id as parameter', () => {
-    const httpClientGetSpy = spyOn(spy, 'get');
     const id = getRandomNumber();
-
     permissionService.getPermissionInfo(id);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
     expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission/' + id, undefined); // undefined for no params
   });
+
+  it('#getPermissionRoles should call HttpClient#get with the provided id as parameter', () => {
+    const id = getRandomNumber();
+    permissionService.getPermissionRoles(id);
+
+    expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
+    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission/' + id + '/roles', undefined); // no params either
+  });
+
 });

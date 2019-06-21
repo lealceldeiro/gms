@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RolePd } from 'src/app/roles/shared/role.pd';
 import { environment } from '../../../environments/environment';
 import { ParamsService } from '../../core/request/params/params.service';
-import { PermissionPd } from './permission.pd';
 import { Permission } from './permission.model';
+import { PermissionPd } from './permission.pd';
 
 /**
  * Service for providing permissions-related services.
@@ -43,6 +44,10 @@ export class PermissionService {
    */
   getPermissionInfo(id: number): Observable<Permission> {
     return this.http.get<Permission>(this.url + '/' + id);
+  }
+
+  getPermissionRoles(id: number): Observable<RolePd> {
+    return this.http.get<RolePd>(this.url + '/' + id + '/roles');
   }
 
 }
