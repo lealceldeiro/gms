@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
 
+/**
+ * A component for showing a permission's info.
+ */
 @Component({
   selector: 'gms-permission-info',
   templateUrl: './permission-info.component.html',
@@ -24,6 +27,9 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
 
   /**
    * Component constructor
+   * @param route {ActivatedRoute} ActivatedRoute for getting url params.
+   * @param permissionService {PermissionService} Service for requesting permissions information.
+   * @param location {Location} Location object for triggering the platform navigation.
    */
   constructor(private route: ActivatedRoute, private permissionService: PermissionService, private location: Location) { }
 
@@ -37,7 +43,7 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   /**
    * Gets the permission's info taking as argument the :id present in the url.
    */
-  private getPermissionInfo() {
+  private getPermissionInfo(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null && !isNaN(+id)) {
       this.permissionSub = this.permissionService.getPermissionInfo(+id).subscribe(info => this.permission = info);
@@ -56,7 +62,7 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   /**
    * Navigates back in the platform's history.
    */
-  back() {
+  back(): void {
     this.location.back();
   }
 }
