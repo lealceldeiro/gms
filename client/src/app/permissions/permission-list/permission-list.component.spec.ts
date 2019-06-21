@@ -5,7 +5,7 @@ import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
 import { MockModule } from '../../shared/mock/mock.module';
 import { SharedModule } from '../../shared/shared.module';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { PermissionPd } from '../shared/permission-pd';
+import { PermissionPd } from '../shared/permission.pd';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionListComponent } from './permission-list.component';
 

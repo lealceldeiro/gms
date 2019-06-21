@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PermissionPd } from '../shared/permission-pd';
+import { PermissionPd } from '../shared/permission.pd';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
 

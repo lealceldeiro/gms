@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ParamsService } from '../../core/request/params/params.service';
-import { PermissionPd } from './permission-pd';
+import { PermissionPd } from './permission.pd';
 import { Permission } from './permission.model';
 
 /**
