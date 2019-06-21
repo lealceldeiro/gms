@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
+import { Role } from 'src/app/roles/shared/role.model';
+import { RolePd } from 'src/app/roles/shared/role.pd';
 
 /**
  * A component for showing a permission's info.
@@ -26,6 +28,16 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   permissionSub = new Subscription;
 
   /**
+   * Array of roles where this permissions is being used.
+   */
+  roles: Array<Role> = [];
+
+  /**
+   * Indicated whether the roles are loaded or not already.
+   */
+  rolesLoaded = false;
+
+  /**
    * Component constructor
    * @param route {ActivatedRoute} ActivatedRoute for getting url params.
    * @param permissionService {PermissionService} Service for requesting permissions information.
@@ -41,6 +53,13 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Lifecycle hook that is called when the component is destroyed.
+   */
+  ngOnDestroy() {
+    this.permissionSub.unsubscribe();
+  }
+
+  /**
    * Gets the permission's info taking as argument the :id present in the url.
    */
   private getPermissionInfo(): void {
@@ -53,10 +72,15 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Lifecycle hook that is called when the component is destroyed.
+   * Loads the roles where this permissions is being used
    */
-  ngOnDestroy() {
-    this.permissionSub.unsubscribe();
+  showInRoles(): void {
+    // at this point the id is not null, otherwise a location.back would have been performed in #getPermissionInfo
+    const id = +(this.route.snapshot.paramMap.get('id') || 0);
+    this.permissionService.getPermissionRoles(id).subscribe((rolePd: RolePd) => {
+      this.roles = rolePd._embedded.role;
+      this.rolesLoaded = true;
+    });
   }
 
   /**
