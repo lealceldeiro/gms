@@ -1,6 +1,6 @@
 import { ConfigurationsModule } from './configurations.module';
 
-describe('PermissionModule', () => {
+describe('ConfigurationsModule', () => {
   let configurationsModule: ConfigurationsModule;
 
   beforeEach(() => {

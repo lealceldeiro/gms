@@ -1,3 +1,14 @@
-<p>
-  configuration-list works!
-</p>
+<table class="table table-hover table-bordered" *ngIf="keys?.length">
+  <thead>
+    <tr>
+      <th scope="col">Key</th>
+      <th scope="col">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let k of keys; let i = index" class="p-row">
+      <td>{{k}}</td>
+      <td>{{values[i]}}</td>
+    </tr>
+  </tbody>
+</table>

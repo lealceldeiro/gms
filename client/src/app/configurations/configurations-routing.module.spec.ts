@@ -1,6 +1,6 @@
 import { ConfigurationsRoutingModule } from './configurations-routing.module';
 
-describe('PermissionRoutingModule', () => {
+describe('ConfigurationsRoutingModule', () => {
   let configurationsRoutingModule: ConfigurationsRoutingModule;
 
   beforeEach(() => {

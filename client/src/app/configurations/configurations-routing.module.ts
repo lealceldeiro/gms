@@ -10,6 +10,9 @@ const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' }
 ];
 
+/**
+ * Module which holds the routing for the configuration module.
+ */
 @NgModule({
   imports: [RouterModule.forChild(routes)]
 })
