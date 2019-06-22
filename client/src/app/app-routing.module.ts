@@ -7,8 +7,18 @@ const routes: Routes = [
     path: 'login', loadChildren: './login/gms-login.module#GmsLoginModule', canActivateChild: [LoginGuard],
     canLoad: [LoginGuard]
   },
-  { path: 'permissions', loadChildren: './permissions/permissions.module#PermissionsModule' },
-  { path: '**', loadChildren: './page-not-found/page-not-found.module#PageNotFoundModule' }
+  {
+    path: 'permissions',
+    loadChildren: () => import('./permissions/permissions.module').then(mod => mod.PermissionsModule)
+  },
+  {
+    path: 'configurations',
+    loadChildren: () => import('./configurations/configurations.module').then(mod => mod.ConfigurationsModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./page-not-found/page-not-found.module').then(mod => mod.PageNotFoundModule)
+  }
 ];
 
 @NgModule({

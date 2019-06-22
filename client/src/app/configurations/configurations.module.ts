@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { ConfigurationsRoutingModule } from './configurations-routing.module';
-import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { ConfigurationListComponent } from '../configurations/configuration-list/configuration-list.component';
+import { SharedModule } from '../shared/shared.module';
+import { ConfigurationsRoutingModule } from './configurations-routing.module';
+
 
 @NgModule({
-  declarations: [],
+  declarations: [ConfigurationListComponent],
   imports: [SharedModule, ConfigurationsRoutingModule, RouterModule]
 })
 export class ConfigurationsModule { }

@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ConfigurationListComponent } from './configuration-list/configuration-list.component';
 
 /**
  * Routes handled in this module.
  */
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'list', component: ConfigurationListComponent },
+  { path: '', redirectTo: 'list', pathMatch: 'full' }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)]

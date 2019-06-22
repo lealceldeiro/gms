@@ -13,20 +13,18 @@ export class SideMenuComponent implements OnInit {
 
   /**
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
-   * @type {boolean}
    */
   isCollapsed = true;
 
   /**
    * Url the nav bar can navigate to.
-   * @type {{}[]}
    */
   urls = [
     { path: '/entities', name: 'Owned Entities' },
     { path: '/users', name: 'Users' },
     { path: '/roles', name: 'Roles' },
     { path: '/permissions', name: 'Permissions' },
-    { path: '/configuration', name: 'Configuration' },
+    { path: '/configurations', name: 'Configurations' },
   ];
 
   /**
