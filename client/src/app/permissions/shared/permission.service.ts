@@ -46,6 +46,10 @@ export class PermissionService {
     return this.http.get<Permission>(this.url + '/' + id);
   }
 
+  /**
+   * Returns an observable with the roles that use the permission with the same id as the one provided as argument.
+   * @param id identifier of the permissions whose roles where it is being used is going to be returned.
+   */
   getPermissionRoles(id: number): Observable<RolePd> {
     return this.http.get<RolePd>(this.url + '/' + id + '/roles');
   }

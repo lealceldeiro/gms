@@ -64,6 +64,9 @@ export class GmsPaginationComponent {
    */
   @Input() size = '-';
 
+  /**
+   * The action to be taken when the page changes.
+   */
   @Output() pageChangeAction = new EventEmitter<number>();
 
   /**
