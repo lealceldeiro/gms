@@ -2,10 +2,25 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginGuard } from './core/guard/login.guard';
 
-const routes: Routes = [
+/**
+ * Top level routes
+ */
+export const routes: Routes = [
   {
     path: 'login', loadChildren: './login/gms-login.module#GmsLoginModule', canActivateChild: [LoginGuard],
     canLoad: [LoginGuard]
+  },
+  /*{
+    path: 'owned-entities',
+    loadChildren: () => import('./owned-entities/owned-entities.module').then(mod => mod.OwnedEntitiesModule)
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./users/users.module').then(mod => mod.UsersModule)
+  },*/
+  {
+    path: 'roles',
+    loadChildren: () => import('./roles/roles.module').then(mod => mod.RolesModule)
   },
   {
     path: 'permissions',
@@ -20,6 +35,11 @@ const routes: Routes = [
     loadChildren: () => import('./page-not-found/page-not-found.module').then(mod => mod.PageNotFoundModule)
   }
 ];
+
+/**
+ * Excluded from menu.
+ */
+export const excluded = ['login'];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

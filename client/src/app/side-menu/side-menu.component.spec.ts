@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { MockModule } from '../shared/mock/mock.module';
+import { getRandomNumber } from '../shared/test-util/functions.util';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SideMenuComponent } from './side-menu.component';
 
@@ -14,22 +15,18 @@ describe('SideMenuComponent', () => {
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
   let spy: Spy;
-
-  const routes = [
-    { path: 'entities', component: DummyStubComponent },
-    { path: 'users', component: DummyStubComponent },
-    { path: 'roles', component: DummyStubComponent },
-    { path: 'permissions', component: DummyStubComponent },
-    { path: 'configuration', component: DummyStubComponent }
-  ];
+  const numberOfRoutes = getRandomNumber(1, 11);
+  const routes: Array<{ [key: string]: any }> = [];
+  for (let i = 0; i < numberOfRoutes; i++) {
+    routes.push({ path: 'dummy-' + i + '-' + getRandomNumber(), component: DummyStubComponent });
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SideMenuComponent],
       imports: [MockModule, RouterTestingModule.withRoutes(routes)],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -39,7 +36,6 @@ describe('SideMenuComponent', () => {
     componentEl = componentDe.nativeElement;
 
     fixture.detectChanges();
-    spy = spyOn((<any>component).router, 'isActive');
   });
 
   it('should create', () => {
@@ -47,12 +43,13 @@ describe('SideMenuComponent', () => {
   });
 
   it('every link should be marked as active when the component navigates to the route', () => {
+    spy = spyOn((<any>component).router, 'isActive');
     const urls = component.urls;
     const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
     for (let i = links.length - 1; i >= 0; i--) {
       gmsClick(links.item(i) as HTMLElement);
       fixture.detectChanges();
-      expect(spy.calls.all()[i].args[0]).toEqual(urls[i].path);
+      expect(spy).toHaveBeenCalledWith(urls[i].path, true);
     }
   });
 
@@ -61,8 +58,32 @@ describe('SideMenuComponent', () => {
 
     const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
     for (let i = links.length - 1; i >= 0; i--) {
-      expect(links.item(i).getAttribute('href')).toEqual(urls[i].path);
+      expect(links.item(i).getAttribute('href')).toEqual('/' + urls[i].path);
       expect(links.item(i).textContent).toContain(urls[i].name);
     }
   });
+
+  it('#getNameFrom should return a logical name from a given url. ' +
+    'i.e: from /business-management/local/ it should return Business Management Local', () => {
+      expect(component['getNameFrom']('/business-management/local/')).toEqual('Business Management Local');
+    });
+
+  it('#getCapitalized should return a capitalized string. ' +
+    'i.e: from `business` it returns `Business`', () => {
+      expect(component['getCapitalized']('business')).toEqual('Business');
+      expect(component['getCapitalized']('management')).toEqual('Management');
+      expect(component['getCapitalized']('local')).toEqual('Local');
+    });
+
+  it('#getCleanUrls should return only the url that are good candidates to be shown in the UI ', () => {
+      const randomVal = 'some-random-url' + getRandomNumber() + '-val';
+      const testUrls = [
+        '*sdf',         // nothing with asterisks
+        'login',        // remove the login word url
+        randomVal
+      ];
+      const expected = [randomVal];
+      expect(component['getCleanUrls'](testUrls)).toEqual(expected);
+    });
+
 });
