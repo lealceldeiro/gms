@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ParamsService } from 'src/app/core/request/params/params.service';
 import { environment } from '../../../environments/environment';
 
 /**
@@ -18,9 +17,8 @@ export class ConfigurationService {
   /**
    * Service's constructor
    * @param {HttpClient} http HttpClient for performing api requests.
-   * @param {ParamsService} paramsService ParamsService for getting request params formatted properly.
    */
-  constructor(private http: HttpClient, private paramsService: ParamsService) { }
+  constructor(private http: HttpClient) { }
 
   /**
    * Return an Observable of objects. Each object contains all system-wide available configurations.
