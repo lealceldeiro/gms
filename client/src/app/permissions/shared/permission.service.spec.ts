@@ -42,7 +42,7 @@ describe('PermissionService', () => {
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledTimes(1);
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission', { params: httpParamsValue });
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}permission`, { params: httpParamsValue });
   });
 
   it('#getPermissionInfo should call HttpClient#get with the provided id as parameter', () => {
@@ -50,7 +50,7 @@ describe('PermissionService', () => {
     permissionService.getPermissionInfo(id);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission/' + id, undefined); // undefined for no params
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}permission/${id}`, undefined); // undefined for no params
   });
 
   it('#getPermissionRoles should call HttpClient#get with the provided id as parameter', () => {
@@ -58,7 +58,7 @@ describe('PermissionService', () => {
     permissionService.getPermissionRoles(id);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(environment.apiBaseUrl + 'permission/' + id + '/roles', undefined); // no params either
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}permission/${id}/roles`, undefined); // no params either
   });
 
 });
