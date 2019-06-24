@@ -43,7 +43,7 @@ export class PermissionService {
    * @param id Identifier of the permissions whose info is going to be returned.
    */
   getPermissionInfo(id: number): Observable<Permission> {
-    return this.http.get<Permission>(this.url + '/' + id);
+    return this.http.get<Permission>(`${this.url}/${id}`);
   }
 
   /**
@@ -51,7 +51,7 @@ export class PermissionService {
    * @param id identifier of the permissions whose roles where it is being used is going to be returned.
    */
   getPermissionRoles(id: number): Observable<RolePd> {
-    return this.http.get<RolePd>(this.url + '/' + id + '/roles');
+    return this.http.get<RolePd>(`${this.url}/${id}/roles`);
   }
 
 }
