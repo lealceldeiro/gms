@@ -2,7 +2,9 @@ package com.gms.controller.security.role;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
+import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.permission.BPermission;
+import com.gms.domain.security.permission.BPermissionMeta;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
@@ -15,6 +17,7 @@ import com.gms.testutil.RestDoc;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
 import org.junit.Before;
@@ -37,6 +40,8 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -174,6 +179,36 @@ public class RoleControllerTest {
                 .andDo(restDocResHandler.document(
                         pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ));
+    }
+
+    @Test
+    public void getPermissionsByRole() throws Exception {
+        BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
+        BRole r = EntityUtil.getSampleRole(random.nextString());
+        r.addPermission(p, p2);
+        repository.save(r);
+        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}/" + ResourcePath.PERMISSION + "s", r.getId())
+                .header(authHeader, tokenType + " " + accessToken)
+                .accept("application/hal+json")
+                .param(dc.getPageSizeParam(), dc.getPageSize()))
+                .andExpect(status().isOk())
+                .andDo(restDocResHandler.document(
+                        responseFields(
+                                RestDoc.getPagingFields(
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].name").description(BPermissionMeta.name),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].label").description(BPermissionMeta.label),
+                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].id").description(GmsEntityMeta.id),
+                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
+                                )
+                        )
+                ))
+                .andDo(restDocResHandler.document(
+                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
+                ))
+                .andDo(restDocResHandler.document(relaxedRequestParameters(
+                        RestDoc.getRelaxedPagingParameters(dc)
+                )));
     }
 
     private void createSamplePermissions() {

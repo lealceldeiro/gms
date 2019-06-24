@@ -1,5 +1,6 @@
 package com.gms.domain.security.permission;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.role.BRole;
 import com.gms.util.i18n.CodeI18N;
@@ -56,6 +57,7 @@ public class BPermission extends GmsEntity {
      * Roles in which the permission is being used.
      */
     @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
     private Set<BRole> roles;
 
 }

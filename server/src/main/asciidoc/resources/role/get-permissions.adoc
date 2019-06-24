@@ -6,22 +6,22 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permissions/path-parameters.adoc[]
+include::{snippets}/role-controller-test/get-permissions-by-role/path-parameters.adoc[]
 
 include::../../util/H-REQUEST-QUERY-PARAMS.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permissions/request-parameters.adoc[]
+include::{snippets}/role-controller-test/get-permissions-by-role/request-parameters.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permissions/curl-request.adoc[]
+include::{snippets}/role-controller-test/get-permissions-by-role/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permissions/response-fields.adoc[]
+include::{snippets}/role-controller-test/get-permissions-by-role/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/b-role-repository-test/get-permissions/http-response.adoc[]
+include::{snippets}/role-controller-test/get-permissions-by-role/http-response.adoc[]

@@ -3,8 +3,6 @@ package com.gms.repository.security.role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.GmsEntityMeta;
-import com.gms.domain.security.permission.BPermission;
-import com.gms.domain.security.permission.BPermissionMeta;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
 import com.gms.repository.security.permission.BPermissionRepository;
@@ -213,39 +211,6 @@ public class BRoleRepositoryTest {
                 .andDo(restDocResHandler.document(
                         pathParameters(parameterWithName("id").description(BRoleMeta.id))
                 ));
-    }
-
-    @Test
-    public void getPermissions() throws Exception {
-        BPermission p = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
-        BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
-        BRole r = EntityUtil.getSampleRole(random.nextString());
-        r.addPermission(p, p2);
-        repository.save(r);
-        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}/" + ResourcePath.PERMISSION + "s", r.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON)
-                .param(pageSizeAttr, pageSize))
-                .andExpect(status().isOk())
-                .andDo(restDocResHandler.document(
-                        responseFields(
-                                RestDoc.getPagingFields(
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].name").description(BPermissionMeta.name),
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].label").description(BPermissionMeta.label),
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[].id").description(GmsEntityMeta.id),
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("bPermission")).ignored(),
-                                        fieldWithPath(LinkPath.EMBEDDED + ResourcePath.PERMISSION + "[]." + LinkPath.get("roles")).ignored(),
-                                        fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
-                                )
-                        )
-                ))
-                .andDo(restDocResHandler.document(
-                        pathParameters(parameterWithName("id").description(BRoleMeta.id))
-                ))
-                .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters(dc)
-                )));
     }
 
     @Test
