@@ -62,9 +62,19 @@ describe('RolesService', () => {
     expect(httpClientDeleteSpy.calls.mostRecent().args[0]).toEqual(`${environment.apiBaseUrl}role/${id}`);
   });
 
-  it('#getRolePermissions should call HttpClient#get with the provided id as parameter', () => {
+  it('#getRolePermissions should call HttpClient#get with the provided proper parameters', () => {
+    const paramsServiceGetParamsSpy = spyOn(spy, 'getHttpParams');
     const id = getRandomNumber();
-    roleService.getRolePermissions(id);
+    const size = getRandomNumber(1, 200);
+    const page = getRandomNumber(1, 300);
+    const params: { [key: string]: number } = {};
+    params[ParamsService.SIZE] = size;
+    params[ParamsService.PAGE] = page - 1;
+
+    roleService.getRolePermissions(id, size, page);
+
+    expect(paramsServiceGetParamsSpy).toHaveBeenCalledTimes(1);
+    expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
     expect(httpClientGetSpy.calls.mostRecent().args[0]).toEqual(`${environment.apiBaseUrl}role/${id}/permissions`);
