@@ -1,17 +1,23 @@
 package com.gms.controller.security.ownedentity;
 
+import javax.validation.Valid;
+
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.service.security.ownedentity.OwnedEntityService;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.GmsGeneralException;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -35,7 +41,6 @@ public class RestOwnedEntityController {
      */
     @PostMapping(path = ResourcePath.OWNED_ENTITY, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public ResponseEntity<EOwnedEntity> create(@Valid @RequestBody Resource<EOwnedEntity> entity)
             throws GmsGeneralException {
         EOwnedEntity e = entityService.create(entity.getContent());

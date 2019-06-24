@@ -62,7 +62,6 @@ public class SecurityController {
      * method.
      */
     @PostMapping(SecurityConst.ACCESS_TOKEN_URL)
-    @ResponseBody
     public Map<String, Object> refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
         String oldRefreshToken = payload.getRefreshToken();
         if (oldRefreshToken != null) {

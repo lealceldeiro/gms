@@ -22,26 +22,22 @@ public class ConfigurationController {
     private final ConfigurationService configService;
 
     @GetMapping("sign-up")
-    @ResponseBody
     public boolean isUserRegistrationAllowed() {
         return configService.isUserRegistrationAllowed();
     }
 
     @GetMapping("multientity")
-    @ResponseBody
     public boolean isMultiEntity() {
         return configService.isMultiEntity();
     }
 
     @GetMapping
-    @ResponseBody
     public Object getConfig(@RequestParam(value = "key", required = false) String key,
                             @RequestParam(value = "id", required = false) Long id) throws NotFoundEntityException {
         return key != null ? getConfigByKey(key, id) : configService.getConfig();
     }
 
     @GetMapping("{id}")
-    @ResponseBody
     public Map<String, Object> getConfigByUser(@PathVariable(value = "id") Long id) {
         return configService.getConfigByUser(id);
     }
