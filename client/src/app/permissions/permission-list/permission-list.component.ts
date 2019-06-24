@@ -27,11 +27,10 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   /**
    * Contains all API pagination information.
    */
-  page: { total: number, size: number, current: number, totalPages: number } = {
+  page: { total: number, size: number, current: number } = {
     total: 0,
     size: 10,
     current: 1,
-    totalPages: 0,
   };
 
   /**
@@ -59,10 +58,9 @@ export class PermissionListComponent implements OnInit, OnDestroy {
    * @param {number} toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
   loadList(toPage: number): void {
-    this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage - 1).subscribe((permissionPd: PermissionPd) => {
+    this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage).subscribe((permissionPd: PermissionPd) => {
       this.permissionList = permissionPd._embedded.permission;
       this.page.total = permissionPd.page.totalElements;
-      this.page.totalPages = permissionPd.page.totalPages;
       this.page.current = permissionPd.page.number + 1;
     });
   }

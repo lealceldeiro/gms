@@ -25,7 +25,7 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   /**
    * Subscription to the observable returning the permission's info.
    */
-  permissionSub = new Subscription;
+  permissionSub = new Subscription();
 
   /**
    * Array of roles where this permissions is being used.
@@ -39,9 +39,9 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
 
   /**
    * Component constructor
-   * @param route {ActivatedRoute} ActivatedRoute for getting url params.
-   * @param permissionService {PermissionService} Service for requesting permissions information.
-   * @param location {Location} Location object for triggering the platform navigation.
+   * @param route ActivatedRoute for getting url params.
+   * @param permissionService Service for requesting permissions information.
+   * @param location Location object for triggering the platform navigation.
    */
   constructor(private route: ActivatedRoute, private permissionService: PermissionService, private location: Location) { }
 

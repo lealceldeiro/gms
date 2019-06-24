@@ -28,13 +28,13 @@ export class PermissionService {
   /**
    * Returns an observable with a list of permissions.
    * @param {number} size Size of the page for loading permissions.
-   * @param {number} page Number of the page.
+   * @param {number} page Number of the page starting from 1.
    * @return {Observable<PermissionPd>} Containing the permissions data.
    */
   getPermissions(size: number, page: number): Observable<PermissionPd> {
     const p: { [key: string]: number } = {};
     p[ParamsService.SIZE] = size;
-    p[ParamsService.PAGE] = page;
+    p[ParamsService.PAGE] = page - 1;
     return this.http.get<PermissionPd>(this.url, { params: this.paramsService.getHttpParams(p) });
   }
 

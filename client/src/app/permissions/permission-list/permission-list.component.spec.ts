@@ -87,6 +87,6 @@ describe('PermissionListComponent', () => {
     component.loadList(toPage);
 
     expect(getPermissionsSpy).toHaveBeenCalledTimes(1);
-    expect(getPermissionsSpy).toHaveBeenCalledWith(component.page.size, toPage - 1);
+    expect(getPermissionsSpy).toHaveBeenCalledWith(component.page.size, toPage);
   });
 });

@@ -35,7 +35,7 @@ describe('PermissionService', () => {
     const page = getRandomNumber(1, 300);
     const params: { [key: string]: number } = {};
     params[ParamsService.SIZE] = size;
-    params[ParamsService.PAGE] = page;
+    params[ParamsService.PAGE] = page - 1;
 
     permissionService.getPermissions(size, page);
 
