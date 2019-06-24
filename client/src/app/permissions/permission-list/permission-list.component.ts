@@ -26,7 +26,6 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   /**
    * Contains all API pagination information.
-   * @type {{total: number; size: number; current: number}}
    */
   page: { total: number, size: number, current: number, totalPages: number } = {
     total: 0,
@@ -37,6 +36,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   /**
    * Component constructor
+   * @param permissionService PermissionService for making request to backend.
    */
   constructor(private permissionService: PermissionService) { }
 
