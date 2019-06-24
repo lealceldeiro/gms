@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { getRandomNumber } from '../../test-util/functions.util';
 import { GmsPaginationComponent } from './gms-pagination.component';
 import { DebugElement, Component, Input, Output, EventEmitter } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('GmsPaginationComponent', () => {
 
@@ -77,7 +78,7 @@ describe('GmsPaginationComponent', () => {
 
   it('should call EventEmitter(pageChangeAction)#emit on click to a new page, different from the selected one', () => {
     let anotherPage = getRandomNumber();
-    if (component['previous'] === anotherPage) {
+    if (component['previous'] === anotherPage) { // make sure that the random generated for anotherPage doesn't collide with the previous
       anotherPage++;
     }
     component.onPageChange(anotherPage);
@@ -92,5 +93,26 @@ describe('GmsPaginationComponent', () => {
     component.onPageChange(anotherPage);
     fixture.detectChanges();
     expect(spyOnEmit).not.toHaveBeenCalled();
+  });
+
+  it('should not render if pageSize value is <= 0', () => {
+    component.pageSize = 0;
+    fixture.detectChanges();
+    expect(componentDe.query(By.css('#gms-pagination'))).toBeFalsy();
+  });
+
+  it('should not render if condition (collectionSize / pageSize) > 1 does not evaluates to true', () => {
+    component.collectionSize = 5;
+    component.pageSize = 5;
+    fixture.detectChanges();
+    expect(componentDe.query(By.css('#gms-pagination'))).toBeFalsy();
+  });
+
+  it('should render if condition (collectionSize / pageSize) > 1 evaluates to true', () => {
+    // two pages
+    component.collectionSize = 10;
+    component.pageSize = 5;
+    fixture.detectChanges();
+    expect(componentDe.query(By.css('#gms-pagination'))).toBeFalsy();
   });
 });

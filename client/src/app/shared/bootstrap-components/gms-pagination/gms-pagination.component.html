@@ -1,2 +1,5 @@
-<ngb-pagination [(page)]="page" [collectionSize]="collectionSize" [pageSize]="pageSize" [maxSize]="maxSize"
-  [boundaryLinks]="boundaryLinks" class="d-flex justify-content-center" (pageChange)="onPageChange($event)"> </ngb-pagination>
+<ng-container *ngIf="pageSize > 0 && (collectionSize / pageSize) > 1" id="gms-pagination">
+  <ngb-pagination [(page)]="page" [collectionSize]="collectionSize" [pageSize]="pageSize" [maxSize]="maxSize"
+    [boundaryLinks]="boundaryLinks" class="d-flex justify-content-center" (pageChange)="onPageChange($event)">
+  </ngb-pagination>
+</ng-container>
