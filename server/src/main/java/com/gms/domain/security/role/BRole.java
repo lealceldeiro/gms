@@ -26,7 +26,7 @@ import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 @EqualsAndHashCode(callSuper = true, exclude = "permissions")
 @ToString(of = {"label"})
 @Entity
-public final class BRole extends GmsEntity{
+public final class BRole extends GmsEntity {
 
     /**
 	 * Version number for a Serializable class.
