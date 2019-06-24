@@ -55,9 +55,7 @@ describe('PermissionListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PermissionListComponent],
       imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{ path: './', component: DummyStubComponent }])],
-      providers: [
-        { provide: PermissionService, useValue: permissionServiceStub },
-      ]
+      providers: [ { provide: PermissionService, useValue: permissionServiceStub } ]
     }).compileComponents();
   }));
 

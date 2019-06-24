@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Role } from '../shared/role.model';
 import { Subscription } from 'rxjs';
 import { RolesService } from '../shared/roles.service';
@@ -12,7 +12,7 @@ import { RolePd } from '../shared/role.pd';
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.scss']
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent implements OnInit, OnDestroy {
 
   /**
    * List of roles
@@ -45,6 +45,13 @@ export class RoleListComponent implements OnInit {
    */
   ngOnInit() {
     this.loadList(this.page.current);
+  }
+
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   */
+  ngOnDestroy() {
+    this.listSubscription.unsubscribe();
   }
 
   /**

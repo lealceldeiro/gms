@@ -1,6 +1,7 @@
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { excluded } from '../app-routing.module';
 import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
 import { MockModule } from '../shared/mock/mock.module';
 import { getRandomNumber } from '../shared/test-util/functions.util';
@@ -20,6 +21,8 @@ describe('SideMenuComponent', () => {
   for (let i = 0; i < numberOfRoutes; i++) {
     routes.push({ path: 'dummy-' + i + '-' + getRandomNumber(), component: DummyStubComponent });
   }
+  // add routes excluded in app-routing
+  excluded.forEach(r => routes.push({ path: r, component: DummyStubComponent }));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -68,22 +71,21 @@ describe('SideMenuComponent', () => {
       expect(component['getNameFrom']('/business-management/local/')).toEqual('Business Management Local');
     });
 
-  it('#getCapitalized should return a capitalized string. ' +
-    'i.e: from `business` it returns `Business`', () => {
-      expect(component['getCapitalized']('business')).toEqual('Business');
-      expect(component['getCapitalized']('management')).toEqual('Management');
-      expect(component['getCapitalized']('local')).toEqual('Local');
-    });
+  it('#getCapitalized should return a capitalized string. i.e: from `business` it returns `Business`', () => {
+    expect(component['getCapitalized']('business')).toEqual('Business');
+    expect(component['getCapitalized']('management')).toEqual('Management');
+    expect(component['getCapitalized']('local')).toEqual('Local');
+  });
 
   it('#getCleanUrls should return only the url that are good candidates to be shown in the UI ', () => {
-      const randomVal = 'some-random-url' + getRandomNumber() + '-val';
-      const testUrls = [
-        '*sdf',         // nothing with asterisks
-        'login',        // remove the login word url
-        randomVal
-      ];
-      const expected = [randomVal];
-      expect(component['getCleanUrls'](testUrls)).toEqual(expected);
-    });
+    const randomVal = 'some-random-url' + getRandomNumber() + '-val';
+    const testUrls = [
+      '*sdf',         // nothing with asterisks
+      'login',        // remove the login word url
+      randomVal
+    ];
+    const expected = [randomVal];
+    expect(component['getCleanUrls'](testUrls)).toEqual(expected);
+  });
 
 });
