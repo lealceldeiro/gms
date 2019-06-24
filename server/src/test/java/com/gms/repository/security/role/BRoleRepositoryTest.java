@@ -5,7 +5,6 @@ import com.gms.Application;
 import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.role.BRoleMeta;
-import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.service.AppService;
 import com.gms.testutil.EntityUtil;
 import com.gms.testutil.GmsMockUtil;
@@ -64,7 +63,6 @@ public class BRoleRepositoryTest {
 
     @Autowired private AppService appService;
     @Autowired private BRoleRepository repository;
-    @Autowired private BPermissionRepository permissionRepository;
 
     private MockMvc mvc;
     private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
