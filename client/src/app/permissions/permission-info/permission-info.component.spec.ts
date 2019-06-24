@@ -1,14 +1,14 @@
 import { Location } from '@angular/common';
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Role } from 'src/app/roles/shared/role.model';
+import { RolePd } from 'src/app/roles/shared/role.pd';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionInfoComponent } from './permission-info.component';
-import { By } from '@angular/platform-browser';
-import { Role } from 'src/app/roles/shared/role.model';
-import { RolePd } from 'src/app/roles/shared/role.pd';
 
 describe('PermissionInfoComponent', () => {
   let component: PermissionInfoComponent;
@@ -38,9 +38,6 @@ describe('PermissionInfoComponent', () => {
   const id = getRandomNumber();
   let idGetter = (): any => id;
   const activatedRouteStub = { snapshot: { paramMap: { get: (): any => idGetter() } } };
-  let getPermissionInfoSpy: jasmine.Spy;
-  let getPermissionRolesSpy: jasmine.Spy;
-  let locationBackSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -65,15 +62,15 @@ describe('PermissionInfoComponent', () => {
   });
 
   it('should call PermissionService#getPermissionInfo on init', () => {
-    getPermissionInfoSpy = spyOn(spy.permission, 'getInfo');
+    const getPermissionInfoSpy = spyOn(spy.permission, 'getInfo');
     component.ngOnInit();
     expect(getPermissionInfoSpy).toHaveBeenCalledTimes(1);
     expect(getPermissionInfoSpy).toHaveBeenCalledWith(id);
   });
 
   it('should not call PermissionService#getPermissionInfo, but Location#back if the id is an invalid value', () => {
-    getPermissionInfoSpy = spyOn(spy.permission, 'getInfo');
-    locationBackSpy = spyOn(spy.location, 'back');
+    const getPermissionInfoSpy = spyOn(spy.permission, 'getInfo');
+    const locationBackSpy = spyOn(spy.location, 'back');
     idGetter = (): any => 'someInvalidId';
     component['getPermissionInfo']();
     expect(getPermissionInfoSpy).not.toHaveBeenCalled();
@@ -81,7 +78,7 @@ describe('PermissionInfoComponent', () => {
   });
 
   it('should call Location#back on call to back function', () => {
-    locationBackSpy = spyOn(spy.location, 'back');
+    const locationBackSpy = spyOn(spy.location, 'back');
     component['back']();
     expect(locationBackSpy).toHaveBeenCalledTimes(1);
   });
@@ -94,7 +91,7 @@ describe('PermissionInfoComponent', () => {
   });
 
   it('should hide the text to allow retrieving the roles using the selected permission and show the table of roles', fakeAsync(() => {
-    getPermissionRolesSpy = spyOn(spy.permission, 'getRoles');
+    const getPermissionRolesSpy = spyOn(spy.permission, 'getRoles');
     component.showInRoles();
     fixture.detectChanges();
     tick();

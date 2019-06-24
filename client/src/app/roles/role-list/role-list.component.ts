@@ -27,11 +27,10 @@ export class RoleListComponent implements OnInit, OnDestroy {
   /**
    * Contains all API pagination information.
    */
-  page: { total: number, size: number, current: number, totalPages: number } = {
+  page: { total: number, size: number, current: number } = {
     total: 0,
     size: 10,
     current: 1,
-    totalPages: 0,
   };
 
   /**
@@ -62,7 +61,6 @@ export class RoleListComponent implements OnInit, OnDestroy {
     this.listSubscription = this.roleService.getRoles(this.page.size, toPage - 1).subscribe((rolePd: RolePd) => {
       this.roleList = rolePd._embedded.role;
       this.page.total = rolePd.page.totalElements;
-      this.page.totalPages = rolePd.page.totalPages;
       this.page.current = rolePd.page.number + 1;
     });
   }

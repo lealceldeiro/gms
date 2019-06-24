@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { ConfigurationListComponent } from './configuration-list.component';
 import { of } from 'rxjs';
+import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { ConfigurationService } from '../shared/configuration.service';
+import { ConfigurationListComponent } from './configuration-list.component';
 
 describe('ConfigurationListComponent', () => {
   let component: ConfigurationListComponent;
