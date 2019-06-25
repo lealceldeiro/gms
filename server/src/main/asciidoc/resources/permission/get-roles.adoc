@@ -6,18 +6,18 @@ include::../../util/H-REQUEST.adoc[]
 
 include::../../util/H-REQUEST-PATH-PARAMS.adoc[]
 
-include::{snippets}/b-permission-repository-test/get-roles/path-parameters.adoc[]
+include::{snippets}/permission-controller-test/get-roles/path-parameters.adoc[]
 
 include::../../util/H-EXAMPLE.adoc[]
 
-include::{snippets}/b-permission-repository-test/get-roles/curl-request.adoc[]
+include::{snippets}/permission-controller-test/get-roles/curl-request.adoc[]
 
 include::../../util/H-RESPONSE.adoc[]
 
 include::../../util/H-RESPONSE-FIELDS.adoc[]
 
-include::{snippets}/b-permission-repository-test/get-roles/response-fields.adoc[]
+include::{snippets}/permission-controller-test/get-roles/response-fields.adoc[]
 
 include::../../util/H-EXAMPLE-BARE.adoc[]
 
-include::{snippets}/b-permission-repository-test/get-roles/http-response.adoc[]
+include::{snippets}/permission-controller-test/get-roles/http-response.adoc[]

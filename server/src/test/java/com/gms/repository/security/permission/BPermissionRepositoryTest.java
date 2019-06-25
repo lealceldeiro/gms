@@ -1,13 +1,22 @@
 package com.gms.repository.security.permission;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.relaxedRequestParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.UnsupportedEncodingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
 import com.gms.domain.GmsEntityMeta;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.permission.BPermissionMeta;
-import com.gms.domain.security.role.BRole;
-import com.gms.domain.security.role.BRoleMeta;
-import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
 import com.gms.testutil.EntityUtil;
 import com.gms.testutil.GmsMockUtil;
@@ -18,6 +27,7 @@ import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.constant.SecurityConst;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Before;
@@ -37,16 +47,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.io.UnsupportedEncodingException;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -68,7 +68,6 @@ public class BPermissionRepositoryTest {
 
     @Autowired private AppService appService;
     @Autowired private BPermissionRepository repository;
-    @Autowired private BRoleRepository roleRepository;
 
     private MockMvc mvc;
     private MockMvc mvcNonDocumenter;
@@ -151,38 +150,6 @@ public class BPermissionRepositoryTest {
                                 fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self),
                                 fieldWithPath(LinkPath.get("bPermission")).ignored(),
                                 fieldWithPath(LinkPath.get("roles")).description(BPermissionMeta.rolesLink)
-                        )
-                ))
-                .andDo(restDocResHandler.document(
-                        pathParameters(parameterWithName("id").description(BPermissionMeta.id))
-                ));
-
-    }
-
-    @Test
-    public void getRoles() throws Exception {
-        BPermission p = createPermissionUsingRepository();
-        BRole r = EntityUtil.getSampleRole(random.nextString());
-        BRole r2 = EntityUtil.getSampleRole(random.nextString());
-        r.addPermission(p);
-        r2.addPermission(p);
-        roleRepository.save(r);
-        roleRepository.save(r2);
-
-        mvc.perform(get(apiPrefix + "/" + reqString + "/{id}/roles", p.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(restDocResHandler.document(
-                        responseFields(
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE + "[].label").description(BRoleMeta.label),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[].id").description(GmsEntityMeta.id),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[].description").description(BRoleMeta.description),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[].enabled").description(BRoleMeta.enabled),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[]." + LinkPath.get()).description(GmsEntityMeta.self),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[]." + LinkPath.get("bRole")).ignored(),
-                                fieldWithPath(LinkPath.EMBEDDED + ResourcePath.ROLE  + "[]." + LinkPath.get("permissions")).description(BRoleMeta.permissionsLink),
-                                fieldWithPath(LinkPath.get()).description(GmsEntityMeta.self)
                         )
                 ))
                 .andDo(restDocResHandler.document(
