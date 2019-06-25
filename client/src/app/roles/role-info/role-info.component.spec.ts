@@ -118,7 +118,7 @@ describe('RoleInfoComponent', () => {
     expect(getRolePermissionsSpy).toHaveBeenCalledWith(id, size, page);
     expect(component.permissionsLoaded).toEqual(true);
     expect(component.permissions).toEqual(fakePermissions);
-    expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('#showPermissionsLnk'))).toBeFalsy();
     expect(fixture.debugElement.query(By.css('#permissionsTable'))).toBeTruthy();
   }));
 

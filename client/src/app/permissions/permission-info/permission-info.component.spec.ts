@@ -1,4 +1,5 @@
 import { Location } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +12,15 @@ import { PermissionService } from '../shared/permission.service';
 import { PermissionInfoComponent } from './permission-info.component';
 
 describe('PermissionInfoComponent', () => {
+
+  @Component({ template: ``, selector: 'gms-pagination' })
+  class DummyGmsPagination {
+    @Input() boundaryLinks = false;
+    @Input() collectionSize = 0;
+    @Input() page = 1;
+    @Input() pageSize = 10;
+  }
+
   let component: PermissionInfoComponent;
   let fixture: ComponentFixture<PermissionInfoComponent>;
   const fakeRoles: Array<Role> = [
@@ -22,15 +32,30 @@ describe('PermissionInfoComponent', () => {
       label: ('label-' + getRandomNumber())
     }
   ];
-  const fakeRolesResult: Observable<RolePd> = new BehaviorSubject<RolePd>({ _embedded: { role: fakeRoles } } as RolePd).asObservable();
-  const spy = { location: { back: () => { } }, permission: { getInfo: (_id: any) => { }, getRoles: (_id: any) => {} } };
+  const fakeRolesResult: Observable<RolePd> = new BehaviorSubject<RolePd>({
+    _embedded: { role: fakeRoles },
+    _links: { self: { href: 'href' } },
+    page: {
+      number: 0,
+      totalElements: 0,
+      size: 0,
+      totalPages: 0
+    }
+  } as RolePd).asObservable();
+  const spy = {
+    location: { back: () => { } },
+    permission: {
+      getInfo: (_id: any) => { },
+      getRoles: (_id: any, _size: any, _page: any) => { }
+    }
+  };
   const permissionServiceStub = {
     getPermissionInfo: (_id: number): Observable<Permission> => {
       spy.permission.getInfo(_id);
       return new BehaviorSubject<Permission>(new Permission()).asObservable();
     },
-    getPermissionRoles: (_id: number) => {
-      spy.permission.getRoles(_id);
+    getPermissionRoles: (_id: number, _size: number, _page: number) => {
+      spy.permission.getRoles(_id, _size, _page);
       return fakeRolesResult;
     }
   };
@@ -41,7 +66,7 @@ describe('PermissionInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PermissionInfoComponent],
+      declarations: [PermissionInfoComponent, DummyGmsPagination],
       providers: [
         { provide: PermissionService, useValue: permissionServiceStub },
         { provide: Location, useValue: locationStub },
@@ -92,15 +117,30 @@ describe('PermissionInfoComponent', () => {
 
   it('should hide the text to allow retrieving the roles using the selected permission and show the table of roles', fakeAsync(() => {
     const getPermissionRolesSpy = spyOn(spy.permission, 'getRoles');
-    component.showInRoles();
+    const size = getRandomNumber();
+    const page = getRandomNumber();
+    component.page.size = size;
+    component.showInRoles(page);
     fixture.detectChanges();
     tick();
     expect(getPermissionRolesSpy).toHaveBeenCalledTimes(1);
-    expect(getPermissionRolesSpy).toHaveBeenCalledWith(id);
+    expect(getPermissionRolesSpy).toHaveBeenCalledWith(id, size, page);
     expect(component.rolesLoaded).toEqual(true);
     expect(component.roles).toEqual(fakeRoles);
     expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeFalsy();
     expect(fixture.debugElement.query(By.css('#rolesTable'))).toBeTruthy();
   }));
+
+  it('should use `this.page.current` as default if not page is provided to `#showInPermissions`', () => {
+    const getRolePermissionsSpy = spyOn(spy.permission, 'getRoles');
+    const size = getRandomNumber();
+    const page = getRandomNumber();
+    component.page.current = page;
+    component.page.size = size;
+    component.showInRoles();
+    fixture.detectChanges();
+    expect(getRolePermissionsSpy).toHaveBeenCalledTimes(1);
+    expect(getRolePermissionsSpy).toHaveBeenCalledWith(id, size, page);
+  });
 
 });

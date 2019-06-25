@@ -16,7 +16,7 @@
       <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">{{role.enabled}}</div>
     </div>
 
-    <div class="row mt-3" *ngIf="!rolesLoaded">
+    <div class="row mt-3" *ngIf="!permissionsLoaded">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <a class="text-primary cursor-pointer" (click)="showInPermissions()" id="showPermissionsLnk">Show
           permissions</a>
