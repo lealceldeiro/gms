@@ -16,6 +16,7 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,13 +62,14 @@ public class RoleController {
 
     @GetMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
     @ResponseBody
-    public ResponseEntity<PagedResources<BPermission>> getAllPermissionsByRole(@PathVariable long id, Pageable pageable,
-            PagedResourcesAssembler pageAssembler) throws NotFoundEntityException {
+    public ResponseEntity<PagedResources<Resource<BPermission>>> getAllPermissionsByRole(@PathVariable long id,
+            Pageable pageable, PagedResourcesAssembler<BPermission> pageAssembler) throws NotFoundEntityException {
         Page<BPermission> page = roleService.getAllPermissionsByRoleId(id, pageable);
-
         Link link = linkTo(methodOn(RoleController.class).getAllPermissionsByRole(id, pageable, pageAssembler))
                 .withSelfRel();
-        return ResponseEntity.ok(pageAssembler.toResource(page, link));
+        PagedResources<Resource<BPermission>> pagedResources = pageAssembler.toResource(page, link);
+
+        return ResponseEntity.ok(pagedResources);
     }
 
 }
