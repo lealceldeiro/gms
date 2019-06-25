@@ -38,6 +38,15 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   rolesLoaded = false;
 
   /**
+   * Contains all API pagination information regarding to the permission's roles.
+   */
+  page: { total: number, size: number, current: number } = {
+    total: 0,
+    size: 6,
+    current: 1
+  };
+
+  /**
    * Component constructor
    * @param route ActivatedRoute for getting url params.
    * @param permissionService Service for requesting permissions information.
@@ -73,12 +82,15 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
 
   /**
    * Loads the roles where this permissions is being used
+   * @param toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
-  showInRoles(): void {
+  showInRoles(toPage: number = this.page.current): void {
     // at this point the id is not null, otherwise a location.back would have been performed in #getPermissionInfo
     const id = +(this.route.snapshot.paramMap.get('id') || 0);
-    this.permissionService.getPermissionRoles(id).subscribe((rolePd: RolePd) => {
+    this.permissionService.getPermissionRoles(id, this.page.size, toPage).subscribe((rolePd: RolePd) => {
       this.roles = rolePd._embedded.role;
+      this.page.current = toPage;
+      this.page.total = rolePd.page.totalElements;
       this.rolesLoaded = true;
     });
   }

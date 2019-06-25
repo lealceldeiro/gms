@@ -49,9 +49,15 @@ export class PermissionService {
   /**
    * Returns an observable with the roles that use the permission with the same id as the one provided as argument.
    * @param id identifier of the permissions whose roles where it is being used is going to be returned.
+   * @param {number} size Size of the page for loading permissions.
+   * @param {number} page Number of the page starting from 1.
+   * @return {Observable<RolePd>} Containing the permissions data.
    */
-  getPermissionRoles(id: number): Observable<RolePd> {
-    return this.http.get<RolePd>(`${this.url}/${id}/roles`);
+  getPermissionRoles(id: number, size: number = 10, page: number = 1): Observable<RolePd> {
+    const p: { [key: string]: number } = {};
+    p[ParamsService.SIZE] = size;
+    p[ParamsService.PAGE] = page - 1;
+    return this.http.get<RolePd>(`${this.url}/${id}/roles`, { params: this.paramsService.getHttpParams(p) });
   }
 
 }

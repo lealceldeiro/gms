@@ -43,7 +43,7 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
   permissionsLoaded = false;
 
   /**
-   * Contains all API pagination information regarding to the role permission.
+   * Contains all API pagination information regarding to the role's permissions.
    */
   page: { total: number, size: number, current: number } = {
     total: 0,

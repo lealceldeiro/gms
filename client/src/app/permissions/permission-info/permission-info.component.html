@@ -38,6 +38,10 @@
               </tr>
             </tbody>
           </table>
+
+          <gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size"
+            [boundaryLinks]="true" (pageChangeAction)="showInRoles($event)"> </gms-pagination>
+
         </div>
       </div>
     </span>
