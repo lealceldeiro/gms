@@ -88,7 +88,7 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
     // at this point the id is not null, otherwise a location.back would have been performed in #getPermissionInfo
     const id = +(this.route.snapshot.paramMap.get('id') || 0);
     this.permissionService.getPermissionRoles(id, this.page.size, toPage).subscribe((rolePd: RolePd) => {
-      this.roles = rolePd._embedded.role;
+      this.roles = rolePd._embedded ? rolePd._embedded.role : [];
       this.page.current = toPage;
       this.page.total = rolePd.page.totalElements;
       this.rolesLoaded = true;
