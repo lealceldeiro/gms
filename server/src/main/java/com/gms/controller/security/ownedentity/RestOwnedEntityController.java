@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
  * @version 0.1
  */
 @BasePathAwareController
-@RestControllerAdvice
 @RequiredArgsConstructor
 public class RestOwnedEntityController {
 

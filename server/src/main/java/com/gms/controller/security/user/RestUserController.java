@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @BasePathAwareController
-@RestControllerAdvice
 public class RestUserController {
 
     private final UserService userService;
