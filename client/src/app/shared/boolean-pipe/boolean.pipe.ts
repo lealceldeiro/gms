@@ -9,9 +9,10 @@ export class BooleanPipe implements PipeTransform {
   /**
    * Transforms the value to a human readable shape depending on whether its value is falsy or truthy.
    * @param value The from where the truthy is checked.
-   * @param args Additional arguments. args[0] is currently used as arguments to show if the evaluation returns truthy, args[1] falsy.
+   * @param trueVal Additional arguments used to show if the evaluation returns truthy. Default: `true`.
+   * @param falseVal Additional arguments used to show if the evaluation returns falsy. Default: `false`.
    */
-  transform(value: any, trueVal: string = 'true', falseVal = 'false'): string {
+  transform(value: any, trueVal: string = 'true', falseVal: string = 'false'): string {
     return value ? trueVal : falseVal;
   }
 
