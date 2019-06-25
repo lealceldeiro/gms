@@ -1,5 +1,6 @@
 package com.gms.repository.security.role;
 
+import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.util.constant.ResourcePath;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import static com.gms.util.constant.ResourcePath.QUERY_VALUE;
 import static com.gms.util.constant.ResourcePath.ROLE;
+
+import java.util.Set;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -27,5 +30,8 @@ public interface BRoleRepository extends PagingAndSortingRepository<BRole, Long>
 
     @RestResource(path = ResourcePath.LABEL, rel = ResourcePath.LABEL)
     Page<BRole> findByLabelEquals(@Param(QUERY_VALUE) String label, Pageable pageable);
+
+    @RestResource(exported = false)
+    Page<BRole> findAllByPermissions(Set<BPermission> permissions, Pageable p);
 
 }
