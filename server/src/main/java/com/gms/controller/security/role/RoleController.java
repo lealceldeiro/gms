@@ -12,7 +12,7 @@ import com.gms.util.exception.domain.NotFoundEntityException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@RepositoryRestController
+@BasePathAwareController
 @RequiredArgsConstructor
 public class RoleController {
 

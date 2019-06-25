@@ -7,7 +7,7 @@ import com.gms.service.security.ownedentity.OwnedEntityService;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.GmsGeneralException;
 
-import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,8 @@ import lombok.RequiredArgsConstructor;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@RepositoryRestController
+@BasePathAwareController
+@RestControllerAdvice
 @RequiredArgsConstructor
 public class RestOwnedEntityController {
 
