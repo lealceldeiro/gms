@@ -7,7 +7,7 @@ import com.gms.service.security.user.UserService;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.GmsGeneralException;
 
-import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +23,7 @@ import lombok.RequiredArgsConstructor;
  * @version 0.1
  */
 @RequiredArgsConstructor
-@BasePathAwareController
-@RestControllerAdvice
+@RepositoryRestController
 public class RestUserController {
 
     private final UserService userService;
