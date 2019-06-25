@@ -33,7 +33,7 @@
             <tbody>
               <tr *ngFor="let r of roles">
                 <td>{{r.label}}</td>
-                <td>{{r.enabled}}</td>
+                <td>{{r.enabled | boolean: 'Yes': 'No'}}</td>
                 <td>{{r.description}}</td>
               </tr>
             </tbody>

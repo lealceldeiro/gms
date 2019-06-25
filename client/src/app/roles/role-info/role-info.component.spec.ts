@@ -4,6 +4,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { Permission } from '../../permissions/shared/permission.model';
 import { PermissionPd } from '../../permissions/shared/permission.pd';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
@@ -12,14 +13,6 @@ import { RolesService } from '../shared/roles.service';
 import { RoleInfoComponent } from './role-info.component';
 
 describe('RoleInfoComponent', () => {
-
-  @Component({ template: ``, selector: 'gms-pagination' })
-  class DummyGmsPagination {
-    @Input() boundaryLinks = false;
-    @Input() collectionSize = 0;
-    @Input() page = 1;
-    @Input() pageSize = 10;
-  }
 
   let component: RoleInfoComponent;
   let fixture: ComponentFixture<RoleInfoComponent>;
@@ -63,7 +56,8 @@ describe('RoleInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RoleInfoComponent, DummyGmsPagination],
+      imports: [SharedModule],
+      declarations: [RoleInfoComponent],
       providers: [
         { provide: RolesService, useValue: roleServiceStub },
         { provide: Location, useValue: locationStub },

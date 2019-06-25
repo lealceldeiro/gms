@@ -6,20 +6,13 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Role } from 'src/app/roles/shared/role.model';
 import { RolePd } from 'src/app/roles/shared/role.pd';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionInfoComponent } from './permission-info.component';
 
 describe('PermissionInfoComponent', () => {
-
-  @Component({ template: ``, selector: 'gms-pagination' })
-  class DummyGmsPagination {
-    @Input() boundaryLinks = false;
-    @Input() collectionSize = 0;
-    @Input() page = 1;
-    @Input() pageSize = 10;
-  }
 
   let component: PermissionInfoComponent;
   let fixture: ComponentFixture<PermissionInfoComponent>;
@@ -66,7 +59,8 @@ describe('PermissionInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PermissionInfoComponent, DummyGmsPagination],
+      imports: [SharedModule],
+      declarations: [PermissionInfoComponent],
       providers: [
         { provide: PermissionService, useValue: permissionServiceStub },
         { provide: Location, useValue: locationStub },

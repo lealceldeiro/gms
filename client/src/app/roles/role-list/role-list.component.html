@@ -10,7 +10,7 @@
     <tr *ngFor="let r of roleList" class="p-row cursor-pointer" [routerLink]="['./', r.id]">
       <td>{{r.label}}</td>
       <td>{{r.description}}</td>
-      <td>{{r.enabled}}</td>
+      <td>{{r.enabled | boolean : 'Yes' : 'No'}}</td>
     </tr>
   </tbody>
 </table>
