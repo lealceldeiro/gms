@@ -52,6 +52,11 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
   };
 
   /**
+   * Message to be shown in case there is not eny permission associated to this role.
+   */
+  noPermissionsMessage = 'No permissions assigned to this role';
+
+  /**
    * Component constructor
    * @param route ActivatedRoute for getting url params.
    * @param rolesService Service for requesting role information.
