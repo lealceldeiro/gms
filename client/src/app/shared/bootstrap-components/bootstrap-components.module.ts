@@ -11,4 +11,4 @@ import { PreviewContentComponent } from './preview-content/preview-content.compo
   declarations: [GmsJumbotronComponent, PreviewContentComponent, GmsPaginationComponent],
   exports: [NgbModule, NgbCollapseModule, GmsJumbotronComponent, PreviewContentComponent, GmsPaginationComponent]
 })
-export class GmsBootstrapComponentsModule { }
+export class BootstrapComponentsModule { }
