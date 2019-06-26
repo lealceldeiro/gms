@@ -1,0 +1,3 @@
+<ngb-alert *ngIf="!shouldClosed" (close)="onClose(); shouldClosed = true" [dismissible]="dismissible" [type]="type">
+  <strong *ngIf="heading !== ''">{{heading}} </strong>{{message}}
+</ngb-alert>
