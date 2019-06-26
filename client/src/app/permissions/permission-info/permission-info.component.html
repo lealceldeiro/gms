@@ -14,37 +14,45 @@
 
     <div class="row mt-3" *ngIf="!rolesLoaded">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-          <a class="text-primary cursor-pointer" (click)="showInRoles()" id="showRolesLnk">Show roles where this permission is used</a>
+        <a class="text-primary cursor-pointer" (click)="showInRoles()" id="showRolesLnk">Show roles where this
+          permission is used</a>
       </div>
     </div>
 
-    <span *ngIf="rolesLoaded && roles.length">
+    <span *ngIf="rolesLoaded">
+      <!-- assigned to some role -->
       <div class="row mt-3">
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">Roles using it:</div>
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-          <table class="table table-bordered table-hover" id="rolesTable">
-            <thead class="thead-light">
-              <tr>
-                <th>Label</th>
-                <th>Enabled</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let r of roles">
-                <td>{{r.label}}</td>
-                <td>{{r.enabled | boolean: 'Yes': 'No'}}</td>
-                <td>{{r.description}}</td>
-              </tr>
-            </tbody>
-          </table>
+        <ng-container *ngIf="roles.length">
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">Roles using it:</div>
+          <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+            <table class="table table-bordered table-hover" id="rolesTable">
+              <thead class="thead-light">
+                <tr>
+                  <th>Label</th>
+                  <th>Enabled</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let r of roles">
+                  <td>{{r.label}}</td>
+                  <td>{{r.enabled | boolean: 'Yes': 'No'}}</td>
+                  <td>{{r.description}}</td>
+                </tr>
+              </tbody>
+            </table>
 
-          <gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size"
-            [boundaryLinks]="true" (pageChangeAction)="showInRoles($event)"> </gms-pagination>
+            <gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size"
+              [boundaryLinks]="true" (pageChangeAction)="showInRoles($event)"> </gms-pagination>
 
+          </div>
+        </ng-container>
+
+        <!-- hasn't been assigned to any role -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="!roles?.length">
+          <gms-alert [message]="noRoleMessage" [type]="'info'"></gms-alert>
         </div>
       </div>
     </span>
-
   </div>
 </div>

@@ -47,6 +47,11 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   };
 
   /**
+   * Message to be shown in case there is not any role using this permission.
+   */
+  noRoleMessage = 'This permission is not being used by any role';
+
+  /**
    * Component constructor
    * @param route ActivatedRoute for getting url params.
    * @param permissionService Service for requesting permissions information.

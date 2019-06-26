@@ -52,7 +52,7 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
   };
 
   /**
-   * Message to be shown in case there is not eny permission associated to this role.
+   * Message to be shown in case there is not any permission associated to this role.
    */
   noPermissionsMessage = 'No permissions assigned to this role';
 
