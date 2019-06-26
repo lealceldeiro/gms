@@ -5,10 +5,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  */
 @Component({
   selector: 'gms-pagination',
-  templateUrl: './gms-pagination.component.html',
-  styleUrls: ['./gms-pagination.component.scss']
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.scss']
 })
-export class GmsPaginationComponent {
+export class PaginationComponent {
 
   /**
    * If true, the "First" and "Last" page links are shown.

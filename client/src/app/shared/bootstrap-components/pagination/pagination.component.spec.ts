@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { getRandomNumber } from '../../test-util/functions.util';
-import { GmsPaginationComponent } from './gms-pagination.component';
+import { PaginationComponent } from './pagination.component';
 import { DebugElement, Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -21,8 +21,8 @@ describe('GmsPaginationComponent', () => {
     @Input() size = '-';
   }
 
-  let component: GmsPaginationComponent;
-  let fixture: ComponentFixture<GmsPaginationComponent>;
+  let component: PaginationComponent;
+  let fixture: ComponentFixture<PaginationComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
   let spyOnEmit: jasmine.Spy;
@@ -47,12 +47,12 @@ describe('GmsPaginationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GmsPaginationComponent, DummyNgPagination]
+      declarations: [PaginationComponent, DummyNgPagination]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GmsPaginationComponent);
+    fixture = TestBed.createComponent(PaginationComponent);
     component = fixture.componentInstance;
     componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;

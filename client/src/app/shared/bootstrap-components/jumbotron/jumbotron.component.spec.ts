@@ -1,23 +1,23 @@
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { GmsJumbotronComponent } from './jumbotron.component';
+import { JumbotronComponent } from './jumbotron.component';
 
 describe('GmsJumbotronComponent', () => {
-  let component: GmsJumbotronComponent;
-  let fixture: ComponentFixture<GmsJumbotronComponent>;
+  let component: JumbotronComponent;
+  let fixture: ComponentFixture<JumbotronComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GmsJumbotronComponent],
+      declarations: [JumbotronComponent],
       imports: [RouterTestingModule]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GmsJumbotronComponent);
+    fixture = TestBed.createComponent(JumbotronComponent);
     component = fixture.componentInstance;
     componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;

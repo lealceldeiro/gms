@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './jumbotron.component.html',
   styleUrls: ['./jumbotron.component.scss']
 })
-export class GmsJumbotronComponent implements OnInit {
+export class JumbotronComponent implements OnInit {
 
   /**
    * The text to be shown as header.
