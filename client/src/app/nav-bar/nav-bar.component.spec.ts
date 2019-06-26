@@ -6,8 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs/index';
 import { SessionService } from '../core/session/session.service';
 import { userMock } from '../core/session/user.mock.model';
-import { DummyStubComponent } from '../shared/mock/dummy-stub.component';
-import { MockModule } from '../shared/mock/mock.module';
+import { DummyStubComponent } from '../shared/test-util/mock/dummy-stub.component';
+import { MockModule } from '../shared/test-util/mock/mock.module';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { NavBarComponent } from './nav-bar.component';
 

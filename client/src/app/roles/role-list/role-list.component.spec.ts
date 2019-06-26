@@ -5,9 +5,9 @@ import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { BehaviorSubject } from 'rxjs';
 import { RolePd } from '../shared/role.pd';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MockModule } from 'src/app/shared/mock/mock.module';
+import { MockModule } from 'src/app/shared/test-util/mock/mock.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DummyStubComponent } from 'src/app/shared/mock/dummy-stub.component';
+import { DummyStubComponent } from 'src/app/shared/test-util/mock/dummy-stub.component';
 import { RolesService } from '../shared/roles.service';
 
 describe('RoleListComponent', () => {

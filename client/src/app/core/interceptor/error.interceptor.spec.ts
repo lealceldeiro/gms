@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse, HttpResponse, HTTP_INTERCEPTORS } from '
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DummyStubComponent } from '../../shared/mock/dummy-stub.component';
-import { MockModule } from '../../shared/mock/mock.module';
+import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
+import { MockModule } from '../../shared/test-util/mock/mock.module';
 import { NotificationService } from '../messages/notification.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
 import { ErrorInterceptor } from './error.interceptor';
