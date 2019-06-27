@@ -21,7 +21,7 @@
         <input type="search" class="form-control" [attr.aria-label]="searchPlaceholder"
           [placeholder]="searchPlaceholder" (keyup.enter)="search()" [(ngModel)]="searchTerm">
         <div class="input-group-append" ngbDropdown>
-          <button type="button" class="btn btn-outline-secondary" (click)="search()">Search</button>
+          <button type="button" class="btn btn-outline-secondary" (click)="search()" id="searchBtn">Search</button>
           <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
             aria-haspopup="true" aria-expanded="false" id="dropdownSearchOptions" ngbDropdownToggle>
             <span class="sr-only">Toggle Dropdown Search Options</span>

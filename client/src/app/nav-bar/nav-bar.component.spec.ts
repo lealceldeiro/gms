@@ -10,7 +10,7 @@ import { DummyStubComponent } from '../shared/test-util/mock/dummy-stub.componen
 import { MockModule } from '../shared/test-util/mock/mock.module';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { NavBarComponent } from './nav-bar.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
@@ -38,7 +38,7 @@ describe('NavBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
-      imports: [MockModule, RouterTestingModule.withRoutes(routes), NgbModule],
+      imports: [MockModule, RouterTestingModule.withRoutes(routes), SharedModule],
       providers: [{ provide: SessionService, useValue: sessionServiceStub }]
     })
       .compileComponents();
@@ -78,13 +78,13 @@ describe('NavBarComponent', () => {
     }
   });
 
-  it('should show the search form only when `isSearchActive` is `true`', () => {
-    expect(getSearchForm()).toBeTruthy('form is not created by default');
+  it('should show the search input only when `isSearchActive` is `true`', () => {
+    expect(getSearchInput()).toBeTruthy('search input is not created by default');
 
     component.isSearchActive = false;
     fixture.detectChanges();
 
-    expect(getSearchForm()).toBeFalsy('form is created when `isSearchActive` is `false`');
+    expect(getSearchInput()).toBeFalsy('search input is created when `isSearchActive` is `false`');
   });
 
   it('should bind properly the input values', () => {
@@ -99,14 +99,8 @@ describe('NavBarComponent', () => {
     expect(getSearchInput().getAttribute('placeholder')).toEqual(samplePlaceHolder, '`placeholder` is incorrect');
     expect(getSearchInput().getAttribute('aria-label')).toEqual(samplePlaceHolder, '`aria-label` is incorrect');
 
-    const searchTextButton = componentEl.querySelector('form[name=nav-bar-search-form] div div button[type=button]');
+    const searchTextButton = componentEl.querySelector('#searchBtn');
     expect(searchTextButton).not.toBeNull();
-    if (searchTextButton) {
-      expect(searchTextButton.textContent).not.toBeNull();
-      if (searchTextButton.textContent) {
-        expect(searchTextButton.textContent.trim()).toEqual(sampleSearchText.trim(), '`searchText` is incorrect');
-      }
-    }
   });
 
   it('should call sessionService#closeSession when click on `logout` link', () => {
@@ -121,11 +115,7 @@ describe('NavBarComponent', () => {
     expect(spyCloseSession).toHaveBeenCalled();
   });
 
-  function getSearchForm(): HTMLElement | any {
-    return componentEl.querySelector('form[name=nav-bar-search-form]');
-  }
-
   function getSearchInput(): HTMLElement | any {
-    return componentEl.querySelector('form[name=nav-bar-search-form] div input[type=search]');
+    return componentEl.querySelector('input[type=search]');
   }
 });
