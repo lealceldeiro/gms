@@ -26,6 +26,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * Session user's info.
    */
   user = new User();
+
   // region @Input
   /**
    * Indicates whether the nav bar search form is active or not.
@@ -34,12 +35,27 @@ export class NavBarComponent implements OnInit, OnDestroy {
   /**
    * Search input placeholder.
    */
-  @Input() searchPlaceholder = 'Search';
+  @Input() searchPlaceholder = 'Type here to search ...';
   /**
    * Search button text.
    */
   @Input() searchText = 'Search';
   // endregion
+
+  /**
+   * Available options to on how to perform the searches.
+   */
+  searchOptions = ['Contains', 'Equals', 'Anything'];
+
+  /**
+   * Selected option when doing a search.
+   */
+  selectedSearchOption = 'Anything';
+
+  /**
+   * Term used to perfom a search.
+   */
+  searchTerm = null;
 
   /**
    * URLs where the nav bar can navigate to.
@@ -99,4 +115,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.sessionService.closeSession();
   }
+
+  /**
+   * Makes a search action to happen in the current view.
+   */
+  search() {
+
+  }
+
 }

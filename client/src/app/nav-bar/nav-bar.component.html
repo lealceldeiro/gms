@@ -17,15 +17,22 @@
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0 ml-auto mr-3" *ngIf="isSearchActive" name="nav-bar-search-form">
-        <div class="input-group">
-          <input class="form-control" type="search" [placeholder]="searchPlaceholder"
-            [attr.aria-label]="searchPlaceholder">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">{{searchText}}</button>
+      <div class="input-group mr-3" *ngIf="isSearchActive">
+        <input type="search" class="form-control" [attr.aria-label]="searchPlaceholder"
+          [placeholder]="searchPlaceholder" (keyup.enter)="search()" [(ngModel)]="searchTerm">
+        <div class="input-group-append" ngbDropdown>
+          <button type="button" class="btn btn-outline-secondary" (click)="search()">Search</button>
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+            aria-haspopup="true" aria-expanded="false" id="dropdownSearchOptions" ngbDropdownToggle>
+            <span class="sr-only">Toggle Dropdown Search Options</span>
+          </button>
+          <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownSearchOptions">
+            <a class="dropdown-item cursor-pointer" *ngFor="let option of searchOptions"
+              [ngClass]="{active: option === selectedSearchOption}"
+              (click)="selectedSearchOption = option">{{option}}</a>
           </div>
         </div>
-      </form>
+      </div>
       <ul class="navbar-nav" id="nav-right-list" *ngIf="!loggedIn">
         <li class="nav-item"><a class="nav-link" routerLink="/sign-up">Sign up</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
