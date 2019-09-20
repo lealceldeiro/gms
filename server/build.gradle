@@ -1,16 +1,19 @@
 buildscript {
     ext {
-        springBootVersion = "2.0.2.RELEASE"
+        appVersion = "0.0.1"
+        // versions (ordered alphabetically)
+        flywayVersion = "5.0.7"
+        jwtVersion = "0.9.0"
+        lombokVersion = "1.18.10"
         nodePluginVersion = "1.2.0"
         propdepsPluginVersion = "0.0.9.RELEASE"
-        jwtVersion = "0.9.0"
-        lombokVersion = "1.18.2"
         refVersion = "0.9.11"
-        flywayVersion = "5.0.7"
-        envSet = false
-        buildPropertiesFilePath = "./build/resources/main/application.properties"
-        snippetsDir = file("build/generated-snippets")
+        springBootVersion = "2.0.2.RELEASE"
+        // other vars
         apiDocsFolder = "apidocs"
+        buildPropertiesFilePath = "./build/resources/main/application.properties"
+        envSet = false
+        snippetsDir = file("build/generated-snippets")
     }
     repositories {
         mavenLocal()
@@ -22,17 +25,14 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
         classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
-        classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
-        classpath "net.saliman:gradle-cobertura-plugin:2.3.1"
-        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     }
 }
 
 plugins {
-    id "org.asciidoctor.convert" version "1.5.3"
+    id "org.asciidoctor.convert" version "2.3.0"
     // coverage reports for coveralls.io
-    id 'net.saliman.cobertura' version '2.3.1'
-    id "com.github.kt3k.coveralls" version "2.8.2"
+    id "net.saliman.cobertura" version "2.6.1"
+    id "com.github.kt3k.coveralls" version "2.8.4"
 }
 
 apply plugin: "io.spring.dependency-management"
@@ -51,7 +51,7 @@ apply plugin: "net.saliman.cobertura"
 apply plugin: "com.github.kt3k.coveralls"
 
 group = "com.gms"
-version = "0.0.1"
+version = "${appVersion}"
 sourceCompatibility = 1.8
 
 repositories {
@@ -75,6 +75,7 @@ dependencies {
     compile ("org.reflections:reflections:${refVersion}")
     compile ("org.flywaydb:flyway-core:${flywayVersion}")
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor ("org.projectlombok:lombok:${lombokVersion}")
     runtime ("org.springframework.boot:spring-boot-devtools")
     runtime ("org.postgresql:postgresql")
     testCompile ("com.jayway.jsonpath:json-path")
