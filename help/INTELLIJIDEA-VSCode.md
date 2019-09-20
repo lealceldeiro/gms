@@ -30,7 +30,7 @@
 
 * At this point the whole project should be imported and shown similar to this:
 
-![Image: Project Structure](./images/vs-code-idea-3-imported-project.png)
+![Image: Project Structure](./images/vs-code-idea-3-imported-folder.png)
 
 [1]: https://gradle.org/
 [2]: https://cli.angular.io/
