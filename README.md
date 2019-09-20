@@ -10,9 +10,10 @@
 * [Overview](#overview)
 * [Ready for production](#ready-for-production)
 * [How to start developing](#how-to-start-developing)
-  1. [Using IntelliJ IDEA](./help/INTELLIJIDEA.md) :smile:
+  1. [Using IntelliJ IDEA Ultimate](./help/INTELLIJIDEA.md) :smile:
   2. [Using Visual Studio Code](./help/VSCode.md) :+1:
-  3. [Using Eclipse](./help/Eclipse.md) :confused:
+  3. [Using IntelliJ IDEA Community and Visual Studio Code](./help/INTELLIJIDEA-VSCode.md) :+1:
+  4. [Using Eclipse](./help/Eclipse.md) :confused:
 
 ## Overview
 
@@ -52,7 +53,8 @@ _**Note:**_ If you don't have [Gradle][6] installed, you can use the command `./
 
   1. Refer to [How to start developing using IntelliJ IDEA](./help/INTELLIJIDEA.md)
   2. Refer to [How to start developing using Visual Studio Code](./help/VSCode.md)
-  3. Refer to [How to start developing using Eclipse](./help/Eclipse.md)
+  3. Refer to [How to start developing using IntelliJ IDEA Community and Visual Studio Code](./help/INTELLIJIDEA-VSCode.md)
+  4. Refer to [How to start developing using Eclipse](./help/Eclipse.md)
 
 [4]: https://nodejs.org/en/
 [5]: https://www.postgresql.org/

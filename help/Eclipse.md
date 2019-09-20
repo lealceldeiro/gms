@@ -1,8 +1,8 @@
-# 2. How to start developing using Eclipse
+# 3. How to start developing using Eclipse
 
 * Make a local working copy of the project (`git clone https://github.com/lealceldeiro/gms.git`).
 
-## 2.1. API Server module
+## 3.1. API Server module
 
 * Go to _File_ > _Import_.
 
@@ -12,7 +12,7 @@
 
 ![Image: Select the wizard for Existing Gradle Project](./images/eclipse-2-import-server-gradle-wizard.png)
 
-* Select the _server_ folder location (where you ckecked out the project from github)
+* Select the _server_ folder location (where you checked out the project from github)
 
 ![Image: Select the server folder location](./images/eclipse-3-select-folder-location.png)
 
@@ -28,7 +28,7 @@
 
 ![Image: Import Preview](./images/eclipse-6-server-imported.png)
 
-## 2.2. Client module
+## 3.2. Client module
 
 * Go to _File_ > _Import_.
 
@@ -52,7 +52,7 @@
 
 ### At this point in the workspace should be two projects (_server_ and _client_)
 
-## 2.3. Additional tools
+## 3.3. Additional tools
 
 These tools are not really mandatory, but in order to get an increased productivity they are recommended.
 
