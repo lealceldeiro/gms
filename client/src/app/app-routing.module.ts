@@ -7,7 +7,9 @@ import { LoginGuard } from './core/guard/login.guard';
  */
 export const routes: Routes = [
   {
-    path: 'login', loadChildren: './login/gms-login.module#GmsLoginModule', canActivateChild: [LoginGuard],
+    path: 'login',
+    loadChildren: () => import('./login/gms-login.module').then(mod => mod.GmsLoginModule),
+    canActivateChild: [LoginGuard],
     canLoad: [LoginGuard]
   },
   /*{
