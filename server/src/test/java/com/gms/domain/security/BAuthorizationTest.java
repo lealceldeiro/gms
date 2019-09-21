@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -50,7 +51,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "bAuthorizationPk", pk);
-        assertTrue(entity.getBAuthorizationPk().equals(pk));
+        assertEquals(entity.getBAuthorizationPk(), pk);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "user", user);
-        assertTrue(entity.getUser().equals(user));
+        assertEquals(entity.getUser(), user);
     }
 
     @Test
@@ -66,7 +67,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "entity", oEntity);
-        assertTrue(entity.getEntity().equals(oEntity));
+        assertEquals(entity.getEntity(), oEntity);
     }
 
     @Test
@@ -74,7 +75,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "role", role);
-        assertTrue(entity.getRole().equals(role));
+        assertEquals(entity.getRole(), role);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         entity.setBAuthorizationPk(pk);
-        assertTrue(pk.equals(ReflectionTestUtils.getField(entity, "bAuthorizationPk")));
+        assertEquals(pk, ReflectionTestUtils.getField(entity, "bAuthorizationPk"));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         entity.setUser(user);
-        assertTrue(user.equals(ReflectionTestUtils.getField(entity, "user")));
+        assertEquals(user, ReflectionTestUtils.getField(entity, "user"));
     }
 
     @Test
@@ -98,7 +99,7 @@ public class BAuthorizationTest {
         cleanEntity();
 
         entity.setEntity(oEntity);
-        assertTrue(oEntity.equals(ReflectionTestUtils.getField(entity, "entity")));
+        assertEquals(oEntity, ReflectionTestUtils.getField(entity, "entity"));
     }
 
     @Test
@@ -106,28 +107,28 @@ public class BAuthorizationTest {
         cleanEntity();
 
         entity.setRole(role);
-        assertTrue(role.equals(ReflectionTestUtils.getField(entity, "role")));
+        assertEquals(role, ReflectionTestUtils.getField(entity, "role"));
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.equals(entity1));
+        assertEquals(entity, entity1);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.hashCode() == entity1.hashCode());
+        assertEquals(entity.hashCode(), entity1.hashCode());
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.toString().equals(entity1.toString()));
+        assertEquals(entity.toString(), entity1.toString());
     }
 
     private void cleanEntity() {

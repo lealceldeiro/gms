@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -85,7 +86,7 @@ public class RepositoryConfigTest {
 
         final String id = GmsSecurityUtil.getValueInJSON(result, "id");
         assertTrue("Entity id not found", id != null && !id.equals(""));
-        assertTrue(u.getId().equals(Long.valueOf(id)));
+        assertEquals(u.getId(), Long.valueOf(id));
     }
 
 }

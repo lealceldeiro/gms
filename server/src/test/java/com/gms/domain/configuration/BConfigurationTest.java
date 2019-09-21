@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -70,7 +71,7 @@ public class BConfigurationTest {
         cleanEntity();
 
         entity.setKey(k);
-        assertTrue(k.equals(String.valueOf(ReflectionTestUtils.getField(entity, "key"))));
+        assertEquals(k, String.valueOf(ReflectionTestUtils.getField(entity, "key")));
     }
 
     @Test
@@ -78,7 +79,7 @@ public class BConfigurationTest {
         cleanEntity();
 
         entity.setValue(v);
-        assertTrue(v.equals(String.valueOf(ReflectionTestUtils.getField(entity, "value"))));
+        assertEquals(v, String.valueOf(ReflectionTestUtils.getField(entity, "value")));
     }
 
     @Test
@@ -86,7 +87,7 @@ public class BConfigurationTest {
         cleanEntity();
 
         entity.setUserId(id);
-        assertTrue(id.equals(Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "userId")))));
+        assertEquals(id, Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "userId"))));
     }
 
     @Test
@@ -94,7 +95,7 @@ public class BConfigurationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "key", k);
-        assertTrue(entity.getKey().equals(k));
+        assertEquals(entity.getKey(), k);
     }
 
     @Test
@@ -102,7 +103,7 @@ public class BConfigurationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "value", v);
-        assertTrue(entity.getValue().equals(v));
+        assertEquals(entity.getValue(), v);
     }
 
     @Test
@@ -110,28 +111,28 @@ public class BConfigurationTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "userId", id);
-        assertTrue(entity.getUserId().equals(id));
+        assertEquals(entity.getUserId(), id);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.hashCode() == entity1.hashCode());
+        assertEquals(entity.hashCode(), entity1.hashCode());
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.equals(entity1));
+        assertEquals(entity, entity1);
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.toString().equals(entity1.toString()));
+        assertEquals(entity.toString(), entity1.toString());
     }
 
     private void cleanEntity() {

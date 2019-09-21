@@ -70,7 +70,7 @@ public class RoleServiceTest {
         pIDs.add(p2.getId());
         try {
             List<Long> added = roleService.addPermissionsToRole(r.getId(), pIDs);
-            assertTrue(added.size() == pIDs.size());
+            assertEquals(added.size(), pIDs.size());
             // assert the list contains the id of the two added permissions
             assertTrue(added.contains(p1.getId()));
             assertTrue(added.contains(p2.getId()));
@@ -93,7 +93,7 @@ public class RoleServiceTest {
             roleService.addPermissionsToRole(r.getId(), pIDs);
         } catch (NotFoundEntityException e) {
             success = true;
-            assertTrue(e.getMessage().equals("role.add.permissions.found.none"));
+            assertEquals(e.getMessage(), "role.add.permissions.found.none");
         }
         assertTrue(success);
     }
@@ -105,7 +105,7 @@ public class RoleServiceTest {
             roleService.getRole(INVALID_ID);
         } catch (NotFoundEntityException e) {
             success = true;
-            assertTrue(e.getMessage().equals(RoleService.ROLE_NOT_FOUND));
+            assertEquals(e.getMessage(), RoleService.ROLE_NOT_FOUND);
         }
         assertTrue(success);
     }
@@ -129,7 +129,7 @@ public class RoleServiceTest {
         try {
             List<Long> deleted = roleService.removePermissionsFromRole(r.getId(), pIDs);
             assertNotNull(deleted);
-            assertTrue(deleted.size() == pIDs.size());
+            assertEquals(deleted.size(), pIDs.size());
             assertTrue(deleted.contains(p1.getId()));
             assertTrue(deleted.contains(p2.getId()));
         } catch (NotFoundEntityException e) {
@@ -164,18 +164,18 @@ public class RoleServiceTest {
             final List<Long> updated = roleService.updatePermissionsInRole(r.getId(), pIDs);
             assertNotNull(updated);
             // assert the role permissions list contains only the new permissions (p3 and p4)
-            assertTrue(updated.size() == pIDs.size());
+            assertEquals(updated.size(), pIDs.size());
             assertTrue(updated.contains(p3.getId()));
             assertTrue(updated.contains(p4.getId()));
-            assertTrue(!updated.contains(p1.getId()));
-            assertTrue(!updated.contains(p2.getId()));
+            assertFalse(updated.contains(p1.getId()));
+            assertFalse(updated.contains(p2.getId()));
 
             Optional<BRole> role = roleRepository.findById(r.getId());
             assertTrue(role.isPresent());
 
             final Set<BPermission> rPermissions = role.get().getPermissions();
-            assertTrue(!rPermissions.contains(p1));
-            assertTrue(!rPermissions.contains(p2));
+            assertFalse(rPermissions.contains(p1));
+            assertFalse(rPermissions.contains(p2));
             assertTrue(rPermissions.contains(p3));
             assertTrue(rPermissions.contains(p4));
         } catch (NotFoundEntityException e) {

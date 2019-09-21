@@ -90,7 +90,6 @@ public class RestUserControllerTest {
         final String r = random.nextString();
         EUser u = EntityUtil.getSampleUser(r);
         Resource<EUser> resource = new Resource<>(u);
-        //noinspection ConstantConditions
         ReflectionTestUtils.setField(resource, "links", null);
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);

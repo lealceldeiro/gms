@@ -21,9 +21,9 @@ public class NotFoundEntityExceptionTest {
         Exception ex = new NullPointerException();
 
         NotFoundEntityException e = new NotFoundEntityException(msg);
-        Assert.assertTrue(e.getMessage().equals(msg));
+        Assert.assertEquals(msg, e.getMessage());
 
         e = new NotFoundEntityException(msg, ex);
-        Assert.assertTrue(e.getMessage().equals(msg + " because of " + ex.toString()));
+        Assert.assertEquals(msg + " because of " + ex.toString(), e.getMessage());
     }
 }

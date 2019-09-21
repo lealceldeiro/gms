@@ -2,6 +2,7 @@ package com.gms.util.response;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -43,7 +44,7 @@ public class GmsResponseTest {
 		cleanEntity();
 
 		ReflectionTestUtils.setField(entity, MESSAGE_TEXT, MESSAGE_VALUE);
-		assertTrue(entity.getMessage().equals(MESSAGE_VALUE));
+		assertEquals(entity.getMessage(), MESSAGE_VALUE);
 	}
 
 	@Test
@@ -59,7 +60,7 @@ public class GmsResponseTest {
 		cleanEntity();
 
 		entity.setMessage(MESSAGE_VALUE);
-		assertTrue(MESSAGE_VALUE.equals(String.valueOf(ReflectionTestUtils.getField(entity, MESSAGE_TEXT))));
+		assertEquals(MESSAGE_VALUE, String.valueOf(ReflectionTestUtils.getField(entity, MESSAGE_TEXT)));
 
 	}
 
@@ -68,20 +69,20 @@ public class GmsResponseTest {
 		cleanEntity();
 		prepareEntitiesForEqualityTest();
 
-		assertTrue(entity.equals(entity2));
+		assertEquals(entity, entity2);
 	}
 
 	@Test
 	public void hashCodeTest() {
 		prepareEntitiesForEqualityTest();
 
-		assertTrue(entity.hashCode() == entity2.hashCode());
+		assertEquals(entity.hashCode(), entity2.hashCode());
 	}
 
 	@Test
 	public void toStringTest() {
 		prepareEntitiesForEqualityTest();
-		assertTrue(entity.toString().equals(entity2.toString()));
+		assertEquals(entity.toString(), entity2.toString());
 	}
 
 	private void cleanEntity() {
@@ -95,7 +96,9 @@ public class GmsResponseTest {
 	}
 
 	private void assertEntityValidity(GmsResponse entity) {
-		assertTrue(ReflectionTestUtils.getField(entity, "message").toString().equals(""));
+		Object field = ReflectionTestUtils.getField(entity, "message");
+		assertNotNull(field);
+		assertEquals("", field.toString());
 		assertNull(ReflectionTestUtils.getField(entity, "data"));
 	}
 

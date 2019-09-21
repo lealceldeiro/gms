@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -28,7 +29,7 @@ public class GmsEntityTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "id", id);
-        assertTrue(entity.getId().equals(id));
+        assertEquals(entity.getId(), id);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class GmsEntityTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "version", v);
-        assertTrue(entity.getVersion().equals(v));
+        assertEquals(entity.getVersion(), v);
     }
 
     @Test
@@ -44,7 +45,7 @@ public class GmsEntityTest {
         cleanEntity();
 
         entity.setId(id);
-        assertTrue(id.equals(Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "id")))));
+        assertEquals(id, Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "id"))));
     }
 
     @Test
@@ -52,7 +53,7 @@ public class GmsEntityTest {
         cleanEntity();
 
         entity.setVersion(v);
-        assertTrue(v.equals(Integer.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "version")))));
+        assertEquals(v, Integer.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "version"))));
 
     }
 
@@ -61,20 +62,20 @@ public class GmsEntityTest {
         cleanEntity();
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.equals(entity2));
+        assertEquals(entity, entity2);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.hashCode() == entity2.hashCode());
+        assertEquals(entity.hashCode(), entity2.hashCode());
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
-        assertTrue(entity.toString().equals(entity2.toString()));
+        assertEquals(entity.toString(), entity2.toString());
     }
 
     private void cleanEntity() {

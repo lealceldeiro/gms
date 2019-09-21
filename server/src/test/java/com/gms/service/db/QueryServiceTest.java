@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +46,7 @@ public class QueryServiceTest {
         assertNotNull(query);
         final List<?> resultList = query.getResultList();
         assertNotNull(resultList);
-        assertTrue(!resultList.isEmpty());
+        assertFalse(resultList.isEmpty());
     }
 
     @Test
@@ -57,7 +58,7 @@ public class QueryServiceTest {
         assertNotNull(query);
         final List<?> resultList = query.getResultList();
         assertNotNull(resultList);
-        assertTrue(!resultList.isEmpty());
+        assertFalse(resultList.isEmpty());
         assertTrue(resultList.contains(p));
     }
 

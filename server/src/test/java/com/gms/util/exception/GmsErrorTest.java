@@ -44,7 +44,7 @@ public class GmsErrorTest {
         GmsError e = new GmsError(errors);
 
         Map<String, List<String>> err = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
-        assertTrue(err.equals(errors));
+        assertEquals(err, errors);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +55,7 @@ public class GmsErrorTest {
         e.addError(field, msg2);
         e.addError(field2, msg2);
         Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        assertNotNull(errors);
         assertTrue(errors.get(field).contains(msg));
         assertTrue(errors.get(field).contains(msg2));
         assertTrue(errors.get(field2).contains(msg2));
@@ -66,6 +67,7 @@ public class GmsErrorTest {
         e.removeError(field2, msg2);
 
         errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        assertNotNull(errors);
         assertNull(errors.get(field));
     }
 
@@ -75,12 +77,14 @@ public class GmsErrorTest {
         GmsError e = new GmsError();
         e.addError(msg);
         Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        assertNotNull(errors);
         assertTrue(errors.get(GmsError.OTHERS).contains(msg));
 
         // test also "removeError"
         e.removeError(msg);
 
         errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        assertNotNull(errors);
         assertFalse(errors.get(GmsError.OTHERS).contains(msg));
     }
 
@@ -101,13 +105,14 @@ public class GmsErrorTest {
         e.addError(msg);
         e.addError(field, msg2);
         Map<String, List<String>> currentErrors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        assertNotNull(currentErrors);
         assertTrue(currentErrors.get(GmsError.OTHERS).contains(msg));
         assertTrue(currentErrors.get(field).contains(msg2));
 
         e.setErrors(errors);
         currentErrors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
-        assertTrue(currentErrors.get("k1").equals(l));
-        assertTrue(currentErrors.get("k2").equals(l2));
+        assertEquals(currentErrors.get("k1"), l);
+        assertEquals(currentErrors.get("k2"), l2);
     }
 
     @Test
@@ -126,7 +131,7 @@ public class GmsErrorTest {
         ReflectionTestUtils.setField(e, errorsHolder, errors);
         Map<String, List<String>> currentErrors = e.getErrors();
 
-        assertTrue(currentErrors.get("k1").equals(l));
-        assertTrue(currentErrors.get("k2").equals(l2));
+        assertEquals(currentErrors.get("k1"), l);
+        assertEquals(currentErrors.get("k2"), l2);
     }
 }

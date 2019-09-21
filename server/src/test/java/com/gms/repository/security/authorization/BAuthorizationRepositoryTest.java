@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -56,9 +57,9 @@ public class BAuthorizationRepositoryTest {
 
         final BAuthorization authFound = authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(user, true);
 
-        assertTrue("Current user and the one found in the authorization do not match", authFound.getUser().equals(user));
-        assertTrue("Current role and the one found in the authorization do not match", authFound.getRole().equals(role));
-        assertTrue("Current entity and the one found in the authorization do not match", authFound.getEntity().equals(entity));
+        assertEquals("Current user and the one found in the authorization do not match", authFound.getUser(), user);
+        assertEquals("Current role and the one found in the authorization do not match", authFound.getRole(), role);
+        assertEquals("Current entity and the one found in the authorization do not match", authFound.getEntity(), entity);
     }
 
     @Test
@@ -69,8 +70,8 @@ public class BAuthorizationRepositoryTest {
 
         final Map<String, List<BRole>> data = authorizationRepository.getRolesForUserOverAllEntities(user.getId());
 
-        assertTrue("Roles not found for entity " + e1.getUsername(), data.keySet().contains(e1.getUsername()));
-        assertTrue("Roles not found for entity " + e2.getUsername(), data.keySet().contains(e2.getUsername()));
+        assertTrue("Roles not found for entity " + e1.getUsername(), data.containsKey(e1.getUsername()));
+        assertTrue("Roles not found for entity " + e2.getUsername(), data.containsKey(e2.getUsername()));
 
         assertTrue("Role " + role.getLabel() + "(role) is not assigned to " + e1.getUsername() + " (e1)",
                 isRoleInList(data.get(e1.getUsername()), role));

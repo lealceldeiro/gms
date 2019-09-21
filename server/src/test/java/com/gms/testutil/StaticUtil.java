@@ -22,8 +22,10 @@ public class StaticUtil {
         List<String> values = new LinkedList<>();
         final Field[] fields = targetClass.getFields();
         String value;
+        Object field;
         for(Field f : fields) {
-            value = ReflectionTestUtils.getField(targetClass, f.getName()).toString();
+            field = ReflectionTestUtils.getField(targetClass, f.getName());
+            value = field != null ? field.toString() : "";
             if (!values.contains(value)) {
                 values.add(value);
             }

@@ -17,6 +17,7 @@ import javax.validation.ConstraintViolation;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -109,7 +110,7 @@ public class BPermissionTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "name", name);
-        assertTrue(entity0.getName().equals(name));
+        assertEquals(entity0.getName(), name);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class BPermissionTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "label", label);
-        assertTrue(entity0.getLabel().equals(label));
+        assertEquals(entity0.getLabel(), label);
     }
 
     @Test
@@ -125,7 +126,7 @@ public class BPermissionTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "roles", roles);
-        assertTrue(entity0.getRoles().equals(roles));
+        assertEquals(entity0.getRoles(), roles);
     }
 
     @Test
@@ -133,28 +134,28 @@ public class BPermissionTest {
         cleanEntity0();
 
         entity0.setRoles(roles);
-        assertTrue(roles.equals(ReflectionTestUtils.getField(entity0, "roles")));
+        assertEquals(roles, ReflectionTestUtils.getField(entity0, "roles"));
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.toString().equals(entity1.toString()));
+        assertEquals(entity0.toString(), entity1.toString());
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.equals(entity1));
+        assertEquals(entity0, entity1);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.hashCode() == entity1.hashCode());
+        assertEquals(entity0.hashCode(), entity1.hashCode());
     }
 
 

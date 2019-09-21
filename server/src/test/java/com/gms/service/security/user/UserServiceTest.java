@@ -138,12 +138,12 @@ public class UserServiceTest {
         List<Long> ids = new LinkedList<>();
         ids.add(r1.getId());
         ids.add(r2.getId());
-        assertTrue(ids.size() == 2);    // make sure later a java.lang.ArrayIndexOutOfBoundsException is not thrown
+        assertEquals(ids.size(), 2);    // make sure later a java.lang.ArrayIndexOutOfBoundsException is not thrown
         List<Long> added = null;
         try {
             added = userService.addRolesToUser(u.getId(), e.getId(), ids);
             assertNotNull(added);
-            assertTrue(added.size() == ids.size());
+            assertEquals(added.size(), ids.size());
             assertTrue(added.contains(ids.get(0)));
             assertTrue(added.contains(ids.get(1)));
         } catch (NotFoundEntityException e1) {
@@ -153,9 +153,9 @@ public class UserServiceTest {
 
         final List<BRole> roles = authorizationRepository.getRolesForUserOverEntity(u.getId(), e.getId());
         assertNotNull(roles);
-        assertTrue(roles.size() == ids.size());
+        assertEquals(roles.size(), ids.size());
         assertNotNull(added);
-        assertTrue(added.size() == roles.size());
+        assertEquals(added.size(), roles.size());
         assertTrue(added.contains(roles.get(0).getId()));
         assertTrue(added.contains(roles.get(1).getId()));
     }
@@ -191,7 +191,7 @@ public class UserServiceTest {
         //check the roles where successfully added
         List<BRole> roles = authorizationRepository.getRolesForUserOverEntity(u.getId(), e.getId());
         assertNotNull(roles);
-        assertTrue(roles.size() == ids.size());
+        assertEquals(roles.size(), ids.size());
         assertTrue(ids.contains(roles.get(0).getId()));
         assertTrue(ids.contains(roles.get(1).getId()));
 
@@ -204,7 +204,7 @@ public class UserServiceTest {
             fail("Roles could not be removed");
         }
         assertNotNull(removed);
-        assertTrue(removed.size() == roles.size());
+        assertEquals(removed.size(), roles.size());
         assertTrue(removed.contains(roles.get(0).getId()));
         assertTrue(removed.contains(roles.get(1).getId()));
 
@@ -220,7 +220,7 @@ public class UserServiceTest {
         assertNotNull(u);
         UserDetails su = userService.loadUserByUsername(u.getUsername());
         assertNotNull(su);
-        assertTrue(su.equals(u));
+        assertEquals(su, u);
     }
 
     @Test
@@ -264,7 +264,7 @@ public class UserServiceTest {
         String separator = "--<<" + random.nextString() + ">>--"; // attempt to make a unique separator
         String authForToken = userService.getUserAuthoritiesForToken(u.getUsername(), separator);
         assertNotNull(authForToken);
-        assertTrue(!authForToken.equals(""));
+        assertNotEquals("", authForToken);
 
         List<String> permissionNames = Arrays.asList(authForToken.split(separator));
         assertTrue(permissionNames.contains(p1.getName()));
@@ -317,7 +317,7 @@ public class UserServiceTest {
         try {
             final Map<String, List<BRole>> rolesForUser = userService.getRolesForUser(u.getId());
             assertNotNull(rolesForUser);
-            assertTrue(!rolesForUser.isEmpty());
+            assertFalse(rolesForUser.isEmpty());
 
             final Set<String> keySet = rolesForUser.keySet();
 
@@ -363,7 +363,7 @@ public class UserServiceTest {
         try {
             final List<BRole> roles = userService.getRolesForUserOverEntity(u.getId(), e.getId());
             assertNotNull(roles);
-            assertTrue(!roles.isEmpty());
+            assertFalse(roles.isEmpty());
 
             assertTrue(roles.contains(r1));
             assertTrue(roles.contains(r2));

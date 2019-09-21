@@ -34,7 +34,8 @@ public class JWTServiceTest {
 
     @Test
     public void getATokenExpirationTime() {
-        long prev = Long.parseLong(ReflectionTestUtils.getField(sc, "aTokenExpirationTime").toString());
+        final Object aTokenExpirationTime = ReflectionTestUtils.getField(sc, "aTokenExpirationTime");
+        long prev = aTokenExpirationTime != null ? Long.parseLong(aTokenExpirationTime.toString()) : -1;
         ReflectionTestUtils.setField(sc, "aTokenExpirationTime", -10);
         assertTrue("Expiration time for access token must be greater than zero", jwtService.getATokenExpirationTime() > 0);
         ReflectionTestUtils.setField(sc, "aTokenExpirationTime", prev);
@@ -51,7 +52,7 @@ public class JWTServiceTest {
 
     @Test
     public void createTwoTokensWithSubjectAreNotEqual() {
-        final String sub = "TestSubject";
+        final String sub = "TestSubjectBN";
         final String token1 = jwtService.createToken(sub);
         final String token2 = jwtService.createToken(sub);
         assertNotEquals("The JWTService#createToken(String subject) method never should create two tokens which are equals",
@@ -60,7 +61,7 @@ public class JWTServiceTest {
 
     @Test
     public void createTwoTokensWithSubjectAndExpAreNotEqual() {
-        final String sub = "TestSubject";
+        final String sub = "TestSubjectCV";
         long exp = 123;
         final String token1 = jwtService.createToken(sub, exp);
         final String token2 = jwtService.createToken(sub, exp);
@@ -71,8 +72,8 @@ public class JWTServiceTest {
 
     @Test
     public void createTwoTokensWithSubjectAndAuthAreNotEqual() {
-        final String sub = "TestSubject";
-        final String auth = "ROLE_1;ROLE_2";
+        final String sub = "TestSubjectRF";
+        final String auth = "ROLE_WS;ROLE_RF";
         final String token1 = jwtService.createToken(sub, auth);
         final String token2 = jwtService.createToken(sub, auth);
         assertNotEquals("The JWTService#createToken(String subject, String authorities) method never should create two tokens which are equals",
@@ -81,8 +82,8 @@ public class JWTServiceTest {
 
     @Test
     public void createTwoTokensWithSubjectAuthAndExpAreNotEqual() {
-        final String sub = "TestSubject";
-        final String auth = "ROLE_1;ROLE_2";
+        final String sub = "TestSubjectBN";
+        final String auth = "ROLE_GT;ROLE_DE";
         long exp = 123;
         final String token1 = jwtService.createToken(sub, auth, exp);
         final String token2 = jwtService.createToken(sub, auth, exp);
@@ -92,8 +93,8 @@ public class JWTServiceTest {
 
     @Test
     public void createTwoRefreshTokensWithSubjectAndAuthAreNotEqual() {
-        final String sub = "TestSubject";
-        final String auth = "ROLE_1;ROLE_2";
+        final String sub = "TestSubjectG";
+        final String auth = "ROLE_N;ROLE_C";
         final String token1 = jwtService.createRefreshToken(sub, auth);
         final String token2 = jwtService.createRefreshToken(sub, auth);
         assertNotEquals("The JWTService#createRefreshToken(String subject, String authorities) method never should create two tokens which are equals",
@@ -102,7 +103,7 @@ public class JWTServiceTest {
 
     @Test
     public void expTimeOfRefreshTokenGreaterThanExpAccessToken() {
-        final String sub = "TestSubject";
+        final String sub = "TestSubject1";
         final String auth = "ROLE_1;ROLE_2";
         final String accessToken = jwtService.createToken(sub, auth);
         final String refreshToken = jwtService.createRefreshToken(sub, auth);
@@ -121,7 +122,7 @@ public class JWTServiceTest {
 
     @Test
     public void getClaims() {
-        final String sub = "TestSubject";
+        final String sub = "TestSubjectX";
         final String auth = "ROLE_1;ROLE_2";
         final String token = jwtService.createToken(sub, auth);
         final Map<String, Object> claims = jwtService.getClaims(token, JWTService.SUBJECT, sc.getAuthoritiesHolder(), JWTService.EXPIRATION);
@@ -131,8 +132,8 @@ public class JWTServiceTest {
 
     @Test
     public void getClaimsExtended() {
-        final String sub = "TestSubject";
-        final String auth = "ROLE_1;ROLE_2";
+        final String sub = "TestSubjectY";
+        final String auth = "ROLE_X;ROLE_Y";
         final long expiresIn = 99999999;
         final String token = jwtService.createToken(sub, auth, expiresIn);
         final String randomKey = "randomKey";
@@ -150,7 +151,7 @@ public class JWTServiceTest {
     }
 
     private void assertClaimsState(Map<String, Object> claims, String subject, String authorities) {
-        assertTrue("Claims map is empty", !claims.isEmpty());
+        assertFalse("Claims map is empty", claims.isEmpty());
 
         assertNotNull("Claims map is null", claims);
         assertNotNull("Expiration time claims is null", claims.get(JWTService.EXPIRATION));

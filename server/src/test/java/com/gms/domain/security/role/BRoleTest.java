@@ -105,7 +105,7 @@ public class BRoleTest {
         entity0.addPermission(sampleP);
 
         final HashSet<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
-        assertTrue(permissions.contains(sampleP));
+        assertTrue(permissions != null && permissions.contains(sampleP));
     }
 
     @Test
@@ -116,25 +116,25 @@ public class BRoleTest {
         cleanEntity0();
         ReflectionTestUtils.setField(entity0, "permissions", auxP);
         HashSet<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
-        assertTrue(permissions.contains(sampleP));
+        assertTrue(permissions != null && permissions.contains(sampleP));
 
         entity0.removePermission(sampleP);
         permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
-        assertTrue(!permissions.contains(sampleP));
+        assertTrue(permissions != null && !permissions.contains(sampleP));
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.equals(entity1));
+        assertEquals(entity0, entity1);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.hashCode() == entity1.hashCode());
+        assertEquals(entity0.hashCode(), entity1.hashCode());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class BRoleTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "label", labelS);
-        assertTrue(entity0.getLabel().equals(labelS));
+        assertEquals(entity0.getLabel(), labelS);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class BRoleTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "description", descriptionS);
-        assertTrue(entity0.getDescription().equals(descriptionS));
+        assertEquals(entity0.getDescription(), descriptionS);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class BRoleTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "enabled", enabledS);
-        assertTrue(entity0.getEnabled().equals(enabledS));
+        assertEquals(entity0.getEnabled(), enabledS);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class BRoleTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "permissions", permissionsS);
-        assertTrue(entity0.getPermissions().equals(permissionsS));
+        assertEquals(entity0.getPermissions(), permissionsS);
     }
 
     @Test
@@ -174,7 +174,7 @@ public class BRoleTest {
         cleanEntity0();
 
         entity0.setDescription(descriptionS);
-        assertTrue(descriptionS.equals(ReflectionTestUtils.getField(entity0, "description")));
+        assertEquals(descriptionS, ReflectionTestUtils.getField(entity0, "description"));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class BRoleTest {
         cleanEntity0();
 
         entity0.setEnabled(enabledS);
-        assertTrue(enabledS.equals(ReflectionTestUtils.getField(entity0, "enabled")));
+        assertEquals(enabledS, ReflectionTestUtils.getField(entity0, "enabled"));
     }
 
     @Test
@@ -190,14 +190,14 @@ public class BRoleTest {
         cleanEntity0();
 
         entity0.setPermissions(permissionsS);
-        assertTrue(permissionsS.equals(ReflectionTestUtils.getField(entity0, "permissions")));
+        assertEquals(permissionsS, ReflectionTestUtils.getField(entity0, "permissions"));
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.toString().equals(entity1.toString()));
+        assertEquals(entity0.toString(), entity1.toString());
     }
 
     private void cleanEntity0() {
@@ -221,7 +221,9 @@ public class BRoleTest {
     private void assertEntityCleanState(BRole entity) {
         assertNull(ReflectionTestUtils.getField(entity, "label"));
         assertNull(ReflectionTestUtils.getField(entity, "description"));
-        assertFalse(Boolean.parseBoolean(ReflectionTestUtils.getField(entity, "enabled").toString()));
+        Object enabled = ReflectionTestUtils.getField(entity, "enabled");
+        assertNotNull(enabled);
+        assertFalse(Boolean.parseBoolean(enabled.toString()));
         assertNull(ReflectionTestUtils.getField(entity, "permissions"));
     }
 

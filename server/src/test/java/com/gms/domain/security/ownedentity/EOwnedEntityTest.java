@@ -14,6 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -118,7 +119,7 @@ public class EOwnedEntityTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "name", name);
-        assertTrue(entity.getName().equals(name));
+        assertEquals(entity.getName(), name);
     }
 
     @Test
@@ -126,7 +127,7 @@ public class EOwnedEntityTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "username", username);
-        assertTrue(entity.getUsername().equals(username));
+        assertEquals(entity.getUsername(), username);
     }
 
     @Test
@@ -134,28 +135,28 @@ public class EOwnedEntityTest {
         cleanEntity();
 
         ReflectionTestUtils.setField(entity, "description", description);
-        assertTrue(entity.getDescription().equals(description));
+        assertEquals(entity.getDescription(), description);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.hashCode() == entity3.hashCode());
+        assertEquals(entity.hashCode(),entity3.hashCode());
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.equals(entity3));
+        assertEquals(entity, entity3);
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity.toString().equals(entity3.toString()));
+        assertEquals(entity.toString(), entity3.toString());
     }
 
     private void cleanEntity() {

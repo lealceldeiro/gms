@@ -170,7 +170,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "authorities", authoritiesS);
-        assertTrue(entity0.getAuthorities().equals(authoritiesS));
+        assertEquals(entity0.getAuthorities(), authoritiesS);
     }
 
     @Test
@@ -178,7 +178,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "accountNonExpired", accountNonExpiredS);
-        assertTrue(entity0.isAccountNonExpired() == accountNonExpiredS);
+        assertEquals(entity0.isAccountNonExpired(), accountNonExpiredS);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "accountNonLocked", accountNonLockedS);
-        assertTrue(entity0.isAccountNonLocked() == accountNonLockedS);
+        assertEquals(entity0.isAccountNonLocked(), accountNonLockedS);
     }
 
     @Test
@@ -194,7 +194,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "credentialsNonExpired", credentialsNonExpiredS);
-        assertTrue(entity0.isCredentialsNonExpired() == credentialsNonExpiredS);
+        assertEquals(entity0.isCredentialsNonExpired(), credentialsNonExpiredS);
     }
 
     @Test
@@ -202,7 +202,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "enabled", enabledS);
-        assertTrue(entity0.isEnabled() == enabledS);
+        assertEquals(entity0.isEnabled(), enabledS);
     }
 
     @Test
@@ -210,21 +210,21 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "emailVerified", emailVerifiedS);
-        assertTrue(entity0.isEmailVerified() == emailVerifiedS);
+        assertEquals(entity0.isEmailVerified(), emailVerifiedS);
     }
 
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.equals(entity1));
+        assertEquals(entity0, entity1);
     }
 
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.hashCode() == entity1.hashCode());
+        assertEquals(entity0.hashCode(), entity1.hashCode());
     }
 
     @Test
@@ -232,7 +232,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "username", usernameS);
-        assertTrue(entity0.getUsername().equals(usernameS));
+        assertEquals(entity0.getUsername(), usernameS);
     }
 
     @Test
@@ -240,7 +240,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "email", emailS);
-        assertTrue(entity0.getEmail().equals(emailS));
+        assertEquals(entity0.getEmail(), emailS);
     }
 
     @Test
@@ -248,7 +248,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "name", nameS);
-        assertTrue(entity0.getName().equals(nameS));
+        assertEquals(entity0.getName(), nameS);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "lastName", lastNameS);
-        assertTrue(entity0.getLastName().equals(lastNameS));
+        assertEquals(entity0.getLastName(), lastNameS);
     }
 
     @Test
@@ -264,7 +264,7 @@ public class EUserTest {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "password", passwordS);
-        assertTrue(entity0.getPassword().equals(passwordS));
+        assertEquals(entity0.getPassword(), passwordS);
     }
 
     @Test
@@ -272,7 +272,7 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setEnabled(enabledS);
-        assertTrue(enabledS.equals(ReflectionTestUtils.getField(entity0, "enabled")));
+        assertEquals(enabledS, ReflectionTestUtils.getField(entity0, "enabled"));
     }
 
     @Test
@@ -280,7 +280,7 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setEmailVerified(emailVerifiedS);
-        assertTrue(emailVerifiedS.equals(ReflectionTestUtils.getField(entity0, "emailVerified")));
+        assertEquals(emailVerifiedS, ReflectionTestUtils.getField(entity0, "emailVerified"));
     }
 
     @Test
@@ -288,7 +288,7 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setAccountNonExpired(accountNonExpiredS);
-        assertTrue(accountNonExpiredS.equals(ReflectionTestUtils.getField(entity0, "accountNonExpired")));
+        assertEquals(accountNonExpiredS, ReflectionTestUtils.getField(entity0, "accountNonExpired"));
     }
 
     @Test
@@ -296,7 +296,7 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setAccountNonLocked(accountNonLockedS);
-        assertTrue(accountNonLockedS.equals(ReflectionTestUtils.getField(entity0, "accountNonLocked")));
+        assertEquals(accountNonLockedS, ReflectionTestUtils.getField(entity0, "accountNonLocked"));
     }
 
     @Test
@@ -304,7 +304,7 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setCredentialsNonExpired(credentialsNonExpiredS);
-        assertTrue(credentialsNonExpiredS.equals(ReflectionTestUtils.getField(entity0, "credentialsNonExpired")));
+        assertEquals(credentialsNonExpiredS, ReflectionTestUtils.getField(entity0, "credentialsNonExpired"));
     }
 
     @Test
@@ -312,14 +312,14 @@ public class EUserTest {
         cleanEntity0();
 
         entity0.setAuthorities(authoritiesS);
-        assertTrue(authoritiesS.equals(ReflectionTestUtils.getField(entity0, "authorities")));
+        assertEquals(authoritiesS, ReflectionTestUtils.getField(entity0, "authorities"));
     }
 
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
 
-        assertTrue(entity0.toString().equals(entity1.toString()));
+        assertEquals(entity0.toString(), entity1.toString());
     }
 
     private void cleanEntity0() {
@@ -357,7 +357,7 @@ public class EUserTest {
 
     private void assertBooleanFalseIfNotNull(Object field) {
         if (field != null) {
-            assertFalse(Boolean.valueOf(field.toString()));
+            assertFalse(Boolean.parseBoolean(field.toString()));
         }
     }
 

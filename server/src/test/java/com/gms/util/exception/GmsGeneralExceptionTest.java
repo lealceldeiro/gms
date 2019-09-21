@@ -11,6 +11,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -22,7 +23,7 @@ public class GmsGeneralExceptionTest {
 
     private static final String msg = "testmsg";
     private static final Boolean finishedOk = false;
-    private static final Exception ex = new NullPointerException();
+    private static Exception ex = new NullPointerException();
     private static final HttpStatus status = HttpStatus.BAD_GATEWAY;
 
     @Before
@@ -67,6 +68,7 @@ public class GmsGeneralExceptionTest {
 
     @Test
     public void GmsGeneralExceptionMsgExFinishedOK() {
+        ex = new IllegalAccessException();
         GmsGeneralException e = new GmsGeneralException(msg, ex, finishedOk);
         finishedOkIs(e, finishedOk);
         messageIs(e, msg);
@@ -100,6 +102,7 @@ public class GmsGeneralExceptionTest {
 
     @Test
     public void GmsGeneralExceptionMsgExFinishedOKHttpStatus() {
+        ex = new IndexOutOfBoundsException();
         GmsGeneralException e = new GmsGeneralException(msg, ex, finishedOk, status);
         finishedOkIs(e, finishedOk);
         messageIs(e, msg);
@@ -130,7 +133,9 @@ public class GmsGeneralExceptionTest {
     }
 
     private void finishedOkIs(GmsGeneralException e, Boolean what) {
-        assertEquals(Boolean.valueOf(ReflectionTestUtils.getField(e, "finishedOK").toString()), what);
+        final Object ok = ReflectionTestUtils.getField(e, "finishedOK");
+        assertNotNull(ok);
+        assertEquals(Boolean.valueOf(ok.toString()), what);
     }
 
     private void httpStatusIs(GmsGeneralException e, HttpStatus status) {

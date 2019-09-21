@@ -42,6 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -279,8 +280,8 @@ public class UserControllerTest {
                 .content(objectMapper.writeValueAsString(rIds))
         ).andReturn();
 
-        assertTrue("The relationship among user, entity and role(s) could not be saved",
-                mvcResult.getResponse().getStatus() == HttpStatus.OK.value());
+        assertEquals("The relationship among user, entity and role(s) could not be saved",
+                     mvcResult.getResponse().getStatus(), HttpStatus.OK.value());
     }
 
 }

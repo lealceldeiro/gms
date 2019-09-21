@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotEquals;
 @SpringBootTest(classes = Application.class)
 public class GmsSecurityExceptionTest {
 
-    private static final String testPath = "/testPath";
+    private static String testPath = "/testPath";
     private static final String msg = "testMsg";
     private static final Throwable th = new NullPointerException();
 
@@ -30,6 +30,7 @@ public class GmsSecurityExceptionTest {
 
     @Test
     public void GmsSecurityExceptionPath() {
+        testPath = "/sample1";
         GmsSecurityException e = new GmsSecurityException(testPath);
         pathIs(e, testPath);
         messageIs(e, GmsSecurityException.DEFAULT_MESSAGE);
@@ -37,6 +38,7 @@ public class GmsSecurityExceptionTest {
 
     @Test
     public void GmsSecurityExceptionPathMessage() {
+        testPath = "/sample2";
         GmsSecurityException e = new GmsSecurityException(testPath, msg);
         pathIs(e, testPath);
         messageIs(e, msg);
@@ -44,6 +46,7 @@ public class GmsSecurityExceptionTest {
 
     @Test
     public void GmsSecurityExceptionPathMessageThrowable() {
+        testPath = "/sample3";
         GmsSecurityException e = new GmsSecurityException(testPath, msg, th);
         pathIs(e, testPath);
         messageIs(e, msg);
@@ -52,6 +55,7 @@ public class GmsSecurityExceptionTest {
 
     @Test
     public void getPath() {
+        testPath = "/sample34";
         GmsSecurityException e = new GmsSecurityException("somePath");
         ReflectionTestUtils.setField(e, "path", testPath);
         assertEquals(testPath, e.getPath());

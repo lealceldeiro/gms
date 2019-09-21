@@ -36,7 +36,7 @@ public class ResponseDataTest {
 		cleanEntity();
 
 		ReflectionTestUtils.setField(entity, "key", KEY1);
-		assertTrue(entity.getKey().equals(KEY1));
+		assertEquals(entity.getKey(), KEY1);
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class ResponseDataTest {
 		cleanEntity();
 
 		ReflectionTestUtils.setField(entity, "value", VALUE1);
-		assertTrue(entity.getValue().equals(VALUE1));
+		assertEquals(entity.getValue(), VALUE1);
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class ResponseDataTest {
 		cleanEntity();
 
 		entity.setKey(KEY1);
-		assertTrue(KEY1.equals(String.valueOf(ReflectionTestUtils.getField(entity, "key"))));
+		assertEquals(KEY1, String.valueOf(ReflectionTestUtils.getField(entity, "key")));
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class ResponseDataTest {
 		cleanEntity();
 
 		entity.setValue(VALUE1);
-		assertTrue(VALUE1.equals(String.valueOf(ReflectionTestUtils.getField(entity, "value"))));
+		assertEquals(VALUE1, String.valueOf(ReflectionTestUtils.getField(entity, "value")));
 	}
 
 	@Test
@@ -68,20 +68,20 @@ public class ResponseDataTest {
 		cleanEntity();
 		prepareEntitiesForEqualityTest();
 
-		assertTrue(entity.equals(entity2));
+		assertEquals(entity, entity2);
 	}
 
 	@Test
 	public void hashCodeTest() {
 		prepareEntitiesForEqualityTest();
 
-		assertTrue(entity.hashCode() == entity2.hashCode());
+		assertEquals(entity.hashCode(), entity2.hashCode());
 	}
 
 	@Test
 	public void toStringTest() {
 		prepareEntitiesForEqualityTest();
-		assertTrue(entity.toString().equals(entity2.toString()));
+		assertEquals(entity.toString(), entity2.toString());
 	}
 
 	private void cleanEntity() {

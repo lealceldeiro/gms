@@ -93,7 +93,6 @@ public class SecurityControllerTest {
         u.setEnabled(false);
 
         Resource<EUser> resource = new Resource<>(u);
-        //noinspection ConstantConditions
         ReflectionTestUtils.setField(resource, "links", null);
 
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);

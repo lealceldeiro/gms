@@ -89,7 +89,7 @@ public class DefaultConstTest {
     public void defaultValuesLoadedProperly() {
         assertEquals(roleLabelBind, autowiredDc.getRoleAdminDefaultLabel());
         assertEquals(roleDescBind, autowiredDc.getRoleAdminDefaultDescription());
-        assertTrue(roleEnabledBind == autowiredDc.isRoleAdminDefaultEnabled());
+        assertEquals(roleEnabledBind, autowiredDc.isRoleAdminDefaultEnabled());
         assertEquals(userNameBind, autowiredDc.getUserAdminDefaultName());
         assertEquals(userLastNameBind, autowiredDc.getUserAdminDefaultLastName());
         assertEquals(userUsernameBind, autowiredDc.getUserAdminDefaultUsername());
@@ -98,8 +98,8 @@ public class DefaultConstTest {
         assertEquals(entityNameBind, autowiredDc.getEntityDefaultName());
         assertEquals(entityUsernameBind, autowiredDc.getEntityDefaultUsername());
         assertEquals(entityDescBind, autowiredDc.getEntityDefaultDescription());
-        assertTrue(isMultiEntityBind == autowiredDc.getIsMultiEntity());
-        assertTrue(isUserRegistrationAllowedBind == autowiredDc.getIsUserRegistrationAllowed());
+        assertEquals(isMultiEntityBind, autowiredDc.getIsMultiEntity());
+        assertEquals(isUserRegistrationAllowedBind, autowiredDc.getIsUserRegistrationAllowed());
         assertEquals(apiBasePathBind, autowiredDc.getApiBasePath());
         assertEquals(pageSizeBind, autowiredDc.getPageSize());
         assertEquals(pageSizeParamBind, autowiredDc.getPageSizeParam());
@@ -296,9 +296,9 @@ public class DefaultConstTest {
         assertNull(ReflectionTestUtils.getField(entity, "entityDefaultUsername"));
         assertNull(ReflectionTestUtils.getField(entity, "entityDefaultDescription"));
         Object ime = ReflectionTestUtils.getField(entity, "isMultiEntity");
-        assertFalse(Boolean.valueOf(ime != null ? ime.toString() : null));
+        assertFalse(Boolean.parseBoolean(ime != null ? ime.toString() : null));
         Object iura = ReflectionTestUtils.getField(entity, "isUserRegistrationAllowed");
-        assertFalse(Boolean.valueOf(iura != null ? iura.toString() : null));
+        assertFalse(Boolean.parseBoolean(iura != null ? iura.toString() : null));
         assertNull(ReflectionTestUtils.getField(entity, "apiBasePath"));
         assertNull(ReflectionTestUtils.getField(entity, "pageSize"));
         assertNull(ReflectionTestUtils.getField(entity, "pageSizeParam"));
