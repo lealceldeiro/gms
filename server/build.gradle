@@ -5,7 +5,6 @@ buildscript {
         flywayVersion = "5.0.7"
         jwtVersion = "0.9.0"
         lombokVersion = "1.18.10"
-        nodePluginVersion = "1.2.0"
         propdepsPluginVersion = "0.0.9.RELEASE"
         refVersion = "0.9.11"
         springBootVersion = "2.0.2.RELEASE"
@@ -23,7 +22,6 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
         classpath "io.spring.gradle:propdeps-plugin:${propdepsPluginVersion}"
     }
 }
@@ -33,6 +31,7 @@ plugins {
     // coverage reports for coveralls.io
     id "net.saliman.cobertura" version "2.6.1"
     id "com.github.kt3k.coveralls" version "2.8.4"
+    id "com.moowork.node" version "1.3.1"
 }
 
 apply plugin: "io.spring.dependency-management"
@@ -45,7 +44,6 @@ apply plugin: "eclipse"
 apply plugin: "idea"
 apply plugin: "org.springframework.boot"
 apply plugin: "war"
-apply plugin: "com.moowork.node"
 
 group = "com.gms"
 version = "${appVersion}"
@@ -86,38 +84,38 @@ dependencies {
 
 //region client task
 task clientBuild(type: NpmTask, dependsOn: ["npmInstall", "copyClientDocBuild",  "configPackageJsonDeployUrl", "configPackageJsonBaseUrl"]) {
-    group = "client tasks"
+    group = "client"
     description = "Compiles client side folder for production"
     args = ["run", "build"]
 }
 
 task configPackageJsonDeployUrl(type: NpmTask) {
-    group = "client tasks"
+    group = "client"
     description = "Sets the configuration variable 'deployUrl' in the package.json#config"
     args = ["config", "set", "client:deployUrl", getClientDeployUrl()]
 }
 
 task configPackageJsonBaseUrl(type: NpmTask) {
-    group = "client tasks"
+    group = "client"
     description = "Sets the configuration variable 'baseUrl' in the package.json#config"
     args = ["config", "set", "client:baseUrl", getClientBaseUrl()]
 }
 
 task copyClientBuild(type: Copy, dependsOn: ["clientBuild"]) {
-    group = "client tasks"
+    group = "client"
     description = "Checks all client side resources are ready for deployment and copy them into the `static` folder"
     from "../client/dist"
     into "build/resources/main/static"
 }
 
 task clientDocBuild(type: NpmTask, dependsOn: ["npmInstall"]) {
-    group = "client tasks"
+    group = "client"
     description = "Compiles client side documentation folder for production"
     args = ["run", "builddoc"]
 }
 
 task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
-    group = "client tasks"
+    group = "client"
     description = "Checks all client app documentation resources are ready for deployment and copy them into the `static` folder"
     from "../client/documentation"
     into "build/resources/main/static/appdocs"
