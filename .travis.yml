@@ -43,13 +43,12 @@ matrix:
       - xvfb
     before_script:
     - export CHROME_BIN=chromium-browser
-    - export DISPLAY=:99.0
     - cd client
     - npm install -g @angular/cli
     - npm install
     script:
     - npm run lint
     - npm run testcoverage
-    - npm run e2e
+#    - npm run e2e
     after_success:
     - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
