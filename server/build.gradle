@@ -29,7 +29,7 @@ buildscript {
 }
 
 plugins {
-    id "org.asciidoctor.convert" version "2.3.0"
+    id "org.asciidoctor.jvm.convert" version "2.3.0"
     // coverage reports for coveralls.io
     id "net.saliman.cobertura" version "2.6.1"
     id "com.github.kt3k.coveralls" version "2.8.4"
