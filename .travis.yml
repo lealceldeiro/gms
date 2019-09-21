@@ -6,6 +6,7 @@ matrix:
   include:
   - language: java
     jdk: oraclejdk8
+    dist: trusty
     addons:
       postgresql: '9.6'
     before_cache:
