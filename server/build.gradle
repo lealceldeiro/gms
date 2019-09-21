@@ -13,11 +13,6 @@ buildscript {
         envSet = false
         snippetsDir = file("build/generated-snippets")
     }
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url "http://repo.spring.io/plugins-release" }
-    }
 }
 
 plugins {
