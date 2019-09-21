@@ -6,7 +6,7 @@ buildscript {
         jwtVersion = "0.9.0"
         lombokVersion = "1.18.10"
         refVersion = "0.9.11"
-        springBootVersion = "2.0.2.RELEASE"
+        springBootVersion = "2.0.2.RELEASE"     // keep synced with plugin org.springframework.boot declared below
         // other vars
         apiDocsFolder = "apidocs"
         buildPropertiesFilePath = "./build/resources/main/application.properties"
@@ -18,15 +18,13 @@ buildscript {
         mavenCentral()
         maven { url "http://repo.spring.io/plugins-release" }
     }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-    }
 }
 
 plugins {
     id "org.asciidoctor.convert" version "2.3.0"
-    id "net.saliman.cobertura" version "2.6.1"          // coverage generator
-    id "com.github.kt3k.coveralls" version "2.8.4"      // coverage reports for coveralls.io
+    id "org.springframework.boot" version "2.0.2.RELEASE"   // keep synced with var springBootVersion
+    id "net.saliman.cobertura" version "2.6.1"              // coverage generator
+    id "com.github.kt3k.coveralls" version "2.8.4"          // coverage reports for coveralls.io
     id "com.moowork.node" version "1.3.1"
     id "io.spring.dependency-management" version "1.0.8.RELEASE"
 }
@@ -34,7 +32,6 @@ plugins {
 apply plugin: "java"
 apply plugin: "eclipse"
 apply plugin: "idea"
-apply plugin: "org.springframework.boot"
 apply plugin: "war"
 
 group = "com.gms"
