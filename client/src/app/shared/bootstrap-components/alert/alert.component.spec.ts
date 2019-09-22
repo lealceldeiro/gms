@@ -52,8 +52,6 @@ describe('AlertComponent', () => {
     const milliseconds = getRandomNumber(1, 11111);
     component.autoDismissible = true;
     component.dismissMilliseconds = milliseconds;
-    console.log(milliseconds);
-    console.log(component.dismissMilliseconds);
     component.ngOnInit();
     expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
     expect(setTimeoutSpy.calls.first().args[1]).toEqual(milliseconds);

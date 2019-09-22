@@ -3,15 +3,18 @@ import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 import { ConfigurationService } from './configuration.service';
 import { SessionService } from 'src/app/core/session/session.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { User } from 'src/app/core/session/user.model';
 import { getRandomNumber } from 'src/app/shared/test-util/functions.util';
 
 describe('ConfigurationService', () => {
   const httpSpy = { get: (_a: any, _b: any) => { } };
   const sessionSSpy = { getUser: () => { } };
-  const httpClientMock = { get: (a: any, b: any) => httpSpy.get(a, b) };
-  const userBehaviorSubject = new BehaviorSubject<User>(new User());
+  const httpClientMock = { get: (a: any, b: any) => { httpSpy.get(a, b); return of(true); } };
+  const userId = getRandomNumber();
+  const user = new User();
+  user.id = userId;
+  const userBehaviorSubject = new BehaviorSubject<User>(user);
   const sessionServiceMock = {
     getUser: () => { sessionSSpy.getUser(); return userBehaviorSubject.asObservable(); }
   };
@@ -44,15 +47,10 @@ describe('ConfigurationService', () => {
   });
 
   it('#getUserConfigurations should call SessionService#getUser to get the user id and HttpClient#get', () => {
-    const sub = configurationService.getUserConfigurations().subscribe(() => {
+    configurationService.getUserConfigurations().subscribe(() => {
       expect(sessionServiceSpy).toHaveBeenCalledTimes(1);
       expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-      expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}configuration/${id}`, undefined);
-      sub.unsubscribe();
+      expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}configuration/${userId}?human=true`, undefined );
     });
-    const id = getRandomNumber();
-    const user = new User();
-    user.id = id;
-    userBehaviorSubject.next(user);
   });
 });
