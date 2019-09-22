@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+
+import { AppConfig } from 'src/app/core/config/app.config';
 import { SessionService } from 'src/app/core/session/session.service';
 import { User } from 'src/app/core/session/user.model';
 
@@ -15,7 +16,7 @@ export class ConfigurationService {
   /**
    * API base url.
    */
-  private url = environment.apiBaseUrl + 'configuration';
+  private url = AppConfig.settings.apiServer.url + 'configuration';
 
   /**
    * Service's constructor

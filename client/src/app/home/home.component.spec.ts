@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { SessionService } from '../core/session/session.service';
 import { HomeComponent } from './home.component';
+import { AppConfig } from '../core/config/app.config';
+import { MockAppConfig } from '../shared/test-util/mock/app.config';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -22,11 +24,15 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [HomeComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: SessionService, useValue: sessionServiceStub }]
+      providers: [
+        AppConfig,
+        { provide: SessionService, useValue: sessionServiceStub }
+      ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    AppConfig.settings = MockAppConfig.settings;
     behaviorSubject.next(false);
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;

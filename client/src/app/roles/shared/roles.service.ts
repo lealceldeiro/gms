@@ -1,7 +1,8 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+
+import { AppConfig } from 'src/app/core/config/app.config';
 import { ParamsService } from '../../core/request/params/params.service';
 import { Role } from './role.model';
 import { RolePd } from './role.pd';
@@ -16,7 +17,7 @@ export class RolesService {
   /**
    * API base url.
    */
-  private url = environment.apiBaseUrl + 'role';
+  private url = AppConfig.settings.apiServer.url + 'role';
 
   /**
    * Service's constructor

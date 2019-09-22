@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/index';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+
+import { AppConfig } from '../../core/config/app.config';
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
 import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 import { LoginRequestModel } from '../../core/session/login-request.model';
@@ -19,11 +20,11 @@ export class LoginService {
   /**
    * API base url.
    */
-  private url = environment.apiBaseUrl;
+  private url = AppConfig.settings.apiServer.url;
   /**
    * Login endpoint.
    */
-  private loginUrl = environment.apiLoginUrl;
+  private loginUrl = AppConfig.settings.apiServer.loginUrl;
 
   /**
    * Service constructor.

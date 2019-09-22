@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
-import { environment } from '../../../environments/environment';
+
 import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { PermissionService } from './permission.service';
+import { AppConfig } from 'src/app/core/config/app.config';
+import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
 
 describe('PermissionService', () => {
+  const url = MockAppConfig.settings.apiServer.url;
   const spy = { getHttpParams: (_a: any) => { }, get: (_a: any, _b: any) => { } };
   const httpParamsValue = { someRandomProperty: 'someRandomValue' + getRandomNumber() };
   const paramsServiceStub = { getHttpParams: (a: any) => { spy.getHttpParams(a); return httpParamsValue; } };
@@ -16,11 +19,12 @@ describe('PermissionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        PermissionService,
+        PermissionService, AppConfig,
         { provide: ParamsService, useValue: paramsServiceStub },
         { provide: HttpClient, useValue: httpClientMock }
       ]
     });
+    AppConfig.settings = MockAppConfig.settings;
     permissionService = TestBed.get(PermissionService);
     httpClientGetSpy = spyOn(spy, 'get');
   });
@@ -42,7 +46,7 @@ describe('PermissionService', () => {
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledTimes(1);
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}permission`, { params: httpParamsValue });
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${url}permission`, { params: httpParamsValue });
   });
 
   it('#getPermissionInfo should call HttpClient#get with the provided id as parameter', () => {
@@ -50,7 +54,7 @@ describe('PermissionService', () => {
     permissionService.getPermissionInfo(id);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}permission/${id}`, undefined); // undefined for no params
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${url}permission/${id}`, undefined); // undefined for no params
   });
 
   it('#getPermissionRoles should call HttpClient#get with the provided id as parameter', () => {
@@ -67,7 +71,7 @@ describe('PermissionService', () => {
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy.calls.mostRecent().args[0]).toEqual(`${environment.apiBaseUrl}permission/${id}/roles`);
+    expect(httpClientGetSpy.calls.mostRecent().args[0]).toEqual(`${url}permission/${id}/roles`);
   });
 
 });

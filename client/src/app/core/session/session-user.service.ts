@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/index';
-import { environment } from '../../../environments/environment';
+
+import { AppConfig } from '../config/app.config';
 import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
 
 /**
@@ -13,7 +14,7 @@ export class SessionUserService {
   /**
    * API base url.
    */
-  private url = environment.apiBaseUrl;
+  private url = AppConfig.settings.apiServer.url;
 
   /**
    * Service's constructor

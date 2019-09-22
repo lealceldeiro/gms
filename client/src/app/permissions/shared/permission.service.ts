@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RolePd } from 'src/app/roles/shared/role.pd';
-import { environment } from '../../../environments/environment';
+
+import { AppConfig } from 'src/app/core/config/app.config';
 import { ParamsService } from '../../core/request/params/params.service';
 import { Permission } from './permission.model';
 import { PermissionPd } from './permission.pd';
@@ -16,7 +17,7 @@ export class PermissionService {
   /**
    * API base url.
    */
-  private url = environment.apiBaseUrl + 'permission';
+  private url = AppConfig.settings.apiServer.url + 'permission';
 
   /**
    * Service's constructor

@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { environment } from 'src/environments/environment';
+
 import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { RolesService } from './roles.service';
+import { AppConfig } from 'src/app/core/config/app.config';
+import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
 
 describe('RolesService', () => {
+  const url = MockAppConfig.settings.apiServer.url;
   const spy = { getHttpParams: (_a: any) => { }, get: (_a: any, _b: any) => { }, delete: (_a: any, _b: any) => { } };
   const httpParamsValue = { someRandomProperty: 'someRandomValue' + getRandomNumber() };
   const paramsServiceStub = { getHttpParams: (a: any) => { spy.getHttpParams(a); return httpParamsValue; } };
@@ -16,11 +19,12 @@ describe('RolesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        RolesService,
+        RolesService, AppConfig,
         { provide: ParamsService, useValue: paramsServiceStub },
         { provide: HttpClient, useValue: httpClientMock }
       ]
     });
+    AppConfig.settings = MockAppConfig.settings;
     roleService = TestBed.get(RolesService);
     httpClientGetSpy = spyOn(spy, 'get');
   });
@@ -42,7 +46,7 @@ describe('RolesService', () => {
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledTimes(1);
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}role`, { params: httpParamsValue });
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${url}role`, { params: httpParamsValue });
   });
 
   it('#getRoleInfo should call HttpClient#get with the provided id as parameter', () => {
@@ -50,7 +54,7 @@ describe('RolesService', () => {
     roleService.getRoleInfo(id);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(`${environment.apiBaseUrl}role/${id}`, undefined); // undefined for no params
+    expect(httpClientGetSpy).toHaveBeenCalledWith(`${url}role/${id}`, undefined); // undefined for no params
   });
 
   it('#deleteRoleInfo should call HttpClient#delete with the provided id as parameter', () => {
@@ -59,7 +63,7 @@ describe('RolesService', () => {
     roleService.deleteRoleInfo(id);
 
     expect(httpClientDeleteSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientDeleteSpy.calls.mostRecent().args[0]).toEqual(`${environment.apiBaseUrl}role/${id}`);
+    expect(httpClientDeleteSpy.calls.mostRecent().args[0]).toEqual(`${url}role/${id}`);
   });
 
   it('#getRolePermissions should call HttpClient#get with the provided proper parameters', () => {
@@ -77,6 +81,6 @@ describe('RolesService', () => {
     expect(paramsServiceGetParamsSpy).toHaveBeenCalledWith(params);
 
     expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy.calls.mostRecent().args[0]).toEqual(`${environment.apiBaseUrl}role/${id}/permissions`);
+    expect(httpClientGetSpy.calls.mostRecent().args[0]).toEqual(`${url}role/${id}/permissions`);
   });
 });

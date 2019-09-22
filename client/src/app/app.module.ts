@@ -1,11 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CookieModule } from 'ngx-cookie';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GmsCoreModule } from './core/core.module';
@@ -13,6 +15,15 @@ import { HomeModule } from './home/home.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SharedModule } from './shared/shared.module';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { AppConfig } from './core/config/app.config';
+
+/**
+ * Factory for loading the app configuration at startup.
+ * @param appConfig AppConfig instance.
+ */
+export function initializeApp(appConfig: AppConfig) {
+  return () => appConfig.load();
+}
 
 /**
  * Base module, bootstrapped in the main file.
@@ -31,6 +42,15 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     GmsCoreModule.forRoot(),
     HomeModule,
     AppRoutingModule
+  ],
+  providers: [
+    AppConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppConfig],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

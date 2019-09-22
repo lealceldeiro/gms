@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { environment } from '../../environments/environment';
+
+import { AppConfig } from '../core/config/app.config';
 import { SessionService } from '../core/session/session.service';
 
 /**
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   /**
    * Application name.
    */
-  appName = environment.metaName;
+  appName = AppConfig.settings.env.metaName;
 
   /**
    * Indicates whether the user is logged in or not.

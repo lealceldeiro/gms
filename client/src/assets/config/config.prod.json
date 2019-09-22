@@ -1,0 +1,10 @@
+{
+  "env": {
+    "name": "prod",
+    "metaName": "General Management System"
+  },
+  "apiServer": {
+    "url": "http://127.0.0.1/gms/api/",
+    "loginUrl": "login"
+  }
+}

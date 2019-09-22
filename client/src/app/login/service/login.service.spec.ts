@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { environment } from '../../../environments/environment';
+
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
 import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 import { LinksModel } from '../../core/response/paginated-data/links.model';
@@ -13,16 +13,17 @@ import { SessionUserService } from '../../core/session/session-user.service';
 import { SessionService } from '../../core/session/session.service';
 import { userMock } from '../../core/session/user.mock.model';
 import { LoginService } from './login.service';
-
+import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
+import { AppConfig } from 'src/app/core/config/app.config';
 
 describe('LoginService', () => {
+  const url = MockAppConfig.settings.apiServer.url;
+  const loginUrl = MockAppConfig.settings.apiServer.loginUrl;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let sessionUserService: SessionUserService;
   let sessionService: SessionService;
   let loginService: LoginService;
-  const api = environment.apiBaseUrl;
-  const url = environment.apiLoginUrl;
 
   let spyAddEFEH: jasmine.Spy;
 
@@ -57,11 +58,13 @@ describe('LoginService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        LoginService, { provide: SessionService, useValue: sessionServiceStub },
+        LoginService, AppConfig,
+        { provide: SessionService, useValue: sessionServiceStub },
         { provide: SessionUserService, useValue: sessionUserServiceStub },
         { provide: InterceptorHelperService, useValue: intHelperServiceStub }
       ]
     });
+    AppConfig.settings = MockAppConfig.settings;
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
     sessionUserService = TestBed.get(SessionUserService);
@@ -110,7 +113,7 @@ describe('LoginService', () => {
       // endregion
 
       // request mock
-      const req = httpTestingController.match(r => r.url === api + url && r.method === 'POST' && r.body === body);
+      const req = httpTestingController.match(r => r.url === url + loginUrl && r.method === 'POST' && r.body === body);
       expect(req.length).toBeGreaterThan(0, 'no request was found');
       req[0].flush(response);
 
