@@ -1,14 +1,34 @@
-<table class="table table-hover table-bordered" *ngIf="keys?.length">
+
+<table class="table table-hover table-bordered" *ngIf="keys['system']?.length"
+aria-describedby="System Configurations">
   <thead>
+    <tr><th colspan="2" scope="col" class="text-center">System Configurations</th></tr>
     <tr>
       <th scope="col">Key</th>
       <th scope="col">Value</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let k of keys; let i = index" class="p-row">
-      <td>{{k}}</td>
-      <td>{{values[i]}}</td>
+    <tr *ngFor="let k of keys['system']; let i = index" class="p-row">
+      <td class="col-md-8">{{k}}</td>
+      <td class="col-md-4">{{values['system'][i]}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-hover table-bordered" *ngIf="keys['user']?.length"
+aria-describedby="User Configurations">
+  <thead>
+    <tr><th colspan="2" scope="col" class="text-center">User Configurations</th></tr>
+    <tr>
+      <th scope="col">Key</th>
+      <th scope="col">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let k of keys['user']; let i = index" class="p-row">
+      <td class="col-md-8">{{k}}</td>
+      <td class="col-md-4">{{values['user'][i]}}</td>
     </tr>
   </tbody>
 </table>

@@ -15,17 +15,22 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
   /**
    * Configurations key
    */
-  keys: Array<string> = [];
+  keys: { [k: string]: Array<string> } = { system: [], user: []};
 
   /**
    * Configurations values corresponding to the keys.
    */
-  values: Array<string> = [];
+  values: { [k: string]: Array<string> } = { system: [], user: []};
 
   /**
    * Configurations values' subscription
    */
   configurationValuesSub = new Subscription();
+
+  /**
+   * User configurations values' subscription
+   */
+  userConfigurationValuesSub = new Subscription();
 
   /**
    * Component constructor
@@ -37,6 +42,7 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.loadConfigurations();
+    this.loadUserConfigurations();
   }
 
   /**
@@ -44,6 +50,7 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.configurationValuesSub.unsubscribe();
+    this.userConfigurationValuesSub.unsubscribe();
   }
 
   /**
@@ -52,8 +59,18 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
    */
   loadConfigurations(): void {
     this.configurationValuesSub = this.configurationService.getConfigurations().subscribe(configs => {
-      this.keys = Object.keys(configs);
-      this.values = Object.values(configs);
+      this.keys.system = Object.keys(configs);
+      this.values.system = Object.values(configs);
+    });
+  }
+
+  /**
+   * Loads the configuration values related to the logged in user into the arrays keys and values..
+   */
+  loadUserConfigurations(): void {
+    this.userConfigurationValuesSub = this.configurationService.getUserConfigurations().subscribe(configs => {
+      this.keys.user = Object.keys(configs);
+      this.values.user = Object.values(configs);
     });
   }
 

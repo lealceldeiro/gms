@@ -19,10 +19,14 @@ describe('ConfigurationListComponent', () => {
     getConfigurations: () => {
       spy.getConfigurations();
       return of<object>(configurationObject);
+    },
+    getUserConfigurations: () => {
+      return of<object>(configurationObject);
     }
   };
   let getConfigurationsSpy: jasmine.Spy;
   let loadConfigurationsSpy: jasmine.Spy;
+  let loadUserConfigurationsSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,6 +41,7 @@ describe('ConfigurationListComponent', () => {
     fixture.detectChanges();
     getConfigurationsSpy = spyOn(spy, 'getConfigurations');
     loadConfigurationsSpy = spyOn(component, 'loadConfigurations');
+    loadUserConfigurationsSpy = spyOn(component, 'loadUserConfigurations');
   });
 
   it('should create', () => {
@@ -51,7 +56,15 @@ describe('ConfigurationListComponent', () => {
   it('should call ConfigurationService#getConfigurations on call to loadConfigurations and set values from the observable ', () => {
     component.loadConfigurations();
     expect(loadConfigurationsSpy).toHaveBeenCalledTimes(1);
-    expect(component.keys).toEqual(Object.keys(configurationObject));
-    expect(component.values).toEqual(Object.values(configurationObject));
+    expect(component.keys.system).toEqual(Object.keys(configurationObject));
+    expect(component.values.system).toEqual(Object.values(configurationObject));
   });
+
+  it('should call ConfigurationService#getUserConfigurations on call to loadUserConfigurations and set values from the observable ', () => {
+    component.loadUserConfigurations();
+    expect(loadUserConfigurationsSpy).toHaveBeenCalledTimes(1);
+    expect(component.keys.user).toEqual(Object.keys(configurationObject));
+    expect(component.values.user).toEqual(Object.values(configurationObject));
+  });
+
 });
