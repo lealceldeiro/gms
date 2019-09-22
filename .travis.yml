@@ -41,8 +41,7 @@ matrix:
     services:
       - xvfb
     before_script:
-    - export CHROME_BIN=chromium-browser
-    - export DISPLAY=:99.0
+    - export CHROME_BIN=/usr/bin/google-chrome
     - cd client
     - npm install -g @angular/cli
     - npm install
