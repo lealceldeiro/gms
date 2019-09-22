@@ -1,7 +1,9 @@
+import { Entity } from '../model/entity.model';
+
 /**
  * Domain object which represents a user.
  */
-export class User {
+export class User extends Entity {
 
   /**
    * User's username
