@@ -1,13 +1,14 @@
 import { HttpParams } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+
 import { ParamsService } from './params.service';
+import { getRandomNumber } from '../../../shared/test-util/functions.util';
 
 describe('ParamsService', () => {
-
   let service: ParamsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ providers: [ParamsService] });
     service = TestBed.get(ParamsService);
   });
 
@@ -15,7 +16,7 @@ describe('ParamsService', () => {
 
   it('#getHttpParams should and HttpParams object properly from the provided params', () => {
     const valueString = 'value1';
-    const valueNumber = 5;
+    const valueNumber = getRandomNumber();
     const valueObject = { sample: 'sample' };
     const valueBoolean = true;
     const valueArray = [valueString, valueNumber, valueObject, valueBoolean];
@@ -29,8 +30,8 @@ describe('ParamsService', () => {
     const httpParams: HttpParams = service.getHttpParams(paramsObj);
     for (const k in paramsObj) {
       if (paramsObj.hasOwnProperty(k)) {
-        expect(httpParams.has(k)).toBeTruthy('HttpParams doesn\'t have key: ' + k);
-        expect(paramsObj[k].toString()).toEqual(httpParams.get(k), 'Params for key ' + k + '  don\'t match');
+        expect(httpParams.has(k)).toBeTruthy(`HttpParams doesn't have key: ${k}`);
+        expect(paramsObj[k].toString()).toEqual(httpParams.get(k), `Params for key ${k} don't match`);
       }
     }
   });
