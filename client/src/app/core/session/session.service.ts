@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/index';
 import { tap } from 'rxjs/operators';
+
 import { StorageService } from '../storage/storage.service';
 import { LoginResponseModel } from './login-response.model';
 import { User } from './user.model';
@@ -245,7 +246,7 @@ export class SessionService {
    * logging in.
    * @returns {Observable<String>}
    */
-  getRefreshToken(): Observable<String> {
+  getRefreshToken(): Observable<string> {
     return this.retrieve(this.key.refreshToken).pipe(tap((rToken) => {
       if (!rToken) {
         const o$ = this.getAuthData().subscribe((data: LoginResponseModel) => {

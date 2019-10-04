@@ -1,68 +1,56 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { StorageService } from '../storage/storage.service';
 import { LoginResponseModel } from './login-response.model';
 import { SessionService } from './session.service';
 import { userMock } from './user.mock.model';
 import { User } from './user.model';
+import { getRandomNumber } from '../../shared/test-util/functions.util';
 
 describe('SessionService', () => {
-  let storageServiceSetSpy: jasmine.Spy;
-  let storageServicePutCookieSpy: jasmine.Spy;
-  let storageServiceClearSpy: jasmine.Spy;
-  let storageServiceClearCookieSpy: jasmine.Spy;
-  let sessionService: SessionService;
-  let storageService: StorageService;
-  let spyGetAuthData: jasmine.Spy;
-
-  let consoleWarnSpy: jasmine.Spy;
-
   const mockLoginResponse: LoginResponseModel = {
     access_token: 'atMock',
     header_to_be_sent: 'htbSMock',
     authorities: ['auth1, auth2'],
-    issued_at: 1212112,
+    issued_at: getRandomNumber(0, 9999999),
     refresh_token: 'rftMock',
-    refresh_token_expiration_time: 1212,
-    token_expiration_time: 2321323,
+    refresh_token_expiration_time: getRandomNumber(0, 9999),
+    token_expiration_time: 9999999,
     token_type: 'typeTMock',
     username: 'userSample',
   };
   const sampleError = new Error('test error');
   const authData$ = new BehaviorSubject<LoginResponseModel>(mockLoginResponse).asObservable();
-  const error$ = new Observable<boolean>(observer => { observer.error(sampleError); observer.complete(); });
-
-  // region values for simulating a fresh store service
+  const error$ = new Observable<boolean>(observer => {
+    observer.error(sampleError);
+    observer.complete();
+  });
   const subjectNull$ = new BehaviorSubject(null).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
-  const testSpy = {
-    set: (a: any, b: any, c: any) => { },
-    clear: (a: any, b: any, c: any) => { },
-    putCookie: (a: any, b: any, c: any) => { },
-    clearCookie: (a: any, b: any, c: any) => { }
-  };
-  const storageServiceStub = {
-    set: (a: any, b: any, c: any) => { testSpy.set(a, b, c); return subjectNull$; },
-    get: () => subjectNull$,
-    clear: (a: any, b: any, c: any) => { testSpy.clear(a, b, c); return trueVal$; },
-    putCookie: (a: any, b: any, c: any) => { testSpy.putCookie(a, b, c); return subjectNull$; },
-    getCookie: () => subjectNull$,
-    clearCookie: (a: any, b: any, c: any) => { testSpy.clearCookie(a, b, c); return trueVal$; },
-  };
-  // endregion
+
+  let storageServiceSpy: jasmine.SpyObj<StorageService>;
+  let getAuthDataSpy: jasmine.Spy;
+  let consoleWarnSpy: jasmine.Spy;
+
+  let sessionService: SessionService;
 
   beforeEach(() => {
+    storageServiceSpy = jasmine.createSpyObj('StorageService', ['set', 'get', 'clear', 'putCookie', 'getCookie', 'clearCookie']);
+    storageServiceSpy.set.and.returnValue(subjectNull$);
+    storageServiceSpy.get.and.returnValue(subjectNull$);
+    storageServiceSpy.clear.and.returnValue(trueVal$);
+    storageServiceSpy.putCookie.and.returnValue(subjectNull$);
+    storageServiceSpy.getCookie.and.returnValue(subjectNull$);
+    storageServiceSpy.clearCookie.and.returnValue(trueVal$);
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [SessionService, { provide: StorageService, useValue: storageServiceStub }]
+      providers: [SessionService, { provide: StorageService, useValue: storageServiceSpy }]
     });
     sessionService = TestBed.get(SessionService);
-    storageService = TestBed.get(StorageService);
-    storageServiceSetSpy = spyOn(testSpy, 'set');
-    storageServicePutCookieSpy = spyOn(testSpy, 'putCookie');
-    storageServiceClearSpy = spyOn(testSpy, 'clear');
-    storageServiceClearCookieSpy = spyOn(testSpy, 'clearCookie');
+    storageServiceSpy = TestBed.get(StorageService);
 
     consoleWarnSpy = spyOn(console, 'warn');
   });
@@ -138,7 +126,7 @@ describe('SessionService', () => {
   it('setLoggedIn should call the store service in order to save in localStorage the values regarding to' +
     '`loggedIn` and `notLoggedIn` and update the value of `loggedIn` and `notLoggedIn` subjects', () => {
       sessionService.setLoggedIn(true);
-      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      const allArgs = storageServiceSpy.set.calls.allArgs(); // array of array of args
       for (let i = 0; i < allArgs.length; i++) {
         if (allArgs[i][0] === sessionService['key']['loggedIn']) {
           expect(allArgs[i][1]).toBeTruthy();
@@ -153,7 +141,7 @@ describe('SessionService', () => {
   it('setUser should call the store service in order to save in localStorage the values regarding to' +
     '`user` and update the value of `user` subject', () => {
       sessionService.setUser(userMock);
-      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      const allArgs = storageServiceSpy.set.calls.allArgs(); // array of array of args
       expect(allArgs.length > 0).toBeTruthy('storageService.set expected to be called at least ' +
         'once but, was called ' + allArgs.length + ' times');
       expect(allArgs[0][0]).toEqual(sessionService['key']['user']);
@@ -164,7 +152,7 @@ describe('SessionService', () => {
   it('setAuthData should call the store service in order to save in localStorage the values regarding to' +
     '`loginData` and update the value of `loginData` subject', () => {
       sessionService.setAuthData(mockLoginResponse);
-      const allArgs = storageServiceSetSpy.calls.allArgs(); // array of array of args
+      const allArgs = storageServiceSpy.set.calls.allArgs(); // array of array of args
       expect(allArgs[0][0]).toEqual(sessionService['key']['loginData']);
       expect(allArgs[0][1]).toEqual(mockLoginResponse);
       expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse, 'set for authData did not work');
@@ -203,13 +191,13 @@ describe('SessionService', () => {
 
       // region check args calls
       // region clear
-      const allArgs = storageServiceClearSpy.calls.allArgs();
+      const allArgs = storageServiceSpy.clear.calls.allArgs();
       expect(allArgs[0][0]).toEqual(sessionService['key']['loginData'], 'incorrect key for `authData`');
       expect(allArgs[1][0]).toEqual(sessionService['key']['user'], 'incorrect key for `user`');
       // endregion
 
       // region clearCookie
-      const allArgsCk = storageServiceClearCookieSpy.calls.allArgs();
+      const allArgsCk = storageServiceSpy.clearCookie.calls.allArgs();
 
       expect(allArgsCk[0][0]).toEqual(sessionService['key']['loggedIn'], 'incorrect key for `loggedIn`');
       expect(allArgsCk[1][0]).toEqual(sessionService['key']['notLoggedIn'], 'incorrect key for `notLoggedIn`');
@@ -227,13 +215,8 @@ describe('SessionService', () => {
 
   it('if `getAccessToken` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the access token for the next call', () => {
-      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-      sessionService.getAccessToken().subscribe((val: any) => {
-        expect(val).toBeNull();
-        const l = spyGetAuthData.calls.all().length;
-        expect(l)
-          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
-      });
+      getAuthDataSpy = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getAccessToken().subscribe(getAuthDataValidateFunction);
     });
 
   it('`getRefreshToken` should return an observable of `null` by default', () => {
@@ -242,13 +225,8 @@ describe('SessionService', () => {
 
   it('if `getRefreshToken` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the refresh token for the next call', () => {
-      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-      sessionService.getRefreshToken().subscribe((val: any) => {
-        expect(val).toBeNull();
-        const l = spyGetAuthData.calls.all().length;
-        expect(l)
-          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
-      });
+      getAuthDataSpy = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getRefreshToken().subscribe(getAuthDataValidateFunction);
     });
 
   it('`getHeader` should return an observable of `null` by default', () => {
@@ -257,13 +235,8 @@ describe('SessionService', () => {
 
   it('if `getHeader` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the header for the next call', () => {
-      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-      sessionService.getHeader().subscribe((val: any) => {
-        expect(val).toBeNull();
-        const l = spyGetAuthData.calls.all().length;
-        expect(l)
-          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
-      });
+      getAuthDataSpy = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getHeader().subscribe(getAuthDataValidateFunction);
     });
 
   it('`getTokenType` should return an observable of `null` by default', () => {
@@ -272,12 +245,14 @@ describe('SessionService', () => {
 
   it('if `getTokenType` returns an observable of `null`, the `getAuthData` must be called and tried to ' +
     'store the value retrieved (if available) regarding to the token type for the next call', () => {
-      spyGetAuthData = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
-      sessionService.getTokenType().subscribe((val: any) => {
-        expect(val).toBeNull();
-        const l = spyGetAuthData.calls.all().length;
-        expect(l)
-          .toEqual(1, '1 call expected for getAuthData but ' + l + ' call(s) was(were) made');
-      });
+      getAuthDataSpy = spyOn(sessionService, 'getAuthData').and.returnValue(authData$);
+      sessionService.getTokenType().subscribe(getAuthDataValidateFunction);
     });
+
+  const getAuthDataValidateFunction = (val: any) => {
+    expect(val).toBeNull();
+    const l = getAuthDataSpy.calls.all().length;
+    expect(l)
+      .toEqual(1, `1 call expected for getAuthData but ${l} call(s) was(were) made`);
+  };
 });
