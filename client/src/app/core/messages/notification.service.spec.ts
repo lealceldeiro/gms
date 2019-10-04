@@ -1,19 +1,19 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
+
 import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
-  const spy = { error: (a: any, b: any): any => { } };
-  const from3rdParty = { error: (a: any, b: any): any => spy.error(a, b) };
-  let errorSpy: jasmine.Spy;
+  let toastrServiceSpy: jasmine.SpyObj<ToastrService>;
   let notificationService: NotificationService;
 
   beforeEach(() => {
+    toastrServiceSpy = jasmine.createSpyObj('ToastrService', ['error']);
+
     TestBed.configureTestingModule({
-      providers: [NotificationService, { provide: ToastrService, useValue: from3rdParty }]
+      providers: [NotificationService, { provide: ToastrService, useValue: toastrServiceSpy }]
     });
     notificationService = TestBed.get(NotificationService);
-    errorSpy = spyOn(spy, 'error');
   });
 
   it('should be created', inject([NotificationService], (service: NotificationService) => {
@@ -22,8 +22,8 @@ describe('NotificationService', () => {
 
   it('should call the notification component in watch', () => {
     notificationService.error('testM', 'testT');
-    expect(errorSpy).toHaveBeenCalledTimes(1);
-    expect(errorSpy.calls.first().args[0]).toBe('testM');
-    expect(errorSpy.calls.first().args[1]).toBe('testT');
+    expect(toastrServiceSpy.error).toHaveBeenCalledTimes(1);
+    expect(toastrServiceSpy.error.calls.first().args[0]).toBe('testM');
+    expect(toastrServiceSpy.error.calls.first().args[1]).toBe('testT');
   });
 });
