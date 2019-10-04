@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { FormHelperService } from './form-helper.service';
 
 describe('HelperService', () => {
@@ -25,23 +26,23 @@ describe('HelperService', () => {
       'c2': 'someOtherVal'
     });
     let c1 = fg.get('c1');
-    expect(c1).not.toBeNull();
-    if (c1) {
+    expect(c1).not.toBeFalsy();
+    if (!!c1) {
       expect(c1.touched).toBeFalsy();
     }
     let c2 = fg.get('c2');
-    expect(c2).not.toBeNull();
-    if (c2) {
+    expect(c2).not.toBeFalsy();
+    if (!!c2) {
       expect(c2.touched).toBeFalsy();
     }
     formHelperService.markFormElementsAsTouched(fg);
     c1 = fg.get('c1');
-    expect(c1).not.toBeNull();
-    if (c1) {
+    expect(c1).not.toBeFalsy();
+    if (!!c1) {
       expect(c1.touched).toBeTruthy();
     }
     c2 = fg.get('c2');
-    expect(c2).not.toBeNull();
+    expect(!!c2).not.toBeFalsy();
     if (c2) {
       expect(c2.touched).toBeTruthy();
     }
