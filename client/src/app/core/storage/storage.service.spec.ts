@@ -2,106 +2,45 @@ import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
-  let storageService: StorageService;
-
-  // region mocks
   const key = 'sampleKey';
   const stringValue = 'sampleValue';
   const objectValue = { mKey: 'mKey' };
   const objectValue$ = new BehaviorSubject(objectValue).asObservable();
   const boolObs$ = new BehaviorSubject(true).asObservable();
   const error$ = new Observable<boolean>(observer => { observer.error(new Error('test error')); observer.complete(); });
-  let setItemFn = (a: any, b: any) => new Observable<boolean>();
-  let removeItemFn = (a: any) => new Observable<boolean>();
-  let clearFn = () => new Observable();
-  let getCookieNotNull = () => stringValue;
-  let getCookieObjectNotNull = () => objectValue;
 
-  const spies = {
-    ls: {
-      set: (a: any, b: any) => { },
-      get: (a: any) => { },
-      clear: () => { },
-      removeItem: (a: any) => { }
-    },
-    ck: {
-      put: (a: any, b: any, c: any) => { },
-      putObject: (a: any, b: any, c: any) => { },
-      get: (a: any) => { },
-      getAll: () => { },
-      getObject: (a: any) => { },
-      remove: (a: any, b: any) => { },
-      removeAll: (a: any) => { },
-    }
-  };
-  const localStorageMock = {
-    setItem: (a: any, b: any) => { spies.ls.set(a, b); return setItemFn(a, b); },
-    getItem: (a: any) => { spies.ls.get(a); return objectValue$; },
-    clear: () => { spies.ls.clear(); return clearFn(); },
-    removeItem: (a: any) => { spies.ls.removeItem(a); return removeItemFn(a); },
-  };
-  const cookiesMock = {
-    put: (a: any, b: any, c: any) => { spies.ck.put(a, b, c); },
-    putObject: (a: any, b: any, c: any) => { spies.ck.putObject(a, b, c); },
-    get: (a: any) => { spies.ck.get(a); return getCookieNotNull(); },
-    getObject: (a: any) => { spies.ck.getObject(a); return getCookieObjectNotNull(); },
-    getAll: () => { spies.ck.getAll(); return objectValue; },
-    remove: (a: any, b: any) => { spies.ck.remove(a, b); },
-    removeAll: (a: any) => { spies.ck.removeAll(a); },
-  };
-  // endregion
-
-  // region spies
-  let setItemSpy: jasmine.Spy;
-  let getItemSpy: jasmine.Spy;
-  let clearItemSpy: jasmine.Spy;
-  let removeItemSpy: jasmine.Spy;
-
-  let putSpy: jasmine.Spy;
-  let putObjectSpy: jasmine.Spy;
-  let getSpy: jasmine.Spy;
-  let getAllSpy: jasmine.Spy;
-  let getObjectSpy: jasmine.Spy;
-  let removeSpy: jasmine.Spy;
-  let removeAllSpy: jasmine.Spy;
-
+  let localStorageSpy: jasmine.SpyObj<LocalStorage>;
+  let cookieServiceSpy: jasmine.SpyObj<CookieService>;
   let consoleWarnSpy: jasmine.Spy;
-  // endregion
+
+  let storageService: StorageService;
 
   beforeEach(() => {
+    cookieServiceSpy = jasmine.createSpyObj('CookieService', ['put', 'putObject', 'get', 'getObject', 'getAll', 'remove', 'removeAll']);
+    cookieServiceSpy.get.and.returnValue(stringValue);
+    cookieServiceSpy.getObject.and.returnValue(objectValue);
+    cookieServiceSpy.getAll.and.returnValue(objectValue);
+
+    localStorageSpy = jasmine.createSpyObj('LocalStorage', ['setItem', 'getItem', 'clear', 'removeItem']);
+    localStorageSpy.setItem.and.returnValue(boolObs$);
+    localStorageSpy.getItem.and.returnValue(objectValue$);
+    localStorageSpy.clear.and.returnValue(boolObs$);
+    localStorageSpy.removeItem.and.returnValue(boolObs$);
+
     TestBed.configureTestingModule({
       providers: [
         StorageService,
-        { provide: CookieService, useValue: cookiesMock },
-        { provide: LocalStorage, useValue: localStorageMock }
+        { provide: CookieService, useValue: cookieServiceSpy },
+        { provide: LocalStorage, useValue: localStorageSpy }
       ]
     });
     storageService = TestBed.get(StorageService);
-    setItemFn = (a: any, b: any) => { spies.ls.set(a, b); return boolObs$; };
-    removeItemFn = (a: any) => { spies.ls.removeItem(a); return boolObs$; };
-    clearFn = () => { spies.ls.clear(); return boolObs$; };
-    getCookieNotNull = () => stringValue;
-    getCookieObjectNotNull = () => objectValue;
-
-    // region spies
-    setItemSpy = spyOn(spies.ls, 'set');
-    getItemSpy = spyOn(spies.ls, 'get');
-    clearItemSpy = spyOn(spies.ls, 'clear');
-    removeItemSpy = spyOn(spies.ls, 'removeItem');
-
-    putSpy = spyOn(spies.ck, 'put');
-    putObjectSpy = spyOn(spies.ck, 'putObject');
-    getSpy = spyOn(spies.ck, 'get');
-    getAllSpy = spyOn(spies.ck, 'getAll');
-    getObjectSpy = spyOn(spies.ck, 'getObject');
-    removeSpy = spyOn(spies.ck, 'remove');
-    removeAllSpy = spyOn(spies.ck, 'removeAll');
 
     consoleWarnSpy = spyOn(console, 'warn');
-    // endregion
   });
 
   it('should be created', inject([StorageService], (service: StorageService) => {
@@ -118,17 +57,9 @@ describe('StorageService', () => {
     const uk = storageService['gmsLs'] + key;
     expect(storageService['cache'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
     expect(storageService['cache$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cache$'][uk].subscribe((newVal: any) => {
-      if (!reset) {
-        expect(newVal)
-          .toEqual(objectValue, 'cache not set for ' + key + ': ' + JSON.stringify(objectValue));
-      } else {
-        expect(newVal)
-          .toEqual(stringValue, 'cache not set for ' + key + ': ' + stringValue);
-      }
-    });
+    storageService['cache$'][uk].subscribe((newVal: any) => valuePutterSetterChecker(reset, newVal));
 
-    const args = setItemSpy.calls.allArgs();
+    const args = localStorageSpy.setItem.calls.allArgs();
     expect(args[0][0]).toEqual(uk);
     expect(args[0][1]).toEqual(objectValue);
 
@@ -138,14 +69,14 @@ describe('StorageService', () => {
   });
 
   it('should re-try to set the value 2 times more if the first time it fails', fakeAsync(() => {
-    setItemFn = () => error$;
+    localStorageSpy.setItem.and.returnValue(error$);
     const ob = 'test';
     const uk = storageService['gmsLs'] + key;
     storageService.set(key, ob);
     tick();
-    expect(setItemSpy).toHaveBeenCalledTimes(3);
+    expect(localStorageSpy.setItem).toHaveBeenCalledTimes(3);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual('Couldn\'t set ' + ob + ' under key \'' + uk + '\'');
+    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ob} under key ${uk}`);
   }));
 
   it('should get an Observable with the value specified under the key (value is cached)', () => {
@@ -157,7 +88,7 @@ describe('StorageService', () => {
   it('should get an Observable with the value specified under the key (value is NOT cached)', () => {
     storageService.get(key).subscribe(val => expect(val).toEqual(objectValue));
 
-    const args = getItemSpy.calls.allArgs();
+    const args = localStorageSpy.getItem.calls.allArgs();
     expect(args[0][0]).toEqual(storageService['gmsLs'] + key);
   });
 
@@ -174,7 +105,7 @@ describe('StorageService', () => {
         }
       }
     });
-    expect(clearItemSpy).toHaveBeenCalled();
+    expect(localStorageSpy.clear).toHaveBeenCalled();
   });
 
   it('should clear the element saved under a key in both the cache and localStorage', () => {
@@ -187,7 +118,7 @@ describe('StorageService', () => {
       expect(finished).toBeTruthy('operation did not finished properly');
       expect((storageService['cache'][uk] as BehaviorSubject<any>).getValue()).toBeNull();
     });
-    expect(removeItemSpy).toHaveBeenCalled();
+    expect(localStorageSpy.removeItem).toHaveBeenCalled();
   });
   // endregion
 
@@ -201,17 +132,9 @@ describe('StorageService', () => {
     const uk = storageService['gmsCk'] + key;
     expect(storageService['cacheCk'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
     expect(storageService['cacheCk$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cacheCk$'][uk].subscribe((newVal: any) => {
-      if (!reset) {
-        expect(newVal)
-          .toEqual(objectValue, 'cache not set for ' + key + ': ' + JSON.stringify(objectValue));
-      } else {
-        expect(newVal)
-          .toEqual(stringValue, 'cache not set for ' + key + ': ' + stringValue);
-      }
-    });
+    storageService['cacheCk$'][uk].subscribe((newVal: any) => valuePutterSetterChecker(reset, newVal));
 
-    const args = putObjectSpy.calls.allArgs();
+    const args = cookieServiceSpy.putObject.calls.allArgs();
     expect(args[0][0]).toEqual(uk);
     expect(args[0][1]).toEqual(objectValue);
 
@@ -235,20 +158,20 @@ describe('StorageService', () => {
   it('should get an Observable with the value (object) specified under the key (value is NOT cached)', () => {
     storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(objectValue));
 
-    const args = getObjectSpy.calls.allArgs();
+    const args = cookieServiceSpy.getObject.calls.allArgs();
     expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
   });
 
   it('should get an Observable with the value (string) specified under the key (value is NOT cached)', () => {
     storageService.getCookie(key).subscribe(val => expect(val).toEqual(stringValue));
 
-    const args = getSpy.calls.allArgs();
+    const args = cookieServiceSpy.get.calls.allArgs();
     expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
   });
 
   it('should get an Observable with all the values (no key provided) (values are NOT cached)', () => {
     storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
-    expect(getAllSpy).toHaveBeenCalled();
+    expect(cookieServiceSpy.getAll).toHaveBeenCalled();
   });
 
   it('should get an Observable with all the values (no key provided) (values are in cached, cache is updated ' +
@@ -258,16 +181,16 @@ describe('StorageService', () => {
       storageService['cacheCk'][uk] = new BehaviorSubject<object>({ testKey: 'testVal' });
       storageService['cacheCk$'][uk] = storageService['cacheCk'][uk].asObservable();
       storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
-      expect(getAllSpy).toHaveBeenCalled();
+      expect(cookieServiceSpy.getAll).toHaveBeenCalled();
     });
 
   it('should get an Observable with the `null` value when there is no specified value(object) under the key ' +
     '(and it is NOT cached)', () => {
       const sampleValue = { mKey: 'randomMKey' };
-      getCookieObjectNotNull = () => sampleValue;
+      cookieServiceSpy.getObject.and.returnValue(sampleValue);
       storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
 
-      const args = getObjectSpy.calls.allArgs();
+      const args = cookieServiceSpy.getObject.calls.allArgs();
       expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
     });
 
@@ -284,7 +207,7 @@ describe('StorageService', () => {
         }
       }
     });
-    expect(removeAllSpy).toHaveBeenCalled();
+    expect(cookieServiceSpy.removeAll).toHaveBeenCalled();
   });
 
   it('should clear the element saved under a key in both the cache and the cookies', () => {
@@ -297,7 +220,17 @@ describe('StorageService', () => {
       expect(finished).toBeTruthy('operation did not finished properly');
       expect((storageService['cacheCk'][uk] as BehaviorSubject<string>).getValue()).toBeNull();
     });
-    expect(removeSpy).toHaveBeenCalled();
+    expect(cookieServiceSpy.remove).toHaveBeenCalled();
   });
   // endregion
+
+  const valuePutterSetterChecker = (isReset: boolean, newVal: any) => {
+    if (!isReset) {
+      expect(newVal)
+        .toEqual(objectValue, `cache not set for ${key}: ${JSON.stringify(objectValue)}`);
+    } else {
+      expect(newVal)
+        .toEqual(stringValue, `cache not set for ${key }: ${stringValue}`);
+    }
+  };
 });

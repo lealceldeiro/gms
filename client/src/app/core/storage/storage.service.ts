@@ -101,7 +101,7 @@ export class StorageService {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
       } else {
-        console.warn('Couldn\'t set ' + value + ' under key \'' + key + '\'');
+        console.warn(`Couldn't set ${value} under key ${key}`);
       }
     });
   }
@@ -192,14 +192,14 @@ export class StorageService {
       return this.localStorage.removeItem(uk).pipe(tap(
         (removed) => { if (removed) { this.cache[uk].next(null); } }, // null for next value in this.cache$[uk]
         () => {
-          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for ' + key);
+          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn(`Couldn't delete value for ${key}`);
         }
       ));
     } else { // clear all
       return this.localStorage.clear().pipe(tap(
         () => this.clearCache(),
         () => {
-          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn('Couldn\'t delete value for' + key);
+          this.tryClearCount[uk]++ < 2 ? this.tryClear(key) : console.warn(`Couldn't delete value for ${key}`);
         }));
     }
   }
