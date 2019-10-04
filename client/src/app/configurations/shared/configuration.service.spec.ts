@@ -11,32 +11,29 @@ import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
 
 describe('ConfigurationService', () => {
   const url = MockAppConfig.settings.apiServer.url;
-  const httpSpy = { get: (_a: any, _b: any) => { } };
-  const sessionSSpy = { getUser: () => { } };
-  const httpClientMock = { get: (a: any, b: any) => { httpSpy.get(a, b); return of(true); } };
   const userId = getRandomNumber();
   const user = new User();
   user.id = userId;
-  const userBehaviorSubject = new BehaviorSubject<User>(user);
-  const sessionServiceMock = {
-    getUser: () => { sessionSSpy.getUser(); return userBehaviorSubject.asObservable(); }
-  };
+  let sessionServiceSpy: jasmine.SpyObj<SessionService>;
   let configurationService: ConfigurationService;
-  let httpClientGetSpy: jasmine.Spy;
-  let sessionServiceSpy: jasmine.Spy;
+  let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   beforeEach(() => {
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    httpClientSpy.get.and.returnValue(of(true));
+
+    sessionServiceSpy = jasmine.createSpyObj('SessionService', ['getUser']);
+    sessionServiceSpy.getUser.and.returnValue(new BehaviorSubject<User>(user).asObservable());
+
     TestBed.configureTestingModule({
       providers: [
         ConfigurationService, AppConfig,
-        { provide: HttpClient, useValue: httpClientMock },
-        { provide: SessionService, useValue: sessionServiceMock }
+        { provide: HttpClient, useValue: httpClientSpy },
+        { provide: SessionService, useValue: sessionServiceSpy }
       ]
     });
     AppConfig.settings = MockAppConfig.settings;
     configurationService = TestBed.get(ConfigurationService);
-    httpClientGetSpy = spyOn(httpSpy, 'get');
-    sessionServiceSpy = spyOn(sessionSSpy, 'getUser');
   });
 
   it('should be created', () => {
@@ -46,15 +43,15 @@ describe('ConfigurationService', () => {
 
   it('#getConfigurations should call HttpClient#get', () => {
     configurationService.getConfigurations();
-    expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-    expect(httpClientGetSpy).toHaveBeenCalledWith(url + 'configuration', undefined);
+    expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+    expect(httpClientSpy.get).toHaveBeenCalledWith(url + 'configuration');
   });
 
   it('#getUserConfigurations should call SessionService#getUser to get the user id and HttpClient#get', () => {
     configurationService.getUserConfigurations().subscribe(() => {
-      expect(sessionServiceSpy).toHaveBeenCalledTimes(1);
-      expect(httpClientGetSpy).toHaveBeenCalledTimes(1);
-      expect(httpClientGetSpy).toHaveBeenCalledWith(`${url}configuration/${userId}?human=true`, undefined );
+      expect(sessionServiceSpy.getUser).toHaveBeenCalledTimes(1);
+      expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+      expect(httpClientSpy.get).toHaveBeenCalledWith(`${url}configuration/${userId}?human=true` );
     });
   });
 });
