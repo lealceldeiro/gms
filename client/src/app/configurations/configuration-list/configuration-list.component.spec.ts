@@ -14,24 +14,18 @@ describe('ConfigurationListComponent', () => {
     configurationObject['randomKey-' + getRandomNumber() + '-' + i] = 'randomValue-' + getRandomNumber() + '-' + i;
   }
 
-  const spy = { getConfigurations: () => { } };
-  const configurationServiceStub = {
-    getConfigurations: () => {
-      spy.getConfigurations();
-      return of<object>(configurationObject);
-    },
-    getUserConfigurations: () => {
-      return of<object>(configurationObject);
-    }
-  };
-  let getConfigurationsSpy: jasmine.Spy;
+  let configurationServiceSpy: jasmine.SpyObj<ConfigurationService>;
   let loadConfigurationsSpy: jasmine.Spy;
   let loadUserConfigurationsSpy: jasmine.Spy;
 
   beforeEach(async(() => {
+    configurationServiceSpy = jasmine.createSpyObj('ConfigurationService', ['getConfigurations', 'getUserConfigurations']);
+    configurationServiceSpy.getConfigurations.and.returnValue(of<object>(configurationObject));
+    configurationServiceSpy.getUserConfigurations.and.returnValue(of<object>(configurationObject));
+
     TestBed.configureTestingModule({
       declarations: [ConfigurationListComponent],
-      providers: [{ provide: ConfigurationService, useValue: configurationServiceStub }]
+      providers: [{ provide: ConfigurationService, useValue: configurationServiceSpy }]
     }).compileComponents();
   }));
 
@@ -39,7 +33,6 @@ describe('ConfigurationListComponent', () => {
     fixture = TestBed.createComponent(ConfigurationListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    getConfigurationsSpy = spyOn(spy, 'getConfigurations');
     loadConfigurationsSpy = spyOn(component, 'loadConfigurations');
     loadUserConfigurationsSpy = spyOn(component, 'loadUserConfigurations');
   });
@@ -56,6 +49,7 @@ describe('ConfigurationListComponent', () => {
   it('should call ConfigurationService#getConfigurations on call to loadConfigurations and set values from the observable ', () => {
     component.loadConfigurations();
     expect(loadConfigurationsSpy).toHaveBeenCalledTimes(1);
+    expect(configurationServiceSpy.getConfigurations).toHaveBeenCalledTimes(1);
     expect(component.keys.system).toEqual(Object.keys(configurationObject));
     expect(component.values.system).toEqual(Object.values(configurationObject));
   });
@@ -63,6 +57,7 @@ describe('ConfigurationListComponent', () => {
   it('should call ConfigurationService#getUserConfigurations on call to loadUserConfigurations and set values from the observable ', () => {
     component.loadUserConfigurations();
     expect(loadUserConfigurationsSpy).toHaveBeenCalledTimes(1);
+    expect(configurationServiceSpy.getUserConfigurations).toHaveBeenCalledTimes(1);
     expect(component.keys.user).toEqual(Object.keys(configurationObject));
     expect(component.values.user).toEqual(Object.values(configurationObject));
   });
