@@ -3,15 +3,15 @@ import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs/index';
 import { first } from 'rxjs/operators';
+
 import { SessionService } from '../session/session.service';
 import { LoginGuard } from './login.guard';
 
 describe('LoginGuard', () => {
-  let guard: LoginGuard;
   const isNotLoggedInSb = new BehaviorSubject<boolean>(false);
-  let navigatedByUrlSpy: jasmine.Spy;
-
   const sessionServiceStub = { isNotLoggedIn: () => isNotLoggedInSb.asObservable() };
+  let guard: LoginGuard;
+  let navigatedByUrlSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

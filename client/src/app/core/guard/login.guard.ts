@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivateChild, CanLoad, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
+
 import { SessionService } from '../session/session.service';
 
 /**
@@ -20,11 +21,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
    * @returns {Observable<boolean>}
    */
   canActivateChild(): Observable<boolean> {
-    return this.sessionService.isNotLoggedIn().pipe(tap((notLogged) => {
-      if (!notLogged) { // logged?
-        this.goToHome();
-      }
-    }), first());
+    return this.getIsUserLoggedInAndGoHomeIfNot();
   }
 
   /**
@@ -32,11 +29,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
    * @returns {Observable<boolean>}
    */
   canLoad(): Observable<boolean> {
-    return this.sessionService.isNotLoggedIn().pipe(tap((notLogged) => {
-      if (!notLogged) { // logged?
-        this.goToHome();
-      }
-    }), first());
+    return this.getIsUserLoggedInAndGoHomeIfNot();
   }
 
   /**
@@ -44,5 +37,18 @@ export class LoginGuard implements CanActivateChild, CanLoad {
    */
   private goToHome() {
     this.router.navigateByUrl('/home');
+  }
+
+  /**
+   * Returns an observable with `true` if the user is logged in, `false` otherwise.
+   * It navigates to the home page if the user is already logged in.
+   * @returns {Observable<boolean>}
+   */
+  private getIsUserLoggedInAndGoHomeIfNot(): Observable<boolean> {
+    return this.sessionService.isNotLoggedIn().pipe(tap((notLogged) => {
+      if (!notLogged) { // logged?
+        this.goToHome();
+      }
+    }), first());
   }
 }
