@@ -8,10 +8,12 @@ import { SessionService } from './core/session/session.service';
 
 describe('AppComponent', () => {
   const event = new Event('beforeunload', { cancelable: true });
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
+
   let isRememberMeSpy: jasmine.Spy;
   let closeSessionSpy: jasmine.Spy;
+
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
 
   // region mocks
   @Component({ selector: 'gms-nav-bar', template: '' })

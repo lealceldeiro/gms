@@ -9,16 +9,15 @@ import { getRandomNumber } from '../shared/test-util/functions.util';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SideMenuComponent } from './side-menu.component';
 
-import Spy = jasmine.Spy;
-
 describe('SideMenuComponent', () => {
+  const numberOfRoutes = getRandomNumber(1, 11);
+  const routes: Array<{ [key: string]: any }> = [];
   let component: SideMenuComponent;
   let fixture: ComponentFixture<SideMenuComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
-  let spy: Spy;
-  const numberOfRoutes = getRandomNumber(1, 11);
-  const routes: Array<{ [key: string]: any }> = [];
+  let spy: jasmine.Spy;
+
   for (let i = 0; i < numberOfRoutes; i++) {
     routes.push({ path: 'dummy-' + i + '-' + getRandomNumber(), component: DummyStubComponent });
   }
@@ -59,8 +58,8 @@ describe('SideMenuComponent', () => {
 
   it('every link should have the route and name specified in the urls property', () => {
     const urls = component.urls;
-
     const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
+
     for (let i = links.length - 1; i >= 0; i--) {
       expect(links.item(i).getAttribute('href')).toEqual('/' + urls[i].path);
       expect(links.item(i).textContent).toContain(urls[i].name);
@@ -86,6 +85,7 @@ describe('SideMenuComponent', () => {
       randomVal
     ];
     const expected = [randomVal];
+
     expect(component['getCleanUrls'](testUrls)).toEqual(expected);
   });
 
