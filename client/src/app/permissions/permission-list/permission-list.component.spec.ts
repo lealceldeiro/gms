@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { BehaviorSubject } from 'rxjs';
+import { of } from 'rxjs';
 
 import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
 import { MockModule } from '../../shared/test-util/mock/mock.module';
@@ -12,10 +12,6 @@ import { PermissionService } from '../shared/permission.service';
 import { PermissionListComponent } from './permission-list.component';
 
 describe('PermissionListComponent', () => {
-  let component: PermissionListComponent;
-  let fixture: ComponentFixture<PermissionListComponent>;
-  let componentEl: HTMLElement;
-
   const getSampleData = () => {
     return {
       _embedded: {
@@ -28,13 +24,13 @@ describe('PermissionListComponent', () => {
       },
       page: {
         number: 0,
-        totalElements: 0, // changed later
-        size: 0,          // changed later
-        totalPages: 0     // changed later
+        // these are changed later
+        totalElements: 0,
+        size: 0,
+        totalPages: 0
       }
     };
   };
-
   const addPermissionsToSampleData = (sampleData: { _embedded: any; _links?: { self: { href: string; }; }; page: any; }) => {
     const rangeBottom = 25;
     const rangeTop = 40;
@@ -48,25 +44,27 @@ describe('PermissionListComponent', () => {
     sampleData.page.totalPages = Math.floor(sampleData.page.totalElements / sampleData.page.size);
   };
 
-  const subjectLRM = new BehaviorSubject<PermissionPd>(getSampleData());
-  const ret = () => subjectLRM.asObservable();
-  const spy = { getPermissions: (a: any, b: any) => { } };
-  const permissionServiceStub = { getPermissions: (size: number, page: number) => { spy.getPermissions(size, page); return ret(); } };
+  let component: PermissionListComponent;
+  let fixture: ComponentFixture<PermissionListComponent>;
+  let componentEl: HTMLElement;
+
+  let sampleDataValue: PermissionPd;
+  let permissionServiceSpy: jasmine.SpyObj<PermissionService>;
 
   beforeEach(async(() => {
+    permissionServiceSpy = jasmine.createSpyObj('PermissionService', ['getPermissions']);
+    sampleDataValue = getSampleData();
+    addPermissionsToSampleData(sampleDataValue);                             // make the observable return a random value for each test
+    permissionServiceSpy.getPermissions.and.returnValue(of(sampleDataValue));
+
     TestBed.configureTestingModule({
       declarations: [PermissionListComponent],
       imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{ path: './', component: DummyStubComponent }])],
-      providers: [ { provide: PermissionService, useValue: permissionServiceStub } ]
+      providers: [{ provide: PermissionService, useValue: permissionServiceSpy }]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    // make the observable return a random value for each test
-    const sampleData = getSampleData();
-    addPermissionsToSampleData(sampleData);
-    subjectLRM.next(sampleData);
-
     fixture = TestBed.createComponent(PermissionListComponent);
     component = fixture.componentInstance;
     componentEl = fixture.nativeElement;
@@ -79,16 +77,16 @@ describe('PermissionListComponent', () => {
 
   it('should render a table with as many rows as elements returned by the (mock) service', () => {
     const tr = componentEl.querySelectorAll('tr.p-row');
-    expect(tr.length).toBe(subjectLRM.getValue()._embedded.permission.length, 'rows count does not match the total elements');
+    expect(tr.length).toBe(sampleDataValue._embedded.permission.length, 'rows count does not match the total elements');
   });
 
   it('should call service for getting new permissions list when #loadList is called', () => {
-    const getPermissionsSpy = spyOn(spy, 'getPermissions');
-
     const toPage = 3;
+    permissionServiceSpy.getPermissions.calls.reset();
+
     component.loadList(toPage);
 
-    expect(getPermissionsSpy).toHaveBeenCalledTimes(1);
-    expect(getPermissionsSpy).toHaveBeenCalledWith(component.page.size, toPage);
+    expect(permissionServiceSpy.getPermissions).toHaveBeenCalledTimes(1);
+    expect(permissionServiceSpy.getPermissions).toHaveBeenCalledWith(component.page.size, toPage);
   });
 });

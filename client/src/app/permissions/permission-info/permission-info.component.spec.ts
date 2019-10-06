@@ -37,8 +37,8 @@ describe('PermissionInfoComponent', () => {
 
   let component: PermissionInfoComponent;
   let fixture: ComponentFixture<PermissionInfoComponent>;
-  let permissionServiceSpy: jasmine.SpyObj<PermissionService>;
 
+  let permissionServiceSpy: jasmine.SpyObj<PermissionService>;
   let locationSpy: jasmine.SpyObj<Location>;
   let paramMapSpy: jasmine.SpyObj<ParamMap>;
   let activatedRouteStub: ActivatedRoute;
