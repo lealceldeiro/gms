@@ -5,7 +5,6 @@ import { getRandomNumber } from '../../test-util/functions.util';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
-
   // tslint:disable-next-line:component-selector
   @Component({ selector: 'ngb-alert', template: `` })
   class DummyAlert {

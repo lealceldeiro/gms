@@ -6,7 +6,6 @@ import { getRandomNumber } from '../../test-util/functions.util';
 import { PaginationComponent } from './pagination.component';
 
 describe('GmsPaginationComponent', () => {
-
   // tslint:disable-next-line:component-selector
   @Component({ template: ``, selector: 'ngb-pagination' })
   class DummyNgPagination {
@@ -22,16 +21,9 @@ describe('GmsPaginationComponent', () => {
     @Input() size = '-';
   }
 
-  let component: PaginationComponent;
-  let fixture: ComponentFixture<PaginationComponent>;
-  let componentDe: DebugElement;
-  let componentEl: HTMLElement;
-  let spyOnEmit: jasmine.Spy;
-
   // some arbitrary values to generate random numbers and booleans in order
   // to make tests more realistic
   const min = 1, max = 11, pivot = 6;
-
   const dummy = {
     boundaryLinks: getRandomNumber(min, max) > pivot,
     collectionSize: getRandomNumber(1, 25),
@@ -45,6 +37,12 @@ describe('GmsPaginationComponent', () => {
     size: '-',
     pageChangeAction: (page: number) => { }
   };
+
+  let component: PaginationComponent;
+  let fixture: ComponentFixture<PaginationComponent>;
+  let componentDe: DebugElement;
+  let componentEl: HTMLElement;
+  let spyOnEmit: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -103,17 +101,24 @@ describe('GmsPaginationComponent', () => {
   });
 
   it('should not render if condition (collectionSize / pageSize) > 1 does not evaluates to true', () => {
-    component.collectionSize = 5;
-    component.pageSize = 5;
-    fixture.detectChanges();
-    expect(componentDe.query(By.css('#gms-pagination'))).toBeFalsy();
+    testRendering(false);
   });
 
   it('should render if condition (collectionSize / pageSize) > 1 evaluates to true', () => {
-    // two pages
-    component.collectionSize = 10;
+    testRendering();
+  });
+
+  const testRendering = (shouldRender = true) => {
+    component.collectionSize = shouldRender ? getRandomNumber(10, 1000) : getRandomNumber(0, 5);
     component.pageSize = 5;
     fixture.detectChanges();
-    expect(componentDe.query(By.css('#gms-pagination'))).toBeFalsy();
-  });
+
+    const element: DebugElement = componentDe.query(By.css('#gms-pagination'));
+
+    if (shouldRender) {
+      expect(element).toBeTruthy();
+    } else {
+      expect(element).toBeFalsy();
+    }
+  };
 });
