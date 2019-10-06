@@ -19,30 +19,26 @@ describe('NavBarComponent', () => {
   let componentEl: HTMLElement;
   let fixture: ComponentFixture<NavBarComponent>;
   let spyIsActive: jasmine.Spy;
-  let spyCloseSession: jasmine.Spy;
 
-  // region mocks
-  const sessionServiceStub = {
-    isNotLoggedIn: () => of(true),
-    isLoggedIn: () => of(false),
-    getUser: () => of(userMock),
-    closeSession: () => { }
-  };
+  let sessionServiceSpy: jasmine.SpyObj<SessionService>;
 
   const routes = [
     { path: 'help', component: DummyStubComponent },
     { path: 'about', component: DummyStubComponent },
     { path: 'home', component: DummyStubComponent }
   ];
-  // endregion
 
   beforeEach(async(() => {
+    sessionServiceSpy = jasmine.createSpyObj('SessionService', ['isNotLoggedIn', 'isLoggedIn', 'getUser', 'closeSession']);
+    sessionServiceSpy.isNotLoggedIn.and.returnValue(of(true));
+    sessionServiceSpy.isLoggedIn.and.returnValue(of(false));
+    sessionServiceSpy.getUser.and.returnValue(of(userMock));
+
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
       imports: [MockModule, RouterTestingModule.withRoutes(routes), SharedModule],
-      providers: [{ provide: SessionService, useValue: sessionServiceStub }]
-    })
-      .compileComponents();
+      providers: [{ provide: SessionService, useValue: sessionServiceSpy }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -52,7 +48,6 @@ describe('NavBarComponent', () => {
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
     spyIsActive = spyOn((<any>component).router, 'isActive');
-    spyCloseSession = spyOn((<any>component).sessionService, 'closeSession');
   });
 
   it('should create', () => {
@@ -113,7 +108,7 @@ describe('NavBarComponent', () => {
       gmsClick(signOutEl);
     }
     fixture.detectChanges();
-    expect(spyCloseSession).toHaveBeenCalled();
+    expect(sessionServiceSpy.closeSession).toHaveBeenCalled();
   });
 
   function getSearchInput(): HTMLElement | any {
