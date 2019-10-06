@@ -52,9 +52,10 @@ describe('PermissionListComponent', () => {
   let permissionServiceSpy: jasmine.SpyObj<PermissionService>;
 
   beforeEach(async(() => {
-    permissionServiceSpy = jasmine.createSpyObj('PermissionService', ['getPermissions']);
     sampleDataValue = getSampleData();
     addPermissionsToSampleData(sampleDataValue);                             // make the observable return a random value for each test
+
+    permissionServiceSpy = jasmine.createSpyObj('PermissionService', ['getPermissions']);
     permissionServiceSpy.getPermissions.and.returnValue(of(sampleDataValue));
 
     TestBed.configureTestingModule({
