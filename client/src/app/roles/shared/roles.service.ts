@@ -2,11 +2,11 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AppConfig } from 'src/app/core/config/app.config';
+import { AppConfig } from '../../core/config/app.config';
 import { ParamsService } from '../../core/request/params/params.service';
 import { Role } from './role.model';
 import { RolePd } from './role.pd';
-import { PermissionPd } from 'src/app/permissions/shared/permission.pd';
+import { PermissionPd } from '../../permissions/shared/permission.pd';
 
 /**
  * Service for providing roles-related services.

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RolePd } from 'src/app/roles/shared/role.pd';
 
-import { AppConfig } from 'src/app/core/config/app.config';
+import { RolePd } from '../../roles/shared/role.pd';
+import { AppConfig } from '../../core/config/app.config';
 import { ParamsService } from '../../core/request/params/params.service';
 import { Permission } from './permission.model';
 import { PermissionPd } from './permission.pd';

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Role } from '../shared/role.model';
 import { Subscription } from 'rxjs';
+
+import { Role } from '../shared/role.model';
 import { RolesService } from '../shared/roles.service';
 import { RolePd } from '../shared/role.pd';
 

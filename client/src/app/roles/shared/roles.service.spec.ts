@@ -4,8 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { RolesService } from './roles.service';
-import { AppConfig } from 'src/app/core/config/app.config';
-import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
+import { AppConfig } from '../../core/config/app.config';
+import { MockAppConfig } from '../../shared/test-util/mock/app.config';
 
 describe('RolesService', () => {
   const url = MockAppConfig.settings.apiServer.url;
@@ -19,7 +19,7 @@ describe('RolesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        RolesService, AppConfig,
+        RolesService,
         { provide: ParamsService, useValue: paramsServiceStub },
         { provide: HttpClient, useValue: httpClientMock }
       ]

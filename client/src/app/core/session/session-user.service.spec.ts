@@ -21,7 +21,7 @@ describe('SessionUserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [SessionUserService, AppConfig]
+      providers: [SessionUserService]
     });
     AppConfig.settings = MockAppConfig.settings;
     httpClient = TestBed.get(HttpClient);

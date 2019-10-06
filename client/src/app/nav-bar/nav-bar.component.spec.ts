@@ -2,8 +2,8 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs/index';
+
 import { SessionService } from '../core/session/session.service';
 import { userMock } from '../core/session/user.mock.model';
 import { DummyStubComponent } from '../shared/test-util/mock/dummy-stub.component';

@@ -1,12 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Role } from 'src/app/roles/shared/role.model';
-import { RolePd } from 'src/app/roles/shared/role.pd';
-import { SharedModule } from 'src/app/shared/shared.module';
+
+import { Role } from '../../roles/shared/role.model';
+import { RolePd } from '../../roles/shared/role.pd';
+import { SharedModule } from '../../shared/shared.module';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';

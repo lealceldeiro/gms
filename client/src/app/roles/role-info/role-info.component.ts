@@ -2,8 +2,9 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Permission } from 'src/app/permissions/shared/permission.model';
-import { PermissionPd } from 'src/app/permissions/shared/permission.pd';
+
+import { Permission } from '../../permissions/shared/permission.model';
+import { PermissionPd } from '../../permissions/shared/permission.pd';
 import { Role } from '../shared/role.model';
 import { RolesService } from '../shared/roles.service';
 

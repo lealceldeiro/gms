@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { AppConfig } from 'src/app/core/config/app.config';
-import { SessionService } from 'src/app/core/session/session.service';
-import { User } from 'src/app/core/session/user.model';
+import { AppConfig } from '../../core/config/app.config';
+import { SessionService } from '../../core/session/session.service';
+import { User } from '../../core/session/user.model';
 
 /**
  * Service for providing configurations-related services.

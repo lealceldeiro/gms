@@ -4,8 +4,8 @@ import { inject, TestBed } from '@angular/core/testing';
 import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { PermissionService } from './permission.service';
-import { AppConfig } from 'src/app/core/config/app.config';
-import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
+import { AppConfig } from '../../core/config/app.config';
+import { MockAppConfig } from '../../shared/test-util/mock/app.config';
 
 describe('PermissionService', () => {
   const url = MockAppConfig.settings.apiServer.url;
@@ -19,7 +19,7 @@ describe('PermissionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        PermissionService, AppConfig,
+        PermissionService,
         { provide: ParamsService, useValue: paramsServiceStub },
         { provide: HttpClient, useValue: httpClientMock }
       ]

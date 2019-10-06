@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { RoleInfoComponent } from './role-info/role-info.component';
 import { RoleListComponent } from './role-list/role-list.component';
 
 /**
- * Routes handled in this module.
+ * Roles module routes.
  */
 const routes: Routes = [
   { path: 'list', component: RoleListComponent },

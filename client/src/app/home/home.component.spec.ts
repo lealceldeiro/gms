@@ -24,7 +24,6 @@ describe('HomeComponent', () => {
       declarations: [HomeComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        AppConfig,
         { provide: SessionService, useValue: sessionServiceSpy }
       ]
     }).compileComponents();

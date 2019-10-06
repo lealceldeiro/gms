@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
@@ -13,31 +12,10 @@ import { SessionUserService } from '../../core/session/session-user.service';
 import { SessionService } from '../../core/session/session.service';
 import { userMock } from '../../core/session/user.mock.model';
 import { LoginService } from './login.service';
-import { MockAppConfig } from 'src/app/shared/test-util/mock/app.config';
-import { AppConfig } from 'src/app/core/config/app.config';
+import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { AppConfig } from '../../core/config/app.config';
 
 describe('LoginService', () => {
-  const url = MockAppConfig.settings.apiServer.url;
-  const loginUrl = MockAppConfig.settings.apiServer.loginUrl;
-  let httpClient: HttpClient;
-  let httpTestingController: HttpTestingController;
-  let sessionUserService: SessionUserService;
-  let sessionService: SessionService;
-  let loginService: LoginService;
-
-  let spyAddEFEH: jasmine.Spy;
-
-  const spy = {
-    sus: { getCurrentUser: (a: any) => { } },
-    ss: { setUser: (a: any) => { }, setAuthData: (a: any) => { }, setLoggedIn: (a: any) => { } }
-  };
-  const sessionServiceStub = {
-    setAuthData: (a: any) => { spy.ss.setAuthData(a); },
-    setLoggedIn: (a: any) => { spy.ss.setLoggedIn(a); },
-    setUser: (a: any) => { spy.ss.setUser(a); return new Subject().asObservable(); }
-  };
-  const intHelperServiceStub = { addExcludedFromErrorHandling: () => { } };
-
   // region user paginated data mock
   const self: SelfModel = { href: 'test' };
   const linkM: LinksModel = { self: self };
@@ -45,30 +23,36 @@ describe('LoginService', () => {
   const value = { page: page, _links: linkM, _embedded: { user: [userMock] } };
   const userModelSubject = new Subject<UserPdModel>();
   // endregion
+  const url = MockAppConfig.settings.apiServer.url;
+  const loginUrl = MockAppConfig.settings.apiServer.loginUrl;
+  const intHelperServiceStub = { addExcludedFromErrorHandling: () => { } };
 
-  const sessionUserServiceStub = {
-    getCurrentUser: (a: any) => {
-      spy.sus.getCurrentUser(a);
-      return userModelSubject.asObservable();
-    }
-  };
+  let httpTestingController: HttpTestingController;
+  let loginService: LoginService;
+
+  let spyAddExcludedFromErrorHandling: jasmine.Spy;
+  let sessionServiceSpy: jasmine.SpyObj<SessionService>;
+  let sessionUserServiceSpy: jasmine.SpyObj<SessionUserService>;
 
   beforeEach(() => {
-    spyAddEFEH = spyOn(intHelperServiceStub, 'addExcludedFromErrorHandling');
+    sessionServiceSpy = jasmine.createSpyObj('SessionService', ['setAuthData', 'setLoggedIn', 'setUser']);
+
+    sessionUserServiceSpy = jasmine.createSpyObj('SessionUserService', ['getCurrentUser']);
+    sessionUserServiceSpy.getCurrentUser.and.returnValue(userModelSubject.asObservable());
+
+    spyAddExcludedFromErrorHandling = spyOn(intHelperServiceStub, 'addExcludedFromErrorHandling');
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        LoginService, AppConfig,
-        { provide: SessionService, useValue: sessionServiceStub },
-        { provide: SessionUserService, useValue: sessionUserServiceStub },
+        LoginService,
+        { provide: SessionService, useValue: sessionServiceSpy },
+        { provide: SessionUserService, useValue: sessionUserServiceSpy },
         { provide: InterceptorHelperService, useValue: intHelperServiceStub }
       ]
     });
     AppConfig.settings = MockAppConfig.settings;
-    httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
-    sessionUserService = TestBed.get(SessionUserService);
-    sessionService = TestBed.get(SessionService);
     loginService = TestBed.get(LoginService);
   });
 
@@ -77,40 +61,32 @@ describe('LoginService', () => {
     httpTestingController.verify();
   });
 
-  it('should be created', inject([LoginService], (service: LoginService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(loginService).toBeTruthy();
+  });
 
   it('should call InterceptorHelperService#addExcludedFromErrorHandling on init', () => {
-    expect(spyAddEFEH).toHaveBeenCalledTimes(1);
+    expect(spyAddExcludedFromErrorHandling).toHaveBeenCalledTimes(1);
   });
 
   it('should post a `LoginRequestModel` payload to the login url and, if it succeeds, set the auth data  in ' +
     'SessionService and call the getUserMethod in the SessionUserService in order to retrieve the current User info',
     fakeAsync(() => {
-      // region mocks and spies
-      const setAuthDataSpy = spyOn(spy.ss, 'setAuthData');
-      const setLoggedInSpy = spyOn(spy.ss, 'setLoggedIn');
-      const setUserSpy = spyOn(spy.ss, 'setUser');
-      const getCurrentUserSpy = spyOn(spy.sus, 'getCurrentUser');
       const body = { usernameOrEmail: userMock.username, password: 'test' };
       const response: LoginResponseModel = { access_token: 'access_tokenS', username: userMock.username };
-      // endregion
 
-      // region actual call
       loginService.login(body).toPromise().then((data: LoginResponseModel) => {
         expect(data).toBeTruthy('data is not ok');
         expect(data.access_token).toBeTruthy('access token is not ok');
-        expect(setAuthDataSpy).toHaveBeenCalledTimes(1);
-        expect(setLoggedInSpy).toHaveBeenCalledTimes(1);
-        expect(getCurrentUserSpy).toHaveBeenCalledTimes(1);
-        expect(getCurrentUserSpy.calls.first().args[0]).toEqual(userMock.username, 'username used for calling ' +
+        expect(sessionServiceSpy.setAuthData).toHaveBeenCalledTimes(1);
+        expect(sessionServiceSpy.setLoggedIn).toHaveBeenCalledTimes(1);
+        expect(sessionUserServiceSpy.getCurrentUser).toHaveBeenCalledTimes(1);
+        expect(sessionUserServiceSpy.getCurrentUser.calls.first().args[0]).toEqual(userMock.username, 'username used for calling ' +
           'the `getCurrentUser` service is not the same as the one which came in the response');
-        expect(setUserSpy).toHaveBeenCalledTimes(1);
-        expect(setUserSpy.calls.first().args[0]).toEqual(userMock, 'sessionUserService not ' +
+        expect(sessionServiceSpy.setUser).toHaveBeenCalledTimes(1);
+        expect(sessionServiceSpy.setUser.calls.first().args[0]).toEqual(userMock, 'sessionUserService not ' +
           'called with the correct username');
       });
-      // endregion
 
       // request mock
       const req = httpTestingController.match(r => r.url === url + loginUrl && r.method === 'POST' && r.body === body);

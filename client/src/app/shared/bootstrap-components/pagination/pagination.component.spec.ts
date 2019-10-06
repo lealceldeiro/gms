@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement, Component, Input } from '@angular/core';
+import { By } from '@angular/platform-browser';
+
 import { getRandomNumber } from '../../test-util/functions.util';
 import { PaginationComponent } from './pagination.component';
-import { DebugElement, Component, Input, Output, EventEmitter } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 describe('GmsPaginationComponent', () => {
 

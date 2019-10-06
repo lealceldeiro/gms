@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject } from 'rxjs';
 
 import { RoleListComponent } from './role-list.component';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { BehaviorSubject } from 'rxjs';
 import { RolePd } from '../shared/role.pd';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { MockModule } from 'src/app/shared/test-util/mock/mock.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { DummyStubComponent } from 'src/app/shared/test-util/mock/dummy-stub.component';
+import { SharedModule } from '../../shared/shared.module';
+import { MockModule } from '../../shared/test-util/mock/mock.module';
+import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
 import { RolesService } from '../shared/roles.service';
 
 describe('RoleListComponent', () => {

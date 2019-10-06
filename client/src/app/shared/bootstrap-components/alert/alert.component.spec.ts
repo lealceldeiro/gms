@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { getRandomNumber } from '../../test-util/functions.util';
 import { AlertComponent } from './alert.component';
 

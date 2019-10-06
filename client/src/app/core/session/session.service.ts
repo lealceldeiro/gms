@@ -141,7 +141,7 @@ export class SessionService {
    * Sets whether the user is logged in or not.
    * @param {boolean} value
    */
-  setLoggedIn(value: boolean) {
+  setLoggedIn(value: boolean): void {
     this.store(this.key.loggedIn, value);
     this.store(this.key.notLoggedIn, !value);
     this.loggedIn.next(value);
@@ -160,7 +160,7 @@ export class SessionService {
    * Sets the current session user's info.
    * @param {User} value
    */
-  setUser(value: User) {
+  setUser(value: User): void {
     this.store(this.key.user, value, false);
     this.user.next(value);
   }
@@ -177,7 +177,7 @@ export class SessionService {
    * Sets the information provided by the authentication endpoint when logging in
    * @param {LoginResponseModel | any} value
    */
-  setAuthData(value: LoginResponseModel | any) {
+  setAuthData(value: LoginResponseModel | any): void {
     this.store(this.key.loginData, value as LoginResponseModel, false);
     this.store(this.key.accessToken, value.access_token);                         // shortcut for access token
     this.store(this.key.refreshToken, value.refresh_token);                       // shortcut for refresh token
@@ -198,7 +198,7 @@ export class SessionService {
    * Sets whether the credentials should be stored or not when logging in.
    * @param {boolean} value
    */
-  setRememberMe(value: boolean) {
+  setRememberMe(value: boolean): void {
     this.store(this.key.rememberMe, value, true);
     this.rememberMe.next(value);
   }
@@ -299,7 +299,7 @@ export class SessionService {
   /**
    * Load some initial data this service manages and gets from storage service.
    */
-  private loadInitialData() {
+  private loadInitialData(): void {
     // load data
     const oli = this.retrieve(this.key.loggedIn).subscribe((val) => {
       this.loggedIn.next(val === true || val === 'true');
@@ -331,7 +331,7 @@ export class SessionService {
    * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @param value Value to be stored.
    */
-  private store(key: string, value: any, inCookie = true, options?: object) {
+  private store(key: string, value: any, inCookie = true, options?: object): void {
     inCookie ? this.storageService.putCookie(key, value, options) : this.storageService.set(key, value);
   }
 
@@ -350,7 +350,7 @@ export class SessionService {
    * Tries to unsubscribe a given subscription.
    * @param {Subscription} subscription Subscription to unsubscribe from.
    */
-  private doUnsubscribe(subscription: Subscription) {
+  private doUnsubscribe(subscription: Subscription): void {
     if (subscription) { // when performing unitary tests, subscription can be undefined sometimes by mocked values
       subscription.unsubscribe();
     }

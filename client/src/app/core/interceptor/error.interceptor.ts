@@ -1,12 +1,12 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/';
 import { tap } from 'rxjs/operators';
 
 import { NotificationService } from '../messages/notification.service';
 import { HttpStatusCode } from '../response/http-status-code.enum';
 import { InterceptorHelperService } from './interceptor-helper.service';
-import { Router } from '@angular/router';
 
 /**
  * Interceptor for catching all response errors and take action according to every specific error.

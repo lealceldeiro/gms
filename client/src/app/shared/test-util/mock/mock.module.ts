@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { DummyStubComponent } from './dummy-stub.component';
 import { RouterLinkStubDirective } from './router-link-stub.directive';
 

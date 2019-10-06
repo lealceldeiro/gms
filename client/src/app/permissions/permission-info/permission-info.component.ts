@@ -2,10 +2,11 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 import { Permission } from '../shared/permission.model';
 import { PermissionService } from '../shared/permission.service';
-import { Role } from 'src/app/roles/shared/role.model';
-import { RolePd } from 'src/app/roles/shared/role.pd';
+import { Role } from '../../roles/shared/role.model';
+import { RolePd } from '../../roles/shared/role.pd';
 
 /**
  * A component for showing a permission's info.

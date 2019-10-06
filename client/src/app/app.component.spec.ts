@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, Subject } from 'rxjs/index';
+import { of, Subject } from 'rxjs';
+
 import { AppComponent } from './app.component';
 import { SessionService } from './core/session/session.service';
 

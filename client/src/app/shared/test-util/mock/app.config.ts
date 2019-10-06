@@ -1,4 +1,4 @@
-import { IAppConfig } from 'src/app/core/model/config/app-config.model';
+import { IAppConfig } from '../../../core/model/config/app-config.model';
 
 /**
  * Sample app configuration to be used in the tests.
