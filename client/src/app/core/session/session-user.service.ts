@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+
+import { Observable } from 'rxjs';
 
 import { AppConfig } from '../config/app.config';
 import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';

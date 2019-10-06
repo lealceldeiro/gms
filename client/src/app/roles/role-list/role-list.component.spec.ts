@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { BehaviorSubject } from 'rxjs';
 
 import { RoleListComponent } from './role-list.component';

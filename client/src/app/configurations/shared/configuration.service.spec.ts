@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+
 import { BehaviorSubject, of } from 'rxjs';
 
 import { ConfigurationService } from './configuration.service';

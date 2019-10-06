@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { AppConfig } from '../../core/config/app.config';

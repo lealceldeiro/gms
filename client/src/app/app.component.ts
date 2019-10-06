@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/index';
+
+import { Subscription } from 'rxjs';
 
 import { SessionService } from './core/session/session.service';
 

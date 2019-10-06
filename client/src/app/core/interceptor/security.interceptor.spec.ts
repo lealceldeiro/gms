@@ -1,6 +1,7 @@
 import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+
 import { BehaviorSubject, of } from 'rxjs/index';
 
 import { SessionService } from '../session/session.service';

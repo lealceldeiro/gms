@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Role } from '../../roles/shared/role.model';
