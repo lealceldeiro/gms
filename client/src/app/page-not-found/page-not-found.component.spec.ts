@@ -6,36 +6,28 @@ import { PageNotFoundService } from '../core/navigation/page-not-found.service';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 describe('PageNotFoundComponent', () => {
+  @Component({ selector: 'gms-dummy', template: '' })
+  class DummyComponent { }
+
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
   let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
-  @Component({ selector: 'gms-dummy', template: '' })
-  class DummyComponent { }
-
-  let wasNotFoundFn: { (): boolean; (): boolean; (): void; };
-  let spyWasNotFound: jasmine.Spy;
-  let spyAddUrl: jasmine.Spy;
-  const spies = { wasNotFound: (_a: any) => { }, addUrl: (_a: any) => { } };
-
-  const pageNotFoundServiceStub = {
-    wasNotFound: (a: any) => { spies.wasNotFound(a); return wasNotFoundFn(); },
-    addUrl: (a: any) => { spies.addUrl(a); }
-  };
+  let pageNotFoundServiceSpy: jasmine.SpyObj<PageNotFoundService>;
 
   beforeEach(async(() => {
+    pageNotFoundServiceSpy = jasmine.createSpyObj('PageNotFoundService', ['wasNotFound', 'addUrl']);
+    pageNotFoundServiceSpy.wasNotFound.and.returnValue(true);
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([{ path: 'test', component: DummyComponent }])],
       declarations: [PageNotFoundComponent, DummyComponent],
-      providers: [{ provide: PageNotFoundService, useValue: pageNotFoundServiceStub }]
+      providers: [{ provide: PageNotFoundService, useValue: pageNotFoundServiceSpy }]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    wasNotFoundFn = () => true;
-    spyWasNotFound = spyOn(spies, 'wasNotFound');
-    spyAddUrl = spyOn(spies, 'addUrl');
     fixture = TestBed.createComponent(PageNotFoundComponent);
     component = fixture.componentInstance;
     componentDe = fixture.debugElement;
@@ -62,21 +54,21 @@ describe('PageNotFoundComponent', () => {
   });
 
   it('should call PageNotFoundService#wasNotFound on init', () => {
-    expect(spyWasNotFound).toHaveBeenCalledTimes(1);
+    expect(pageNotFoundServiceSpy.wasNotFound).toHaveBeenCalledTimes(1);
   });
 
   it('should call PageNotFoundService#addUrl if PageNotFoundService#wasNotFound returns false on init', () => {
     // re-configure whole test for this scenario when wasNotFoundFn returns false
-    wasNotFoundFn = () => false;
+    pageNotFoundServiceSpy.wasNotFound.and.returnValue(false);
     fixture = TestBed.createComponent(PageNotFoundComponent);
     component = fixture.componentInstance;
     componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
-    expect(spyAddUrl).toHaveBeenCalledTimes(1);
+    expect(pageNotFoundServiceSpy.addUrl).toHaveBeenCalledTimes(1);
   });
 
   it('should not call PageNotFoundService#addUrl if PageNotFoundService#wasNotFound returns true on init', () => {
-    expect(spyAddUrl).not.toHaveBeenCalled();
+    expect(pageNotFoundServiceSpy.addUrl).not.toHaveBeenCalled();
   });
 });

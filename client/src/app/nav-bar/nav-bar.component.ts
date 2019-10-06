@@ -55,7 +55,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   selectedSearchOption = 'Anything';
 
   /**
-   * Term used to perfom a search.
+   * Term used to perform a search.
    */
   searchTerm = null;
 
@@ -121,7 +121,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   /**
    * Makes a search action to happen in the current view.
    */
-  search() {
+  search(): void {
 
   }
 
