@@ -25,19 +25,23 @@ export class GmsCoreModule {
    */
   constructor(@Optional() @SkipSelf() parentModule: GmsCoreModule) {
     if (parentModule) {
-      console.warn('GmsCoreModule is already loaded. Consider import it in the AppModule only if you are only' +
+      console.warn('GmsCoreModule is already loaded. Consider import it in the AppModule if you are only' +
         'using its providers');
     }
   }
 
   /**
    * Method for getting a module's instance with providers.
+   *
    * @param config Optional configuration object with custom providers to be used. The following attributes can be set
    * in the object in order to set custom providers classes:
+   * <p>- `notificationService` for providing a class instead of the default NotificationService</p>
    * <p>- `sessionService` for providing a class instead of the default SessionService</p>
    * <p>- `storageService` for providing a class instead of the default StorageService</p>
    * <p>- `loginGuard` for providing a class instead of the default LoginGuard</p>
    * <p>- `sessionUserService` for providing a class instead of the default SessionUserService</p>
+   * <p>- `formHelperService` for providing a class instead of the default FormHelperService</p>
+   *
    * <p>Example of configuration object: { sessionService: MySessionService } </p>
    */
   static forRoot(config?: any): ModuleWithProviders {

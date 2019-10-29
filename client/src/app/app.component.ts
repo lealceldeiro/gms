@@ -29,12 +29,13 @@ export class AppComponent implements OnInit, OnDestroy {
   /**
    * Listens for the app when is being leaved and tries to remove the login data if the user has not chosen to be
    * remembered.
-   * @param $event
+   *
+   * @param $event Event triggered (unused for now.)
    */
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
-    this.sessionService.isRememberMe().subscribe((r: boolean) => {
-      if (!r) {
+    this.sessionService.isRememberMe().subscribe((shouldIRememberSessionInfo: boolean) => {
+      if (!shouldIRememberSessionInfo) {
         this.sessionService.closeSession();
       }
     });
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /**
    * Component constructor.
+   *
    * @param {SessionService} sessionService Service which holds session-related information.
    */
   constructor(public sessionService: SessionService) { }
@@ -53,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loggedInSub = this.sessionService.isLoggedIn().subscribe((logged) => {
       this.loggedIn = logged;
     });
+    this.sessionService.loadInitialData();
   }
 
   /**

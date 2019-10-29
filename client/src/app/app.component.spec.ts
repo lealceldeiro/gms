@@ -7,15 +7,6 @@ import { AppComponent } from './app.component';
 import { SessionService } from './core/session/session.service';
 
 describe('AppComponent', () => {
-  const event = new Event('beforeunload', { cancelable: true });
-
-  let isRememberMeSpy: jasmine.Spy;
-  let closeSessionSpy: jasmine.Spy;
-
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
-
-  // region mocks
   @Component({ selector: 'gms-nav-bar', template: '' })
   class NavBarStubComponent { }
 
@@ -28,30 +19,30 @@ describe('AppComponent', () => {
   @Component({ selector: 'ngx-ui-loader', template: '' })  // tslint:disable-line
   class LoadingIndicatorComponent { }
 
-  const spy = { isRememberMe: () => { }, closeSession: () => { } };
-  const subject = new Subject();
-
-  const sessionServiceStub = {
-    isNotLoggedIn: () => of(false),
-    isLoggedIn: () => of(true),
-    isRememberMe: () => { spy.isRememberMe(); return subject.asObservable(); },
-    closeSession: () => { spy.closeSession(); }
-  };
-  // endregion
+  const event = new Event('beforeunload', { cancelable: true });
+  const subject = new Subject<boolean>();
+  let sessionServiceSpy: jasmine.SpyObj<SessionService>;
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
 
   beforeEach(async(() => {
+    sessionServiceSpy = jasmine.createSpyObj(
+      'SessionService',
+      ['loadInitialData', 'closeSession', 'isRememberMe', 'isLoggedIn', 'loadInitialData']
+    );
+    sessionServiceSpy.isRememberMe.and.returnValue(subject.asObservable());
+    sessionServiceSpy.isLoggedIn.and.returnValue(of(true));
+
     TestBed.configureTestingModule({
       declarations: [AppComponent, NavBarStubComponent, SideMenuStubComponent, RouterOutletStubComponent,
         LoadingIndicatorComponent],
-      providers: [{ provide: SessionService, useValue: sessionServiceStub }]
+      providers: [{ provide: SessionService, useValue: sessionServiceSpy }]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    isRememberMeSpy = spyOn(spy, 'isRememberMe');
-    closeSessionSpy = spyOn(spy, 'closeSession');
     fixture.detectChanges();
   });
 
@@ -59,17 +50,22 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   }));
 
+  it('should call SessionService#loadInitialData on init', () => {
+    component.ngOnInit();
+    expect(sessionServiceSpy.loadInitialData).toHaveBeenCalled();
+  });
+
   it('should call SessionService#isRememberMe in order to get to know whether the session data should be kept ' +
     'or not ("remember me" is true)', () => {
       window.dispatchEvent(event);
-      expect(isRememberMeSpy).toHaveBeenCalled();
+      expect(sessionServiceSpy.isRememberMe).toHaveBeenCalled();
     });
 
   it('should call SessionService#isRememberMe in order to get to know whether the session data should be kept ' +
     'or not ("remember me" is false)', () => {
       window.dispatchEvent(event);
-      expect(isRememberMeSpy).toHaveBeenCalledTimes(1);
-      subject.next(false); // do not delete data
-      expect(closeSessionSpy).toHaveBeenCalled();
+      expect(sessionServiceSpy.isRememberMe).toHaveBeenCalledTimes(1);
+      subject.next(false); // do not remember
+      expect(sessionServiceSpy.closeSession).toHaveBeenCalled();
     });
 });
