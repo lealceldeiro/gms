@@ -6,5 +6,20 @@
   "apiServer": {
     "url": "http://127.0.0.1:8080/gms/api/",
     "loginUrl": "login"
+  },
+  "security": {
+    "hash": {
+      "key": {
+        "loggedIn": "lIxSkd838DJ47fLo0P4J8K2K1J7j472538MIL3k",
+        "notLoggedIn": "nLif8H7D0f6DmajD727Dj39fMf74jfKFje729Djj29faLSk38sdJD237jd210F",
+        "loginData": "lDmj8ddDj83DJ02FdHjDJ0_kdj9Dks9dkD23jC0kj7dfjDJ0Ck",
+        "user": "uSdkcndoi8jasdlu201039Jdjd92jAaw02kdDJ93jfLak93jh71d93dDJ7472Ak",
+        "accessToken": "aTJsj89572ANjfnAkdnKSJDn837fNdu1048NDJSF83r4f7ndLDJ",
+        "refreshToken": "rTjdAjs9239DSJdj5720DSJKfn8D8F0F3D9f03kvmg73Djf830sfj",
+        "headerToBeSent": "hTbSjfUSdjdMfnfu8329DHsn82Dj9fD0D89D76D7888Dj6DnNMg76s7a82j4N47F",
+        "tokenType": "tTn7ND92Md7dHd88dh62Dn6DJj3Djj3jS9Kd8di8D8shh3msd",
+        "rememberMe": "rMjfDj39fj2dsje38dJd3hfKfj3820ddF7fhS7Fh7D8che8jue"
+      }
+    }
   }
 }

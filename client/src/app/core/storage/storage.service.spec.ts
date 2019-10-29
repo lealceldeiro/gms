@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StorageService } from './storage.service';
+import { getRandomNumber } from '../../shared/test-util/functions.util';
 
 describe('StorageService', () => {
   const key = 'sampleKey';
@@ -49,19 +50,23 @@ describe('StorageService', () => {
   }));
 
   // region localStorage
-  it('should set the value specified under a specified key', () => {
+  it('should set the value specified under a specified key', (done) => {
     // fresh set
     let reset = false;
     const val = storageService.set(key, objectValue);
+
     expect(val).toEqual(objectValue, 'set should return the set value properly');
     // cache checks
-    const uk = storageService['gmsLs'] + key;
-    expect(storageService['cache'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
-    expect(storageService['cache$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cache$'][uk].subscribe((newVal: any) => valuePutterSetterChecker(reset, newVal));
+    expect(storageService['cache'][key]).toBeTruthy('Behavior subject not set properly for ' + key);
+    expect(storageService['cache$'][key]).toBeTruthy('Observable not set properly for ' + key);
+    storageService['cache$'][key].subscribe((newVal: any) => {
+      valuePutterSetterChecker(reset, newVal);
+      done();
+    });
 
     const args = localStorageSpy.setItem.calls.allArgs();
-    expect(args[0][0]).toEqual(uk);
+
+    expect(args[0][0]).toEqual(key);
     expect(args[0][1]).toEqual(objectValue);
 
     // re-set
@@ -69,74 +74,67 @@ describe('StorageService', () => {
     storageService.set(key, stringValue);
   });
 
+  it('set should return null if the key is not valid', () => {
+    storageService['isValidKey'] = () => false;
+
+    expect(storageService.set(`key${getRandomNumber()}`, `value${getRandomNumber()}`)).toBe(null);
+  });
+
   it('should re-try to set the value 2 times more if the first time it fails', fakeAsync(() => {
     localStorageSpy.setItem.and.returnValue(error$);
     const ob = 'test';
-    const uk = storageService['gmsLs'] + key;
     storageService.set(key, ob);
     tick();
     expect(localStorageSpy.setItem).toHaveBeenCalledTimes(3);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ob} under key ${uk}`);
+    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ob} under key ${key}`);
   }));
 
-  it('should get an Observable with the value specified under the key (value is cached)', () => {
-    const uk = storageService['gmsLs'] + key;
-    storageService['cache$'][uk] = new BehaviorSubject<any>(objectValue).asObservable();
-    storageService.get(key).subscribe(val => expect(val).toEqual(objectValue));
+  it('should get an Observable with the value specified under the key (value is cached)', (done) => {
+    storageService['cache$'][key] = new BehaviorSubject<any>(objectValue).asObservable();
+    storageService.get(key).subscribe(val => {
+      expect(val).toEqual(objectValue);
+      done();
+    });
   });
 
   it('should get an Observable with the value specified under the key (value is NOT cached)', () => {
     storageService.get(key).subscribe(val => expect(val).toEqual(objectValue));
 
     const args = localStorageSpy.getItem.calls.allArgs();
-    expect(args[0][0]).toEqual(storageService['gmsLs'] + key);
+    expect(args[0][0]).toEqual(key);
   });
 
-  it('should clear all elements in the cache and clear the localStorage', () => {
+  it('should clear the element saved under a key in both the cache and localStorage', (done) => {
     // mock values in cache
-    const uk = storageService['gmsLs'] + key;
-    storageService['cache'][uk] = new BehaviorSubject<string>(stringValue);
-    storageService['cache$'][uk] = (storageService['cache'][uk] as BehaviorSubject<string>).asObservable();
-    storageService.clear().subscribe((finished: boolean) => {
-      expect(finished).toBeTruthy('operation did not finished properly');
-      for (const k in storageService['cache']) {
-        if (storageService['cache'].hasOwnProperty(k)) {
-          expect((storageService['cache'][k] as BehaviorSubject<any>).getValue()).toBeNull();
-        }
-      }
-    });
-    expect(localStorageSpy.clear).toHaveBeenCalled();
-  });
-
-  it('should clear the element saved under a key in both the cache and localStorage', () => {
-    // mock values in cache
-    const uk = storageService['gmsLs'] + key;
-    storageService['cache'][uk] = new BehaviorSubject<any>(objectValue);
-    storageService['cache$'][uk] = (storageService['cache'][uk] as BehaviorSubject<any>).asObservable();
+    storageService['cache'][key] = new BehaviorSubject<any>(objectValue);
+    storageService['cache$'][key] = (storageService['cache'][key] as BehaviorSubject<any>).asObservable();
 
     storageService.clear(key).subscribe((finished: boolean) => {
       expect(finished).toBeTruthy('operation did not finished properly');
-      expect((storageService['cache'][uk] as BehaviorSubject<any>).getValue()).toBeNull();
+      expect((storageService['cache'][key] as BehaviorSubject<any>).getValue()).toBeNull();
+      done();
     });
     expect(localStorageSpy.removeItem).toHaveBeenCalled();
   });
   // endregion
 
   // region cookies
-  it('should put the value specified under a specified key', () => {
+  it('should put the value specified under a specified key', (done) => {
     // fresh set
     let reset = false;
     const val = storageService.putCookie(key, objectValue);
     expect(val).toEqual(objectValue, '`putCookie` should return the set value properly');
     // cache checks
-    const uk = storageService['gmsCk'] + key;
-    expect(storageService['cacheCk'][uk]).toBeTruthy('Behavior subject not set properly for ' + key);
-    expect(storageService['cacheCk$'][uk]).toBeTruthy('Observable not set properly for ' + key);
-    storageService['cacheCk$'][uk].subscribe((newVal: any) => valuePutterSetterChecker(reset, newVal));
+    expect(storageService['cacheCk'][key]).toBeTruthy('Behavior subject not set properly for ' + key);
+    expect(storageService['cacheCk$'][key]).toBeTruthy('Observable not set properly for ' + key);
+    storageService['cacheCk$'][key].subscribe((newVal: any) => {
+      valuePutterSetterChecker(reset, newVal);
+      done();
+    });
 
     const args = cookieServiceSpy.putObject.calls.allArgs();
-    expect(args[0][0]).toEqual(uk);
+    expect(args[0][0]).toEqual(key);
     expect(args[0][1]).toEqual(objectValue);
 
     // re-set (with a string value now)
@@ -144,82 +142,67 @@ describe('StorageService', () => {
     storageService.putCookie(key, stringValue);
   });
 
-  it('should get an Observable with the value (object) specified under the key (value is cached)', () => {
-    const uk = storageService['gmsCk'] + key;
-    storageService['cacheCk$'][uk] = new BehaviorSubject<any>(objectValue).asObservable();
-    storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(objectValue));
+  it('putCookie should return null if the key is not valid', () => {
+    storageService['isValidKey'] = () => false;
+
+    expect(storageService.putCookie(`key${getRandomNumber()}`, `value${getRandomNumber()}`)).toBe(null);
   });
 
-  it('should get an Observable with the value (string) specified under the key (value is cached)', () => {
-    const uk = storageService['gmsCk'] + key;
-    storageService['cacheCk$'][uk] = new BehaviorSubject<string>(stringValue).asObservable();
-    storageService.getCookie(key).subscribe(val => expect(val).toEqual(stringValue));
+  it('should get an Observable with the value (object) specified under the key (value is cached)', (done) => {
+    storageService['cacheCk$'][key] = new BehaviorSubject<any>(objectValue).asObservable();
+    storageService.getCookie(key, true).subscribe(val => {
+      expect(val).toEqual(objectValue);
+      done();
+    });
   });
 
-  it('should get an Observable with the value (object) specified under the key (value is NOT cached)', () => {
-    storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(objectValue));
+  it('should get an Observable with the value (string) specified under the key (value is cached)', (done) => {
+    storageService['cacheCk$'][key] = new BehaviorSubject<string>(stringValue).asObservable();
+    storageService.getCookie(key).subscribe(val => {
+      expect(val).toEqual(stringValue);
+      done();
+    });
+  });
+
+  it('should get an Observable with the value (object) specified under the key (value is NOT cached)', (done) => {
+    storageService.getCookie(key, true).subscribe(val => {
+      expect(val).toEqual(objectValue);
+      done();
+    });
 
     const args = cookieServiceSpy.getObject.calls.allArgs();
-    expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
+    expect(args[0][0]).toEqual(key);
   });
 
-  it('should get an Observable with the value (string) specified under the key (value is NOT cached)', () => {
-    storageService.getCookie(key).subscribe(val => expect(val).toEqual(stringValue));
+  it('should get an Observable with the value (string) specified under the key (value is NOT cached)', (done) => {
+    storageService.getCookie(key).subscribe(val => {
+      expect(val).toEqual(stringValue);
+      done();
+    });
 
     const args = cookieServiceSpy.get.calls.allArgs();
-    expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
+    expect(args[0][0]).toEqual(key);
   });
-
-  it('should get an Observable with all the values (no key provided) (values are NOT cached)', () => {
-    storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
-    expect(cookieServiceSpy.getAll).toHaveBeenCalled();
-  });
-
-  it('should get an Observable with all the values (no key provided) (values are in cached, cache is updated ' +
-    'with a new value (mocked one)',
-    () => {
-      const uk = storageService['gmsPriv'] + storageService['gmsCk'];
-      storageService['cacheCk'][uk] = new BehaviorSubject<object>({ testKey: 'testVal' });
-      storageService['cacheCk$'][uk] = storageService['cacheCk'][uk].asObservable();
-      storageService.getCookie().subscribe(val => expect(val).toEqual(objectValue));
-      expect(cookieServiceSpy.getAll).toHaveBeenCalled();
-    });
 
   it('should get an Observable with the `null` value when there is no specified value(object) under the key ' +
     '(and it is NOT cached)', () => {
-      const sampleValue = { mKey: 'randomMKey' };
+      const sampleValue = { mKey: `random ${getRandomNumber()}MKey` };
       cookieServiceSpy.getObject.and.returnValue(sampleValue);
       storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
 
       const args = cookieServiceSpy.getObject.calls.allArgs();
-      expect(args[0][0]).toEqual(storageService['gmsCk'] + key);
+      expect(args[0][0]).toEqual(key);
     });
 
-  it('should clear both cookies and the cache', () => {
+  it('should clear the element saved under a key in both the cache and the cookies', (done) => {
     // mock values in cache
-    const uk = storageService['gmsCk'] + key;
-    storageService['cacheCk'][uk] = new BehaviorSubject<string>(stringValue);
-    storageService['cacheCk$'][uk] = (storageService['cacheCk'][uk] as BehaviorSubject<string>).asObservable();
-    storageService.clearCookie().subscribe((finished: boolean) => {
-      expect(finished).toBeTruthy('operation did not finished properly');
-      for (const k in storageService['cacheCk']) {
-        if (storageService['cacheCk'].hasOwnProperty(k)) {
-          expect((storageService['cacheCk'][k] as BehaviorSubject<any>).getValue()).toBeNull();
-        }
-      }
-    });
-    expect(cookieServiceSpy.removeAll).toHaveBeenCalled();
-  });
-
-  it('should clear the element saved under a key in both the cache and the cookies', () => {
-    // mock values in cache
-    const uk = storageService['gmsCk'] + key;
-    storageService['cacheCk'][uk] = new BehaviorSubject<string>(stringValue);
-    storageService['cacheCk$'][uk] = (storageService['cacheCk'][uk] as BehaviorSubject<string>).asObservable();
+    storageService['cacheCk'][key] = new BehaviorSubject<string>(stringValue);
+    storageService['cacheCk$'][key] = (storageService['cacheCk'][key] as BehaviorSubject<string>).asObservable();
 
     storageService.clearCookie(key).subscribe((finished: boolean) => {
       expect(finished).toBeTruthy('operation did not finished properly');
-      expect((storageService['cacheCk'][uk] as BehaviorSubject<string>).getValue()).toBeNull();
+      expect((storageService['cacheCk'][key] as BehaviorSubject<string>).getValue()).toBeNull();
+      done();
     });
     expect(cookieServiceSpy.remove).toHaveBeenCalled();
   });

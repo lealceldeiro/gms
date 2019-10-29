@@ -19,9 +19,10 @@ import { AppConfig } from './core/config/app.config';
 
 /**
  * Factory for loading the app configuration at startup.
+ *
  * @param appConfig AppConfig instance.
  */
-export function initializeApp(appConfig: AppConfig) {
+export function initializeApp(appConfig: AppConfig): () => Promise<void> {
   return () => appConfig.load();
 }
 
