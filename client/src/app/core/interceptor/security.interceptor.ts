@@ -50,12 +50,14 @@ export class SecurityInterceptor implements HttpInterceptor {
 
   /**
    * Intercepts all request in order to set the Authorization header properly if the user is logged in.
+   *
    * @param {HttpRequest<any>} req Request performed.
    * @param {HttpHandler} next Next http handler.
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.isLoggedIn && this.header && this.tokenType && this.accessToken) { // logged in and all necessary data is here already
+    if (!!this.isLoggedIn && !!this.header && !!this.tokenType && !!this.accessToken) {
+      // logged in and all necessary data is here already
       const iHeaders: { [key: string]: any } = {};
       iHeaders[this.header] = this.tokenType + ' ' + this.accessToken;
       return next.handle(req.clone({ setHeaders: iHeaders }));

@@ -6,7 +6,6 @@ import { BooleanPipe } from './boolean-pipe/boolean.pipe';
 import { BootstrapComponentsModule } from './bootstrap-components/bootstrap-components.module';
 
 @NgModule({
-  imports: [],
   declarations: [BooleanPipe],
   exports: [CommonModule, FormsModule, ReactiveFormsModule, BootstrapComponentsModule, BooleanPipe]
 })

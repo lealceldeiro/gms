@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import * as _ from 'lodash';
+
 import { environment } from '../../../environments/environment';
 import { IAppConfig } from '../model/config/app-config.model';
+import { Util } from '../util/util';
 
 /**
  * Service for loading the app configurations.
@@ -17,7 +20,7 @@ export class AppConfig {
   /**
    * Path to the configuration files.
    */
-  private PATH = 'assets/config/config';
+  private readonly PATH = `assets/config/config.${environment.name}.json`;
 
   /**
    * Creates a new instance of AppConfig.
@@ -29,14 +32,17 @@ export class AppConfig {
    * Loads the application configuration.
    */
   load(): Promise<void> {
-    const jsonFile = `${this.PATH}.${environment.name}.json`;
     return new Promise<void>((resolve, reject) => {
-      this.http.get(jsonFile).toPromise().then((response) => {
-        AppConfig.settings = <IAppConfig>response;
-        resolve();
-      }).catch((response: any) => {
-        reject(`Could not load configuration file '${jsonFile}': ${JSON.stringify(response)}`);
-      });
+      this.http.get<IAppConfig>(this.PATH).toPromise()
+        .then((appConfig: IAppConfig) => {
+          const keyHashed = Util.hashMapFrom(appConfig.security.hash.key);
+          AppConfig.settings = { ...appConfig, security: { hash: { key: keyHashed } } };
+
+          resolve();
+        })
+        .catch((err: any) => {
+          reject(`Could not load configuration file '${this.PATH}': ${_(err).value()}`);
+        });
     });
   }
 }
