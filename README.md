@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)&nbsp;&nbsp;
 [![Build Status](https://travis-ci.org/lealceldeiro/gms.svg?branch=master)](https://travis-ci.org/lealceldeiro/gms)&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/lealceldeiro/gms/badge.svg?branch=master)](https://coveralls.io/github/lealceldeiro/gms?branch=master)&nbsp;&nbsp;
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)&nbsp;&nbsp;
 
 # Table of Contents
 
@@ -32,7 +33,9 @@ The project consists of two main (independent) modules:
   2. From the location `server/` run `gradle bootWar`.
 * API + Angular Client
   1. You need to have [Node.js][4] 10.9.0 or later, together with an [npm][7] package manager.
-  2. Consider modifying the configuration file according to your environment: `client/src/assets/config/config.dev.json` (when you're in development mode) or `assets/config/config.prod.json` (when you're in production mode) with the proper values.
+  2. Consider modifying the configuration file with the proper values according to your environment:
+      * `client/src/assets/config/config.dev.json` (when you're in development mode)
+      * `client/src/assets/config/config.prod.json` (when you're in production mode)
   3. From the location `server/` run `gradle bootWar -Pclient=true`.
   4. Optionally you can modify other behaviors for the client app while generating the WAR using the following commands:
   * `client`, use `-Pclient=true` for generating the client Angular app.
