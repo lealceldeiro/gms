@@ -34,8 +34,8 @@ export function initializeApp(appConfig: AppConfig): () => Promise<void> {
   imports: [
     BrowserModule,
     HttpClientModule,
-    NgxUiLoaderModule,        // "loader" (spinner) component
-    BrowserAnimationsModule,  // required by toastr
+    NgxUiLoaderModule, // "loader" (spinner) component
+    BrowserAnimationsModule, // required by toastr
     ToastrModule.forRoot({ preventDuplicates: true, autoDismiss: true, enableHtml: true }),
     CookieModule.forRoot(),
     NgbModule,

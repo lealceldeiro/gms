@@ -30,7 +30,6 @@ describe('LoginComponent', () => {
   const formHelperStub = { markFormElementsAsTouched: () => { } };
 
   let component: LoginComponent;
-  let componentEl: HTMLElement;
   let componentDe: DebugElement;
   let fixture: ComponentFixture<LoginComponent>;
   let navigateByUrlSpy: jasmine.Spy;
@@ -60,7 +59,6 @@ describe('LoginComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    componentEl = fixture.nativeElement;
     componentDe = fixture.debugElement;
     component.loginForm.controls['rememberMe'].setValue(false);
     fixture.detectChanges();

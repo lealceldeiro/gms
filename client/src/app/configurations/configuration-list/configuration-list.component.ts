@@ -13,16 +13,15 @@ import { ConfigurationService } from '../shared/configuration.service';
   styleUrls: ['./configuration-list.component.scss']
 })
 export class ConfigurationListComponent implements OnInit, OnDestroy {
-
   /**
    * Configurations key
    */
-  keys: { [k: string]: Array<string> } = { system: [], user: []};
+  keys: { [k: string]: Array<string> } = { system: [], user: [] };
 
   /**
    * Configurations values corresponding to the keys.
    */
-  values: { [k: string]: Array<string> } = { system: [], user: []};
+  values: { [k: string]: Array<string> } = { system: [], user: [] };
 
   /**
    * Configurations values' subscription
@@ -75,5 +74,4 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
       this.values.user = Object.values(configs);
     });
   }
-
 }

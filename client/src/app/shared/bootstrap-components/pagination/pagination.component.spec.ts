@@ -7,7 +7,7 @@ import { PaginationComponent } from './pagination.component';
 
 describe('GmsPaginationComponent', () => {
   // tslint:disable-next-line:component-selector
-  @Component({ template: ``, selector: 'ngb-pagination' })
+  @Component({ template: '', selector: 'ngb-pagination' })
   class DummyNgPagination {
     @Input() boundaryLinks = false;
     @Input() collectionSize = 0;
@@ -23,7 +23,9 @@ describe('GmsPaginationComponent', () => {
 
   // some arbitrary values to generate random numbers and booleans in order
   // to make tests more realistic
-  const min = 1, max = 11, pivot = 6;
+  const min = 1;
+  const max = 11;
+  const pivot = 6;
   const dummy = {
     boundaryLinks: getRandomNumber(min, max) > pivot,
     collectionSize: getRandomNumber(1, 25),
@@ -35,13 +37,12 @@ describe('GmsPaginationComponent', () => {
     pageSize: getRandomNumber(min, max),
     rotate: getRandomNumber(min, max) > pivot,
     size: '-',
-    pageChangeAction: (page: number) => { }
+    pageChangeAction: () => { }
   };
 
   let component: PaginationComponent;
   let fixture: ComponentFixture<PaginationComponent>;
   let componentDe: DebugElement;
-  let componentEl: HTMLElement;
   let spyOnEmit: jasmine.Spy;
 
   beforeEach(async(() => {
@@ -54,7 +55,6 @@ describe('GmsPaginationComponent', () => {
     fixture = TestBed.createComponent(PaginationComponent);
     component = fixture.componentInstance;
     componentDe = fixture.debugElement;
-    componentEl = fixture.nativeElement;
 
     component.boundaryLinks = dummy.boundaryLinks;
     component.collectionSize = dummy.collectionSize;

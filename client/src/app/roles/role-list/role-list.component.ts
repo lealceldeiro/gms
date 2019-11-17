@@ -15,7 +15,6 @@ import { RolePd } from '../shared/role.pd';
   styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit, OnDestroy {
-
   /**
    * List of roles
    */
@@ -32,7 +31,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   page: { total: number, size: number, current: number } = {
     total: 0,
     size: 10,
-    current: 1,
+    current: 1
   };
 
   /**
@@ -66,5 +65,4 @@ export class RoleListComponent implements OnInit, OnDestroy {
       this.page.current = rolePd.page.number + 1;
     });
   }
-
 }

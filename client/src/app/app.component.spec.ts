@@ -13,10 +13,10 @@ describe('AppComponent', () => {
   @Component({ selector: 'gms-side-menu', template: '' })
   class SideMenuStubComponent { }
 
-  @Component({ selector: 'router-outlet', template: '' })  // tslint:disable-line
+  @Component({ selector: 'router-outlet', template: '' }) // tslint:disable-line
   class RouterOutletStubComponent { }
 
-  @Component({ selector: 'ngx-ui-loader', template: '' })  // tslint:disable-line
+  @Component({ selector: 'ngx-ui-loader', template: '' }) // tslint:disable-line
   class LoadingIndicatorComponent { }
 
   const event = new Event('beforeunload', { cancelable: true });
@@ -55,17 +55,17 @@ describe('AppComponent', () => {
     expect(sessionServiceSpy.loadInitialData).toHaveBeenCalled();
   });
 
-  it('should call SessionService#isRememberMe in order to get to know whether the session data should be kept ' +
-    'or not ("remember me" is true)', () => {
-      window.dispatchEvent(event);
-      expect(sessionServiceSpy.isRememberMe).toHaveBeenCalled();
-    });
+  it(`should call SessionService#isRememberMe in order to get to know whether the session data should be kept
+    or not ("remember me" is true)`, () => {
+    window.dispatchEvent(event);
+    expect(sessionServiceSpy.isRememberMe).toHaveBeenCalled();
+  });
 
-  it('should call SessionService#isRememberMe in order to get to know whether the session data should be kept ' +
-    'or not ("remember me" is false)', () => {
-      window.dispatchEvent(event);
-      expect(sessionServiceSpy.isRememberMe).toHaveBeenCalledTimes(1);
-      subject.next(false); // do not remember
-      expect(sessionServiceSpy.closeSession).toHaveBeenCalled();
-    });
+  it(`should call SessionService#isRememberMe in order to get to know whether the session data should be kept
+    or not ("remember me" is false)`, () => {
+    window.dispatchEvent(event);
+    expect(sessionServiceSpy.isRememberMe).toHaveBeenCalledTimes(1);
+    subject.next(false); // do not remember
+    expect(sessionServiceSpy.closeSession).toHaveBeenCalled();
+  });
 });

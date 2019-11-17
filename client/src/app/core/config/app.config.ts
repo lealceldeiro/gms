@@ -41,7 +41,7 @@ export class AppConfig {
           resolve();
         })
         .catch((err: any) => {
-          reject(`Could not load configuration file '${this.PATH}': ${_(err).value()}`);
+          reject(new Error(`Could not load configuration file '${this.PATH}': ${_(err).value()}`));
         });
     });
   }

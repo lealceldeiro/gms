@@ -1,4 +1,3 @@
-import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -7,7 +6,6 @@ import { JumbotronComponent } from './jumbotron.component';
 describe('GmsJumbotronComponent', () => {
   let component: JumbotronComponent;
   let fixture: ComponentFixture<JumbotronComponent>;
-  let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
   beforeEach(async(() => {
@@ -20,7 +18,6 @@ describe('GmsJumbotronComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(JumbotronComponent);
     component = fixture.componentInstance;
-    componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
   });

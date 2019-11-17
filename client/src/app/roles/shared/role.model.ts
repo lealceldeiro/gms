@@ -1,9 +1,7 @@
 /**
  * Domain object which represents a role.
  */
-
 export class Role {
-
   /**
    * Label to which the role can be referred to.
    */

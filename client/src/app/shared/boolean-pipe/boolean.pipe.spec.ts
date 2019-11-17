@@ -6,7 +6,9 @@ import { getRandomNumber } from '../test-util/functions.util';
 describe('BooleanPipe', () => {
   let pipe: PipeTransform;
 
-  beforeEach(() => pipe = new BooleanPipe());
+  beforeEach(() => {
+    pipe = new BooleanPipe();
+  });
 
   it('create an instance', () => {
     expect(pipe).toBeTruthy();
@@ -29,5 +31,4 @@ describe('BooleanPipe', () => {
     const falsyVal = 'val-' + getRandomNumber() + 'rnd';
     expect(pipe.transform(false, undefined, falsyVal)).toEqual(falsyVal);
   });
-
 });

@@ -6,7 +6,6 @@ import { FormGroup, NgForm } from '@angular/forms';
  */
 @Injectable()
 export class FormHelperService {
-
   /**
    * Service constructor
    */

@@ -10,7 +10,6 @@ import { SessionService } from '../session/session.service';
  */
 @Injectable()
 export class SecurityInterceptor implements HttpInterceptor {
-
   /**
    * Session service for retrieving session-related info in order to modify requests regarding to security parameters.
    */
@@ -42,10 +41,18 @@ export class SecurityInterceptor implements HttpInterceptor {
    */
   constructor(private injector: Injector) {
     this.sessionService = this.injector.get(SessionService);
-    this.sessionService.isLoggedIn().subscribe((ili: boolean) => this.isLoggedIn = ili);
-    this.sessionService.getHeader().subscribe((h: string) => this.header = h);
-    this.sessionService.getTokenType().subscribe((tt: string) => this.tokenType = tt);
-    this.sessionService.getAccessToken().subscribe((at: string) => this.accessToken = at);
+    this.sessionService.isLoggedIn().subscribe((loggedIn: boolean) => {
+      this.isLoggedIn = loggedIn;
+    });
+    this.sessionService.getHeader().subscribe((header: string) => {
+      this.header = header;
+    });
+    this.sessionService.getTokenType().subscribe((tokenType: string) => {
+      this.tokenType = tokenType;
+    });
+    this.sessionService.getAccessToken().subscribe((accessToken: string) => {
+      this.accessToken = accessToken;
+    });
   }
 
   /**

@@ -12,7 +12,6 @@ import { excluded, routes } from '../app-routing.module';
   styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent implements OnInit {
-
   /**
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
    */
@@ -51,11 +50,13 @@ export class SideMenuComponent implements OnInit {
    */
   private getNameFrom(url: string | undefined | null): string {
     const base: string = url || 'Undefined';
-    const relatives = this.getCleanUrls(base.split('/'));      // get [business-management, local]
+    const relatives = this.getCleanUrls(base.split('/')); // get [business-management, local]
     let name = '';
     relatives.forEach(partialName => {
       const names = partialName.split('-'); // get [business, management]
-      names.forEach(subName => name += subName ? ' ' + this.getCapitalized(subName) : '');
+      names.forEach(subName => {
+        name += subName ? ' ' + this.getCapitalized(subName) : '';
+      });
     });
     return name.slice(1);
   }

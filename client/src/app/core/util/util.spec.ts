@@ -1,5 +1,4 @@
 import * as hash from 'object-hash';
-import * as _ from 'lodash';
 
 import { Util } from './util';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
@@ -19,10 +18,11 @@ describe('Util', () => {
   });
 
   it('hashMapFrom should return a clone of the input if it is a primitive', () => {
+    // array with number, string, boolean, null and undefined
     const values = [
-      getRandomNumber(),                  // number
-      `test${getRandomNumber()}`,         // string
-      getRandomNumber() % 2 === 0,        // boolean
+      getRandomNumber(),
+      `test${getRandomNumber()}`,
+      getRandomNumber() % 2 === 0,
       null,
       undefined
     ];
@@ -33,24 +33,24 @@ describe('Util', () => {
     });
   });
 
-  it('hashMapFrom should return a clone of the input when it\'s a plain object ' +
-    'and should set all of its keys to their hashed values (calling Util#hash internally)', () => {
-      const returnValueForHash = `sample${getRandomNumber()}value`;
-      spyOn(Util, 'hashFrom').and.returnValue(returnValueForHash);
-      Util.hashFrom = <T>(unused: T): string => returnValueForHash;
+  it(`hashMapFrom should return a clone of the input when it's a plain object
+    and should set all of its keys to their hashed values (calling Util#hash internally)`, () => {
+    const returnValueForHash = `sample${getRandomNumber()}value`;
+    spyOn(Util, 'hashFrom').and.returnValue(returnValueForHash);
+    Util.hashFrom = (): string => returnValueForHash;
 
-      const seed: { [k: string]: string } = {};
-      const expectedHashedObject: { [k: string]: string } = {};
+    const seed: { [k: string]: string } = {};
+    const expectedHashedObject: { [k: string]: string } = {};
 
-      let key: string;
-      for (let i = 0; i < getRandomNumber(); i++) {
-        key = `test${getRandomNumber()}key`;
-        seed[key] = `test${getRandomNumber()}value`;
-        expectedHashedObject[key] = returnValueForHash;
-      }
+    let key: string;
+    for (let i = 0; i < getRandomNumber(); i++) {
+      key = `test${getRandomNumber()}key`;
+      seed[key] = `test${getRandomNumber()}value`;
+      expectedHashedObject[key] = returnValueForHash;
+    }
 
-      expect(Util.hashMapFrom(seed)).toEqual(expectedHashedObject);
-    });
+    expect(Util.hashMapFrom(seed)).toEqual(expectedHashedObject);
+  });
 
   it('getRandomNumberBetween should give a number between 0 and 100 by default', () => {
     let random;

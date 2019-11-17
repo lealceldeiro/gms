@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class InterceptorHelperService {
-
   /**
    * Excluded urls from being caught in order to handle any possible error.
    * @type {any[]}

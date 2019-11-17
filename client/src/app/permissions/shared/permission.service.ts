@@ -14,7 +14,6 @@ import { PermissionPd } from './permission.pd';
  */
 @Injectable()
 export class PermissionService {
-
   /**
    * API base url.
    */
@@ -61,5 +60,4 @@ export class PermissionService {
     p[ParamsService.PAGE] = page - 1;
     return this.http.get<RolePd>(`${this.url}/${id}/roles`, { params: this.paramsService.getHttpParams(p) });
   }
-
 }

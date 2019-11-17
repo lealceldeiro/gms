@@ -6,12 +6,12 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-firefox-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-jasmine-html-reporter',
+      'karma-coverage-istanbul-reporter',
+      '@angular-devkit/build-angular/plugins/karma'
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -26,10 +26,12 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] :
-      process.platform === 'win32' ? ['Chrome'] :           // windows
-        [
-          'Chromium',
+    browsers: process.env.TRAVIS
+      ? ['Chrome_travis_ci']
+      : process.platform === 'win32'
+        ? ['Chrome']
+        : [
+          'Chromium'
           // 'Firefox'
         ],
     customLaunchers: process.env.TRAVIS ? {
@@ -41,5 +43,5 @@ module.exports = function (config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
-};
+  })
+}

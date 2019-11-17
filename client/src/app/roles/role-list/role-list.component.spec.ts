@@ -54,9 +54,9 @@ describe('RoleListComponent', () => {
     rolesServiceSpy.getRoles.and.returnValue(of(sampleDataValue));
 
     TestBed.configureTestingModule({
-      declarations: [ RoleListComponent ],
+      declarations: [RoleListComponent],
       imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{ path: './', component: DummyStubComponent }])],
-      providers: [ { provide: RolesService, useValue: rolesServiceSpy }]
+      providers: [{ provide: RolesService, useValue: rolesServiceSpy }]
     }).compileComponents();
   }));
 

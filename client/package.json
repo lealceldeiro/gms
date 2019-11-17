@@ -12,7 +12,7 @@
     "testwatch": "ng test --watch=true",
     "testwatchnosourcemap": "ng test --watch=true --sourceMap=false",
     "testcoverage": "ng test --watch=false --code-coverage",
-    "lint": "ng lint",
+    "lint": "npx standardx **/*.ts && ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -51,6 +51,8 @@
     "@types/jasmine": "^3.4.0",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.7.5",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
     "codelyzer": "^5.1.0",
     "coveralls": "^3.0.6",
     "jasmine-core": "^3.5.0",
@@ -63,8 +65,29 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "node-sass": "^4.12.0",
     "protractor": "^5.4.2",
+    "standardx": "^5.0.0",
     "ts-node": "^8.2.0",
     "tslint": "^5.17.0",
     "typescript": "~3.4.2"
+  },
+  "standardx": {
+    "globals": [
+      "jasmine",
+      "expect",
+      "it",
+      "describe",
+      "beforeEach",
+      "beforeAll",
+      "afterEach",
+      "afterAll",
+      "spyOn",
+      "HTMLElement",
+      "ErrorEvent",
+      "Event"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
   }
 }

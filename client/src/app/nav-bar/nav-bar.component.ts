@@ -15,7 +15,6 @@ import { User } from '../core/session/user.model';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-
   /**
    * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
    */
@@ -89,7 +88,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.loggedInSub = this.sessionService.isLoggedIn().subscribe((logged: boolean) => this.loggedIn = logged);
+    this.loggedInSub = this.sessionService.isLoggedIn().subscribe((logged: boolean) => {
+      this.loggedIn = logged;
+    });
     this.userSub = this.sessionService.getUser().subscribe((userInfo: User) => {
       this.user = userInfo;
     });
@@ -126,5 +127,4 @@ export class NavBarComponent implements OnInit, OnDestroy {
   search(): void {
 
   }
-
 }

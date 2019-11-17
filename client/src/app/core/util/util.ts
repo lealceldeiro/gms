@@ -7,7 +7,6 @@ import { IPredicate } from '../predicate/predicate.interface';
  * Utility class.
  */
 export class Util {
-
   /**
    * Generate a hash from a T value.
    *

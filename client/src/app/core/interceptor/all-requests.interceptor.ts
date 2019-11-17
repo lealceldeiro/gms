@@ -10,7 +10,6 @@ import { tap } from 'rxjs/operators';
  */
 @Injectable()
 export class AllRequestsInterceptor implements HttpInterceptor {
-
   /**
    * Service which handles the UI loader.
    * @type {NgxUiLoaderService}

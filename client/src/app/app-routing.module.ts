@@ -13,14 +13,14 @@ export const routes: Routes = [
     canActivateChild: [LoginGuard],
     canLoad: [LoginGuard]
   },
-  /*{
+  /* {
     path: 'owned-entities',
     loadChildren: () => import('./owned-entities/owned-entities.module').then(mod => mod.OwnedEntitiesModule)
   },
   {
     path: 'users',
     loadChildren: () => import('./users/users.module').then(mod => mod.UsersModule)
-  },*/
+  }, */
   {
     path: 'roles',
     loadChildren: () => import('./roles/roles.module').then(mod => mod.RolesModule)

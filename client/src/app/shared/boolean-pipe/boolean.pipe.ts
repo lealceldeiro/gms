@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
  */
 @Pipe({ name: 'boolean' })
 export class BooleanPipe implements PipeTransform {
-
   /**
    * Transforms the value to a human readable shape depending on whether its value is falsy or truthy.
    * @param value The from where the truthy is checked.
@@ -15,5 +14,4 @@ export class BooleanPipe implements PipeTransform {
   transform(value: any, trueVal: string = 'true', falseVal: string = 'false'): string {
     return value ? trueVal : falseVal;
   }
-
 }

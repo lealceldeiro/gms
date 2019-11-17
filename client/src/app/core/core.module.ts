@@ -14,10 +14,9 @@ import { SessionService } from './session/session.service';
 import { StorageService } from './storage/storage.service';
 
 @NgModule({
-  declarations: [],
+  declarations: []
 })
 export class GmsCoreModule {
-
   /**
    * Module's constructor.
    * @param {GmsCoreModule} parentModule Self GmsCoreModule injected into its own constructor in order to guard against a lazy-loaded module
