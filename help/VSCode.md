@@ -25,7 +25,7 @@ These extensions are required to be added to VS Code:
 
 ## 2.2. Additional extensions
 
-These extensions are not required to be installed in order to develop, but they will higly increase your productivity.
+These extensions are not required to be installed in order to develop, but they will highly increase your productivity.
 
 * [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) (this one, will actually install many of the listed below)
 * [Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle)
@@ -45,6 +45,7 @@ These extensions are not required to be installed in order to develop, but they 
 * [angular2-inline](https://marketplace.visualstudio.com/items?itemName=natewallace.angular2-inline)
 * [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 * [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
+* [vscode-standardjs-snippets](https://marketplace.visualstudio.com/items?itemName=capaj.vscode-standardjs-snippets)
 * [Node npm](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
 * [Peacock](https://marketplace.visualstudio.com/items?itemName=johnpapa.vscode-peacock)
 * [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
