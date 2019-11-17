@@ -21,7 +21,6 @@ import { LoginService } from '../service/login.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   /**
    * Form for handling the login data inputted by the user.
    */
@@ -46,10 +45,14 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @param formHelperService FormHelperService.
    * @param notificationService {NotificationService} Service for showing the messages.
    */
-  constructor(private loginService: LoginService, private sessionService: SessionService, private router: Router,
-    private fb: FormBuilder, private formHelperService: FormHelperService,
-    private notificationService: NotificationService) {
-
+  constructor(
+    private loginService: LoginService,
+    private sessionService: SessionService,
+    private router: Router,
+    private fb: FormBuilder,
+    private formHelperService: FormHelperService,
+    private notificationService: NotificationService
+  ) {
     this.loginForm = this.fb.group({
       usernameOrEmail: [null, Validators.required],
       password: [null, Validators.required],
@@ -110,5 +113,4 @@ export class LoginComponent implements OnInit, OnDestroy {
     const ctrl = this.loginForm.get(name);
     return ctrl ? ctrl.value : null;
   }
-
 }

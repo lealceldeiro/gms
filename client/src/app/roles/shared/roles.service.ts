@@ -14,7 +14,6 @@ import { PermissionPd } from '../../permissions/shared/permission.pd';
  */
 @Injectable()
 export class RolesService {
-
   /**
    * API base url.
    */

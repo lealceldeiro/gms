@@ -66,10 +66,10 @@ describe('SideMenuComponent', () => {
     }
   });
 
-  it('#getNameFrom should return a logical name from a given url. ' +
-    'i.e: from /business-management/local/ it should return Business Management Local', () => {
-      expect(component['getNameFrom']('/business-management/local/')).toEqual('Business Management Local');
-    });
+  it(`#getNameFrom should return a logical name from a given url.
+    i.e: from /business-management/local/ it should return Business Management Local`, () => {
+    expect(component['getNameFrom']('/business-management/local/')).toEqual('Business Management Local');
+  });
 
   it('#getCapitalized should return a capitalized string. i.e: from `business` it returns `Business`', () => {
     expect(component['getCapitalized']('business')).toEqual('Business');
@@ -80,13 +80,12 @@ describe('SideMenuComponent', () => {
   it('#getCleanUrls should return only the url that are good candidates to be shown in the UI ', () => {
     const randomVal = 'some-random-url' + getRandomNumber() + '-val';
     const testUrls = [
-      '*sdf',         // nothing with asterisks
-      'login',        // remove the login word url
+      '*sdf', // nothing with asterisks
+      'login', // remove the login word url
       randomVal
     ];
     const expected = [randomVal];
 
     expect(component['getCleanUrls'](testUrls)).toEqual(expected);
   });
-
 });

@@ -22,23 +22,23 @@ describe('HelperService', () => {
 
   it('should mark every control inside a form as touched', () => {
     const fg = fb.group({
-      'c1': 'someValue',
-      'c2': 'someOtherVal'
+      c1: 'someValue',
+      c2: 'someOtherVal'
     });
     let c1 = fg.get('c1');
     expect(c1).not.toBeFalsy();
-    if (!!c1) {
+    if (c1) {
       expect(c1.touched).toBeFalsy();
     }
     let c2 = fg.get('c2');
     expect(c2).not.toBeFalsy();
-    if (!!c2) {
+    if (c2) {
       expect(c2.touched).toBeFalsy();
     }
     formHelperService.markFormElementsAsTouched(fg);
     c1 = fg.get('c1');
     expect(c1).not.toBeFalsy();
-    if (!!c1) {
+    if (c1) {
       expect(c1.touched).toBeTruthy();
     }
     c2 = fg.get('c2');

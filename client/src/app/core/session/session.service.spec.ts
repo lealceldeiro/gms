@@ -25,7 +25,7 @@ describe('SessionService', () => {
     refresh_token_expiration_time: getRandomNumber(0, 9999),
     token_expiration_time: 9999999,
     token_type: 'typeTMock',
-    username: 'userSample',
+    username: 'userSample'
   };
   const subjectNull$ = new BehaviorSubject(null).asObservable();
   const trueVal$ = new BehaviorSubject(true).asObservable();
@@ -43,7 +43,7 @@ describe('SessionService', () => {
     storageServiceSpy.getCookie.and.returnValue(subjectNull$);
     storageServiceSpy.clearCookie.and.returnValue(trueVal$);
 
-    utilAllValuesFulfilSpy = spyOn(Util, 'allValuesFulfil').and.returnValue(true);   // mock behavior for keys validity: make them valid
+    utilAllValuesFulfilSpy = spyOn(Util, 'allValuesFulfil').and.returnValue(true); // mock behavior for keys validity: make them valid
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -52,39 +52,38 @@ describe('SessionService', () => {
     sessionService = TestBed.get(SessionService);
   });
 
-  it('loadInitialData should call retrieve to get data for following keys: loggedInKey, notLoggedInKey, userKey,' +
-    ' loginDataKey and rememberMeKey... and set the proper values to the observables holding this data', () => {
-      const value = `testValue${getRandomNumber()}`;
-      const spy = { retrieve: (unused: string, unused2: boolean) => { /* no-op */ } };
-      const retrieveSpy = spyOn(spy, 'retrieve');
-      sessionService['retrieve'] = (key: string, fromCookie: boolean): Observable<any> => {
-        spy.retrieve(key, fromCookie);
-        return of(value);
-      };
-      const valueInCookiesErrorMessage = 'is stored in cookies, it should be retrieved from cookies';
-      const valueInStorageErrorMessage = 'is stored in storage, it should be retrieved from storage';
-      const trueOrUndefined = [undefined, true];
+  it(`loadInitialData should call retrieve to get data for following keys: loggedInKey, notLoggedInKey, userKey,
+    loginDataKey and rememberMeKey... and set the proper values to the observables holding this data`, () => {
+    const value = `testValue${getRandomNumber()}`;
+    const spy = { retrieve: (unused1: string, unused2: boolean) => { /* no-op */ } };
+    const retrieveSpy = spyOn(spy, 'retrieve');
+    sessionService['retrieve'] = (key: string, fromCookie: boolean): Observable<any> => {
+      spy.retrieve(key, fromCookie);
+      return of(value);
+    };
+    const valueInCookiesErrorMessage = 'is stored in cookies, it should be retrieved from cookies';
+    const valueInStorageErrorMessage = 'is stored in storage, it should be retrieved from storage';
+    const trueOrUndefined = [undefined, true];
 
-      sessionService.loadInitialData();
+    sessionService.loadInitialData();
 
-      expect(retrieveSpy).toHaveBeenCalledTimes(5);
+    expect(retrieveSpy).toHaveBeenCalledTimes(5);
 
-      expect(retrieveSpy.calls.argsFor(0)[0]).toBe(sessionService['loggedInKey']);
-      expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(0)[1], `loggedInKey ${valueInCookiesErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(0)[0]).toBe(sessionService['loggedInKey']);
+    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(0)[1], `loggedInKey ${valueInCookiesErrorMessage}`);
 
-      expect(retrieveSpy.calls.argsFor(1)[0]).toBe(sessionService['notLoggedInKey']);
-      expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(1)[1], `notLoggedInKey ${valueInCookiesErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(1)[0]).toBe(sessionService['notLoggedInKey']);
+    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(1)[1], `notLoggedInKey ${valueInCookiesErrorMessage}`);
 
-      expect(retrieveSpy.calls.argsFor(2)[0]).toBe(sessionService['userKey']);
-      expect(retrieveSpy.calls.argsFor(2)[1]).toBe(false, `userKey ${valueInStorageErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(2)[0]).toBe(sessionService['userKey']);
+    expect(retrieveSpy.calls.argsFor(2)[1]).toBe(false, `userKey ${valueInStorageErrorMessage}`);
 
-      expect(retrieveSpy.calls.argsFor(3)[0]).toBe(sessionService['loginDataKey']);
-      expect(retrieveSpy.calls.argsFor(3)[1]).toBe(false, `loginDataKey ${valueInStorageErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(3)[0]).toBe(sessionService['loginDataKey']);
+    expect(retrieveSpy.calls.argsFor(3)[1]).toBe(false, `loginDataKey ${valueInStorageErrorMessage}`);
 
-      expect(retrieveSpy.calls.argsFor(4)[0]).toBe(sessionService['rememberMeKey']);
-      expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(4)[1], `rememberMeKey ${valueInCookiesErrorMessage}`);
-
-    });
+    expect(retrieveSpy.calls.argsFor(4)[0]).toBe(sessionService['rememberMeKey']);
+    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(4)[1], `rememberMeKey ${valueInCookiesErrorMessage}`);
+  });
 
   it('should be created', inject([SessionService], (service: SessionService) => {
     expect(service).toBeTruthy();
@@ -235,20 +234,20 @@ describe('SessionService', () => {
   });
 
   describe('test set values', () => {
-    it('setLoggedIn should call the store service in order to save in localStorage the values regarding to' +
-      '`loggedIn` and `notLoggedIn` and update the value of `loggedIn` and `notLoggedIn` subjects', () => {
-        setUpSessionServiceProperties();
-        const value = getRandomNumber() % 2 === 0;
-        sessionService.setLoggedIn(value);
+    it(`setLoggedIn should call the store service in order to save in localStorage the values regarding to
+      'loggedIn' and 'notLoggedIn' and update the value of 'loggedIn' and 'notLoggedIn' subjects`, () => {
+      setUpSessionServiceProperties();
+      const value = getRandomNumber() % 2 === 0;
+      sessionService.setLoggedIn(value);
 
-        expect(storageServiceSpy.putCookie).toHaveBeenCalled();
-        expect(storageServiceSpy.putCookie.calls.argsFor(0)[0]).toBe(sessionService['loggedInKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(0)[1]).toBe(value);
-        expect(storageServiceSpy.putCookie.calls.argsFor(1)[0]).toBe(sessionService['notLoggedInKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(1)[1]).toBe(!value);
-        expect(sessionService['loggedIn'].getValue()).toBe(value);
-        expect(sessionService['notLoggedIn'].getValue()).toBe(!value);
-      });
+      expect(storageServiceSpy.putCookie).toHaveBeenCalled();
+      expect(storageServiceSpy.putCookie.calls.argsFor(0)[0]).toBe(sessionService['loggedInKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(0)[1]).toBe(value);
+      expect(storageServiceSpy.putCookie.calls.argsFor(1)[0]).toBe(sessionService['notLoggedInKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(1)[1]).toBe(!value);
+      expect(sessionService['loggedIn'].getValue()).toBe(value);
+      expect(sessionService['notLoggedIn'].getValue()).toBe(!value);
+    });
     it('setLoggedIn should early return if the key is not valid', () => {
       setUpSessionServiceProperties();
       setKeyAreInvalid();
@@ -279,41 +278,41 @@ describe('SessionService', () => {
       expect(storageServiceSpy.set).not.toHaveBeenCalled();
     });
 
-    it('setAuthData should call the store service in order to save in localStorage the values regarding to' +
-      '`authData`, `accessToken`, `refreshToken`, `headerToBeSent` and `tokenType` and update the value of ' +
-      '`authData`, `accessToken`, `refreshToken`, `headerToBeSent` and `tokenType` subjects', () => {
-        setUpSessionServiceProperties();
+    it(`setAuthData should call the store service in order to save in localStorage the values regarding to
+      'authData', 'accessToken', 'refreshToken', 'headerToBeSent' and 'tokenType' and update the value of
+      'authData', 'accessToken', 'refreshToken', 'headerToBeSent' and 'tokenType' subjects`, () => {
+      setUpSessionServiceProperties();
 
-        sessionService.setAuthData(mockLoginResponse);
+      sessionService.setAuthData(mockLoginResponse);
 
-        expect(storageServiceSpy.set).toHaveBeenCalledTimes(1);       // save login data in local storage
-        expect(storageServiceSpy.putCookie).toHaveBeenCalledTimes(4); // save rest of the values in cookie
+      expect(storageServiceSpy.set).toHaveBeenCalledTimes(1); // save login data in local storage
+      expect(storageServiceSpy.putCookie).toHaveBeenCalledTimes(4); // save rest of the values in cookie
 
-        // auth data
-        expect(storageServiceSpy.set.calls.argsFor(0)[0]).toEqual(sessionService['loginDataKey']);
-        expect(storageServiceSpy.set.calls.argsFor(0)[1]).toEqual(mockLoginResponse);
-        expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse);
+      // auth data
+      expect(storageServiceSpy.set.calls.argsFor(0)[0]).toEqual(sessionService['loginDataKey']);
+      expect(storageServiceSpy.set.calls.argsFor(0)[1]).toEqual(mockLoginResponse);
+      expect(sessionService['authData'].getValue()).toEqual(mockLoginResponse);
 
-        // access token
-        expect(storageServiceSpy.putCookie.calls.argsFor(0)[0]).toBe(sessionService['accessTokenKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(0)[1]).toBe(mockLoginResponse.access_token);
-        expect(sessionService['accessToken'].getValue()).toBe(mockLoginResponse.access_token as string);
+      // access token
+      expect(storageServiceSpy.putCookie.calls.argsFor(0)[0]).toBe(sessionService['accessTokenKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(0)[1]).toBe(mockLoginResponse.access_token);
+      expect(sessionService['accessToken'].getValue()).toBe(mockLoginResponse.access_token as string);
 
-        // refresh token
-        expect(storageServiceSpy.putCookie.calls.argsFor(1)[0]).toBe(sessionService['refreshTokenKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(1)[1]).toBe(mockLoginResponse.refresh_token);
-        expect(sessionService['refreshToken'].getValue()).toBe(mockLoginResponse.refresh_token as string);
+      // refresh token
+      expect(storageServiceSpy.putCookie.calls.argsFor(1)[0]).toBe(sessionService['refreshTokenKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(1)[1]).toBe(mockLoginResponse.refresh_token);
+      expect(sessionService['refreshToken'].getValue()).toBe(mockLoginResponse.refresh_token as string);
 
-        // header
-        expect(storageServiceSpy.putCookie.calls.argsFor(2)[0]).toBe(sessionService['headerToBeSentKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(2)[1]).toBe(mockLoginResponse.header_to_be_sent);
-        expect(sessionService['headerToBeSent'].getValue()).toBe(mockLoginResponse.header_to_be_sent as string);
+      // header
+      expect(storageServiceSpy.putCookie.calls.argsFor(2)[0]).toBe(sessionService['headerToBeSentKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(2)[1]).toBe(mockLoginResponse.header_to_be_sent);
+      expect(sessionService['headerToBeSent'].getValue()).toBe(mockLoginResponse.header_to_be_sent as string);
 
-        // token type
-        expect(storageServiceSpy.putCookie.calls.argsFor(3)[0]).toBe(sessionService['tokenTypeKey']);
-        expect(storageServiceSpy.putCookie.calls.argsFor(3)[1]).toBe(mockLoginResponse.token_type);
-        expect(sessionService['tokenType'].getValue()).toBe(mockLoginResponse.token_type as string);
-      });
+      // token type
+      expect(storageServiceSpy.putCookie.calls.argsFor(3)[0]).toBe(sessionService['tokenTypeKey']);
+      expect(storageServiceSpy.putCookie.calls.argsFor(3)[1]).toBe(mockLoginResponse.token_type);
+      expect(sessionService['tokenType'].getValue()).toBe(mockLoginResponse.token_type as string);
+    });
 
     it('setAuthData should early return if the key is not valid', () => {
       setUpSessionServiceProperties();
@@ -384,46 +383,46 @@ describe('SessionService', () => {
     });
   });
 
-  it('closeSession should set loggedIn as `false`, `notLoggedIn` as true, `authData` as an empty object and ' +
-    'the session user as an empty user', () => {
-      setUpSessionServiceProperties();
-      const undefinedString: string = <unknown>undefined as string;
-      sessionService.closeSession();
+  it(`closeSession should set loggedIn as 'false', 'notLoggedIn' as true, 'authData' as an empty object and
+    the session user as an empty user`, () => {
+    setUpSessionServiceProperties();
+    const undefinedString: string = <unknown>undefined as string;
+    sessionService.closeSession();
 
-      // region check session service vars
-      expect(sessionService['loggedIn'].getValue()).toBeFalsy('`loggedIn` subject value was not set properly');
-      expect(sessionService['notLoggedIn'].getValue()).toBeTruthy('`notLoggedIn` subject value was not set properly');
-      expect(sessionService['authData'].getValue()).toEqual({}, '`authData` subject value was not set properly');
-      expect(sessionService['accessToken'].getValue()).toBe(undefinedString, '`accessToken` subject value was not set properly');
-      expect(sessionService['refreshToken'].getValue()).toBe(undefinedString, '`refreshToken` subject value was not set properly');
-      expect(sessionService['headerToBeSent'].getValue()).toBe(undefinedString, '`headerToBeSent` subject value was not set properly');
-      expect(sessionService['tokenType'].getValue()).toBe(undefinedString, '`tokenType` subject value was not set properly');
-      expect(sessionService['user'].getValue()).toEqual(new User(), '`user` subject value was not set properly');
-      // endregion
+    // region check session service vars
+    expect(sessionService['loggedIn'].getValue()).toBeFalsy('`loggedIn` subject value was not set properly');
+    expect(sessionService['notLoggedIn'].getValue()).toBeTruthy('`notLoggedIn` subject value was not set properly');
+    expect(sessionService['authData'].getValue()).toEqual({}, '`authData` subject value was not set properly');
+    expect(sessionService['accessToken'].getValue()).toBe(undefinedString, '`accessToken` subject value was not set properly');
+    expect(sessionService['refreshToken'].getValue()).toBe(undefinedString, '`refreshToken` subject value was not set properly');
+    expect(sessionService['headerToBeSent'].getValue()).toBe(undefinedString, '`headerToBeSent` subject value was not set properly');
+    expect(sessionService['tokenType'].getValue()).toBe(undefinedString, '`tokenType` subject value was not set properly');
+    expect(sessionService['user'].getValue()).toEqual(new User(), '`user` subject value was not set properly');
+    // endregion
 
-      expect(storageServiceSpy.clear).toHaveBeenCalledTimes(2);
-      expect(storageServiceSpy.clearCookie).toHaveBeenCalledTimes(6);
+    expect(storageServiceSpy.clear).toHaveBeenCalledTimes(2);
+    expect(storageServiceSpy.clearCookie).toHaveBeenCalledTimes(6);
 
-      // region check args calls
-      // region clear
-      expect(storageServiceSpy.clear.calls.argsFor(0)[0]).toEqual(sessionService['loginDataKey'], 'incorrect key for `authData`');
-      expect(storageServiceSpy.clear.calls.argsFor(1)[0]).toEqual(sessionService['userKey'], 'incorrect key for `user`');
-      // endregion
+    // region check args calls
+    // region clear
+    expect(storageServiceSpy.clear.calls.argsFor(0)[0]).toEqual(sessionService['loginDataKey'], 'incorrect key for `authData`');
+    expect(storageServiceSpy.clear.calls.argsFor(1)[0]).toEqual(sessionService['userKey'], 'incorrect key for `user`');
+    // endregion
 
-      // region clearCookie
-      expect(storageServiceSpy.clearCookie.calls.argsFor(0)[0]).toEqual(sessionService['loggedInKey'], 'incorrect key for `loggedIn`');
-      expect(storageServiceSpy.clearCookie.calls.argsFor(1)[0])
-        .toEqual(sessionService['notLoggedInKey'], 'incorrect key for `notLoggedIn`');
-      expect(storageServiceSpy.clearCookie.calls.argsFor(2)[0])
-        .toEqual(sessionService['accessTokenKey'], 'incorrect key for `accessToken`');
-      expect(storageServiceSpy.clearCookie.calls.argsFor(3)[0])
-        .toEqual(sessionService['refreshTokenKey'], 'incorrect key for `refreshToken`');
-      expect(storageServiceSpy.clearCookie.calls.argsFor(4)[0])
-        .toEqual(sessionService['headerToBeSentKey'], 'incorrect key for `headerToBeSent`');
-      expect(storageServiceSpy.clearCookie.calls.argsFor(5)[0]).toEqual(sessionService['tokenTypeKey'], 'incorrect key for `tokenType`');
-      // endregion
-      // endregion
-    });
+    // region clearCookie
+    expect(storageServiceSpy.clearCookie.calls.argsFor(0)[0]).toEqual(sessionService['loggedInKey'], 'incorrect key for `loggedIn`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(1)[0])
+      .toEqual(sessionService['notLoggedInKey'], 'incorrect key for `notLoggedIn`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(2)[0])
+      .toEqual(sessionService['accessTokenKey'], 'incorrect key for `accessToken`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(3)[0])
+      .toEqual(sessionService['refreshTokenKey'], 'incorrect key for `refreshToken`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(4)[0])
+      .toEqual(sessionService['headerToBeSentKey'], 'incorrect key for `headerToBeSent`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(5)[0]).toEqual(sessionService['tokenTypeKey'], 'incorrect key for `tokenType`');
+    // endregion
+    // endregion
+  });
 
   it('closeSession should early return if the keys are not valid', () => {
     setUpSessionServiceProperties();
@@ -452,38 +451,38 @@ describe('SessionService', () => {
   });
 
   describe('retrieve should call StorageService', () => {
-    it('#getCookie with the first argument provided to its call' +
-      ' and `false` as second argument, when second argument is not provided', () => {
-        const key = `test4${getRandomNumber()}`;
-        sessionService['retrieve'](key);
+    it(`#getCookie with the first argument provided to its call
+      and 'false' as second argument, when second argument is not provided`, () => {
+      const key = `test4${getRandomNumber()}`;
+      sessionService['retrieve'](key);
 
-        expect(storageServiceSpy.get).not.toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie).toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(false);
-      });
+      expect(storageServiceSpy.get).not.toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie).toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(false);
+    });
 
-    it('#getCookie with the first argument provided to its call' +
-      ' and `false` as second argument, when second argument is true', () => {
-        const key = `test4${getRandomNumber()}`;
-        sessionService['retrieve'](key, true);
+    it(`#getCookie with the first argument provided to its call
+      and 'false' as second argument, when second argument is true`, () => {
+      const key = `test4${getRandomNumber()}`;
+      sessionService['retrieve'](key, true);
 
-        expect(storageServiceSpy.get).not.toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie).toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(false);
-      });
+      expect(storageServiceSpy.get).not.toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie).toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(false);
+    });
 
-    it('#getCookie with the first argument provided to its call' +
-      ' when second argument is true and `true` as second argument if it is provided to its call', () => {
-        const key = `test5${getRandomNumber()}`;
-        sessionService['retrieve'](key, true, true);
+    it(`#getCookie with the first argument provided to its call
+      when second argument is true and 'true' as second argument if it is provided to its call`, () => {
+      const key = `test5${getRandomNumber()}`;
+      sessionService['retrieve'](key, true, true);
 
-        expect(storageServiceSpy.get).not.toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie).toHaveBeenCalled();
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
-        expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(true);
-      });
+      expect(storageServiceSpy.get).not.toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie).toHaveBeenCalled();
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[0]).toBe(key);
+      expect(storageServiceSpy.getCookie.calls.argsFor(0)[1]).toBe(true);
+    });
 
     it('#get with the first argument provided to its call when second argument is false', () => {
       const key = `test5${getRandomNumber()}`;
@@ -504,22 +503,22 @@ describe('SessionService', () => {
     });
   });
 
-  it('keysAreValid should call Util#allValuesFulfil providing a truthy predicate instance and the provided keys as' +
-    ' second argument', () => {
-      const keys: string[] = [];
-      for (let i = 0; i < getRandomNumber(); i++) {
-        keys.push(`key${getRandomNumber()}`);
-      }
+  it(`keysAreValid should call Util#allValuesFulfil providing a truthy predicate instance and the provided keys as
+    second argument`, () => {
+    const keys: string[] = [];
+    for (let i = 0; i < getRandomNumber(); i++) {
+      keys.push(`key${getRandomNumber()}`);
+    }
 
-      expect(sessionService['keysAreValid'](...keys)).toBe(true);   // true as mocked in beforeEach setup
+    expect(sessionService['keysAreValid'](...keys)).toBe(true); // true as mocked in beforeEach setup
 
-      expect(utilAllValuesFulfilSpy).toHaveBeenCalled();
-      expect(utilAllValuesFulfilSpy.calls.argsFor(0)[0]).toEqual(new TruthyPredicate<ISecurityKey | string>());
+    expect(utilAllValuesFulfilSpy).toHaveBeenCalled();
+    expect(utilAllValuesFulfilSpy.calls.argsFor(0)[0]).toEqual(new TruthyPredicate<ISecurityKey | string>());
 
-      keys.forEach((key, index) => {
-        expect(utilAllValuesFulfilSpy.calls.argsFor(0)[index + 1]).toContain(key);
-      });
+    keys.forEach((key, index) => {
+      expect(utilAllValuesFulfilSpy.calls.argsFor(0)[index + 1]).toContain(key);
     });
+  });
 
   describe('key getters should call _key with the proper value', () => {
     const spy = { _key: (unused: string) => { /* no-op */ } };
@@ -575,39 +574,39 @@ describe('SessionService', () => {
 
   function setUpSessionServiceProperties(config: { [key: string]: string } = {}) {
     Object.defineProperties(sessionService, {
-      'loggedInKey': {
+      loggedInKey: {
         value: config.loggedInKey || `key${getRandomNumber()}test`,
         writable: false
       },
-      'notLoggedInKey': {
+      notLoggedInKey: {
         value: config.notLoggedInKey || `key1${getRandomNumber()}test1`,
         writable: false
       },
-      'loginDataKey': {
+      loginDataKey: {
         value: config.loginDataKey || `key2${getRandomNumber()}test2`,
         writable: false
       },
-      'accessTokenKey': {
+      accessTokenKey: {
         value: config.accessTokenKey || `key3${getRandomNumber()}test3`,
         writable: false
       },
-      'refreshTokenKey': {
+      refreshTokenKey: {
         value: config.refreshTokenKey || `key4${getRandomNumber()}test4`,
         writable: false
       },
-      'headerToBeSentKey': {
+      headerToBeSentKey: {
         value: config.headerToBeSentKey || `key5${getRandomNumber()}test5`,
         writable: false
       },
-      'tokenTypeKey': {
+      tokenTypeKey: {
         value: config.tokenTypeKey || `key6${getRandomNumber()}test6`,
         writable: false
       },
-      'userKey': {
+      userKey: {
         value: config.userKey || `key7${getRandomNumber()}test7`,
         writable: false
       },
-      'rememberMeKey': {
+      rememberMeKey: {
         value: config.rememberMeKey || `key8${getRandomNumber()}test8`,
         writable: false
       }

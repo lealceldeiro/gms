@@ -1,6 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import * as _ from 'lodash';
+
 /**
  * A service for providing helper functions related to request parameters.
  */
@@ -8,7 +10,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ParamsService {
-
   /**
    * Parameter for setting the size of the pages when requesting paginated results.
    */
@@ -33,7 +34,7 @@ export class ParamsService {
   getHttpParams(params?: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();
     for (const k in params) {
-      if (params.hasOwnProperty(k)) {
+      if (_.has(params, k)) {
         httpParams = httpParams.append(k, String(params[k]));
       }
     }

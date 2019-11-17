@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
@@ -7,7 +6,6 @@ import { MockAppConfig } from '../../shared/test-util/mock/app.config';
 
 describe('AppConfig', () => {
   let appConfig: AppConfig;
-  let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -15,7 +13,6 @@ describe('AppConfig', () => {
       imports: [HttpClientTestingModule],
       providers: [AppConfig]
     });
-    httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
     appConfig = TestBed.get(AppConfig);
   });

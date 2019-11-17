@@ -13,7 +13,6 @@ import { SessionService } from './core/session/session.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   /**
    * Indicates whether the user is logged in or not.
    * @type {boolean}
@@ -33,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * @param $event Event triggered (unused for now.)
    */
   @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
+  unloadNotification($eventUnused: any) {
     this.sessionService.isRememberMe().subscribe((shouldIRememberSessionInfo: boolean) => {
       if (!shouldIRememberSessionInfo) {
         this.sessionService.closeSession();

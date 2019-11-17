@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class PageNotFoundService {
-
   /**
    * Routes which resulted in a not found page.
    */

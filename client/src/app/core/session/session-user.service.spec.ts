@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
@@ -14,7 +13,6 @@ import { AppConfig } from '../config/app.config';
 
 describe('SessionUserService', () => {
   const url = MockAppConfig.settings.apiServer.url;
-  let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let sessionUserService: SessionUserService;
 
@@ -24,7 +22,6 @@ describe('SessionUserService', () => {
       providers: [SessionUserService]
     });
     AppConfig.settings = MockAppConfig.settings;
-    httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
     sessionUserService = TestBed.get(SessionUserService);
   });

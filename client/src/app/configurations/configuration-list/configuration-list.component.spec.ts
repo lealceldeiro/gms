@@ -55,5 +55,4 @@ describe('ConfigurationListComponent', () => {
     expect(component.keys.user).toEqual(Object.keys(configurationObject));
     expect(component.values.user).toEqual(Object.values(configurationObject));
   });
-
 });

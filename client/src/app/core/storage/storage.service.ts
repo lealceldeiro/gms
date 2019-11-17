@@ -13,7 +13,6 @@ import { TruthyPredicate } from '../predicate/truthy.predicate';
  */
 @Injectable()
 export class StorageService {
-
   /**
    * Object which holds the stored values for localStorage.
    */
@@ -110,7 +109,7 @@ export class StorageService {
    */
   get(key: string): Observable<any> {
     const value$ = this.cache$[key];
-    return value$ ? value$ : this.localStorage.getItem(key).pipe(tap((val) => this.setCache(key, val)));
+    return value$ || this.localStorage.getItem(key).pipe(tap((val) => this.setCache(key, val)));
   }
 
   /**

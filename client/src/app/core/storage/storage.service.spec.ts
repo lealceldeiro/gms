@@ -184,15 +184,15 @@ describe('StorageService', () => {
     expect(args[0][0]).toEqual(key);
   });
 
-  it('should get an Observable with the `null` value when there is no specified value(object) under the key ' +
-    '(and it is NOT cached)', () => {
-      const sampleValue = { mKey: `random ${getRandomNumber()}MKey` };
-      cookieServiceSpy.getObject.and.returnValue(sampleValue);
-      storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
+  it(`should get an Observable with the 'null' value when there is no specified value(object) under the key
+    (and it is NOT cached)`, () => {
+    const sampleValue = { mKey: `random ${getRandomNumber()}MKey` };
+    cookieServiceSpy.getObject.and.returnValue(sampleValue);
+    storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
 
-      const args = cookieServiceSpy.getObject.calls.allArgs();
-      expect(args[0][0]).toEqual(key);
-    });
+    const args = cookieServiceSpy.getObject.calls.allArgs();
+    expect(args[0][0]).toEqual(key);
+  });
 
   it('should clear the element saved under a key in both the cache and the cookies', (done) => {
     // mock values in cache
@@ -214,7 +214,7 @@ describe('StorageService', () => {
         .toEqual(objectValue, `cache not set for ${key}: ${JSON.stringify(objectValue)}`);
     } else {
       expect(newVal)
-        .toEqual(stringValue, `cache not set for ${key }: ${stringValue}`);
+        .toEqual(stringValue, `cache not set for ${key}: ${stringValue}`);
     }
   };
 });

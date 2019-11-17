@@ -1,4 +1,4 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -11,7 +11,6 @@ describe('PageNotFoundComponent', () => {
 
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
-  let componentDe: DebugElement;
   let componentEl: HTMLElement;
 
   let pageNotFoundServiceSpy: jasmine.SpyObj<PageNotFoundService>;
@@ -30,7 +29,6 @@ describe('PageNotFoundComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PageNotFoundComponent);
     component = fixture.componentInstance;
-    componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
   });
@@ -62,7 +60,6 @@ describe('PageNotFoundComponent', () => {
     pageNotFoundServiceSpy.wasNotFound.and.returnValue(false);
     fixture = TestBed.createComponent(PageNotFoundComponent);
     component = fixture.componentInstance;
-    componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
     expect(pageNotFoundServiceSpy.addUrl).toHaveBeenCalledTimes(1);

@@ -9,7 +9,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./preview-content.component.scss']
 })
 export class PreviewContentComponent implements OnInit {
-
   /**
    * Heading text.
    */
@@ -39,5 +38,4 @@ export class PreviewContentComponent implements OnInit {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() { }
-
 }

@@ -4,7 +4,6 @@ import { IPredicate } from './predicate.interface';
  * Predicate to check that a value is truthy.
  */
 export class TruthyPredicate<T> implements IPredicate<T> {
-
   /**
    * Test whether `data` has a truthy value;
    *
@@ -14,5 +13,4 @@ export class TruthyPredicate<T> implements IPredicate<T> {
   test(data: T): boolean {
     return !!data;
   }
-
 }

@@ -21,7 +21,7 @@ describe('AllRequestsInterceptor', () => {
       providers: [
         AllRequestsInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: AllRequestsInterceptor, multi: true },
-        { provide: NgxUiLoaderService, useValue: loaderServiceSpy },
+        { provide: NgxUiLoaderService, useValue: loaderServiceSpy }
       ]
     });
 

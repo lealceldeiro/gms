@@ -28,7 +28,11 @@ describe('ErrorInterceptor', () => {
     notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['error']);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MockModule, RouterTestingModule.withRoutes([{ path: '', component: DummyStubComponent }])],
+      imports: [
+        HttpClientTestingModule,
+        MockModule,
+        RouterTestingModule.withRoutes([{ path: '', component: DummyStubComponent }])
+      ],
       providers: [
         ErrorInterceptor,
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -129,16 +133,16 @@ describe('ErrorInterceptor', () => {
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 
-  it('should show as title `Error` as default and add `title` and message if error object is present with ' +
-    'both values inside it', () => {
-      httpClient.get(url).subscribe(() => { }, (error) => {
-        expect(error).toBeTruthy();
-        expect(interceptorHelperServiceSpy.isExcludedFromErrorHandling).toHaveBeenCalled();
-        expect(notificationServiceSpy.error).toHaveBeenCalled();
-        expect(notificationServiceSpy.error.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
-        expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Error');
-      });
-      // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-      httpTestingController.expectOne(url).flush(errMock, httpErr);
+  it(`should show as title 'Error' as default and add 'title' and message if error object is present with
+    both values inside it`, () => {
+    httpClient.get(url).subscribe(() => { }, (error) => {
+      expect(error).toBeTruthy();
+      expect(interceptorHelperServiceSpy.isExcludedFromErrorHandling).toHaveBeenCalled();
+      expect(notificationServiceSpy.error).toHaveBeenCalled();
+      expect(notificationServiceSpy.error.calls.first().args[0]).toBe(errMock.error + ': ' + errMock.message);
+      expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Error');
     });
+    // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
+    httpTestingController.expectOne(url).flush(errMock, httpErr);
+  });
 });

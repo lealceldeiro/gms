@@ -13,7 +13,6 @@ import { User } from '../../core/session/user.model';
  */
 @Injectable()
 export class ConfigurationService {
-
   /**
    * API base url.
    */

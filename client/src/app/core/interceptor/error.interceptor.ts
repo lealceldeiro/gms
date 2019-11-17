@@ -14,7 +14,6 @@ import { InterceptorHelperService } from './interceptor-helper.service';
  */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-
   /**
    * Interceptor constructor.
    * @param {NotificationService} notificationService Service for showing the messages.

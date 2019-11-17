@@ -11,7 +11,6 @@ import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
  */
 @Injectable()
 export class SessionUserService {
-
   /**
    * API base url.
    */

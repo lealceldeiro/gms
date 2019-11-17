@@ -17,7 +17,6 @@ import { RolesService } from '../shared/roles.service';
   styleUrls: ['./role-info.component.scss']
 })
 export class RoleInfoComponent implements OnInit, OnDestroy {
-
   /**
    * Object holding the role's info.
    */
@@ -85,7 +84,9 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
   private getRoleInfo(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null && !isNaN(+id)) {
-      this.roleSub = this.rolesService.getRoleInfo(+id).subscribe(info => this.role = info);
+      this.roleSub = this.rolesService.getRoleInfo(+id).subscribe(info => {
+        this.role = info;
+      });
     } else {
       this.location.back();
     }
@@ -105,5 +106,4 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
       this.permissionsLoaded = true;
     });
   }
-
 }

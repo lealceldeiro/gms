@@ -11,7 +11,6 @@ import { SessionService } from '../session/session.service';
  */
 @Injectable()
 export class LoginGuard implements CanActivateChild, CanLoad {
-
   /**
    * Guards constructor.
    */

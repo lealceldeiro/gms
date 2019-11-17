@@ -52,7 +52,7 @@ describe('ConfigurationService', () => {
     configurationService.getUserConfigurations().subscribe(() => {
       expect(sessionServiceSpy.getUser).toHaveBeenCalledTimes(1);
       expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
-      expect(httpClientSpy.get).toHaveBeenCalledWith(`${url}configuration/${userId}?human=true` );
+      expect(httpClientSpy.get).toHaveBeenCalledWith(`${url}configuration/${userId}?human=true`);
     });
   });
 });

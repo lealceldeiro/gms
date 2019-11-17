@@ -15,7 +15,6 @@ import { PermissionService } from '../shared/permission.service';
   styleUrls: ['./permission-list.component.scss']
 })
 export class PermissionListComponent implements OnInit, OnDestroy {
-
   /**
    * List of permissions
    */
@@ -32,7 +31,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   page: { total: number, size: number, current: number } = {
     total: 0,
     size: 10,
-    current: 1,
+    current: 1
   };
 
   /**
@@ -66,5 +65,4 @@ export class PermissionListComponent implements OnInit, OnDestroy {
       this.page.current = permissionPd.page.number + 1;
     });
   }
-
 }

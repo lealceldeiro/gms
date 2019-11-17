@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
  */
 @Injectable()
 export class NotificationService {
-
   /**
    * Service constructor.
    * @param toastr {ToastrService} Service for showing the messages.

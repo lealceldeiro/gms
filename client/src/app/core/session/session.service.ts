@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
 
 import { StorageService } from '../storage/storage.service';
@@ -19,7 +19,6 @@ import { TruthyPredicate } from '../predicate/truthy.predicate';
  */
 @Injectable()
 export class SessionService {
-
   // region properties
   /**
    * Whether the user is logged in or not (`true` indicates the user is logged in, `false` otherwise).
@@ -135,7 +134,7 @@ export class SessionService {
       this.user.next(val);
     });
     this.retrieve(this.loginDataKey, false).subscribe((val) => {
-      this.authData.next(val ? val : {});
+      this.authData.next(val || {});
     });
     this.retrieve(this.rememberMeKey, true).subscribe((r) => {
       this.rememberMe.next(r === true || r === 'true');
@@ -364,14 +363,14 @@ export class SessionService {
     this.setAuthData({});
     this.setUser(new User());
 
-    this.storageService.clearCookie(this.loggedInKey).subscribe(() => { /* no-op */});
-    this.storageService.clearCookie(this.notLoggedInKey).subscribe(() => { /* no-op */});
-    this.storageService.clear(this.loginDataKey).subscribe(() => { /* no-op */});
-    this.storageService.clearCookie(this.accessTokenKey).subscribe(() => { /* no-op */});
-    this.storageService.clearCookie(this.refreshTokenKey).subscribe(() => { /* no-op */});
-    this.storageService.clearCookie(this.headerToBeSentKey).subscribe(() => { /* no-op */});
-    this.storageService.clearCookie(this.tokenTypeKey).subscribe(() => { /* no-op */});
-    this.storageService.clear(this.userKey).subscribe(() => { /* no-op */});
+    this.storageService.clearCookie(this.loggedInKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.notLoggedInKey).subscribe(() => { /* no-op */ });
+    this.storageService.clear(this.loginDataKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.accessTokenKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.refreshTokenKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.headerToBeSentKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.tokenTypeKey).subscribe(() => { /* no-op */ });
+    this.storageService.clear(this.userKey).subscribe(() => { /* no-op */ });
   }
 
   // region private
@@ -463,6 +462,5 @@ export class SessionService {
     return this._key('headerToBeSent');
   }
   // endregion
-
   // endregion
 }

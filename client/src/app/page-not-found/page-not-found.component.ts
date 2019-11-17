@@ -12,7 +12,6 @@ import { PageNotFoundService } from '../core/navigation/page-not-found.service';
   styleUrls: ['./page-not-found.component.scss']
 })
 export class PageNotFoundComponent implements OnInit {
-
   /**
    * First digit in the 404 text.
    */

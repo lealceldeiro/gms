@@ -73,5 +73,4 @@ describe('PermissionService', () => {
     expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     expect(httpClientSpy.get.calls.mostRecent().args[0]).toEqual(`${url}permission/${id}/roles`);
   });
-
 });

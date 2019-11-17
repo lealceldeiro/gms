@@ -6,7 +6,7 @@ import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
   // tslint:disable-next-line:component-selector
-  @Component({ selector: 'ngb-alert', template: `` })
+  @Component({ selector: 'ngb-alert', template: '' })
   class DummyAlert {
     @Input() heading = '';
     @Input() message = '';

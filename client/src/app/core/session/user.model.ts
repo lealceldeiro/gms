@@ -4,7 +4,6 @@ import { Entity } from '../model/entity.model';
  * Domain object which represents a user.
  */
 export class User extends Entity {
-
   /**
    * User's username
    */
@@ -54,5 +53,4 @@ export class User extends Entity {
    * Whether the user's credentials (combination of username, email, or whatsoever and the password) are not expired or are they.
    */
   credentialsNonExpired = true;
-
 }

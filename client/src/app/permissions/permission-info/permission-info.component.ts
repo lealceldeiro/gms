@@ -18,7 +18,6 @@ import { RolePd } from '../../roles/shared/role.pd';
   styleUrls: ['./permission-info.component.scss']
 })
 export class PermissionInfoComponent implements OnInit, OnDestroy {
-
   /**
    * Object holding the permission's info.
    */
@@ -81,7 +80,9 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
   private getPermissionInfo(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null && !isNaN(+id)) {
-      this.permissionSub = this.permissionService.getPermissionInfo(+id).subscribe(info => this.permission = info);
+      this.permissionSub = this.permissionService.getPermissionInfo(+id).subscribe(info => {
+        this.permission = info;
+      });
     } else {
       this.location.back();
     }

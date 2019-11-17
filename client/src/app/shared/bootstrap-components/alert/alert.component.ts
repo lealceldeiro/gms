@@ -9,7 +9,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent implements OnInit {
-
   /**
    * Alert heading/title. It will be shown in bold at the start of the alert message.
    */
@@ -64,7 +63,12 @@ export class AlertComponent implements OnInit {
    */
   ngOnInit() {
     if (this.autoDismissible) {
-      setTimeout(() => this.shouldClosed = true, this.dismissMilliseconds);
+      setTimeout(
+        () => {
+          this.shouldClosed = true;
+        },
+        this.dismissMilliseconds
+      );
     }
   }
 
@@ -74,5 +78,4 @@ export class AlertComponent implements OnInit {
   onClose() {
     this.close.emit(this.closeMessage);
   }
-
 }

@@ -14,7 +14,6 @@ import { SessionService } from '../core/session/session.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
   /**
    * Application name.
    */
@@ -39,7 +38,9 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() {
-    this.isLoggedInSubscription = this.sessionService.isLoggedIn().subscribe(ili => this.isLoggedIn = ili);
+    this.isLoggedInSubscription = this.sessionService.isLoggedIn().subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn;
+    });
   }
 
   /**
@@ -48,5 +49,4 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.isLoggedInSubscription.unsubscribe();
   }
-
 }

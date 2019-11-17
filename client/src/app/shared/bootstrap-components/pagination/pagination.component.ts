@@ -9,7 +9,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent {
-
   /**
    * If true, the "First" and "Last" page links are shown.
    */
@@ -91,5 +90,4 @@ export class PaginationComponent {
       this.pageChangeAction.emit(newPageNumber);
     }
   }
-
 }

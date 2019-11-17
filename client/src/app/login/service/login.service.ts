@@ -17,7 +17,6 @@ import { SessionService } from '../../core/session/session.service';
  */
 @Injectable()
 export class LoginService {
-
   /**
    * API base url.
    */

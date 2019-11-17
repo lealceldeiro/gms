@@ -9,7 +9,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./jumbotron.component.scss']
 })
 export class JumbotronComponent implements OnInit {
-
   /**
    * The text to be shown as header.
    */
@@ -49,5 +48,4 @@ export class JumbotronComponent implements OnInit {
    * Lifecycle hook that is called after data-bound properties are initialized.
    */
   ngOnInit() { }
-
 }
