@@ -118,11 +118,15 @@ While the prerequisites above must be satisfied prior to having your pull reques
 
 ### Git Commit Messages
 
+* Start the commit messages with one of the following options, followed by the issue number (if apply) and a short description of what is this commit about:
+  * `Server:` if the changes are in the server side
+  * `Client:` if the changes are in the client side
+  * `Documentation:` if the changes are related to the project documentation, such as modifying reamde, licence, etc. files 
+  * `Integration:` if the changes are in files related to CI/CD, GitHub related, IDE configurations, etc. files, such as a `.travis.yml`, `.gitignore`, `.github/**`, etc.
 * Use the present tense ("Add feature" not "Added feature").
 * Use the imperative mood ("Expand card..." not "Expands card...").
 * Limit the first line to 72 characters or less.
 * Reference issues and pull requests liberally after the first line.
-* Start the comment with `Server:` if the changes are in the server side or `Client:` if they are in the client side, followed by the issue number (if apply). Do not use any of these if the changes are in any other file(s).
 
 ### JavaScript/TypeScript Styleguide
 
