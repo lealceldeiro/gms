@@ -75,7 +75,7 @@ describe('Util', () => {
   it('allValuesFulfil should return true if all values fulfil certain predicate', () => {
     const values = [true, 'test', getRandomNumber(1, 40), { key: 'value' }, 1];
 
-    expect(Util.allValuesFulfil(new MockPredicate(), ...values));
+    expect(Util.allValuesFulfil(new MockPredicate(), ...values)).toBe(true);
   });
 
   it('allValuesFulfil should return false if at least one value does not fulfil certain predicate', () => {
