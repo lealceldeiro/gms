@@ -12,7 +12,7 @@ if ! grep -E "$regex" "$1"; then
 	echo -e "\e[31m[ERROR]\e[0m > \e[33m[POLICY]\e[0m"
 	echo -e "The commit message should start with one of the following words: \e[1mClient\e[0m, \e[1mServer\e[0m, \e[1mDocumentation\e[0m, \e[1mIntegration\e[0m, followed by a colon (\e[1m:\e[0m) and a space."
 	echo -e "\e[2mi.e.: Documentation: Update README.md file\e[0m"
-	echo -e "\e[2mFor more information see https://github.com/lealceldeiro/gms/blob/master/CONTRIBUTING.md#git-commit-messages\e[0m"
+	echo -e "\e[2mFor more information see\e[0m \e[34mhttps://github.com/lealceldeiro/gms/blob/master/CONTRIBUTING.md#git-commit-messages\e[0m"
 	exit 1
 fi
 
