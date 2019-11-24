@@ -23,7 +23,7 @@ You need to have installed either [Google Chrome](https://www.google.com/chrome/
 
 By default Chromium is used. You can use Google Chrome or Firefox by activating them at [`karma.conf.js`](src/karma.conf.js)
 
-* Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run testwatch` in order to watch for changes while running the tests. With `npm run testcoverage` it can be generated a coverage report.
+* Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and `npm run test:watch` in order to watch for changes while running the tests. With `npm run test:coverage` it can be generated a coverage report.
 
 ### Running end-to-end tests
 
@@ -37,9 +37,9 @@ By default Chromium is used. You can use Google Chrome or Firefox by activating 
 
 This uses [compodoc](https://github.com/compodoc/compodoc) for generating the app documentation. So you can:
 
-* Run `npm run builddoc` in order to build the documentation resources.
-* Run `npm run servedoc` once you built the documentation resources and navigate to `http://localhost:8080/`.
-* Run `npm run buildservedoc` in order to build and serve the documentation resources. Navigate to `http://localhost:8080/`.
+* Run `npm run doc:build` in order to build the documentation resources.
+* Run `npm run doc:serve` once you built the documentation resources and navigate to `http://localhost:8080/`.
+* Run `npm run doc:build:serve` in order to build and serve the documentation resources. Navigate to `http://localhost:8080/`.
 
 All documentation resources are stored in the `documentation/` directory.
 
