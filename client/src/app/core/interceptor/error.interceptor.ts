@@ -16,18 +16,23 @@ import { InterceptorHelperService } from './interceptor-helper.service';
 export class ErrorInterceptor implements HttpInterceptor {
   /**
    * Interceptor constructor.
-   * @param {NotificationService} notificationService Service for showing the messages.
-   * @param {InterceptorHelperService} intHelperService for sharing information with the rest of the services.
-   * @param {Router} router fir navigating to home page when there is a not found error.
+   *
+   * @param notificationService Service for showing the messages.
+   * @param intHelperService for sharing information with the rest of the services.
+   * @param router fir navigating to home page when there is a not found error.
    */
-  constructor(private notificationService: NotificationService, private intHelperService: InterceptorHelperService,
-    private router: Router) { }
+  constructor(
+    private notificationService: NotificationService,
+    private intHelperService: InterceptorHelperService,
+    private router: Router
+  ) { }
 
   /**
    * Intercepts all responses in order to catch any possible error and take action accordingly.
-   * @param {HttpRequest<any>} req Request performed.
-   * @param {HttpHandler} next Next http handler.
-   * @returns {Observable<HttpEvent<any>>}
+   *
+   * @param req Request performed.
+   * @param next Next http handler.
+   * @returns Observable<HttpEvent<any>>
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(tap(

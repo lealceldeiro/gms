@@ -1,26 +1,11 @@
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DebugElement, Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { getRandomNumber } from '../../test-util/functions.util';
 import { PaginationComponent } from './pagination.component';
 
 describe('GmsPaginationComponent', () => {
-  // tslint:disable-next-line:component-selector
-  @Component({ template: '', selector: 'ngb-pagination' })
-  class DummyNgPagination {
-    @Input() boundaryLinks = false;
-    @Input() collectionSize = 0;
-    @Input() directionLinks = true;
-    @Input() disabled = false;
-    @Input() ellipses = true;
-    @Input() maxSize = 10;
-    @Input() page = 1;
-    @Input() pageSize = 10;
-    @Input() rotate = false;
-    @Input() size = '-';
-  }
-
   // some arbitrary values to generate random numbers and booleans in order
   // to make tests more realistic
   const min = 1;
@@ -47,7 +32,8 @@ describe('GmsPaginationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PaginationComponent, DummyNgPagination]
+      declarations: [PaginationComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

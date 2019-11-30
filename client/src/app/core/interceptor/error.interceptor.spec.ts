@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,7 +14,7 @@ describe('ErrorInterceptor', () => {
   const url = 'sample-url-nk-9fj92md9';
   const errMock = { error: 'error message', message: 'body message', status: 500 };
   const httpErr: HttpErrorResponse = new HttpErrorResponse({
-    error: { error: errMock.error, message: errMock.message }, status: errMock.status, statusText: 'Server Error', url: url
+    error: { error: errMock.error, message: errMock.message }, status: errMock.status, statusText: 'Server Error', url
   });
   let navigateByUrlSpy: jasmine.Spy;
   let interceptorHelperServiceSpy: jasmine.SpyObj<InterceptorHelperService>;
@@ -84,7 +84,7 @@ describe('ErrorInterceptor', () => {
     flush response with something different from and HttpErrorResponse in order to NOT meet
     second condition: event instanceof HttpErrorResponse
     */
-    const errRes: HttpResponse<any> = new HttpResponse({ status: 204, statusText: 'Another Error', url: url });
+    const errRes: HttpResponse<any> = new HttpResponse({ status: 204, statusText: 'Another Error', url });
     httpTestingController.expectOne(url).flush(errRes);
   });
 
@@ -97,7 +97,7 @@ describe('ErrorInterceptor', () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Error');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: errMock.status, statusText: 'Server Error', url: url });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: errMock.status, statusText: 'Server Error', url });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
@@ -107,7 +107,7 @@ describe('ErrorInterceptor', () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Unauthorized');
     });
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
-      status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url
+      status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url
     });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
@@ -118,7 +118,7 @@ describe('ErrorInterceptor', () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Not found');
     });
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
-      status: HttpStatusCode.NOT_FOUND, statusText: 'Server Error', url: url
+      status: HttpStatusCode.NOT_FOUND, statusText: 'Server Error', url
     });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
@@ -129,7 +129,7 @@ describe('ErrorInterceptor', () => {
       expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
       expect(navigateByUrlSpy.calls.first().args[0]).toEqual('/', 'should navigate to `home` once user is logged in');
     });
-    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.NOT_FOUND, statusText: '', url: url });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.NOT_FOUND, statusText: '', url });
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 

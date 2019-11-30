@@ -5,8 +5,8 @@ import { CookieOptions, CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { Util } from '../util/util';
 import { TruthyPredicate } from '../predicate/truthy.predicate';
+import { Util } from '../util/util';
 
 /**
  * A service for providing access to the storage and cookies in client runner (browser, etc).
@@ -58,8 +58,8 @@ export class StorageService {
   /**
    * Service constructor.
    *
-   * @param {CookieService} cookieService CookieService for storing values in cookies.
-   * @param {LocalStorage} localStorage LocalStorage for storing values in the browser local storage.
+   * @param cookieService CookieService for storing values in cookies.
+   * @param localStorage LocalStorage for storing values in the browser local storage.
    */
   constructor(private cookieService: CookieService, private localStorage: LocalStorage) { } // todo: change to StorageMap
 
@@ -67,9 +67,9 @@ export class StorageService {
   /**
    * Sets a new value under a key in the localStorage.
    *
-   * @param {string} key String representation of the key under which the value will be stored.
+   * @param key String representation of the key under which the value will be stored.
    * @param value Value to be stored
-   * @returns {any}
+   * @returns The value if it was successfully set.
    */
   set(key: string, value: any): any {
     if (!this.isValidKey(key)) {
@@ -86,7 +86,7 @@ export class StorageService {
    * Tries to save a value under a key in the client local storage. If the method fails it will retry 2 times more to
    * save it.
    *
-   * @param {string} key String representation of the key under which the value will be stored.
+   * @param key String representation of the key under which the value will be stored.
    * @param value Value to be stored
    */
   private trySet(key: string, value: any): void {
@@ -102,8 +102,8 @@ export class StorageService {
   /**
    * Returns an observable which will emit the value specified under a key.
    *
-   * @param {string} key Key under which the value it's being tried to be accessed was saved previously.
-   * @returns {Observable<any>} An Observable with the saved value under the specified key or `null` if no value is
+   * @param key Key under which the value it's being tried to be accessed was saved previously.
+   * @returns An Observable<any> with the saved value under the specified key or `null` if no value is
    * found under the specified.
    * key.
    */
@@ -115,9 +115,9 @@ export class StorageService {
   /**
    * Creates the cache value and the cache observable.
    *
-   * @param {string} key Key for looking up.
-   * @param {any} val Value to be looked up.
-   * @param {boolean} isCookie Whether to set the value in the cookie cache or the localStorage cache.
+   * @param key Key for looking up.
+   * @param val Value to be looked up.
+   * @param isCookie Whether to set the value in the cookie cache or the localStorage cache.
    */
   private setCache(key: string, val: any, isCookie = false): void {
     let subject = isCookie ? this.cacheCk[key] : this.cache[key];
@@ -142,8 +142,8 @@ export class StorageService {
   /**
    * Clears a value under a key. This function uses the StorageService#get function in order to return the value.
    *
-   * @param {string} key Key under the value is being tried to be removed was saved previously.
-   * @returns {Observable<boolean>}
+   * @param key Key under the value is being tried to be removed was saved previously.
+   * @returns Observable<boolean>
    */
   clear(key: string): Observable<boolean> {
     this.tryClearCount[key] = 0;
@@ -154,8 +154,8 @@ export class StorageService {
    * Tries to clear a value under a key or all values if no key is specified. This function uses the StorageService#get
    * function in order to return the value. If the method fails it will retry 2 times more to clear the value.
    *
-   * @param {string} key
-   * @returns {Observable<boolean>}
+   * @param string key
+   * @returns Observable<boolean>
    */
   private tryClear(key: string): Observable<boolean> {
     return this.localStorage.removeItem(key).pipe(tap(
@@ -171,11 +171,11 @@ export class StorageService {
   /**
    * Puts a new value under a key in a cookie.
    *
-   * @param {string} key String representation of the key under which the value will be stored.
+   * @param key String representation of the key under which the value will be stored.
    * @param value Value to be stored.
-   * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
+   * @param options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
    * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
-   * @returns {any}
+   * @returns any
    */
   putCookie(key: string, value: any, options?: object): any {
     if (!this.isValidKey(key)) {
@@ -192,9 +192,9 @@ export class StorageService {
   /**
    * Gets a cookie value (or all values if no key is provided) specified under a key stored in cookie.
    *
-   * @param {string} key Key under which the value it's being tried to be accessed was saved previously.
-   * @param {boolean} isObject Whether the value is trying to be retrieved is an object or not.
-   * @returns {Observable<any>} An Observable with the saved value under the specified key or `null` if
+   * @param key Key under which the value it's being tried to be accessed was saved previously.
+   * @param isObject Whether the value is trying to be retrieved is an object or not.
+   * @returns An Observable<any> with the saved value under the specified key or `null` if
    * no value is found under the specified key.
    */
   getCookie(key: string, isObject = false): Observable<any> {
@@ -211,10 +211,10 @@ export class StorageService {
   /**
    * Clears a value under a key. This function uses the StorageService#getCookie function in order to return the value.
    *
-   * @param {string} key Key under the value is being tried to be removed was saved previously. If no key is provided
+   * @param key Key under the value is being tried to be removed was saved previously. If no key is provided
    * all values are removed.
    * provided, then this can not be provided.
-   * @returns {Observable<boolean>} An Observable to wait the end of the operation.
+   * @returns An Observable<boolean> to wait the end of the operation.
    */
   clearCookie(key: string): Observable<boolean> {
     if (this.isValidKey(key)) {
@@ -231,7 +231,7 @@ export class StorageService {
 
   /**
    * Checks whether a given key is valid or not. This throws an error if the given key is invalid.
-   * @param {string} key
+   * @param key Key which is validity is checked.
    */
   private isValidKey(key: string): boolean {
     return Util.allValuesFulfil(new TruthyPredicate<string>(), key);

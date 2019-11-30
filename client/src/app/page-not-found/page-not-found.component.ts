@@ -34,7 +34,8 @@ export class PageNotFoundComponent implements OnInit {
 
   /**
    * Generates a random number as string.
-   * @returns {string}
+   *
+   * @returns a randomly generated number as a string
    */
   private static randomNumber(): string {
     return (Math.floor(Math.random() * 9) + 1).toString();

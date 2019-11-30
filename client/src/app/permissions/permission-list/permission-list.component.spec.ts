@@ -3,10 +3,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
-import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
-import { MockModule } from '../../shared/test-util/mock/mock.module';
 import { SharedModule } from '../../shared/shared.module';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
+import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
+import { MockModule } from '../../shared/test-util/mock/mock.module';
 import { PermissionPd } from '../shared/permission.pd';
 import { PermissionService } from '../shared/permission.service';
 import { PermissionListComponent } from './permission-list.component';

@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @param router Router module in order to perform navigation.
    * @param fb FormBuilder A form builder for generating the login form.
    * @param formHelperService FormHelperService.
-   * @param notificationService {NotificationService} Service for showing the messages.
+   * @param notificationService Service for showing the messages.
    */
   constructor(
     private loginService: LoginService,
@@ -106,8 +106,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   /**
    * Returns the value set for a form control in the login form.
-   * @param {string} name
-   * @returns {any}
+   *
+   * @param name Name or path of the form control.
+   * @returns The child control given the control's name or path.
    */
   private formValueOf(name: string): any {
     const ctrl = this.loginForm.get(name);

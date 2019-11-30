@@ -5,9 +5,9 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { SharedModule } from '../../shared/shared.module';
 import { Permission } from '../../permissions/shared/permission.model';
 import { PermissionPd } from '../../permissions/shared/permission.pd';
+import { SharedModule } from '../../shared/shared.module';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { Role } from '../shared/role.model';
 import { RolesService } from '../shared/roles.service';
@@ -53,7 +53,7 @@ describe('RoleInfoComponent', () => {
     paramMapSpy = jasmine.createSpyObj('paramMapSpy', ['get']);
     paramMapSpy.get.and.returnValue(id.toString());
 
-    activatedRouteStub = (<unknown>{ snapshot: { paramMap: paramMapSpy } }) as ActivatedRoute;
+    activatedRouteStub = ({ snapshot: { paramMap: paramMapSpy } } as unknown) as ActivatedRoute;
 
     TestBed.configureTestingModule({
       imports: [SharedModule],

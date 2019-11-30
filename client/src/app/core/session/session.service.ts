@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-import { StorageService } from '../storage/storage.service';
-import { LoginResponseModel } from './login-response.model';
-import { User } from './user.model';
 import { AppConfig } from '../config/app.config';
 import { ISecurityKey } from '../model/config/app-config.model';
-import { Util } from '../util/util';
 import { TruthyPredicate } from '../predicate/truthy.predicate';
+import { StorageService } from '../storage/storage.service';
+import { Util } from '../util/util';
+import { LoginResponseModel } from './login-response.model';
+import { User } from './user.model';
 
 /**
  * A service for providing information about the current session.
@@ -144,7 +144,7 @@ export class SessionService {
   /**
    * Indicates whether the user is logged in.
    *
-   * @returns {Observable<boolean>} An observable containing `true` if the user is logged in, `false` otherwise.
+   * @returns An Observable<boolean> containing `true` if the user is logged in, `false` otherwise.
    * @see isNotLoggedIn
    */
   isLoggedIn(): Observable<boolean> {
@@ -154,7 +154,7 @@ export class SessionService {
   /**
    * Indicates whether the user is not logged in.
    *
-   * @returns {Observable<boolean>} An observable containing `true` if the user is not logged in, `false` otherwise.
+   * @returns An Observable<boolean> containing `true` if the user is not logged in, `false` otherwise.
    * @see isLoggedIn
    */
   isNotLoggedIn(): Observable<boolean> {
@@ -164,7 +164,7 @@ export class SessionService {
   /**
    * Sets whether the user is logged in or not.
    *
-   * @param {boolean} value Value to be set.
+   * @param boolean value Value to be set.
    */
   setLoggedIn(value: boolean): void {
     if (!this.keysAreValid(this.loggedInKey, this.notLoggedInKey)) {
@@ -180,7 +180,7 @@ export class SessionService {
   /**
    * Returns the current session user's info.
    *
-   * @returns {Observable<User>}
+   * @returns Observable<User>
    */
   getUser(): Observable<User> {
     return this.user$;
@@ -189,7 +189,7 @@ export class SessionService {
   /**
    * Sets the current session user's info.
    *
-   * @param {User} value Value to be set.
+   * @param value Value to be set.
    */
   setUser(value: User): void {
     if (!this.keysAreValid(this.userKey)) {
@@ -202,7 +202,8 @@ export class SessionService {
 
   /**
    * Returns the information provided by the authentication endpoint when logging in.
-   * @returns {Observable<LoginResponseModel>}
+   *
+   * @returns Observable<LoginResponseModel>
    */
   getAuthData(): Observable<LoginResponseModel> {
     return this.authData$;
@@ -211,7 +212,7 @@ export class SessionService {
   /**
    * Sets the information provided by the authentication endpoint when logging in.
    *
-   * @param {LoginResponseModel | any} value Value to ve set.
+   * @param value Value to ve set.
    */
   setAuthData(value: LoginResponseModel | any): void {
     if (!this.keysAreValid(this.loginDataKey, this.accessTokenKey, this.refreshTokenKey, this.headerToBeSentKey, this.tokenTypeKey)) {
@@ -229,7 +230,7 @@ export class SessionService {
   /**
    * Returns whether the credentials should be stored or not when logging in.
    *
-   * @returns {Observable<boolean>}
+   * @returns Observable<boolean>
    */
   isRememberMe(): Observable<boolean> {
     return this.rememberMe$;
@@ -238,7 +239,7 @@ export class SessionService {
   /**
    * Sets whether the credentials should be stored or not when logging in.
    *
-   * @param {boolean} value Value to be set.
+   * @param value Value to be set.
    */
   setRememberMe(value: boolean): void {
     if (!this.keysAreValid(this.rememberMeKey)) {
@@ -253,7 +254,7 @@ export class SessionService {
    * Returns the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
    * logging in.
    *
-   * @returns {Observable<string>}
+   * @returns Observable<string>
    */
   getAccessToken(): Observable<string> {
     return this.accessToken$;
@@ -263,7 +264,7 @@ export class SessionService {
    * Sets the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
    * logging in.
    *
-   * @param {string} value Value to be set.
+   * @param value Value to be set.
    */
   setAccessToken(value: string): void {
     if (!this.keysAreValid(this.accessTokenKey)) {
@@ -278,7 +279,7 @@ export class SessionService {
    * Returns the refresh token required for requesting a new access token without performing authentication again.
    * logging in.
    *
-   * @returns {Observable<String>}
+   * @returns Observable<String>
    */
   getRefreshToken(): Observable<string> {
     return this.refreshToken$;
@@ -288,7 +289,7 @@ export class SessionService {
    * Sets the refresh token required for requesting a new access token without performing authentication again.
    * logging in.
    *
-   * @param {string} value Value to be set.
+   * @param value Value to be set.
    */
   setRefreshToken(value: string): void {
     if (!this.keysAreValid(this.refreshTokenKey)) {
@@ -302,7 +303,7 @@ export class SessionService {
   /**
    * Returns the header to be sent with the access token.
    *
-   * @returns {Observable<String>}
+   * @returns Observable<String>
    */
   getHeader(): Observable<string> {
     return this.headerToBeSent$;
@@ -311,7 +312,7 @@ export class SessionService {
   /**
    * Sets the header to be sent with the access token.
    *
-   * @param {string} value Value to be set.
+   * @param value Value to be set.
    */
   setHeader(value: string): void {
     if (!this.keysAreValid(this.headerToBeSentKey)) {
@@ -325,7 +326,7 @@ export class SessionService {
   /**
    * Returns the token type to be sent in the header along with the access token.
    *
-   * @returns {Observable<String>}
+   * @returns Observable<String>
    */
   getTokenType(): Observable<string> {
     return this.tokenType$;
@@ -378,9 +379,9 @@ export class SessionService {
   /**
    * Stores a value under a key using the StorageService dependency.
    *
-   * @param {string} key Key under which the value will be saved.
-   * @param {boolean} inCookie Whether the value should be stored as a cookie or in the localStorage
-   * @param {object} options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
+   * @param key Key under which the value will be saved.
+   * @param inCookie Whether the value should be stored as a cookie or in the localStorage
+   * @param options Additional options to be passes. i.e.: if it is a cookie the 'expires' option can be set like this:
    * <gmsCk><code>{expires: <value> {string|Date}</code></gmsCk>
    * @param value Value to be stored.
    */
@@ -395,10 +396,10 @@ export class SessionService {
   /**
    * Retrieves a value stored using the StorageService under a specific key.
    *
-   * @param {string} key Key under which the value was stored.
-   * @param {boolean} fromCookie Whether the value is trying to be retrieved was stored in a cookie or not (in the localStorage)
-   * @param {boolean} isObject Whether the value is trying to be retrieved is an object or not when retrieving value from cookie.
-   * @returns {Observable<any>}
+   * @param key Key under which the value was stored.
+   * @param fromCookie Whether the value is trying to be retrieved was stored in a cookie or not (in the localStorage)
+   * @param isObject Whether the value is trying to be retrieved is an object or not when retrieving value from cookie.
+   * @returns Observable<any>
    */
   private retrieve(key: string, fromCookie = true, isObject = false): Observable<any> {
     return fromCookie ? this.storageService.getCookie(key, isObject) : this.storageService.get(key);
@@ -408,7 +409,7 @@ export class SessionService {
    * Gets the value of a key given it's name.
    *
    * @param name Name of the key to be retrieved.
-   * @returns {string} the value of the key or `undefined` if the key is not present.
+   * @returns the value of the key or `undefined` if the key is not present.
    * @see {AppConfig}
    */
   private _key(name: keyof ISecurityKey | string): string {
@@ -419,7 +420,7 @@ export class SessionService {
    * Checks that all keys are valid.
    *
    * @param keys Keys to be checked.
-   * @returns {boolean} true if all the `keys` are valid, false otherwise.
+   * @returns true if all the `keys` are valid, false otherwise.
    */
   private keysAreValid(...keys: (ISecurityKey | string)[]): boolean {
     return Util.allValuesFulfil(new TruthyPredicate<ISecurityKey | string>(), ...keys);

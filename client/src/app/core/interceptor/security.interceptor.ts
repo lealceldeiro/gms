@@ -37,7 +37,7 @@ export class SecurityInterceptor implements HttpInterceptor {
 
   /**
    * Interceptor constructor.
-   * @param {Injector} injector Angular injector for retrieving the service dependencies properly.
+   * @param injector Angular injector for retrieving the service dependencies properly.
    */
   constructor(private injector: Injector) {
     this.sessionService = this.injector.get(SessionService);
@@ -58,9 +58,9 @@ export class SecurityInterceptor implements HttpInterceptor {
   /**
    * Intercepts all request in order to set the Authorization header properly if the user is logged in.
    *
-   * @param {HttpRequest<any>} req Request performed.
-   * @param {HttpHandler} next Next http handler.
-   * @returns {Observable<HttpEvent<any>>}
+   * @param req Request performed.
+   * @param next Next http handler.
+   * @returns Observable<HttpEvent<any>>
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!!this.isLoggedIn && !!this.header && !!this.tokenType && !!this.accessToken) {

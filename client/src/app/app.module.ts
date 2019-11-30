@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -10,12 +10,12 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppConfig } from './core/config/app.config';
 import { GmsCoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SharedModule } from './shared/shared.module';
 import { SideMenuComponent } from './side-menu/side-menu.component';
-import { AppConfig } from './core/config/app.config';
 
 /**
  * Factory for loading the app configuration at startup.

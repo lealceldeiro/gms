@@ -3,13 +3,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
-import { RoleListComponent } from './role-list.component';
-import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { RolePd } from '../shared/role.pd';
 import { SharedModule } from '../../shared/shared.module';
-import { MockModule } from '../../shared/test-util/mock/mock.module';
+import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
+import { MockModule } from '../../shared/test-util/mock/mock.module';
+import { RolePd } from '../shared/role.pd';
 import { RolesService } from '../shared/roles.service';
+import { RoleListComponent } from './role-list.component';
 
 describe('RoleListComponent', () => {
   const getSampleData = () => {
