@@ -47,7 +47,7 @@ matrix:
     - npm install -g @angular/cli
     - npm install
     script:
-    - npm run lint
+    - npm run lint-parallel
     - npm run test:coverage
 #    - npm run e2e
     after_success:
