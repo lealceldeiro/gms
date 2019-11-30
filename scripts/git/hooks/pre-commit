@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# References
+# References:
 # https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#The-Set-Builtin
 #
 # Called by "git commit" with no arguments.
