@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# References:
+# https://www.npmjs.com/package/npm-run-all
+# https://github.com/mysticatea/npm-run-all/blob/HEAD/docs/npm-run-all.md
+
 # Called by "git push" after it has checked the remote status, but before anything has been
 # pushed. If this script exits with a non-zero status nothing will be pushed.
 #
@@ -53,6 +57,6 @@ echo 'Running tests...'
 
 # exit if any check fails
 set -ex
-npm run lint --prefix ./client
+npm run test:e2e --prefix ./client
 
 exit 0
