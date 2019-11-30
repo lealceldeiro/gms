@@ -17,6 +17,7 @@
     "lint-parallel": "npm-run-all --aggregate-output --parallel lint:*",
     "e2e": "ng e2e",
     "test:e2e": "npm-run-all --aggregate-output --parallel test e2e",
+    "test:e2e:coverage": "npm-run-all --aggregate-output --parallel e2e test:coverage",
     "postinstall": "npm run script:git:hooks",
     "script:git:hooks": "copyfiles -f -s ../scripts/git/hooks/* ../.git/hooks"
   },
