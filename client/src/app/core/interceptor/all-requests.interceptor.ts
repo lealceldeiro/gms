@@ -12,7 +12,6 @@ import { tap } from 'rxjs/operators';
 export class AllRequestsInterceptor implements HttpInterceptor {
   /**
    * Service which handles the UI loader.
-   * @type {NgxUiLoaderService}
    */
   private loaderService: NgxUiLoaderService;
 
@@ -28,7 +27,7 @@ export class AllRequestsInterceptor implements HttpInterceptor {
 
   /**
    * Interceptor constructor.
-   * @param {Injector} injector Angular injector for retrieving the service dependencies properly.
+   * @param injector Angular injector for retrieving the service dependencies properly.
    */
   constructor(private injector: Injector) {
     this.loaderService = this.injector.get(NgxUiLoaderService);
@@ -36,9 +35,9 @@ export class AllRequestsInterceptor implements HttpInterceptor {
 
   /**
    * Intercepts all requests responses for setting/un-setting the loading indicator while doing all requests to the backend API.
-   * @param {HttpRequest<any>} req Request performed.
-   * @param {HttpHandler} next Next http handler.
-   * @returns {Observable<HttpEvent<any>>}
+   * @param req Request performed.
+   * @param next Next http handler.
+   * @returns Observable<HttpEvent<any>>
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.startRequest();

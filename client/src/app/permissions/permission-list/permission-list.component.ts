@@ -56,7 +56,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   /**
    * Loads the permission list
-   * @param {number} toPage number of page to which the list will move. `toPage` starts from 1 (first page).
+   * @param toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
   loadList(toPage: number): void {
     this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage).subscribe((permissionPd: PermissionPd) => {

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PermissionListComponent } from './permission-list/permission-list.component';
 import { PermissionInfoComponent } from './permission-info/permission-info.component';
+import { PermissionListComponent } from './permission-list/permission-list.component';
 
 /**
  * Permissions module routes.

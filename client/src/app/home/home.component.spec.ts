@@ -4,10 +4,10 @@ import { By } from '@angular/platform-browser';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { SessionService } from '../core/session/session.service';
-import { HomeComponent } from './home.component';
 import { AppConfig } from '../core/config/app.config';
+import { SessionService } from '../core/session/session.service';
 import { MockAppConfig } from '../shared/test-util/mock/app.config';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   const behaviorSubject = new BehaviorSubject<boolean>(false);

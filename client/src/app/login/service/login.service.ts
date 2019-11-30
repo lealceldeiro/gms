@@ -33,15 +33,19 @@ export class LoginService {
    * @param sessionUserService SessionUserService for storing/retrieving session user-related information.
    * @param intHelperService InterceptorHelperService for sharing information with the interceptors.
    */
-  constructor(private http: HttpClient, private sessionService: SessionService,
-    private sessionUserService: SessionUserService, private intHelperService: InterceptorHelperService) {
+  constructor(
+    private http: HttpClient,
+    private sessionService: SessionService,
+    private sessionUserService: SessionUserService,
+    private intHelperService: InterceptorHelperService
+  ) {
     this.intHelperService.addExcludedFromErrorHandling(this.loginUrl);
   }
 
   /**
    * Performs a login request.
-   * @param {LoginResponseModel} payload Login data to be sent to the service in order to get the authorization data.
-   * @returns {Observable<LoginResponseModel>}
+   * @param payload Login data to be sent to the service in order to get the authorization data.
+   * @returns Observable<LoginResponseModel>
    */
   login(payload: LoginRequestModel): Observable<LoginResponseModel> {
     return this.http.post<LoginResponseModel>(this.url + this.loginUrl, payload).pipe(

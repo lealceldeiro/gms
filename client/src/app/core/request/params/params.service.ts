@@ -17,7 +17,6 @@ export class ParamsService {
 
   /**
    * Parameter for setting the number of the page to return when requesting paginated results.
-   * @type {string}
    */
   public static PAGE = 'page';
 
@@ -29,7 +28,7 @@ export class ParamsService {
   /**
    * Returns an HttpParams from the given object params.
    * @param params request parameters
-   * @return {HttpParams}
+   * @return HttpParams
    */
   getHttpParams(params?: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();

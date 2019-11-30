@@ -7,8 +7,8 @@ export interface IPredicate<T> {
     /**
      * Test the predicate.
      *
-     * @param {T} data Data to be tested against.
-     * @returns {boolean} `true` if `data` is truthy, `false`, otherwise.
+     * @param data Data to be tested against.
+     * @returns `true` if `data` is truthy, `false`, otherwise.
      */
     test(data: T): boolean;
 }

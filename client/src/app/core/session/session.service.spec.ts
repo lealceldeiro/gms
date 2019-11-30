@@ -3,17 +3,17 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { StorageService } from '../storage/storage.service';
-import { LoginResponseModel } from './login-response.model';
-import { SessionService } from './session.service';
-import { User } from './user.model';
-import { AppConfig } from '../config/app.config';
-import { Util } from '../util/util';
-import { TruthyPredicate } from '../predicate/truthy.predicate';
-import { ISecurityKey } from '../model/config/app-config.model';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { AppConfig } from '../config/app.config';
+import { ISecurityKey } from '../model/config/app-config.model';
+import { TruthyPredicate } from '../predicate/truthy.predicate';
+import { StorageService } from '../storage/storage.service';
+import { Util } from '../util/util';
+import { LoginResponseModel } from './login-response.model';
+import { SessionService } from './session.service';
 import { userMock } from './user.mock.model';
+import { User } from './user.model';
 
 describe('SessionService', () => {
   const mockLoginResponse: LoginResponseModel = {
@@ -386,7 +386,7 @@ describe('SessionService', () => {
   it(`closeSession should set loggedIn as 'false', 'notLoggedIn' as true, 'authData' as an empty object and
     the session user as an empty user`, () => {
     setUpSessionServiceProperties();
-    const undefinedString: string = <unknown>undefined as string;
+    const undefinedString: string = undefined as unknown as string;
     sessionService.closeSession();
 
     // region check session service vars
@@ -435,10 +435,10 @@ describe('SessionService', () => {
   });
 
   it('store should early return if the key param is falsy', () => {
-    const falseKey = <unknown>false as string;
-    const nullKey = <unknown>null as string;
-    const undefinedKey = <unknown>undefined as string;
-    const zeroKey = <unknown>0 as string;
+    const falseKey = false as unknown as string;
+    const nullKey = null as unknown as string;
+    const undefinedKey = undefined as unknown as string;
+    const zeroKey = 0 as unknown as string;
     const value = `testValue${getRandomNumber()}`;
     const storeFn = sessionService['store'];
 

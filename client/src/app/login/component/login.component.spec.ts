@@ -12,9 +12,9 @@ import { HttpStatusCode } from '../../core/response/http-status-code.enum';
 import { LoginRequestModel } from '../../core/session/login-request.model';
 import { LoginResponseModel } from '../../core/session/login-response.model';
 import { SessionService } from '../../core/session/session.service';
+import { SharedModule } from '../../shared/shared.module';
 import { DummyStubComponent } from '../../shared/test-util/mock/dummy-stub.component';
 import { MockModule } from '../../shared/test-util/mock/mock.module';
-import { SharedModule } from '../../shared/shared.module';
 import { LoginService } from '../service/login.service';
 import { LoginComponent } from './login.component';
 
@@ -62,7 +62,7 @@ describe('LoginComponent', () => {
     componentDe = fixture.debugElement;
     component.loginForm.controls['rememberMe'].setValue(false);
     fixture.detectChanges();
-    navigateByUrlSpy = spyOn((<any>component).router, 'navigateByUrl');
+    navigateByUrlSpy = spyOn((component as any).router, 'navigateByUrl');
   });
 
   it('should create', () => {

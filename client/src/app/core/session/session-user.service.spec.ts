@@ -1,6 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
+import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { AppConfig } from '../config/app.config';
 import { UserPdModel } from '../response/paginated-data/impl/user-pd-.model';
 import { LinksModel } from '../response/paginated-data/links.model';
 import { PaginatedDataModel } from '../response/paginated-data/model';
@@ -8,8 +10,6 @@ import { PageModel } from '../response/paginated-data/page.model';
 import { SelfModel } from '../response/paginated-data/self.model';
 import { SessionUserService } from './session-user.service';
 import { userMock } from './user.mock.model';
-import { MockAppConfig } from '../../shared/test-util/mock/app.config';
-import { AppConfig } from '../config/app.config';
 
 describe('SessionUserService', () => {
   const url = MockAppConfig.settings.apiServer.url;
@@ -54,7 +54,7 @@ describe('SessionUserService', () => {
 
     const href = 'hrefTest';
     const numbVal = 24;
-    const selfModel: SelfModel = { href: href };
+    const selfModel: SelfModel = { href };
     const linksModel: LinksModel = { self: selfModel };
     const pageModel: PageModel = { size: numbVal, totalElements: numbVal, totalPages: numbVal, number: numbVal };
     const response: PaginatedDataModel = {

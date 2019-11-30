@@ -15,13 +15,11 @@ import { SessionService } from './core/session/session.service';
 export class AppComponent implements OnInit, OnDestroy {
   /**
    * Indicates whether the user is logged in or not.
-   * @type {boolean}
    */
   public loggedIn = false;
 
   /**
    * Subscription to new values returned by SessionService#isLoggedIn.
-   * @type {Subscription}
    */
   private loggedInSub: Subscription = new Subscription();
 
@@ -43,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
   /**
    * Component constructor.
    *
-   * @param {SessionService} sessionService Service which holds session-related information.
+   * @param sessionService Service which holds session-related information.
    */
   constructor(public sessionService: SessionService) { }
 

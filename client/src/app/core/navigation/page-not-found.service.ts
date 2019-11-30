@@ -17,7 +17,7 @@ export class PageNotFoundService {
 
   /**
    * Removes a url from the collection of url which resulted in a not found page.
-   * @param {string} url Url to be removed.
+   * @param url Url to be removed.
    */
   removeUrl(url: string): void {
     const i = this.notFoundUrls.indexOf(url);
@@ -28,7 +28,7 @@ export class PageNotFoundService {
 
   /**
    * Adds a url to the collection of url which resulted in a not found page.
-   * @param {string} url Url to be added.
+   * @param url Url to be added.
    */
   addUrl(url: string): void {
     const i = this.notFoundUrls.indexOf(url);
@@ -39,8 +39,8 @@ export class PageNotFoundService {
 
   /**
    * Returns whether the url was added previously as a not found route.
-   * @param {string} url url to be checked against to.
-   * @return {boolean} `true` if it was added previously as a not found route, `false` otherwise.
+   * @param url url to be checked against to.
+   * @return `true` if it was added previously as a not found route, `false` otherwise.
    */
   wasNotFound(url: string): boolean {
     return this.notFoundUrls.indexOf(url) !== -1;

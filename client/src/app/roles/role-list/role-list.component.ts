@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
 import { Role } from '../shared/role.model';
-import { RolesService } from '../shared/roles.service';
 import { RolePd } from '../shared/role.pd';
+import { RolesService } from '../shared/roles.service';
 
 /**
  * A component for showing a list with all the roles.
@@ -56,7 +56,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
 
   /**
    * Loads the role list
-   * @param {number} toPage number of page to which the list will move. `toPage` starts from 1 (first page).
+   * @param toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
   loadList(toPage: number): void {
     this.listSubscription = this.roleService.getRoles(this.page.size, toPage - 1).subscribe((rolePd: RolePd) => {

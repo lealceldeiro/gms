@@ -53,7 +53,7 @@ describe('PermissionInfoComponent', () => {
     paramMapSpy = jasmine.createSpyObj('paramMapSpy', ['get']);
     paramMapSpy.get.and.returnValue(id.toString());
 
-    activatedRouteStub = (<unknown>{ snapshot: { paramMap: paramMapSpy } }) as ActivatedRoute;
+    activatedRouteStub = ({ snapshot: { paramMap: paramMapSpy } } as unknown) as ActivatedRoute;
 
     TestBed.configureTestingModule({
       imports: [SharedModule],

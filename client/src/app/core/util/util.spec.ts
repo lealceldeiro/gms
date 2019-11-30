@@ -1,8 +1,8 @@
 import * as hash from 'object-hash';
 
-import { Util } from './util';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
 import { IPredicate } from '../predicate/predicate.interface';
+import { Util } from './util';
 
 describe('Util', () => {
   class MockPredicate<T> implements IPredicate<T> {

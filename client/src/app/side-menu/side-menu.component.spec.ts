@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { excluded } from '../app-routing.module';
+import { getRandomNumber } from '../shared/test-util/functions.util';
 import { DummyStubComponent } from '../shared/test-util/mock/dummy-stub.component';
 import { MockModule } from '../shared/test-util/mock/mock.module';
-import { getRandomNumber } from '../shared/test-util/functions.util';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { SideMenuComponent } from './side-menu.component';
 
@@ -46,7 +46,7 @@ describe('SideMenuComponent', () => {
   });
 
   it('every link should be marked as active when the component navigates to the route', () => {
-    spy = spyOn((<any>component).router, 'isActive');
+    spy = spyOn((component as any).router, 'isActive');
     const urls = component.urls;
     const links: NodeListOf<Element> = componentEl.querySelectorAll('div nav div ul li a');
     for (let i = links.length - 1; i >= 0; i--) {
