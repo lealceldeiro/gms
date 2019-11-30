@@ -7,11 +7,11 @@ import { of } from 'rxjs';
 
 import { SessionService } from '../core/session/session.service';
 import { userMock } from '../core/session/user.mock.model';
+import { SharedModule } from '../shared/shared.module';
 import { DummyStubComponent } from '../shared/test-util/mock/dummy-stub.component';
 import { MockModule } from '../shared/test-util/mock/mock.module';
 import { gmsClick } from '../shared/test-util/mouse.util';
 import { NavBarComponent } from './nav-bar.component';
-import { SharedModule } from '../shared/shared.module';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
@@ -47,7 +47,7 @@ describe('NavBarComponent', () => {
     componentDe = fixture.debugElement;
     componentEl = fixture.nativeElement;
     fixture.detectChanges();
-    spyIsActive = spyOn((<any>component).router, 'isActive');
+    spyIsActive = spyOn((component as any).router, 'isActive');
   });
 
   it('should create', () => {

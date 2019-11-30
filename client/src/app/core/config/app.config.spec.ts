@@ -1,8 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
-import { AppConfig } from './app.config';
 import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { AppConfig } from './app.config';
 
 describe('AppConfig', () => {
   let appConfig: AppConfig;

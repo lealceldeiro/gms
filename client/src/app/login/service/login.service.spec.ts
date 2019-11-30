@@ -3,6 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
+import { AppConfig } from '../../core/config/app.config';
 import { InterceptorHelperService } from '../../core/interceptor/interceptor-helper.service';
 import { UserPdModel } from '../../core/response/paginated-data/impl/user-pd-.model';
 import { LinksModel } from '../../core/response/paginated-data/links.model';
@@ -12,16 +13,15 @@ import { LoginResponseModel } from '../../core/session/login-response.model';
 import { SessionUserService } from '../../core/session/session-user.service';
 import { SessionService } from '../../core/session/session.service';
 import { userMock } from '../../core/session/user.mock.model';
-import { LoginService } from './login.service';
 import { MockAppConfig } from '../../shared/test-util/mock/app.config';
-import { AppConfig } from '../../core/config/app.config';
+import { LoginService } from './login.service';
 
 describe('LoginService', () => {
   // region user paginated data mock
   const self: SelfModel = { href: 'test' };
-  const linkM: LinksModel = { self: self };
+  const linkM: LinksModel = { self };
   const page: PageModel = { totalPages: 1, number: 1, size: 1, totalElements: 1 };
-  const value = { page: page, _links: linkM, _embedded: { user: [userMock] } };
+  const value = { page, _links: linkM, _embedded: { user: [userMock] } };
   const userModelSubject = new Subject<UserPdModel>();
   // endregion
   const url = MockAppConfig.settings.apiServer.url;

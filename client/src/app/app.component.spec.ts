@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of, Subject } from 'rxjs';
@@ -7,18 +7,6 @@ import { AppComponent } from './app.component';
 import { SessionService } from './core/session/session.service';
 
 describe('AppComponent', () => {
-  @Component({ selector: 'gms-nav-bar', template: '' })
-  class NavBarStubComponent { }
-
-  @Component({ selector: 'gms-side-menu', template: '' })
-  class SideMenuStubComponent { }
-
-  @Component({ selector: 'router-outlet', template: '' }) // tslint:disable-line
-  class RouterOutletStubComponent { }
-
-  @Component({ selector: 'ngx-ui-loader', template: '' }) // tslint:disable-line
-  class LoadingIndicatorComponent { }
-
   const event = new Event('beforeunload', { cancelable: true });
   const subject = new Subject<boolean>();
   let sessionServiceSpy: jasmine.SpyObj<SessionService>;
@@ -34,9 +22,9 @@ describe('AppComponent', () => {
     sessionServiceSpy.isLoggedIn.and.returnValue(of(true));
 
     TestBed.configureTestingModule({
-      declarations: [AppComponent, NavBarStubComponent, SideMenuStubComponent, RouterOutletStubComponent,
-        LoadingIndicatorComponent],
-      providers: [{ provide: SessionService, useValue: sessionServiceSpy }]
+      declarations: [AppComponent],
+      providers: [{ provide: SessionService, useValue: sessionServiceSpy }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

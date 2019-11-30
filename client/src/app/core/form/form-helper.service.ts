@@ -13,7 +13,8 @@ export class FormHelperService {
 
   /**
    * Marks all controls in a form as touched.
-   * @param {FormGroup | NgForm} form
+   *
+   * @param form Form for which all controls will be marked as touched.
    */
   markFormElementsAsTouched(form: FormGroup | NgForm): void {
     Object.keys(form.controls).forEach(ctrlName => {

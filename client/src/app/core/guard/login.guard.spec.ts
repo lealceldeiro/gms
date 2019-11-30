@@ -20,7 +20,7 @@ describe('LoginGuard', () => {
       providers: [LoginGuard, HttpClientTestingModule, { provide: SessionService, useValue: sessionServiceStub }]
     });
     guard = TestBed.get(LoginGuard);
-    navigatedByUrlSpy = spyOn((<any>guard).router, 'navigateByUrl');
+    navigatedByUrlSpy = spyOn((guard as any).router, 'navigateByUrl');
   });
 
   it('should be created', inject([LoginGuard], (service: LoginGuard) => {

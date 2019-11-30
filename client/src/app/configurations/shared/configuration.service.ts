@@ -20,7 +20,7 @@ export class ConfigurationService {
 
   /**
    * Service's constructor
-   * @param {HttpClient} http HttpClient for performing api requests.
+   * @param http HttpClient for performing api requests.
    */
   constructor(private http: HttpClient, private readonly sessionService: SessionService) { }
 

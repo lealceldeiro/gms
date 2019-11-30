@@ -1,5 +1,5 @@
-import * as hash from 'object-hash';
 import * as _ from 'lodash';
+import * as hash from 'object-hash';
 
 import { IPredicate } from '../predicate/predicate.interface';
 
@@ -11,7 +11,7 @@ export class Util {
    * Generate a hash from a T value.
    *
    * @param seed Value to generate the hash from.
-   * @returns {string} A hash string.
+   * @returns A hash string.
    */
   static hashFrom<T>(seed: T): string {
     return hash(seed);
@@ -22,7 +22,7 @@ export class Util {
    * generated from the previous value associated to the same key. This does not modify the original object.
    *
    * @param seed Object T to iterate over all of its keys.
-   * @returns {T} A cloned object from the provided object T as argument with the key replaced by the hashes.
+   * @returns A cloned object from the provided object T as argument with the key replaced by the hashes.
    */
   static hashMapFrom<T>(seed: T): T {
     const clone = _.cloneDeep(seed);
@@ -41,7 +41,7 @@ export class Util {
    * @param min Number to take as minimum value in the range where the number will be generated in.
    * @param max Number to take as maximum value in the range where the number will be generated in.
    *
-   * @returns {number} A random `number` between the numbers `min` and `max` specified as arguments.
+   * @returns A random `number` between the numbers `min` and `max` specified as arguments.
    */
   static getRandomNumberBetween(min: number = 0, max: number = 100): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -51,8 +51,8 @@ export class Util {
    * Checks that all `values` fulfil the given predicate.
    *
    * @param values values to check the predicate against to.
-   * @param predicate {IPredicate} Predicate to check against the value.
-   * @returns {boolean} true if all `values` fulfil the given `predicate`, false otherwise.
+   * @param predicate Predicate to check against the value.
+   * @returns true if all `values` fulfil the given `predicate`, false otherwise.
    */
   static allValuesFulfil<T>(predicate: IPredicate<T>, ...values: T[]): boolean {
     return _.every(values, (val) => predicate.test(val));

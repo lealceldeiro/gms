@@ -18,7 +18,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
 
   /**
    * Return an observable with  `true` if the login route can be activated, `false` otherwise.
-   * @returns {Observable<boolean>}
+   * @returns Observable<boolean>
    */
   canActivateChild(): Observable<boolean> {
     return this.getIsUserLoggedInAndGoHomeIfNot();
@@ -26,7 +26,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
 
   /**
    * Returns an observable with `true` if the login component can be loaded, `false` otherwise.
-   * @returns {Observable<boolean>}
+   * @returns Observable<boolean>
    */
   canLoad(): Observable<boolean> {
     return this.getIsUserLoggedInAndGoHomeIfNot();
@@ -42,7 +42,7 @@ export class LoginGuard implements CanActivateChild, CanLoad {
   /**
    * Returns an observable with `true` if the user is logged in, `false` otherwise.
    * It navigates to the home page if the user is already logged in.
-   * @returns {Observable<boolean>}
+   * @returns Observable<boolean>
    */
   private getIsUserLoggedInAndGoHomeIfNot(): Observable<boolean> {
     return this.sessionService.isNotLoggedIn().pipe(tap((notLogged) => {

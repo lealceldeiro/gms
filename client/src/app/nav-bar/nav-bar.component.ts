@@ -107,8 +107,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   /**
    * Indicates whether the provided link is the one active or not.
    *
-   * @param {string} link Link to be checked.
-   * @returns {boolean} `true` if the link is the one active or `false` otherwise.
+   * @param link Link to be checked.
+   * @returns `true` if the link is the one active or `false` otherwise.
    */
   isLinkActive(link: string): boolean {
     return this.router.isActive(link, true);

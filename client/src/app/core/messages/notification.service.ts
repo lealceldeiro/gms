@@ -9,15 +9,15 @@ import { ToastrService } from 'ngx-toastr';
 export class NotificationService {
   /**
    * Service constructor.
-   * @param toastr {ToastrService} Service for showing the messages.
+   * @param toastr Service for showing the messages.
    */
   constructor(private toastr: ToastrService) { }
 
   /**
    * Shows an error message
-   * @param {string} message Message body.
-   * @param {string} title Message title.
-   * @return {any}
+   * @param message Message body.
+   * @param title Message title.
+   * @return the ActiveToast<any>
    */
   error(message?: string, title?: string): any {
     return this.toastr.error(message, title);

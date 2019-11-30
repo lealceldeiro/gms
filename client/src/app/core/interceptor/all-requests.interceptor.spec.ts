@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -63,7 +63,7 @@ describe('AllRequestsInterceptor', () => {
 
   it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and an unsuccessful response arrived',
     () => {
-      const error: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url: url });
+      const error: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url });
       httpClient.get(url).subscribe(() => { }, () => {
         // error
         expect(loaderServiceSpy.start).toHaveBeenCalledTimes(1);

@@ -1,7 +1,7 @@
 import { PipeTransform } from '@angular/core';
 
-import { BooleanPipe } from './boolean.pipe';
 import { getRandomNumber } from '../test-util/functions.util';
+import { BooleanPipe } from './boolean.pipe';
 
 describe('BooleanPipe', () => {
   let pipe: PipeTransform;

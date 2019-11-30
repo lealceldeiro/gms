@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 
 import * as _ from 'lodash';
 
-import { ParamsService } from './params.service';
 import { getRandomNumber } from '../../../shared/test-util/functions.util';
+import { ParamsService } from './params.service';
 
 describe('ParamsService', () => {
   let service: ParamsService;

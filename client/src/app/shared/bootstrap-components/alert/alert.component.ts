@@ -46,7 +46,7 @@ export class AlertComponent implements OnInit {
   /**
    * An event emitted when the close button is clicked. It has no payload and only relevant for dismissible alerts.
    */
-  @Output() close = new EventEmitter();
+  @Output() closeAlert = new EventEmitter();
 
   /**
    * Whether the alert should be closed or not. Useful for auto-closeable alerts.
@@ -76,6 +76,6 @@ export class AlertComponent implements OnInit {
    * Emits a notification when the alert is dismissed. The notification emitted is the message set on `closeMessage`.
    */
   onClose() {
-    this.close.emit(this.closeMessage);
+    this.closeAlert.emit(this.closeMessage);
   }
 }

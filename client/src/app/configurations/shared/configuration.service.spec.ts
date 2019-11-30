@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 
 import { BehaviorSubject, of } from 'rxjs';
 
-import { ConfigurationService } from './configuration.service';
+import { AppConfig } from '../../core/config/app.config';
 import { SessionService } from '../../core/session/session.service';
 import { User } from '../../core/session/user.model';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { AppConfig } from '../../core/config/app.config';
 import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { ConfigurationService } from './configuration.service';
 
 describe('ConfigurationService', () => {
   const url = MockAppConfig.settings.apiServer.url;

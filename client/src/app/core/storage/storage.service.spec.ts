@@ -4,8 +4,8 @@ import { LocalStorage } from '@ngx-pwa/local-storage';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { StorageService } from './storage.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
+import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
   const key = 'sampleKey';

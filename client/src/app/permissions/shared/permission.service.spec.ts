@@ -1,15 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
 
+import { AppConfig } from '../../core/config/app.config';
 import { ParamsService } from '../../core/request/params/params.service';
 import { getRandomNumber } from '../../shared/test-util/functions.util';
-import { PermissionService } from './permission.service';
-import { AppConfig } from '../../core/config/app.config';
 import { MockAppConfig } from '../../shared/test-util/mock/app.config';
+import { PermissionService } from './permission.service';
 
 describe('PermissionService', () => {
   const url = MockAppConfig.settings.apiServer.url;
-  const httpParamsValue: HttpParams = (<unknown>{ someRandomProperty: 'someRandomValue' + getRandomNumber() }) as HttpParams;
+  const httpParamsValue: HttpParams = ({ someRandomProperty: 'someRandomValue' + getRandomNumber() } as unknown) as HttpParams;
   let paramsServiceSpy: jasmine.SpyObj<ParamsService>;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let permissionService: PermissionService;
