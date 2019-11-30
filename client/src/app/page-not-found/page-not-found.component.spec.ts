@@ -6,9 +6,6 @@ import { PageNotFoundService } from '../core/navigation/page-not-found.service';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 describe('PageNotFoundComponent', () => {
-  @Component({ selector: 'gms-dummy', template: '' })
-  class DummyComponent { }
-
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
   let componentEl: HTMLElement;
@@ -20,8 +17,8 @@ describe('PageNotFoundComponent', () => {
     pageNotFoundServiceSpy.wasNotFound.and.returnValue(true);
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'test', component: DummyComponent }])],
-      declarations: [PageNotFoundComponent, DummyComponent],
+      imports: [RouterTestingModule.withRoutes([{ path: 'test', redirectTo: '' }])],
+      declarations: [PageNotFoundComponent],
       providers: [{ provide: PageNotFoundService, useValue: pageNotFoundServiceSpy }]
     }).compileComponents();
   }));
