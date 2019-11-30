@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Inspiration for this script:
+# References:
 # https://regexr.com/
 # https://www.regular-expressions.info/near.html
 # https://www.gnu.org/savannah-checkouts/gnu/grep/manual/grep.html > 2.4 grep Programs
