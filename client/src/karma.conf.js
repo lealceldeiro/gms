@@ -26,20 +26,7 @@ module.exports = function(config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: process.env.TRAVIS
-      ? ['Chrome_travis_ci']
-      : process.platform === 'win32'
-        ? ['Chrome']
-        : [
-          'Chromium'
-          // 'Firefox'
-        ],
-    customLaunchers: process.env.TRAVIS ? {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    } : {},
+    browsers: ['ChromeHeadless'],
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
