@@ -12,6 +12,7 @@
             "element",
             "gms",
             "kebab-case"
-        ]
+        ],
+        "space-before-function-paren": false
     }
 }

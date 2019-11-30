@@ -13,7 +13,7 @@
     "test:watch:no-sourcemap": "ng test --watch=true --sourceMap=false",
     "test:coverage": "ng test --watch=false --code-coverage",
     "lint:ng": "ng lint",
-    "lint:standard": "npx standardx **/*.ts",
+    "lint:standard": "npx standardx **/*.ts **/*.js",
     "lint-parallel": "npm-run-all --aggregate-output --parallel lint:*",
     "e2e": "ng e2e",
     "test:e2e": "npm-run-all --aggregate-output --parallel test e2e",
