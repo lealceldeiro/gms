@@ -29,13 +29,7 @@ matrix:
   - language: node_js
     node_js: lts/*
     addons:
-      apt:
-        update: true
-        sources:
-        - google-chrome
-        packages:
-        - google-chrome-stable
-        - google-chrome-beta
+      chrome: stable
     cache:
       directories:
       - node_modules
@@ -48,7 +42,6 @@ matrix:
     - npm install
     script:
     - npm run lint-parallel
-    - npm run test:coverage
-#    - npm run e2e
+    - npm run test:e2e:coverage
     after_success:
     - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
