@@ -12,8 +12,11 @@
     "test:watch": "ng test --watch=true",
     "test:watch:no-sourcemap": "ng test --watch=true --sourceMap=false",
     "test:coverage": "ng test --watch=false --code-coverage",
-    "lint": "npx standardx **/*.ts && ng lint",
+    "lint:ng": "ng lint",
+    "lint:standard": "npx standardx **/*.ts",
+    "lint-parallel": "npm-run-all --aggregate-output --parallel lint:*",
     "e2e": "ng e2e",
+    "test:e2e": "npm-run-all --aggregate-output --parallel test e2e",
     "postinstall": "npm run script:git:hooks",
     "script:git:hooks": "copyfiles -f -s ../scripts/git/hooks/* ../.git/hooks"
   },
