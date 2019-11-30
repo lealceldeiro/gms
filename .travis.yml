@@ -30,9 +30,7 @@ matrix:
     node_js: lts/*
     addons:
       chrome: stable
-    cache:
-      directories:
-      - node_modules
+    cache: npm
     services:
       - xvfb
     before_script:
