@@ -47,7 +47,7 @@ echo 'Linting...'
 
 # exit if any check fails
 set -ex
-npm run lint --prefix ./client
+npm run lint-parallel --prefix ./client
 
 # If there are whitespace errors, print the offending file names and fail.
 exec git diff-index --check --cached $against --
