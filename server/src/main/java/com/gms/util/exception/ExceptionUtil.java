@@ -10,36 +10,47 @@ import org.springframework.transaction.TransactionSystemException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class ExceptionUtil {
+public final class ExceptionUtil {
 
-    private ExceptionUtil() {}
+    private ExceptionUtil() {
+    }
 
     /**
-     * Creates the response body for exceptions of type {@link GmsGeneralException}
-     * @param ex {@link GmsGeneralException} for getting the exception data.
+     * Creates the response body for exceptions of type {@link GmsGeneralException}.
+     *
+     * @param ex  {@link GmsGeneralException} for getting the exception data.
      * @param msg {@link MessageResolver} for translating the message.
-     * @param dc {@link DefaultConst} in order to get the variable placeholders.
+     * @param dc  {@link DefaultConst} in order to get the variable placeholders.
      * @return Object with the response data.
      */
-    public static Object getResponseBodyForGmsGeneralException(GmsGeneralException ex, MessageResolver msg, DefaultConst dc) {
-        String suffixCode = ex.finishedOK() ? "request.finished.OK" : "request.finished.KO";
+    public static Object getResponseBodyForGmsGeneralException(final GmsGeneralException ex, final MessageResolver msg,
+                                                               final DefaultConst dc) {
+        String suffixCode = ex.isFinishedOK() ? "request.finished.OK" : "request.finished.KO";
+
         return createResponseBodyAsMap(msg.getMessage(ex.getMessage()) + ". " + msg.getMessage(suffixCode), dc);
     }
 
     /**
-     * Creates the response body for exceptions of type {@link GmsSecurityException}
-     * @param ex {@link GmsSecurityException} for getting the exception data.
+     * Creates the response body for exceptions of type {@link GmsSecurityException}.
+     *
+     * @param ex  {@link GmsSecurityException} for getting the exception data.
      * @param msg {@link MessageResolver} for translating the message.
-     * @param dc {@link DefaultConst} in order to get the variable placeholders.
+     * @param dc  {@link DefaultConst} in order to get the variable placeholders.
      * @return Object with the response data.
      */
-    public static Map<String, Object> getResponseBodyForGmsSecurityException(GmsSecurityException ex, MessageResolver msg, DefaultConst dc) {
+    public static Map<String, Object> getResponseBodyForGmsSecurityException(final GmsSecurityException ex,
+                                                                             final MessageResolver msg,
+                                                                             final DefaultConst dc) {
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("timestamp", System.currentTimeMillis());
         additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
@@ -51,13 +62,15 @@ public class ExceptionUtil {
     /**
      * Creates the response body for constraint violation exceptions such as {@link TransactionSystemException} and
      * {@link DataIntegrityViolationException} caused by violated domain restrictions.
-     * @param ex {@link Exception} for getting the exception data.
+     *
+     * @param ex  {@link Exception} for getting the exception data.
      * @param msg {@link MessageResolver} for translating the message.
-     * @param dc {@link DefaultConst} in order to get the variable placeholders.
+     * @param dc  {@link DefaultConst} in order to get the variable placeholders.
      * @return Object with the response data.
      */
-    public static Object getResponseBodyForConstraintViolationException(Exception ex, MessageResolver msg, DefaultConst dc) {
-        Object resBody = "";
+    public static Object getResponseBodyForConstraintViolationException(final Exception ex, final MessageResolver msg,
+                                                                        final DefaultConst dc) {
+        Object responseBody = "";
         Throwable cause = null;
         if (ex instanceof TransactionSystemException) {
             cause = ((TransactionSystemException) ex).getRootCause();
@@ -72,15 +85,16 @@ public class ExceptionUtil {
             } else if (cause instanceof SQLException) {
                 gmsError = getErrorsWhenSQLException(cause, msg);
             }
-            HashMap<String, Object> additionalData = new HashMap<>();
+            Map<String, Object> additionalData = new HashMap<>();
             additionalData.put("errors", gmsError.getErrors());
-            resBody = createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc, additionalData);
+            responseBody = createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc, additionalData);
         }
-        return resBody;
+
+        return responseBody;
     }
 
 
-    private static GmsError getErrorsWhenSQLException(Throwable cause, MessageResolver msg) {
+    private static GmsError getErrorsWhenSQLException(final Throwable cause, final MessageResolver msg) {
         final String state = ((SQLException) cause).getSQLState();
         final Iterator<Throwable> th = ((SQLException) cause).iterator();
         GmsError gmsError = new GmsError();
@@ -104,20 +118,22 @@ public class ExceptionUtil {
                     gmsError.addError(t.getLocalizedMessage());
                     break;
                 default:
-                    // for now, just add the error
-                    gmsError.addError(t.getLocalizedMessage());
+                    // for now, just add the error as in case SQLExceptionCode.STRING_DATA_RIGHT_TRUNCATION
                     break;
             }
         }
+
         return gmsError;
     }
 
-    private static GmsError getErrorsWhenConstraintViolationException(Throwable cause, MessageResolver msg) {
+    private static GmsError getErrorsWhenConstraintViolationException(final Throwable cause,
+                                                                      final MessageResolver msg) {
         final Set<ConstraintViolation<?>> v = ((ConstraintViolationException) cause).getConstraintViolations();
         GmsError gmsError = new GmsError();
         Object aux1;
         Object aux2;
         LinkedList<String> args;
+
         for (ConstraintViolation<?> cv : v) {
             args = new LinkedList<>();
             args.add(cv.getPropertyPath().toString());
@@ -130,35 +146,46 @@ public class ExceptionUtil {
                 args.add(aux2.toString());
             }
 
-            gmsError.addError(cv.getPropertyPath().toString(), msg.getMessage(cv.getMessage(), args.toArray(new String[args.size()])));
+            gmsError.addError(
+                    cv.getPropertyPath().toString(),
+                    msg.getMessage(
+                            cv.getMessage(),
+                            args.toArray(new String[0])
+                    )
+            );
         }
+
         return gmsError;
     }
 
     /**
      * Creates a response body as a {@link Map} to be sent as response body when handling exceptions.
-     * @param o Object with useful information.
+     *
+     * @param o  Object with useful information.
      * @param dc {@link DefaultConst} in order to get the variable placeholders.
-     * @return A {@link Map} with keys retrieved from the <code>dc</code> object holding the object <code>o</code>.
+     * @return A {@link Map} with keys retrieved from the {@code dc} object holding the object {@code o}.
      */
-    public static Map<String, Object> createResponseBodyAsMap(Object o, DefaultConst dc) {
-        HashMap<String, Object> r = new HashMap<>();
-        r.put(dc.getResMessageHolder(), o);
-        return r;
+    public static Map<String, Object> createResponseBodyAsMap(final Object o, final DefaultConst dc) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put(dc.getResMessageHolder(), o);
+
+        return responseBody;
     }
 
     /**
      * Creates a response body as a {@link Map} to be sent as response body when handling exceptions.
-     * @param o Object with useful information.
-     * @param dc {@link DefaultConst} in order to get the variable placeholders.
-     * @param additionalDataMap Additional information to be put beside the <code>o</code> param.
-     * @return A {@link Map} with keys retrieved from the <code>dc</code> object holding the object <code>o</code>.
+     *
+     * @param o                 Object with useful information.
+     * @param dc                {@link DefaultConst} in order to get the variable placeholders.
+     * @param additionalDataMap Additional information to be put beside the {@code o} param.
+     * @return A {@link Map} with keys retrieved from the {@code dc} object holding the object {@code o}.
      */
-    private static Map<String, Object> createResponseBodyAsMap(Object o, DefaultConst dc, Map<String, Object> additionalDataMap) {
-        Map<String, Object> base = createResponseBodyAsMap(o, dc);
-        base.putAll(additionalDataMap);
+    private static Map<String, Object> createResponseBodyAsMap(final Object o, final DefaultConst dc,
+                                                               final Map<String, Object> additionalDataMap) {
+        Map<String, Object> responseBodyAsMap = createResponseBodyAsMap(o, dc);
+        responseBodyAsMap.putAll(additionalDataMap);
 
-        return base;
+        return responseBodyAsMap;
     }
 
 }

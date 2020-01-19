@@ -55,7 +55,10 @@ describe('RoleListComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [RoleListComponent],
-      imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{ path: './', component: DummyStubComponent }])],
+      imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{
+        path: './',
+        component: DummyStubComponent
+      }])],
       providers: [{ provide: RolesService, useValue: rolesServiceSpy }]
     }).compileComponents();
   }));

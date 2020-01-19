@@ -10,16 +10,15 @@ import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.Map;
@@ -33,12 +32,24 @@ import java.util.Map;
 @BasePathAwareController
 public class SecurityController {
 
+    /**
+     * Instance of {@link UserService}.
+     */
     private final UserService userService;
+    /**
+     * Instance of {@link SecurityConst}.
+     */
     private final SecurityConst sc;
+    /**
+     * Instance of {@link JWTService}.
+     */
     private final JWTService jwtService;
 
     /**
-     * Registers a new {@link EUser} setting it as active with some properties such as enabled to `true`.
+     * Registers a new {@link EUser} setting it as active with some properties such as enabled to `true`. This method
+     * is intended to be used by the Spring framework and should not be overridden. Doing so may produce unexpected
+     * results.
+     *
      * @param user {@link EUser} data to be created
      * @return A {@link EUser} mapped into a @{@link ResponseBody}
      * @throws GmsGeneralException when an unhandled exception occurs.
@@ -46,23 +57,29 @@ public class SecurityController {
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<EUser> signUpUser(@Valid @RequestBody Resource<EUser> user, PersistentEntityResourceAssembler pra)
+    public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final Resource<? extends EUser> user)
             throws GmsGeneralException {
-        EUser u = userService.signUp(user.getContent(), false);
+        EUser u = userService.signUp(user.getContent(), UserService.EmailStatus.NOT_VERIFIED);
         if (u != null) {
-            return new ResponseEntity<EUser>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            throw GmsGeneralException.builder()
+                    .messageI18N("user.add.error")
+                    .finishedOK(false)
+                    .httpStatus(HttpStatus.CONFLICT)
+                    .build();
         }
-        else throw new GmsGeneralException("user.add.error", false, HttpStatus.CONFLICT);
     }
 
     /**
-     * Provides a new access token given a refresh token.
-     * @return Map with the same information provided in the
-     * {@link com.gms.config.security.JWTAuthenticationFilter#successfulAuthentication(HttpServletRequest, HttpServletResponse, FilterChain, Authentication)}
-     * method.
+     * Provides a new access token given a refresh token. This method is intended to be used by the Spring framework
+     * and should not be overridden. Doing so may produce unexpected results.
+     *
+     * @param payload Payload with the information required to provide a new refresh token.
+     * @return {@link  Map} with the new login information.
      */
     @PostMapping(SecurityConst.ACCESS_TOKEN_URL)
-    public Map<String, Object> refreshToken(@Valid @RequestBody RefreshTokenPayload payload) {
+    public Map<String, Object> refreshToken(@Valid @RequestBody final RefreshTokenPayload payload) {
         String oldRefreshToken = payload.getRefreshToken();
         if (oldRefreshToken != null) {
             try {
@@ -83,4 +100,5 @@ public class SecurityController {
         }
         throw new GmsSecurityException(SecurityConst.ACCESS_TOKEN_URL, "security.token.refresh.required");
     }
+
 }

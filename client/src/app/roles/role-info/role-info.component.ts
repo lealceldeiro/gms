@@ -62,7 +62,8 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
    * @param rolesService Service for requesting role information.
    * @param location Location object for triggering the platform navigation.
    */
-  constructor(private route: ActivatedRoute, private rolesService: RolesService, private location: Location) { }
+  constructor(private route: ActivatedRoute, private rolesService: RolesService, private location: Location) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -99,11 +100,12 @@ export class RoleInfoComponent implements OnInit, OnDestroy {
   showInPermissions(toPage: number = this.page.current): void {
     // at this point the id is not null, otherwise a location.back would have been performed in #getPermissionInfo
     const id = +(this.route.snapshot.paramMap.get('id') || 0);
-    this.permissionsSub = this.rolesService.getRolePermissions(id, this.page.size, toPage).subscribe((permissionPd: PermissionPd) => {
-      this.permissions = permissionPd._embedded ? permissionPd._embedded.permission : [];
-      this.page.current = toPage;
-      this.page.total = permissionPd.page.totalElements;
-      this.permissionsLoaded = true;
-    });
+    this.permissionsSub = this.rolesService.getRolePermissions(id, this.page.size, toPage)
+      .subscribe((permissionPd: PermissionPd) => {
+        this.permissions = permissionPd._embedded ? permissionPd._embedded.permission : [];
+        this.page.current = toPage;
+        this.page.total = permissionPd.page.totalElements;
+        this.permissionsLoaded = true;
+      });
   }
 }

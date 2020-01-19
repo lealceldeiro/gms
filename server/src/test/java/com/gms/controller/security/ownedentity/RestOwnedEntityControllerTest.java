@@ -5,7 +5,11 @@ import com.gms.Application;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.testutil.*;
+import com.gms.testutil.EntityUtil;
+import com.gms.testutil.GmsMockUtil;
+import com.gms.testutil.GmsSecurityUtil;
+import com.gms.testutil.RestDoc;
+import com.gms.testutil.StringUtil;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
 import com.gms.util.constant.DefaultConst;
@@ -39,32 +43,91 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class RestOwnedEntityControllerTest {
 
-    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    /**
+     * Instance of {@link JUnitRestDocumentation} to create the documentation for Asciidoc from the resutls of the
+     * mocked webrequests.
+     */
+    @Rule
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
-    @Autowired private WebApplicationContext context;
-    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
+    /**
+     * Instance of {@link WebApplicationContext}.
+     */
+    @Autowired
+    private WebApplicationContext context;
+    /**
+     * Instance of {@link ObjectMapper}.
+     */
+    private final ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
-    @Autowired private FilterChainProxy springSecurityFilterChain;
+    /**
+     * Instance of {@link FilterChainProxy}.
+     */
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired private SecurityConst sc;
-    @Autowired private DefaultConst dc;
+    /**
+     * Instance of {@link SecurityConst}.
+     */
+    @Autowired
+    private SecurityConst sc;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
+    @Autowired
+    private DefaultConst dc;
 
-    @Autowired private AppService appService;
-    @Autowired private ConfigurationService configService;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link ConfigurationService}.
+     */
+    @Autowired
+    private ConfigurationService configService;
 
+    /**
+     * Instance of {@link MockMvc} to perform web requests.
+     */
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
+    /**
+     * An instance of {@link RestDocumentationResultHandler} for the documenting RESTful APIs endpoints.
+     */
+    private final RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
     //region vars
+    /**
+     * Base path for the API.
+     */
     private String apiPrefix;
+    /**
+     * Header to be used for sending authentication credentials.
+     */
     private String authHeader;
+    /**
+     * Type of the authorization token.
+     */
     private String tokenType;
+    /**
+     * Access token used to get access to secured resources.
+     */
     private String accessToken;
-    private static final String reqString = ResourcePath.OWNED_ENTITY;
+    /**
+     * Base path for requests in this test suite (after the base API path).
+     */
+    private static final String REQ_STRING = ResourcePath.OWNED_ENTITY;
     //endregion
 
+    /**
+     * An alphanumeric random generator.
+     */
     private final GMSRandom random = new GMSRandom();
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
@@ -78,6 +141,9 @@ public class RestOwnedEntityControllerTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void create() throws Exception {
         final boolean multiEntity = configService.isMultiEntity();
@@ -87,16 +153,20 @@ public class RestOwnedEntityControllerTest {
         EOwnedEntity e = EntityUtil.getSampleEntity(random.nextString());
         ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
 
-        mvc.perform(post(apiPrefix + "/" + reqString)
+        mvc.perform(post(apiPrefix + "/" + REQ_STRING)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(e)))
                 .andExpect(status().isCreated())
                 .andDo(restDocResHandler.document(
                         requestFields(
-                                fields.withPath("name").description("Natural name which is used commonly for referring to the entity"),
-                                fields.withPath("username").description("A unique string representation of the {@LINK #name}. Useful when there are other entities with the same {@LINK #name}"),
-                                fields.withPath("description").description("A brief description of the entity")
+                                fields.withPath("name")
+                                        .description("Natural name which is used commonly for referring to the entity"),
+                                fields.withPath("username")
+                                        .description("A unique string representation of the {@LINK #name}. Useful "
+                                                + "when there are other entities with the same {@LINK #name}"),
+                                fields.withPath("description")
+                                        .description("A brief description of the entity")
                         )
                 ));
         if (!multiEntity) {
@@ -104,6 +174,9 @@ public class RestOwnedEntityControllerTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createKO() throws Exception {
         final boolean multiEntity = configService.isMultiEntity();
@@ -113,7 +186,7 @@ public class RestOwnedEntityControllerTest {
 
         EOwnedEntity e = EntityUtil.getSampleEntity(random.nextString());
         mvc.perform(
-                post(apiPrefix + "/" + reqString)
+                post(apiPrefix + "/" + REQ_STRING)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(e))
@@ -124,6 +197,9 @@ public class RestOwnedEntityControllerTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleTransactionSystemException() throws Exception {
         boolean initial = configService.isMultiEntity();
@@ -149,6 +225,9 @@ public class RestOwnedEntityControllerTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
         boolean initial = configService.isMultiEntity();
@@ -179,4 +258,5 @@ public class RestOwnedEntityControllerTest {
             configService.setIsMultiEntity(false);
         }
     }
+
 }

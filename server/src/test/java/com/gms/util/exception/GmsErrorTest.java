@@ -12,7 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -22,12 +26,30 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class GmsErrorTest {
 
-    private static final String msg = "test";
-    private static final String msg2 = "test2";
-    private static final String field = "field";
-    private static final String field2 = "field2";
-    private static final String errorsHolder = "errors";
+    /**
+     * A sample String.
+     */
+    private static final String MSG = "test";
+    /**
+     * A sample String.
+     */
+    private static final String MSG_2 = "test2";
+    /**
+     * A sample String.
+     */
+    private static final String FIELD = "field";
+    /**
+     * A sample String.
+     */
+    private static final String FIELD_2 = "field2";
+    /**
+     * A sample String.
+     */
+    private static final String ERRORS_HOLDER = "errors";
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void testAllArgsConstructor() {
@@ -43,51 +65,60 @@ public class GmsErrorTest {
 
         GmsError e = new GmsError(errors);
 
-        Map<String, List<String>> err = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        Map<String, List<String>> err = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertEquals(err, errors);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void addErrorFieldMessage() {
         GmsError e = new GmsError();
-        e.addError(field, msg);
-        e.addError(field, msg2);
-        e.addError(field2, msg2);
-        Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        e.addError(FIELD, MSG);
+        e.addError(FIELD, MSG_2);
+        e.addError(FIELD_2, MSG_2);
+        Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertNotNull(errors);
-        assertTrue(errors.get(field).contains(msg));
-        assertTrue(errors.get(field).contains(msg2));
-        assertTrue(errors.get(field2).contains(msg2));
+        assertTrue(errors.get(FIELD).contains(MSG));
+        assertTrue(errors.get(FIELD).contains(MSG_2));
+        assertTrue(errors.get(FIELD_2).contains(MSG_2));
 
         // test also "removeErrors"
-        e.removeErrors(field);
+        e.removeErrors(FIELD);
 
         // test also "removeError"
-        e.removeError(field2, msg2);
+        e.removeError(FIELD_2, MSG_2);
 
-        errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertNotNull(errors);
-        assertNull(errors.get(field));
+        assertNull(errors.get(FIELD));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void addErrorMessage() {
         GmsError e = new GmsError();
-        e.addError(msg);
-        Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        e.addError(MSG);
+        Map<String, List<String>> errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertNotNull(errors);
-        assertTrue(errors.get(GmsError.OTHERS).contains(msg));
+        assertTrue(errors.get(GmsError.OTHERS).contains(MSG));
 
         // test also "removeError"
-        e.removeError(msg);
+        e.removeError(MSG);
 
-        errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        errors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertNotNull(errors);
-        assertFalse(errors.get(GmsError.OTHERS).contains(msg));
+        assertFalse(errors.get(GmsError.OTHERS).contains(MSG));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void setErrors() {
@@ -102,19 +133,28 @@ public class GmsErrorTest {
         errors.put("k2", l2);
 
         GmsError e = new GmsError();
-        e.addError(msg);
-        e.addError(field, msg2);
-        Map<String, List<String>> currentErrors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        e.addError(MSG);
+        e.addError(FIELD, MSG_2);
+        Map<String, List<String>> currentErrors =
+                (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
         assertNotNull(currentErrors);
-        assertTrue(currentErrors.get(GmsError.OTHERS).contains(msg));
-        assertTrue(currentErrors.get(field).contains(msg2));
+        assertTrue(currentErrors.get(GmsError.OTHERS).contains(MSG));
+        assertTrue(currentErrors.get(FIELD).contains(MSG_2));
 
         e.setErrors(errors);
-        currentErrors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, errorsHolder);
+        currentErrors = (Map<String, List<String>>) ReflectionTestUtils.getField(e, ERRORS_HOLDER);
+
+        if (currentErrors == null) {
+            currentErrors = new HashMap<>();
+        }
+
         assertEquals(currentErrors.get("k1"), l);
         assertEquals(currentErrors.get("k2"), l2);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getErrors() {
         Map<String, List<String>> errors = new HashMap<>();
@@ -128,10 +168,11 @@ public class GmsErrorTest {
         errors.put("k2", l2);
 
         GmsError e = new GmsError();
-        ReflectionTestUtils.setField(e, errorsHolder, errors);
+        ReflectionTestUtils.setField(e, ERRORS_HOLDER, errors);
         Map<String, List<String>> currentErrors = e.getErrors();
 
         assertEquals(currentErrors.get("k1"), l);
         assertEquals(currentErrors.get("k2"), l2);
     }
+
 }

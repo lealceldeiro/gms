@@ -15,53 +15,65 @@ import java.util.Objects;
 @Component
 public class DAOProvider {
 
+    /**
+     * Database url connection.
+     */
     @Value("${spring.datasource.url:null}")
     private String url;
 
+    /**
+     * Instance of {@link QueryService}.
+     */
     private final QueryService queryService;
 
-    private static final String NOT_IMPLEMENTED_YET = "Whether the `spring.datasource.url` property has not been" +
-            "specified or support for the specified one has not been implemented yet";
+    /**
+     * Message: Not implemented yet.
+     */
+    private static final String NOT_IMPLEMENTED_YET = "Either the `spring.datasource.url` property has not been"
+            + " specified or support for the specified one has not been implemented yet";
 
+    /**
+     * Creates a new {@link DAOProvider} from the given arguments.
+     *
+     * @param queryService
+     */
     @Autowired
-    public DAOProvider(QueryService queryService) {
+    public DAOProvider(final QueryService queryService) {
         this.queryService = Objects.requireNonNull(queryService);
     }
 
     /**
      * Returns a proper instance of a {@link BAuthorizationDAO} according to the current database management system.
+     *
      * @return An extended-from-{@link BAuthorizationDAO} class.
      * @throws NullPointerException if the database driver property specified in application.properties under the key
-     * "spring.datasource.driver-class-name" corresponds to one of the following database management systems: MySQL,
-     * Oracle.
+     *                              "spring.datasource.driver-class-name" corresponds to one of the following database
+     *                              management systems: i.e.: MySQL, Oracle.
      * @throws NullPointerException if the property "spring.datasource.driver-class-name" is not specified in the
-     * application.properties.
+     *                              application.properties.
      */
-    public BAuthorizationDAO getBAuthorizationDAO () {
-        switch (DatabaseDriver.fromJdbcUrl(url)) {
-            case POSTGRESQL:
-                return new PostgreSQLBAuthorizationDAO(queryService);
-            default:
-                throw new NullPointerException(NOT_IMPLEMENTED_YET);
+    public BAuthorizationDAO getBAuthorizationDAO() {
+        if (DatabaseDriver.fromJdbcUrl(url) == DatabaseDriver.POSTGRESQL) {
+            return new PostgreSQLBAuthorizationDAO(queryService);
         }
+        throw new NullPointerException(NOT_IMPLEMENTED_YET);
     }
 
     /**
      * Returns a proper instance of a {@link BPermissionDAO} according to the current database management system.
+     *
      * @return An extended-from-{@link BPermissionDAO} class.
      * @throws NullPointerException if the database driver property specified in application.properties under the key
-     * "spring.datasource.driver-class-name" corresponds to one of the following database management systems: MySQL,
-     * Oracle.
+     *                              "spring.datasource.driver-class-name" corresponds to one of the following database
+     *                              management systems: i.e.: MySQL, Oracle.
      * @throws NullPointerException if the property "spring.datasource.driver-class-name" is not specified in the
-     * application.properties.
+     *                              application.properties.
      */
-    public BPermissionDAO getBPermissionDAO () {
-        switch (DatabaseDriver.fromJdbcUrl(url)) {
-            case POSTGRESQL:
-                return new PostgreSQLBPermissionDAO(queryService);
-            default:
-                throw new NullPointerException(NOT_IMPLEMENTED_YET);
+    public BPermissionDAO getBPermissionDAO() {
+        if (DatabaseDriver.fromJdbcUrl(url) == DatabaseDriver.POSTGRESQL) {
+            return new PostgreSQLBPermissionDAO(queryService);
         }
+        throw new NullPointerException(NOT_IMPLEMENTED_YET);
     }
 
 }

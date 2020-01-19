@@ -21,7 +21,7 @@ matrix:
     - psql -c "create database gmstest;" -U postgres
     - sudo -u postgres psql -c "ALTER ROLE postgres WITH password 'postgres'"
     script:
-    - "./gradlew test"
+    - "./gradlew check --stacktrace"
     services:
     - postgresql
     after_success:

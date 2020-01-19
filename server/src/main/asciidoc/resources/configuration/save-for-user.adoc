@@ -1,6 +1,9 @@
 [[system-configuration-save-for-user]]
 ==== Setting configurations for a specific user
-A `POST` or (`PUT`) request that inserts or updates a configuration  for a specific user. The key values you should pass as a body request can vary depending on the configuration parameter you would like to set; but the parameter `user` must *always* be present.
+
+A `POST` or (`PUT`) request that inserts or updates a configuration for a specific user.
+The key values you should pass as a body request can vary depending on the configuration parameter you would like to set; but the parameter `user`
+must *always* be present.
 
 In this example the parameters `language` and `last_accessed_entity` are provided in order to set those values respectively for the user with the provided id in the param `user`.
 

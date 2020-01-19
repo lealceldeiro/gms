@@ -36,7 +36,8 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
   /**
    * Component constructor
    */
-  constructor(private configurationService: ConfigurationService) { }
+  constructor(private configurationService: ConfigurationService) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -55,8 +56,8 @@ export class ConfigurationListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Loads the configuration values into the arrays keys and values by calling the method for getting the configuration in
-   * the configurations service.
+   * Loads the configuration values into the arrays keys and values by calling the method for getting the configuration
+   * in the configurations service.
    */
   loadConfigurations(): void {
     this.configurationValuesSub = this.configurationService.getConfigurations().subscribe(configs => {

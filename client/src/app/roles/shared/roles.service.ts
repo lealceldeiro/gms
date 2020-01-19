@@ -24,7 +24,8 @@ export class RolesService {
    * @param http HttpClient for performing api requests.
    * @param paramsService ParamsService for getting request params formatted properly.
    */
-  constructor(private http: HttpClient, private paramsService: ParamsService) { }
+  constructor(private http: HttpClient, private paramsService: ParamsService) {
+  }
 
   /**
    * Returns an observable with a list of roles.
@@ -45,7 +46,7 @@ export class RolesService {
    * @return A Observable<Role> containing the role data.
    */
   getRoleInfo(id: number): Observable<Role> {
-    return this.http.get<Role>(`${this.url}/${id}`);
+    return this.http.get<Role>(`${ this.url }/${ id }`);
   }
 
   /**
@@ -54,7 +55,7 @@ export class RolesService {
    * @return A Observable<HttpResponse<string>> containing the response data.
    */
   deleteRoleInfo(id: number): Observable<HttpResponse<string>> {
-    return this.http.delete(`${this.url}/${id}`, { responseType: 'text', observe: 'response' });
+    return this.http.delete(`${ this.url }/${ id }`, { responseType: 'text', observe: 'response' });
   }
 
   /**
@@ -68,6 +69,8 @@ export class RolesService {
     const p: { [key: string]: number } = {};
     p[ParamsService.SIZE] = size;
     p[ParamsService.PAGE] = page - 1;
-    return this.http.get<PermissionPd>(`${this.url}/${id}/permissions`, { params: this.paramsService.getHttpParams(p) });
+    return this.http.get<PermissionPd>(
+      `${ this.url }/${ id }/permissions`, { params: this.paramsService.getHttpParams(p) }
+    );
   }
 }

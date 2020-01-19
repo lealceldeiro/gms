@@ -1,5 +1,6 @@
 [[resource-role-delete]]
 ==== Deleting a role's info
+
 A `DELETE` request deletes a role's information.
 
 include::../../util/H-REQUEST.adoc[]

@@ -1,5 +1,6 @@
 [[resource-user-update]]
 ==== Updating a user's info
+
 A `PUT` (full update) or `PATCH` (partial update) request updates a user's information.
 
 include::../../util/H-REQUEST.adoc[]

@@ -1,8 +1,13 @@
 [[security-access-and-refresh-token]]
 === Access token and Refresh token
-After a period of time the access token expires and a new one need to be retrieved in order allow the user keeping performing operations over the protected resources. A new access token can be retrieved performing a request to this endpoint providing the previously gotten refresh token. If the refresh token also expired a new login must be performed by the user. Usually the refresh token has a much longer expiration time.
 
-These two parameters (access token and refresh token expiration time) are configured by your API provider. If you are experiencing any issues regarding to this, you should put in contact.
+After a period of time the access token expires and a new one need to be retrieved in order allow the user keeping performing operations over the protected resources.
+A new access token can be retrieved performing a request to this endpoint providing the previously gotten refresh token.
+If the refresh token also expired a new login must be performed by the user.
+Usually the refresh token has a much longer expiration time.
+
+These two parameters (access token and refresh token expiration time) are configured by your API provider.
+If you are experiencing any issues regarding to this, you should put in contact.
 
 This `POST` request which gets a new access token and other necessary data for getting access to protected resources.
 

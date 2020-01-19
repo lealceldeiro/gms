@@ -26,8 +26,14 @@ describe('LoginComponent', () => {
   const subjectLoginResponseModel = new Subject<LoginResponseModel>();
 
   const sessionServiceIsLoggedInSubject = new Subject<boolean>();
-  const sessionServiceStub = { isLoggedIn: () => sessionServiceIsLoggedInSubject.asObservable(), setRememberMe: () => { } };
-  const formHelperStub = { markFormElementsAsTouched: () => { } };
+  const sessionServiceStub = {
+    isLoggedIn: () => sessionServiceIsLoggedInSubject.asObservable(), setRememberMe: () => {
+    }
+  };
+  const formHelperStub = {
+    markFormElementsAsTouched: () => {
+    }
+  };
 
   let component: LoginComponent;
   let componentDe: DebugElement;

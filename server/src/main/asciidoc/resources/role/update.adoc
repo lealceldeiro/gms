@@ -1,5 +1,6 @@
 [[resource-role-update]]
 ==== Updating a role's info
+
 A `PUT` (full update) or `PATCH` (partial update) request updates a role's information.
 
 include::../../util/H-REQUEST.adoc[]

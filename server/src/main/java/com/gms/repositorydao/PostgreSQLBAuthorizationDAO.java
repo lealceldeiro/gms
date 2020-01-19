@@ -21,42 +21,53 @@ import java.util.Map;
 @Transactional
 class PostgreSQLBAuthorizationDAO extends BAuthorizationDAO {
 
+    /**
+     * Parameter userId.
+     */
     private static final String USER_ID_PARAM = "userId";
 
-    PostgreSQLBAuthorizationDAO(QueryService queryService) {
-        this.queryService = queryService;
+    /**
+     * Creates a new instance of a {@link BAuthorizationDAO} from the given arguments.
+     *
+     * @param queryService An instance of {@link QueryService}.
+     */
+    PostgreSQLBAuthorizationDAO(final QueryService queryService) {
+        super(queryService);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, List<BRole>> getRolesForUserOverAllEntities(long userId) {
+    public Map<String, List<BRole>> getRolesForUserOverAllEntities(final long userId) {
         Map<String, List<BRole>> r = new HashMap<>();
-        final Query queryOE = queryService.createNativeQuery("SELECT e.username FROM eowned_entity e INNER JOIN" +
-                " bauthorization auth ON e.id = auth.entity_id WHERE auth.user_id = :userId");
+        final Query queryOE = this.getQueryService().createNativeQuery("SELECT e.username FROM eowned_entity e "
+                + "INNER JOIN bauthorization auth ON e.id = auth.entity_id WHERE auth.user_id = :userId");
         queryOE.setParameter(USER_ID_PARAM, userId);
         List<String> oEntitiesUsernames = queryOE.getResultList();
 
         Query queryR;
         List<Object[]> result;
-        for (String OEUsername : oEntitiesUsernames) {
-            queryR = queryService.createNativeQuery("SELECT r.id, r.version, r.label, r.description, r.enabled" +
-                    " FROM brole r INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_entity e ON" +
-                    " auth.entity_id = e.id WHERE e.username = :eUsername AND auth.user_id = :userId");
-            queryR.setParameter("eUsername", OEUsername).setParameter(USER_ID_PARAM, userId);
+        for (String entityUsername : oEntitiesUsernames) {
+            queryR = this.getQueryService().createNativeQuery("SELECT r.id, r.version, r.label, r.description, "
+                    + "r.enabled FROM brole r INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN "
+                    + "eowned_entity e ON auth.entity_id = e.id WHERE e.username = :eUsername AND "
+                    + "auth.user_id = :userId");
+            queryR.setParameter("eUsername", entityUsername).setParameter(USER_ID_PARAM, userId);
             result = queryR.getResultList();
-            r.put(OEUsername, getRolesListFrom(result));
+            r.put(entityUsername, getRolesListFrom(result));
         }
+
         return r;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<BRole> getRolesForUserOverEntity(long userId, long entityId) {
-        Query queryR = queryService.createNativeQuery("SELECT r.id, r.version, r.label, r.description, r.enabled" +
-                " FROM brole r INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_entity e ON" +
-                " auth.entity_id = e.id WHERE e.id = :entityId AND auth.user_id = :userId");
+    public List<BRole> getRolesForUserOverEntity(final long userId, final long entityId) {
+        Query queryR = this.getQueryService().createNativeQuery("SELECT r.id, r.version, r.label, r.description, "
+                + "r.enabled FROM brole r INNER JOIN bauthorization auth ON r.id = auth.role_id INNER JOIN eowned_"
+                + "entity e ON auth.entity_id = e.id WHERE e.id = :entityId AND auth.user_id = :userId");
         queryR.setParameter("entityId", entityId).setParameter(USER_ID_PARAM, userId);
         List<Object[]> rawVal = queryR.getResultList();
+
         return getRolesListFrom(rawVal);
     }
 

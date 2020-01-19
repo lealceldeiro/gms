@@ -1,5 +1,6 @@
 [[resources-user]]
 === User
+
 The User resource is used to create a new user, show the users' information, update the information of an existing one or completely delete one.
 
 include::create.adoc[]

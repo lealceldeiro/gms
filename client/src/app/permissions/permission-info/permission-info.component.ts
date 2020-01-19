@@ -58,7 +58,8 @@ export class PermissionInfoComponent implements OnInit, OnDestroy {
    * @param permissionService Service for requesting permissions information.
    * @param location Location object for triggering the platform navigation.
    */
-  constructor(private route: ActivatedRoute, private permissionService: PermissionService, private location: Location) { }
+  constructor(private route: ActivatedRoute, private permissionService: PermissionService, private location: Location) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.

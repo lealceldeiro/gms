@@ -35,7 +35,10 @@ describe('SessionService', () => {
   let sessionService: SessionService;
 
   beforeEach(() => {
-    storageServiceSpy = jasmine.createSpyObj('StorageService', ['set', 'get', 'clear', 'putCookie', 'getCookie', 'clearCookie']);
+    storageServiceSpy = jasmine.createSpyObj(
+      'StorageService',
+      ['set', 'get', 'clear', 'putCookie', 'getCookie', 'clearCookie']
+    );
     storageServiceSpy.set.and.returnValue(subjectNull$);
     storageServiceSpy.get.and.returnValue(subjectNull$);
     storageServiceSpy.clear.and.returnValue(trueVal$);
@@ -43,7 +46,7 @@ describe('SessionService', () => {
     storageServiceSpy.getCookie.and.returnValue(subjectNull$);
     storageServiceSpy.clearCookie.and.returnValue(trueVal$);
 
-    utilAllValuesFulfilSpy = spyOn(Util, 'allValuesFulfil').and.returnValue(true); // mock behavior for keys validity: make them valid
+    utilAllValuesFulfilSpy = spyOn(Util, 'allValuesFulfil').and.returnValue(true); // make keys valid
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -54,8 +57,11 @@ describe('SessionService', () => {
 
   it(`loadInitialData should call retrieve to get data for following keys: loggedInKey, notLoggedInKey, userKey,
     loginDataKey and rememberMeKey... and set the proper values to the observables holding this data`, () => {
-    const value = `testValue${getRandomNumber()}`;
-    const spy = { retrieve: (unused1: string, unused2: boolean) => { /* no-op */ } };
+    const value = `testValue${ getRandomNumber() }`;
+    const spy = {
+      retrieve: (unused1: string, unused2: boolean) => { /* no-op */
+      }
+    };
     const retrieveSpy = spyOn(spy, 'retrieve');
     sessionService['retrieve'] = (key: string, fromCookie: boolean): Observable<any> => {
       spy.retrieve(key, fromCookie);
@@ -70,19 +76,22 @@ describe('SessionService', () => {
     expect(retrieveSpy).toHaveBeenCalledTimes(5);
 
     expect(retrieveSpy.calls.argsFor(0)[0]).toBe(sessionService['loggedInKey']);
-    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(0)[1], `loggedInKey ${valueInCookiesErrorMessage}`);
+    expect(trueOrUndefined)
+      .toContain(retrieveSpy.calls.argsFor(0)[1], `loggedInKey ${ valueInCookiesErrorMessage }`);
 
     expect(retrieveSpy.calls.argsFor(1)[0]).toBe(sessionService['notLoggedInKey']);
-    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(1)[1], `notLoggedInKey ${valueInCookiesErrorMessage}`);
+    expect(trueOrUndefined)
+      .toContain(retrieveSpy.calls.argsFor(1)[1], `notLoggedInKey ${ valueInCookiesErrorMessage }`);
 
     expect(retrieveSpy.calls.argsFor(2)[0]).toBe(sessionService['userKey']);
-    expect(retrieveSpy.calls.argsFor(2)[1]).toBe(false, `userKey ${valueInStorageErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(2)[1]).toBe(false, `userKey ${ valueInStorageErrorMessage }`);
 
     expect(retrieveSpy.calls.argsFor(3)[0]).toBe(sessionService['loginDataKey']);
-    expect(retrieveSpy.calls.argsFor(3)[1]).toBe(false, `loginDataKey ${valueInStorageErrorMessage}`);
+    expect(retrieveSpy.calls.argsFor(3)[1]).toBe(false, `loginDataKey ${ valueInStorageErrorMessage }`);
 
     expect(retrieveSpy.calls.argsFor(4)[0]).toBe(sessionService['rememberMeKey']);
-    expect(trueOrUndefined).toContain(retrieveSpy.calls.argsFor(4)[1], `rememberMeKey ${valueInCookiesErrorMessage}`);
+    expect(trueOrUndefined)
+      .toContain(retrieveSpy.calls.argsFor(4)[1], `rememberMeKey ${ valueInCookiesErrorMessage }`);
   });
 
   it('should be created', inject([SessionService], (service: SessionService) => {
@@ -162,13 +171,15 @@ describe('SessionService', () => {
       });
     });
 
-    it('isNotLoggedIn should return the proper value regarding to `notLoggedIn$` observable (from `notLoggedIn`)', (done) => {
-      sessionService['notLoggedIn'].next(true);
-      sessionService.isNotLoggedIn().subscribe((val: boolean) => {
-        expect(val).toBeTruthy();
-        done();
-      });
-    });
+    it('isNotLoggedIn should return the proper value regarding to `notLoggedIn$` observable (from `notLoggedIn`)',
+      (done) => {
+        sessionService['notLoggedIn'].next(true);
+        sessionService.isNotLoggedIn().subscribe((val: boolean) => {
+          expect(val).toBeTruthy();
+          done();
+        });
+      }
+    );
 
     it('getUser should return the proper value regarding to `user$` observable (from `user`)', (done) => {
       sessionService['user'].next(userMock);
@@ -187,50 +198,60 @@ describe('SessionService', () => {
       });
     });
 
-    it('isRememberMe should return the proper value regarding to `rememberMe$` observable (from `rememberMe`)', (done) => {
-      const value = getRandomNumber() % 2 === 0;
-      sessionService['rememberMe'].next(value);
-      sessionService.isRememberMe().subscribe((expected: boolean) => {
-        expect(expected).toEqual(value);
-        done();
-      });
-    });
+    it('isRememberMe should return the proper value regarding to `rememberMe$` observable (from `rememberMe`)',
+      (done) => {
+        const value = getRandomNumber() % 2 === 0;
+        sessionService['rememberMe'].next(value);
+        sessionService.isRememberMe().subscribe((expected: boolean) => {
+          expect(expected).toEqual(value);
+          done();
+        });
+      }
+    );
 
-    it('getAccessToken should return the proper value regarding to `accessToken$` observable (from `accessToken`)', (done) => {
-      const value = `test${getRandomNumber()}value`;
-      sessionService['accessToken'].next(value);
-      sessionService.getAccessToken().subscribe((token: string) => {
-        expect(token).toEqual(value);
-        done();
-      });
-    });
+    it('getAccessToken should return the proper value regarding to `accessToken$` observable (from `accessToken`)',
+      (done) => {
+        const value = `test${ getRandomNumber() }value`;
+        sessionService['accessToken'].next(value);
+        sessionService.getAccessToken().subscribe((token: string) => {
+          expect(token).toEqual(value);
+          done();
+        });
+      }
+    );
 
-    it('getRefreshToken should return the proper value regarding to `refreshToken$` observable (from `refreshToken`)', (done) => {
-      const value = `test${getRandomNumber()}value`;
-      sessionService['refreshToken'].next(value);
-      sessionService.getRefreshToken().subscribe((token: string) => {
-        expect(token).toEqual(value);
-        done();
-      });
-    });
+    it('getRefreshToken should return the proper value regarding to `refreshToken$` observable (from `refreshToken`)',
+      (done) => {
+        const value = `test${ getRandomNumber() }value`;
+        sessionService['refreshToken'].next(value);
+        sessionService.getRefreshToken().subscribe((token: string) => {
+          expect(token).toEqual(value);
+          done();
+        });
+      }
+    );
 
-    it('getHeader should return the proper value regarding to `headerToBeSent$` observable (from `headerToBeSent`)', (done) => {
-      const value = `test${getRandomNumber()}value`;
-      sessionService['headerToBeSent'].next(value);
-      sessionService.getHeader().subscribe((header: string) => {
-        expect(header).toEqual(value);
-        done();
-      });
-    });
+    it('getHeader should return the proper value regarding to `headerToBeSent$` observable (from `headerToBeSent`)',
+      (done) => {
+        const value = `test${ getRandomNumber() }value`;
+        sessionService['headerToBeSent'].next(value);
+        sessionService.getHeader().subscribe((header: string) => {
+          expect(header).toEqual(value);
+          done();
+        });
+      }
+    );
 
-    it('getTokenType should return the proper value regarding to `tokenType$` observable (from `tokenType`)', (done) => {
-      const value = `token${getRandomNumber()}type`;
-      sessionService['tokenType'].next(value);
-      sessionService.getTokenType().subscribe((type: string) => {
-        expect(type).toEqual(value);
-        done();
-      });
-    });
+    it('getTokenType should return the proper value regarding to `tokenType$` observable (from `tokenType`)',
+      (done) => {
+        const value = `token${ getRandomNumber() }type`;
+        sessionService['tokenType'].next(value);
+        sessionService.getTokenType().subscribe((type: string) => {
+          expect(type).toEqual(value);
+          done();
+        });
+      }
+    );
   });
 
   describe('test set values', () => {
@@ -258,16 +279,18 @@ describe('SessionService', () => {
       expect(storageServiceSpy.putCookie).not.toHaveBeenCalled();
     });
 
-    it('setUser should set the proper value regarding to `user` value and call the store service to save the value', () => {
-      setUpSessionServiceProperties();
+    it('setUser should set the proper value regarding to `user` value and call the store service to save the value',
+      () => {
+        setUpSessionServiceProperties();
 
-      sessionService.setUser(userMock);
+        sessionService.setUser(userMock);
 
-      expect(storageServiceSpy.set).toHaveBeenCalled();
-      expect(storageServiceSpy.set.calls.argsFor(0)[0]).toBe(sessionService['userKey']);
-      expect(storageServiceSpy.set.calls.argsFor(0)[1]).toBe(userMock);
-      expect(sessionService['user'].getValue()).toBe(userMock);
-    });
+        expect(storageServiceSpy.set).toHaveBeenCalled();
+        expect(storageServiceSpy.set.calls.argsFor(0)[0]).toBe(sessionService['userKey']);
+        expect(storageServiceSpy.set.calls.argsFor(0)[1]).toBe(userMock);
+        expect(sessionService['user'].getValue()).toBe(userMock);
+      }
+    );
 
     it('setUser should early return if the key is not valid', () => {
       setUpSessionServiceProperties();
@@ -328,7 +351,7 @@ describe('SessionService', () => {
       setUpSessionServiceProperties();
       setKeyAreInvalid();
 
-      sessionService.setAccessToken(`${getRandomNumber()}test`);
+      sessionService.setAccessToken(`${ getRandomNumber() }test`);
 
       expect(storageServiceSpy.putCookie).not.toHaveBeenCalled();
     });
@@ -337,7 +360,7 @@ describe('SessionService', () => {
       setUpSessionServiceProperties();
       setKeyAreInvalid();
 
-      sessionService.setRefreshToken(`${getRandomNumber()}test`);
+      sessionService.setRefreshToken(`${ getRandomNumber() }test`);
 
       expect(storageServiceSpy.putCookie).not.toHaveBeenCalled();
     });
@@ -346,7 +369,7 @@ describe('SessionService', () => {
       setUpSessionServiceProperties();
       setKeyAreInvalid();
 
-      sessionService.setHeader(`${getRandomNumber()}test`);
+      sessionService.setHeader(`${ getRandomNumber() }test`);
 
       expect(storageServiceSpy.putCookie).not.toHaveBeenCalled();
     });
@@ -355,7 +378,7 @@ describe('SessionService', () => {
       setUpSessionServiceProperties();
       setKeyAreInvalid();
 
-      sessionService.setTokenType(`${getRandomNumber()}test`);
+      sessionService.setTokenType(`${ getRandomNumber() }test`);
 
       expect(storageServiceSpy.putCookie).not.toHaveBeenCalled();
     });
@@ -390,14 +413,22 @@ describe('SessionService', () => {
     sessionService.closeSession();
 
     // region check session service vars
-    expect(sessionService['loggedIn'].getValue()).toBeFalsy('`loggedIn` subject value was not set properly');
-    expect(sessionService['notLoggedIn'].getValue()).toBeTruthy('`notLoggedIn` subject value was not set properly');
-    expect(sessionService['authData'].getValue()).toEqual({}, '`authData` subject value was not set properly');
-    expect(sessionService['accessToken'].getValue()).toBe(undefinedString, '`accessToken` subject value was not set properly');
-    expect(sessionService['refreshToken'].getValue()).toBe(undefinedString, '`refreshToken` subject value was not set properly');
-    expect(sessionService['headerToBeSent'].getValue()).toBe(undefinedString, '`headerToBeSent` subject value was not set properly');
-    expect(sessionService['tokenType'].getValue()).toBe(undefinedString, '`tokenType` subject value was not set properly');
-    expect(sessionService['user'].getValue()).toEqual(new User(), '`user` subject value was not set properly');
+    expect(sessionService['loggedIn'].getValue())
+      .toBeFalsy('`loggedIn` subject value was not set properly');
+    expect(sessionService['notLoggedIn'].getValue())
+      .toBeTruthy('`notLoggedIn` subject value was not set properly');
+    expect(sessionService['authData'].getValue())
+      .toEqual({}, '`authData` subject value was not set properly');
+    expect(sessionService['accessToken'].getValue())
+      .toBe(undefinedString, '`accessToken` subject value was not set properly');
+    expect(sessionService['refreshToken'].getValue())
+      .toBe(undefinedString, '`refreshToken` subject value was not set properly');
+    expect(sessionService['headerToBeSent'].getValue())
+      .toBe(undefinedString, '`headerToBeSent` subject value was not set properly');
+    expect(sessionService['tokenType'].getValue())
+      .toBe(undefinedString, '`tokenType` subject value was not set properly');
+    expect(sessionService['user'].getValue())
+      .toEqual(new User(), '`user` subject value was not set properly');
     // endregion
 
     expect(storageServiceSpy.clear).toHaveBeenCalledTimes(2);
@@ -405,12 +436,15 @@ describe('SessionService', () => {
 
     // region check args calls
     // region clear
-    expect(storageServiceSpy.clear.calls.argsFor(0)[0]).toEqual(sessionService['loginDataKey'], 'incorrect key for `authData`');
-    expect(storageServiceSpy.clear.calls.argsFor(1)[0]).toEqual(sessionService['userKey'], 'incorrect key for `user`');
+    expect(storageServiceSpy.clear.calls.argsFor(0)[0])
+      .toEqual(sessionService['loginDataKey'], 'incorrect key for `authData`');
+    expect(storageServiceSpy.clear.calls.argsFor(1)[0])
+      .toEqual(sessionService['userKey'], 'incorrect key for `user`');
     // endregion
 
     // region clearCookie
-    expect(storageServiceSpy.clearCookie.calls.argsFor(0)[0]).toEqual(sessionService['loggedInKey'], 'incorrect key for `loggedIn`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(0)[0])
+      .toEqual(sessionService['loggedInKey'], 'incorrect key for `loggedIn`');
     expect(storageServiceSpy.clearCookie.calls.argsFor(1)[0])
       .toEqual(sessionService['notLoggedInKey'], 'incorrect key for `notLoggedIn`');
     expect(storageServiceSpy.clearCookie.calls.argsFor(2)[0])
@@ -419,7 +453,8 @@ describe('SessionService', () => {
       .toEqual(sessionService['refreshTokenKey'], 'incorrect key for `refreshToken`');
     expect(storageServiceSpy.clearCookie.calls.argsFor(4)[0])
       .toEqual(sessionService['headerToBeSentKey'], 'incorrect key for `headerToBeSent`');
-    expect(storageServiceSpy.clearCookie.calls.argsFor(5)[0]).toEqual(sessionService['tokenTypeKey'], 'incorrect key for `tokenType`');
+    expect(storageServiceSpy.clearCookie.calls.argsFor(5)[0])
+      .toEqual(sessionService['tokenTypeKey'], 'incorrect key for `tokenType`');
     // endregion
     // endregion
   });
@@ -439,7 +474,7 @@ describe('SessionService', () => {
     const nullKey = null as unknown as string;
     const undefinedKey = undefined as unknown as string;
     const zeroKey = 0 as unknown as string;
-    const value = `testValue${getRandomNumber()}`;
+    const value = `testValue${ getRandomNumber() }`;
     const storeFn = sessionService['store'];
 
     storeFn(falseKey, value);
@@ -453,7 +488,7 @@ describe('SessionService', () => {
   describe('retrieve should call StorageService', () => {
     it(`#getCookie with the first argument provided to its call
       and 'false' as second argument, when second argument is not provided`, () => {
-      const key = `test4${getRandomNumber()}`;
+      const key = `test4${ getRandomNumber() }`;
       sessionService['retrieve'](key);
 
       expect(storageServiceSpy.get).not.toHaveBeenCalled();
@@ -464,7 +499,7 @@ describe('SessionService', () => {
 
     it(`#getCookie with the first argument provided to its call
       and 'false' as second argument, when second argument is true`, () => {
-      const key = `test4${getRandomNumber()}`;
+      const key = `test4${ getRandomNumber() }`;
       sessionService['retrieve'](key, true);
 
       expect(storageServiceSpy.get).not.toHaveBeenCalled();
@@ -475,7 +510,7 @@ describe('SessionService', () => {
 
     it(`#getCookie with the first argument provided to its call
       when second argument is true and 'true' as second argument if it is provided to its call`, () => {
-      const key = `test5${getRandomNumber()}`;
+      const key = `test5${ getRandomNumber() }`;
       sessionService['retrieve'](key, true, true);
 
       expect(storageServiceSpy.get).not.toHaveBeenCalled();
@@ -485,7 +520,7 @@ describe('SessionService', () => {
     });
 
     it('#get with the first argument provided to its call when second argument is false', () => {
-      const key = `test5${getRandomNumber()}`;
+      const key = `test5${ getRandomNumber() }`;
       sessionService['retrieve'](key, false);
 
       expect(storageServiceSpy.getCookie).not.toHaveBeenCalled();
@@ -507,7 +542,7 @@ describe('SessionService', () => {
     second argument`, () => {
     const keys: string[] = [];
     for (let i = 0; i < getRandomNumber(); i++) {
-      keys.push(`key${getRandomNumber()}`);
+      keys.push(`key${ getRandomNumber() }`);
     }
 
     expect(sessionService['keysAreValid'](...keys)).toBe(true); // true as mocked in beforeEach setup
@@ -521,12 +556,15 @@ describe('SessionService', () => {
   });
 
   describe('key getters should call _key with the proper value', () => {
-    const spy = { _key: (unused: string) => { /* no-op */ } };
+    const spy = {
+      _key: (unused: string) => { /* no-op */
+      }
+    };
     let _keySpy: jasmine.Spy;
     let valueAssociatedToKey: string;
 
     beforeEach(() => {
-      valueAssociatedToKey = `valueAssociatedToKey${getRandomNumber()}`;
+      valueAssociatedToKey = `valueAssociatedToKey${ getRandomNumber() }`;
       sessionService['_key'] = (k: string): string => {
         spy._key(k);
         return valueAssociatedToKey;
@@ -575,39 +613,39 @@ describe('SessionService', () => {
   function setUpSessionServiceProperties(config: { [key: string]: string } = {}) {
     Object.defineProperties(sessionService, {
       loggedInKey: {
-        value: config.loggedInKey || `key${getRandomNumber()}test`,
+        value: config.loggedInKey || `key${ getRandomNumber() }test`,
         writable: false
       },
       notLoggedInKey: {
-        value: config.notLoggedInKey || `key1${getRandomNumber()}test1`,
+        value: config.notLoggedInKey || `key1${ getRandomNumber() }test1`,
         writable: false
       },
       loginDataKey: {
-        value: config.loginDataKey || `key2${getRandomNumber()}test2`,
+        value: config.loginDataKey || `key2${ getRandomNumber() }test2`,
         writable: false
       },
       accessTokenKey: {
-        value: config.accessTokenKey || `key3${getRandomNumber()}test3`,
+        value: config.accessTokenKey || `key3${ getRandomNumber() }test3`,
         writable: false
       },
       refreshTokenKey: {
-        value: config.refreshTokenKey || `key4${getRandomNumber()}test4`,
+        value: config.refreshTokenKey || `key4${ getRandomNumber() }test4`,
         writable: false
       },
       headerToBeSentKey: {
-        value: config.headerToBeSentKey || `key5${getRandomNumber()}test5`,
+        value: config.headerToBeSentKey || `key5${ getRandomNumber() }test5`,
         writable: false
       },
       tokenTypeKey: {
-        value: config.tokenTypeKey || `key6${getRandomNumber()}test6`,
+        value: config.tokenTypeKey || `key6${ getRandomNumber() }test6`,
         writable: false
       },
       userKey: {
-        value: config.userKey || `key7${getRandomNumber()}test7`,
+        value: config.userKey || `key7${ getRandomNumber() }test7`,
         writable: false
       },
       rememberMeKey: {
-        value: config.rememberMeKey || `key8${getRandomNumber()}test8`,
+        value: config.rememberMeKey || `key8${ getRandomNumber() }test8`,
         writable: false
       }
     });

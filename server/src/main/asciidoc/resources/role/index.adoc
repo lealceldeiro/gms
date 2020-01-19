@@ -1,6 +1,8 @@
 [[resources-role]]
 === Role
-The role resource is used to create, update, get and delete information related to the concept "Role". This concept represents a group of permissions a user has over an owned entity.
+
+The role resource is used to create, update, get and delete information related to the concept "Role".
+This concept represents a group of permissions a user has over an owned entity.
 
 include::create.adoc[]
 

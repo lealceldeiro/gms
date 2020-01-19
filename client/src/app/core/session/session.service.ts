@@ -109,6 +109,7 @@ export class SessionService {
    * Observable holding `this.tokenType`.
    */
   private tokenType$ = this.tokenType.asObservable();
+
   // endregion
 
   /**
@@ -116,11 +117,12 @@ export class SessionService {
    *
    * @param storageService StorageService for storing session-related information.
    */
-  constructor(private storageService: StorageService) { }
+  constructor(private storageService: StorageService) {
+  }
 
   /**
-   * Loads all the the data regarding the user session. This method must be called on app startup in order to load information such as
-   * login status of the user.
+   * Loads all the the data regarding the user session. This method must be called on app startup in order to load
+   * information such as login status of the user.
    */
   loadInitialData(): void {
     // load data
@@ -215,7 +217,13 @@ export class SessionService {
    * @param value Value to ve set.
    */
   setAuthData(value: LoginResponseModel | any): void {
-    if (!this.keysAreValid(this.loginDataKey, this.accessTokenKey, this.refreshTokenKey, this.headerToBeSentKey, this.tokenTypeKey)) {
+    if (!this.keysAreValid(
+      this.loginDataKey,
+      this.accessTokenKey,
+      this.refreshTokenKey,
+      this.headerToBeSentKey,
+      this.tokenTypeKey
+    )) {
       return;
     }
 
@@ -251,8 +259,8 @@ export class SessionService {
   }
 
   /**
-   * Returns the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
-   * logging in.
+   * Returns the access token required for doing all secured requests to the API endpoints, provided by the
+   * authentication endpoint when logging in.
    *
    * @returns Observable<string>
    */
@@ -261,8 +269,8 @@ export class SessionService {
   }
 
   /**
-   * Sets the access token required for doing all secured requests to the API endpoints, provided by the authentication endpoint when
-   * logging in.
+   * Sets the access token required for doing all secured requests to the API endpoints, provided by the authentication
+   * endpoint when logging in.
    *
    * @param value Value to be set.
    */
@@ -364,14 +372,22 @@ export class SessionService {
     this.setAuthData({});
     this.setUser(new User());
 
-    this.storageService.clearCookie(this.loggedInKey).subscribe(() => { /* no-op */ });
-    this.storageService.clearCookie(this.notLoggedInKey).subscribe(() => { /* no-op */ });
-    this.storageService.clear(this.loginDataKey).subscribe(() => { /* no-op */ });
-    this.storageService.clearCookie(this.accessTokenKey).subscribe(() => { /* no-op */ });
-    this.storageService.clearCookie(this.refreshTokenKey).subscribe(() => { /* no-op */ });
-    this.storageService.clearCookie(this.headerToBeSentKey).subscribe(() => { /* no-op */ });
-    this.storageService.clearCookie(this.tokenTypeKey).subscribe(() => { /* no-op */ });
-    this.storageService.clear(this.userKey).subscribe(() => { /* no-op */ });
+    this.storageService.clearCookie(this.loggedInKey).subscribe(() => {
+    });
+    this.storageService.clearCookie(this.notLoggedInKey).subscribe(() => {
+    });
+    this.storageService.clear(this.loginDataKey).subscribe(() => {
+    });
+    this.storageService.clearCookie(this.accessTokenKey).subscribe(() => {
+    });
+    this.storageService.clearCookie(this.refreshTokenKey).subscribe(() => {
+    });
+    this.storageService.clearCookie(this.headerToBeSentKey).subscribe(() => {
+    });
+    this.storageService.clearCookie(this.tokenTypeKey).subscribe(() => {
+    });
+    this.storageService.clear(this.userKey).subscribe(() => {
+    });
   }
 
   // region private
@@ -413,7 +429,7 @@ export class SessionService {
    * @see {AppConfig}
    */
   private _key(name: keyof ISecurityKey | string): string {
-    return _.get(AppConfig.settings, `security.hash.key.${name}`);
+    return _.get(AppConfig.settings, `security.hash.key.${ name }`);
   }
 
   /**
@@ -462,6 +478,7 @@ export class SessionService {
   private get headerToBeSentKey(): string {
     return this._key('headerToBeSent');
   }
+
   // endregion
   // endregion
 }

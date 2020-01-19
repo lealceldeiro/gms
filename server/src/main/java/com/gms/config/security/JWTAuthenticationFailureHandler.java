@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -23,28 +24,42 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+    /**
+     * Instance of {@link DefaultConst}.
+     */
     private final DefaultConst dc;
+    /**
+     * Instance of {@link SecurityConst}.
+     */
     private final SecurityConst sc;
+    /**
+     * Instance of {@link MessageResolver}.
+     */
     private final MessageResolver msg;
 
     /**
-     * Called when an authentication attempt fails.
+     * Called when an authentication attempt fails. This method is intended to be used by the Spring framework and
+     * should not be overridden. Doing so may produce unexpected results.
      *
      * @param request   the request during which the authentication attempt occurred.
      * @param response  the response.
      * @param exception the exception which was thrown to reject the authentication
      */
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException {
+    public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
+                                        final AuthenticationException exception) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().append(getBody());
+        try (PrintWriter printWriter = response.getWriter()) {
+            printWriter.append(getBody());
+        }
     }
 
     private String getBody() {
         GmsSecurityException ex = new GmsSecurityException(sc.getSignInUrl(),
                 msg.getMessage("security.bad.credentials"));
+
         return new JSONObject(ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc)).toString();
     }
+
 }

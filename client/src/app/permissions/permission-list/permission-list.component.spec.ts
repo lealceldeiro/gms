@@ -31,7 +31,9 @@ describe('PermissionListComponent', () => {
       }
     };
   };
-  const addPermissionsToSampleData = (sampleData: { _embedded: any; _links?: { self: { href: string; }; }; page: any; }) => {
+  const addPermissionsToSampleData = (
+    sampleData: { _embedded: any; _links?: { self: { href: string; }; }; page: any; }
+  ) => {
     const rangeBottom = 25;
     const rangeTop = 40;
     const randomAmountValue = getRandomNumber(rangeBottom, rangeTop);
@@ -60,7 +62,10 @@ describe('PermissionListComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [PermissionListComponent],
-      imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{ path: './', component: DummyStubComponent }])],
+      imports: [SharedModule, MockModule, RouterTestingModule.withRoutes([{
+        path: './',
+        component: DummyStubComponent
+      }])],
       providers: [{ provide: PermissionService, useValue: permissionServiceSpy }]
     }).compileComponents();
   }));

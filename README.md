@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/lealceldeiro/gms.svg?branch=master)](https://travis-ci.org/lealceldeiro/gms)&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/lealceldeiro/gms/badge.svg?branch=master)](https://coveralls.io/github/lealceldeiro/gms?branch=master)&nbsp;&nbsp;
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)&nbsp;&nbsp;
+[![Java Style Checker](https://img.shields.io/badge/code%20style-checkstyle-brightgreen?style=flat&logo=java&logoColor=f89820)](https://checkstyle.sourceforge.io/)
 
 # Table of Contents
 
@@ -23,7 +24,7 @@ The project consists of two main (independent) modules:
 * [Spring Boot application](./server)
 
 * [Angular application](./client)
-  
+
   You can collaborate on any of them independently by modifying only the module you would like to change.
 
 ## Ready for production

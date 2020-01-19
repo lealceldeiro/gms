@@ -1,5 +1,6 @@
 [[resource-role-get]]
 ==== Getting a role's info
+
 A `GET` request gets a role's information.
 
 include::../../util/H-REQUEST.adoc[]

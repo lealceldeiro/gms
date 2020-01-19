@@ -1,90 +1,60 @@
 package com.gms.util.exception;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 /**
+ * Used to create general exceptions.
+ * <p>IMPORTANT!</p>
+ * <p>Due to the number of different combinations of arguments this exception may get to
+ * construct a meaningful message this class must be instantiated using a provided builder.</p>
+ *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
-public class GmsGeneralException extends Exception {
+@Builder
+@Getter
+@Setter
+public final class GmsGeneralException extends Exception {
 
     /**
-	 * Version number for a Serializable class.
-	 */
-	private static final long serialVersionUID = 5034123990490698557L;
-	private final Boolean finishedOK;
-    private final HttpStatus httpStatus;
-    public static final HttpStatus DEFAULT_HTTP_STATUS = HttpStatus.BAD_REQUEST;
-    public static final String DEFAULT_MSG = "exception.general";
-    public static final Boolean DEFAULT_FINISHED_OK = true;
+     * Version number for a Serializable class.
+     */
+    private static final long serialVersionUID = 5034123990490698557L;
 
+    /**
+     * Indicates whether the action finished OK or not despite the exception thrown.
+     */
+    @Builder.Default
+    private boolean finishedOK = true;
 
-    public GmsGeneralException() {
-        super(DEFAULT_MSG);
-        this.finishedOK = DEFAULT_FINISHED_OK;
-        this.httpStatus = DEFAULT_HTTP_STATUS;
+    /**
+     * HttpStatus to be returned because the of the thrown exception.
+     */
+    @Builder.Default
+    private HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+    /**
+     * i18n code for the default error to be shown when the exception occurs.
+     */
+    @Builder.Default
+    private String messageI18N = "exception.general";
+
+    /**
+     * Cause of this exception.
+     */
+    private Throwable cause;
+
+    @Override
+    public String getMessage() {
+        return this.messageI18N;
     }
 
-    public GmsGeneralException(String msg) {
-        super(msg);
-        this.finishedOK = DEFAULT_FINISHED_OK;
-        this.httpStatus = DEFAULT_HTTP_STATUS;
-    }
-
-    public GmsGeneralException(Boolean finishedOK) {
-        super(DEFAULT_MSG);
-        this.finishedOK = finishedOK;
-        this.httpStatus = DEFAULT_HTTP_STATUS;
-    }
-
-    public GmsGeneralException(String msg, Boolean finishedOK) {
-        super(msg);
-        this.finishedOK = finishedOK;
-        this.httpStatus = DEFAULT_HTTP_STATUS;
-    }
-
-    public GmsGeneralException(String msg, Exception e, Boolean finishedOK) {
-        super(msg, e);
-        this.finishedOK = finishedOK;
-        this.httpStatus = DEFAULT_HTTP_STATUS;
-    }
-
-    public GmsGeneralException(HttpStatus httpStatus) {
-        super(DEFAULT_MSG);
-        this.finishedOK = DEFAULT_FINISHED_OK;
-        this.httpStatus = httpStatus;
-    }
-
-    public GmsGeneralException(String msg, HttpStatus httpStatus) {
-        super(msg);
-        this.finishedOK = DEFAULT_FINISHED_OK;
-        this.httpStatus = httpStatus;
-    }
-
-    public GmsGeneralException(Boolean finishedOK, HttpStatus httpStatus) {
-        super(DEFAULT_MSG);
-        this.finishedOK = finishedOK;
-        this.httpStatus = httpStatus;
-    }
-
-    public GmsGeneralException(String msg, Boolean finishedOK, HttpStatus httpStatus) {
-        super(msg);
-        this.finishedOK = finishedOK;
-        this.httpStatus = httpStatus;
-    }
-
-    public GmsGeneralException(String msg, Exception e, Boolean finishedOK, HttpStatus httpStatus) {
-        super(msg, e);
-        this.finishedOK = finishedOK;
-        this.httpStatus = httpStatus;
-    }
-
-    public Boolean finishedOK () {
-        return finishedOK;
-    }
-
-    public HttpStatus getHttpStatus () {
-        return httpStatus;
+    @Override
+    public synchronized Throwable getCause() {
+        return cause;
     }
 
 }

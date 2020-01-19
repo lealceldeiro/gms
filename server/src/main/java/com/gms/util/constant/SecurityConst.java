@@ -35,7 +35,8 @@ public class SecurityConst {
     private String secret;
 
     /**
-     * Variable in which the time where the token was issued will be sent in the response in the login information to the client.
+     * Variable in which the time where the token was issued will be sent in the response in the login information to
+     * the client.
      */
     @Value("${gms.security.jwt.issued_time_holder:issued_at}")
     private String issuedTimeHolder;
@@ -67,7 +68,8 @@ public class SecurityConst {
     private String aTokenType;
 
     /**
-     * Variable in which the {@link SecurityConst#aTokenType} will be sent in the response in the login information to the client.
+     * Variable in which the {@link SecurityConst#aTokenType} will be sent in the response in the login information to
+     * the client.
      */
     @Value("${gms.security.jwt.token_type_holder:token_type}")
     private String aTokenTypeHolder;
@@ -79,7 +81,8 @@ public class SecurityConst {
     private String aTokenHeader;
 
     /**
-     * Variable in which the {@link SecurityConst#aTokenHeader} will be sent  in the response in the login information to the client.
+     * Variable in which the {@link SecurityConst#aTokenHeader} will be sent  in the response in the login information
+     * to the client.
      */
     @Value("${gms.security.jwt.token_header_to_be_sent_holder:header_to_be_sent}")
     private String aTokenHeaderToBeSentHolder;
@@ -97,7 +100,8 @@ public class SecurityConst {
     private String aTokenExpirationTimeHolder;
 
     /**
-     * Variable in which the time of validity of the access token will be sent in the response in the login information to the client.
+     * Variable in which the time of validity of the access token will be sent in the response in the login information
+     * to the client.
      */
     @Value("${gms.security.jwt.token_expires_in_holder:token_expires_in}")
     private String aTokenExpiresInHolder;
@@ -123,7 +127,8 @@ public class SecurityConst {
     private String rTokenExpirationTimeHolder;
 
     /**
-     * Variable in which the time of validity of the access token will be sent in the response in the login information to the client.
+     * Variable in which the time of validity of the access token will be sent in the response in the login information
+     * to the client.
      */
     @Value("${gms.security.jwt.refresh_token_expires_in_holder:refresh_token_expires_in}")
     private String rTokenExpiresInHolder;
@@ -184,25 +189,42 @@ public class SecurityConst {
     private String usernameHolder;
 
     /**
-     * Password holder for storing the username in a token's claims
+     * Password holder for storing the username in a token's claims.
      */
     public static final String USERNAME_HOLDER = "username";
 
     /**
      * No more than 255 characters and no less than 1
-     * No special characters except underscore and hyphen ("_" and "-"). Those two characters cannot be the one after the
-     * other and the username can't start or end with them.
+     * No special characters except underscore and hyphen ("_" and "-"). Those two characters cannot be the one after
+     * the other and the username can't start or end with them.
      */
     public static final String USERNAME_REGEXP = "^(?!.*[-_]{2,})(?=^[^-_].*[^-_]$)[\\w-]{1,255}$";
 
+    /**
+     * Returns the url declared as free from configuration.
+     *
+     * @return An array of {@link String} with the free urls.
+     */
     public String[] getFreeURLsAnyRequest() {
         return freeURLsAnyRequest.split(";");
     }
 
+    /**
+     * Returns the url declared as free from configuration as long as they are requested through a {@code GET}
+     * {@link org.springframework.http.HttpMethod}.
+     *
+     * @return An array of {@link String} with the free urls.
+     */
     public String[] getFreeURLsGetRequest() {
         return freeURLsGetRequest.split(";");
     }
 
+    /**
+     * Returns the url declared as free from configuration as long as they are requested through a {@code POST}
+     * {@link org.springframework.http.HttpMethod}.
+     *
+     * @return An array of {@link String} with the free urls.
+     */
     public String[] getFreeURLsPostRequest() {
         return freeURLsPostRequest.split(";");
     }

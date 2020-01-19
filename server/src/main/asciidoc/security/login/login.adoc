@@ -1,5 +1,6 @@
 [[security-login]]
 === Login
+
 A `POST` request which gets a new **access token** and other necessary data for getting access to protected resources.
 
 include::{snippets}/security-config-test/login/request-fields.adoc[]
@@ -23,12 +24,10 @@ include::{snippets}/security-config-test/login-k-o/http-response.adoc[]
 When the authentication is successful the following information is provided.
 include::{snippets}/security-config-test/login-k-o/response-fields.adoc[]
 
-After getting the login information successfully, this must be used in order to access protected resources. An example of
-successful subsequent request using this information is the following:
+After getting the login information successfully, this must be used in order to access protected resources.
+An example of successful subsequent request using this information is the following:
 include::{snippets}/b-permission-repository-test/list/curl-request.adoc[]
 
-Notice the _Authorization_ header sent which contains the token type (or scheme) which is _Bearer_, followed by a whitespace
-and the access token provided in the login information.
+Notice the _Authorization_ header sent which contains the token type (or scheme) which is _Bearer_, followed by a whitespace and the access token provided in the login information.
 
-If a protected resource is tried to be accessed and this information is not provided properly this will result in an
-unsuccessful response like the one previously shown.
+If a protected resource is tried to be accessed and this information is not provided properly this will result in an unsuccessful response like the one previously shown.

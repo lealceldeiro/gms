@@ -17,11 +17,9 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(classes = Application.class)
 public class ResourcePathTest {
 
-    @Test
-    public void constructorTest() {
-        assertNotNull(ResourcePath.getInstance());
-    }
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void constantsAreNotNull() {
         assertNotNull(ResourcePath.CONFIGURATION);
@@ -61,9 +59,12 @@ public class ResourcePathTest {
         assertNotNull(ResourcePath.LABEL);
     }
 
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void fieldsAreNotRepeated() {
         StaticUtil.testFieldsAreNorRepeated(ResourcePath.class);
     }
+
 }

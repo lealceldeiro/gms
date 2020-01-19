@@ -1,8 +1,9 @@
 [[security]]
 == Security
+
 In order to get access to the API resources a login must be performed before, by providing a valid login data.
-Each resource can be accessed under specific(s) role(s). Depending on the user's role(s), some resources may be available
-or not.
+Each resource can be accessed under specific(s) role(s).
+Depending on the user's role(s), some resources may be available or not.
 
 include::login/login.adoc[]
 include::login/access.token.adoc[]

@@ -1,17 +1,18 @@
 <table class="table table-hover table-bordered" *ngIf="permissionList?.length">
   <thead>
-    <tr>
-      <th scope="col">Label</th>
-      <th scope="col">Name</th>
-    </tr>
+  <tr>
+    <th scope="col">Label</th>
+    <th scope="col">Name</th>
+  </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of permissionList" class="p-row cursor-pointer" [routerLink]="['./', p.id]">
-      <td>{{p.label}}</td>
-      <td>{{p.name}}</td>
-    </tr>
+  <tr *ngFor="let p of permissionList" class="p-row cursor-pointer" [routerLink]="['./', p.id]">
+    <td>{{p.label}}</td>
+    <td>{{p.name}}</td>
+  </tr>
   </tbody>
 </table>
 
-<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true" (pageChangeAction)="loadList($event)"
-  *ngIf="permissionList?.length"> </gms-pagination>
+<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true"
+                (pageChangeAction)="loadList($event)"
+                *ngIf="permissionList?.length"></gms-pagination>

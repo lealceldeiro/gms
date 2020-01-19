@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.lang.reflect.Method;
 
 /**
- * Based on content borrowed from https://stackoverflow.com/questions/32927937/how-to-set-base-url-for-rest-in-spring-boot/39907655#39907655
+ * Based on content borrowed from https://stackoverflow.com/a/39907655/5640649 .
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
@@ -21,6 +21,12 @@ import java.lang.reflect.Method;
 @Configuration
 public class ApiPathConfig {
 
+    /**
+     * this method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @return a {@link WebMvcRegistrations}
+     */
     @Bean
     public WebMvcRegistrations webMvcRegistrationsHandlerMapping() {
         return new WebMvcRegistrations() {
@@ -31,16 +37,23 @@ public class ApiPathConfig {
                     private String apiBasePath;
 
                     @Override
-                    protected void registerHandlerMethod(Object handler, Method method, RequestMappingInfo mapping) {
+                    protected void registerHandlerMethod(final Object handler, final Method method,
+                                                         final RequestMappingInfo mapping) {
                         PatternsRequestCondition apiPattern = new PatternsRequestCondition(apiBasePath)
                                 .combine(mapping.getPatternsCondition());
 
-                        mapping = new RequestMappingInfo(mapping.getName(), apiPattern,
-                                mapping.getMethodsCondition(), mapping.getParamsCondition(),
-                                mapping.getHeadersCondition(), mapping.getConsumesCondition(),
-                                mapping.getProducesCondition(), mapping.getCustomCondition());
+                        RequestMappingInfo requestMappingInfo = new RequestMappingInfo(
+                                mapping.getName(),
+                                apiPattern,
+                                mapping.getMethodsCondition(),
+                                mapping.getParamsCondition(),
+                                mapping.getHeadersCondition(),
+                                mapping.getConsumesCondition(),
+                                mapping.getProducesCondition(),
+                                mapping.getCustomCondition()
+                        );
 
-                        super.registerHandlerMethod(handler, method, mapping);
+                        super.registerHandlerMethod(handler, method, requestMappingInfo);
                     }
                 };
             }

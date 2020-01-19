@@ -1,7 +1,9 @@
 [[system-configuration]]
 === System configuration
 
-The system is highly configurable, you can get and change how it behaves using the provided endpoints. Also specific configurations can be saved for specific users. In order to achieve that, the following endpoint are provided.
+The system is highly configurable, you can get and change how it behaves using the provided endpoints.
+Also specific configurations can be saved for specific users.
+In order to achieve that, the following endpoint are provided.
 
 include::get.adoc[]
 

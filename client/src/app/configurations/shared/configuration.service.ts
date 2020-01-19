@@ -21,8 +21,10 @@ export class ConfigurationService {
   /**
    * Service's constructor
    * @param http HttpClient for performing api requests.
+   * @param sessionService Instance of SessionService
    */
-  constructor(private http: HttpClient, private readonly sessionService: SessionService) { }
+  constructor(private http: HttpClient, private readonly sessionService: SessionService) {
+  }
 
   /**
    * Return an Observable of objects. Each object contains all system-wide available configurations.
@@ -35,11 +37,12 @@ export class ConfigurationService {
   /**
    * Return an Observable of objects. Each object contains the user available configurations.
    * The configurations are in the shape o {configKey: configValue}.
-   * @param humanReadable indicates whether the configuration should show the values to be human readable or not. Default `true`.
+   * @param humanReadable indicates whether the configuration should show the values to be human readable or not.
+   * Default `true`.
    */
   getUserConfigurations(humanReadable = true): Observable<object> {
     return this.sessionService.getUser().pipe(
-      switchMap((user: User) => this.http.get<object>(`${this.url}/${user.id}?human=${humanReadable}`))
+      switchMap((user: User) => this.http.get<object>(`${ this.url }/${ user.id }?human=${ humanReadable }`))
     );
   }
 }

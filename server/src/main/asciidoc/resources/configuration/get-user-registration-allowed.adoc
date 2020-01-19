@@ -1,5 +1,6 @@
 [[system-configuration-get-user-registration-allowed]]
 ==== Getting whether the system is configured for signing up new users or not
+
 A `GET` request return `true` or `false` indicating whether new users can sign up (`true`) or not (`false`).
 
 include::../../util/H-REQUEST.adoc[]

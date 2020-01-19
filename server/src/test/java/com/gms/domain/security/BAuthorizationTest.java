@@ -14,7 +14,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -24,28 +23,61 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class BAuthorizationTest {
 
-    private final Long uId = 999999999L;
-    private final Long eId = 9999999999L;
-    private final Long rId = 99999999999L;
+    /**
+     * "userId" field value.
+     */
+    private static final Long USER_ID = 999999999L;
+    /**
+     * "entityId" field value.
+     */
+    private static final Long ENTITY_ID = 9999999999L;
+    /**
+     * "roleId" field value.
+     */
+    private static final Long ROLE_ID = 99999999999L;
+    /**
+     * Instance of {@link EUser}.
+     */
     private final EUser user = EntityUtil.getSampleUser();
+    /**
+     * Instance of {@link EOwnedEntity}.
+     */
     private final EOwnedEntity oEntity = EntityUtil.getSampleEntity();
+    /**
+     * Instance of {@link BRole}.
+     */
     private final BRole role = EntityUtil.getSampleRole();
+    /**
+     * Instance of {@link BAuthorization.BAuthorizationPk}.
+     */
     private final BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk();
 
+    /**
+     * Instance of {@link BAuthorization}.
+     */
     private BAuthorization entity;
+    /**
+     * Instance of {@link BAuthorization}.
+     */
     private BAuthorization entity1;
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
-        pk.setUserId(uId);
-        pk.setEntityId(eId);
-        pk.setRoleId(rId);
+        pk.setUserId(USER_ID);
+        pk.setEntityId(ENTITY_ID);
+        pk.setRoleId(ROLE_ID);
 
-        user.setId(uId);
-        oEntity.setId(eId);
-        role.setId(rId);
+        user.setId(USER_ID);
+        oEntity.setId(ENTITY_ID);
+        role.setId(ROLE_ID);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getBAuthorizationPk() {
         cleanEntity();
@@ -54,6 +86,9 @@ public class BAuthorizationTest {
         assertEquals(entity.getBAuthorizationPk(), pk);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getUser() {
         cleanEntity();
@@ -62,6 +97,9 @@ public class BAuthorizationTest {
         assertEquals(entity.getUser(), user);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getEntity() {
         cleanEntity();
@@ -70,6 +108,9 @@ public class BAuthorizationTest {
         assertEquals(entity.getEntity(), oEntity);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRole() {
         cleanEntity();
@@ -78,6 +119,9 @@ public class BAuthorizationTest {
         assertEquals(entity.getRole(), role);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setBAuthorizationPk() {
         cleanEntity();
@@ -86,6 +130,9 @@ public class BAuthorizationTest {
         assertEquals(pk, ReflectionTestUtils.getField(entity, "bAuthorizationPk"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setUser() {
         cleanEntity();
@@ -94,6 +141,9 @@ public class BAuthorizationTest {
         assertEquals(user, ReflectionTestUtils.getField(entity, "user"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setEntity() {
         cleanEntity();
@@ -102,6 +152,9 @@ public class BAuthorizationTest {
         assertEquals(oEntity, ReflectionTestUtils.getField(entity, "entity"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setRole() {
         cleanEntity();
@@ -110,6 +163,9 @@ public class BAuthorizationTest {
         assertEquals(role, ReflectionTestUtils.getField(entity, "role"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -117,6 +173,9 @@ public class BAuthorizationTest {
         assertEquals(entity, entity1);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -124,6 +183,9 @@ public class BAuthorizationTest {
         assertEquals(entity.hashCode(), entity1.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -141,11 +203,11 @@ public class BAuthorizationTest {
         assertEntityCleanState(entity1);
     }
 
-    private void assertEntityCleanState(BAuthorization entity) {
-        assertNull(ReflectionTestUtils.getField(entity, "bAuthorizationPk"));
-        assertNull(ReflectionTestUtils.getField(entity, "user"));
-        assertNull(ReflectionTestUtils.getField(entity, "entity"));
-        assertNull(ReflectionTestUtils.getField(entity, "role"));
+    private void assertEntityCleanState(final BAuthorization entityArg) {
+        assertNull(ReflectionTestUtils.getField(entityArg, "bAuthorizationPk"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "user"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "entity"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "role"));
     }
 
     private void prepareEntitiesForEqualityTest() {
@@ -156,10 +218,11 @@ public class BAuthorizationTest {
         prepareEntityForEqualityTest(entity1);
     }
 
-    private void prepareEntityForEqualityTest(BAuthorization entity) {
-        ReflectionTestUtils.setField(entity, "bAuthorizationPk", pk);
-        ReflectionTestUtils.setField(entity, "user", user);
-        ReflectionTestUtils.setField(entity, "entity", oEntity);
-        ReflectionTestUtils.setField(entity, "role", role);
+    private void prepareEntityForEqualityTest(final BAuthorization entityArg) {
+        ReflectionTestUtils.setField(entityArg, "bAuthorizationPk", pk);
+        ReflectionTestUtils.setField(entityArg, "user", user);
+        ReflectionTestUtils.setField(entityArg, "entity", oEntity);
+        ReflectionTestUtils.setField(entityArg, "role", role);
     }
+
 }

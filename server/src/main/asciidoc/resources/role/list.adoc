@@ -1,5 +1,6 @@
 [[resource-role-list]]
 ==== Listing roles
+
 A `GET` request lists roles.
 
 include::../../util/H-REQUEST.adoc[]

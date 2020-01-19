@@ -40,12 +40,13 @@ describe('PageNotFoundService', () => {
   });
 
   it('#addUrl should do nothing when the url is in the collection already', () => {
+    const collectionStringify = JSON.stringify(collection);
     expect(collection).not.toContain(url, 'Collection had the value already');
     collection.push(url);
     expect(collection).toContain(url, 'Collection did not add the value');
     service.addUrl(url);
     expect(collection.lastIndexOf(url))
-      .toBe(0, `it added the value despite it was already in the collection. Collection is ${JSON.stringify(collection)}`);
+      .toBe(0, `it added the value despite it was already in the collection. Collection is ${ collectionStringify }`);
   });
 
   it('#wasNotFound should return `true` if the url is in the collection', () => {

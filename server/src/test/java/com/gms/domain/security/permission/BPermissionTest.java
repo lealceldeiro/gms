@@ -29,19 +29,44 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class BPermissionTest {
 
+    /**
+     * "name" field value.
+     */
     private final String name = "sampleN";
+    /**
+     * "label" field value.
+     */
     private final String label = "sampleL";
+    /**
+     * "roles" field value.
+     */
     private final Set<BRole> roles = new HashSet<>();
-    private final int MAX_RANGE_255 = 255;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_255 = 255;
+    /**
+     * Instance of {@link BPermission}.
+     */
     private BPermission entity0;
+    /**
+     * Instance of {@link BPermission}.
+     */
     private BPermission entity1;
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         roles.add(EntityUtil.getSampleRole());
     }
 
     //region persistence constraints validations
+
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void checkValidEntity() {
         cleanEntity0();
@@ -50,61 +75,102 @@ public class BPermissionTest {
         assertTrue(cv.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotBlank() {
         propertyIsNot("", label, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotNull() {
         propertyIsNot(null, label, CodeI18N.FIELD_NOT_NULL, "name property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotWithInvalidPattern() {
         String[] invalidNames = StringUtil.INVALID_USERNAME;
-        for (String name: invalidNames) {
-            propertyIsNot(name, label, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+        for (String iName : invalidNames) {
+            propertyIsNot(iName, label, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
                     "name property does not fulfill the username pattern restrictions");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsValidWithValidPattern() {
         BPermission p;
         String[] validNames = StringUtil.VALID_USERNAME;
-        for (String name: validNames) {
-            p = new BPermission(name, label);
-            assertTrue("Permission is not valid with a valid name: " + name, PersistenceValidation.validate(p).isEmpty());
+        for (String iName : validNames) {
+            p = new BPermission(iName, label);
+            assertTrue(
+                    "Permission is not valid with a valid name: " + iName,
+                    PersistenceValidation.validate(p).isEmpty()
+            );
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotBlank() {
         propertyIsNot(name, "", CodeI18N.FIELD_NOT_BLANK, "label property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotNull() {
         propertyIsNot(name, null, CodeI18N.FIELD_NOT_NULL, "label property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), label, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                label,
+                CodeI18N.FIELD_SIZE,
+                "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotOutOfRange() {
-        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                name,
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                CodeI18N.FIELD_SIZE,
+                "label property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
-    public void propertyIsNot(String name, String label, String messageTest, String assertMessage) {
-        BPermission e = new BPermission(name, label);
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
+    private void propertyIsNot(final String nameArg, final String labelArg, final String messageTest,
+                               final String assertMessage) {
+        BPermission e = new BPermission(nameArg, labelArg);
+        assertTrue(assertMessage, PersistenceValidation.isObjectInvalidWithErrorMessage(e, messageTest));
     }
     //endregion
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getName() {
         cleanEntity0();
@@ -113,6 +179,9 @@ public class BPermissionTest {
         assertEquals(entity0.getName(), name);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getLabel() {
         cleanEntity0();
@@ -121,6 +190,9 @@ public class BPermissionTest {
         assertEquals(entity0.getLabel(), label);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRoles() {
         cleanEntity0();
@@ -129,6 +201,9 @@ public class BPermissionTest {
         assertEquals(entity0.getRoles(), roles);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setRoles() {
         cleanEntity0();
@@ -137,6 +212,9 @@ public class BPermissionTest {
         assertEquals(roles, ReflectionTestUtils.getField(entity0, "roles"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -144,6 +222,9 @@ public class BPermissionTest {
         assertEquals(entity0.toString(), entity1.toString());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -151,6 +232,9 @@ public class BPermissionTest {
         assertEquals(entity0, entity1);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -169,7 +253,7 @@ public class BPermissionTest {
         assertEntityValidity(entity0);
     }
 
-    private void assertEntityValidity(BPermission entity) {
+    private void assertEntityValidity(final BPermission entity) {
         assertNull(ReflectionTestUtils.getField(entity, "name"));
         assertNull(ReflectionTestUtils.getField(entity, "label"));
         assertNull(ReflectionTestUtils.getField(entity, "roles"));
@@ -181,9 +265,11 @@ public class BPermissionTest {
         prepareEntityForEqualityTest(entity0);
         prepareEntityForEqualityTest(entity1);
     }
-    private void prepareEntityForEqualityTest(BPermission e) {
+
+    private void prepareEntityForEqualityTest(final BPermission e) {
         ReflectionTestUtils.setField(e, "name", name);
         ReflectionTestUtils.setField(e, "label", label);
         ReflectionTestUtils.setField(e, "roles", roles);
     }
+
 }

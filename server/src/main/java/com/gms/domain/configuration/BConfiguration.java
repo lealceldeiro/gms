@@ -1,7 +1,6 @@
 package com.gms.domain.configuration;
 
 import com.gms.domain.GmsEntity;
-import com.gms.util.i18n.CodeI18N;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,6 +11,11 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_DEFAULT;
+import static com.gms.util.i18n.CodeI18N.FIELD_NOT_BLANK;
+import static com.gms.util.i18n.CodeI18N.FIELD_NOT_NULL;
+import static com.gms.util.i18n.CodeI18N.FIELD_SIZE;
 
 /**
  * Represents a configuration through a string-representation under a key and a value.
@@ -26,27 +30,27 @@ import javax.validation.constraints.Size;
 @Entity
 public final class BConfiguration extends GmsEntity {
 
-	/**
-	 * Version number for a Serializable class.
-	 */
-	private static final long serialVersionUID = 5750664701833456936L;
+    /*
+     * Version number for a Serializable class.
+     */
+    private static final long serialVersionUID = 5750664701833456936L;
 
-	/**
+    /**
      * Key under the configuration is saved.
      */
-    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
-    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
-    @Column(nullable = false, length = 255)
+    @NotNull(message = FIELD_NOT_NULL)
+    @NotBlank(message = FIELD_NOT_BLANK)
+    @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
+    @Column(nullable = false)
     private String key;
 
     /**
      * String representation of the configuration value.
      */
-    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
-    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = 255, message = CodeI18N.FIELD_SIZE)
-    @Column(nullable = false, length = 255)
+    @NotNull(message = FIELD_NOT_NULL)
+    @NotBlank(message = FIELD_NOT_BLANK)
+    @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
+    @Column(nullable = false)
     private String value;
 
     /**
@@ -54,7 +58,13 @@ public final class BConfiguration extends GmsEntity {
      */
     private Long userId;
 
-    public BConfiguration(String key, String value) {
+    /**
+     * Creates a new {@link BConfiguration} from the given arguments.
+     *
+     * @param key   Key under the configuration is saved.
+     * @param value String representation of the configuration value.
+     */
+    public BConfiguration(final String key, final String value) {
         super();
         this.key = key;
         this.value = value;

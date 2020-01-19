@@ -18,7 +18,11 @@ import javax.validation.ConstraintViolation;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -28,29 +32,84 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class EUserTest {
 
+    /**
+     * "username" field value.
+     */
     private final String usernameS = "usernameS";
+    /**
+     * "email" field value.
+     */
     private final String emailS = "email@sample.com";
+    /**
+     * "name" field value.
+     */
     private final String nameS = "nameS";
+    /**
+     * "lastName" field value.
+     */
     private final String lastNameS = "lastnameS";
+    /**
+     * "password" field value.
+     */
     private final String passwordS = "passwordS";
+    /**
+     * "enabled" field value.
+     */
     private final Boolean enabledS = true;
+    /**
+     * "emailVerified" field value.
+     */
     private final Boolean emailVerifiedS = true;
+    /**
+     * "accountNonExpired" field value.
+     */
     private final Boolean accountNonExpiredS = true;
+    /**
+     * "accountNonLocked" field value.
+     */
     private final Boolean accountNonLockedS = true;
+    /**
+     * "credentialsNonExpired" field value.
+     */
     private final Boolean credentialsNonExpiredS = true;
+    /**
+     * "authorities" field value.
+     */
     private final HashSet<GrantedAuthority> authoritiesS = new HashSet<>();
-    private final int MAX_RANGE_255 = 255;
-    private final int MAX_RANGE_254 = 254;
-    private final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_255 = 255;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_254 = 254;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * Instance of {@link EUser}.
+     */
     private EUser entity0;
+    /**
+     * Instance of {@link EUser}.
+     */
     private EUser entity1;
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         authoritiesS.add(new SimpleGrantedAuthority("sampleAuth"));
     }
 
     //region persistence constraints validations
+
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void checkValidEntity() {
         cleanEntity0();
@@ -59,120 +118,319 @@ public class EUserTest {
         assertTrue(cv.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotBlank() {
-        propertyIsNot("", emailS, nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_BLANK, "username property must not be blank");
+        propertyIsNot(
+                "",
+                emailS,
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_BLANK,
+                "username property must not be blank"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotNull() {
-        propertyIsNot(null, emailS, nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_NULL, "username property must not be null");
+        propertyIsNot(
+                null,
+                emailS,
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_NULL,
+                "username property must not be null"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), emailS, nameS, lastNameS, passwordS, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                emailS,
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_SIZE,
+                "username property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotWithInvalidPattern() {
         String[] invalidUsernames = StringUtil.INVALID_USERNAME;
-        for (String username: invalidUsernames) {
+        for (String username : invalidUsernames) {
             propertyIsNot(username, emailS, nameS, lastNameS, passwordS, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
                     "username property does not fulfill the username pattern restrictions");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void  usernameIsValidWithValidPattern() {
-        EUser u;
+    public void usernameIsValidWithValidPattern() {
+        EUser user;
         String[] validUsernames = StringUtil.VALID_USERNAME;
-        for (String username: validUsernames) {
-            u = new EUser(username, emailS, nameS, lastNameS, passwordS);
-            assertTrue("User is not valid with a valid label: " + username, PersistenceValidation.validate(u).isEmpty());
+        for (String username : validUsernames) {
+            user = new EUser(username, emailS, nameS, lastNameS, passwordS);
+            assertTrue(
+                    "User is not valid with a valid label: " + username,
+                    PersistenceValidation.validate(user).isEmpty()
+            );
         }
     }
 
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void emailIsNotBlank() {
-        propertyIsNot(usernameS, "", nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_BLANK, "email property must not be blank");
+        propertyIsNot(
+                usernameS,
+                "",
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_BLANK,
+                "email property must not be blank"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void emailIsNotNull() {
-        propertyIsNot(usernameS, null, nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_NULL, "email property must not be null");
+        propertyIsNot(
+                usernameS,
+                null,
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_NULL,
+                "email property must not be null"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void emailIsNotOutOfRange() {
-        propertyIsNot(nameS, StringUtil.createJString(MAX_RANGE_254 + 1), nameS, lastNameS, passwordS, CodeI18N.FIELD_SIZE, "email property must not be of size lesser than 0 and larger than " + MAX_RANGE_254 + " characters");
+        propertyIsNot(
+                nameS,
+                StringUtil.createJString(MAX_RANGE_254 + 1),
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_SIZE,
+                "email property must not be of size lesser than 0 and larger than " + MAX_RANGE_254 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void emailIsAValidEmail() {
-        propertyIsNot(usernameS, "invalid1", nameS, lastNameS, passwordS, CodeI18N.FIELD_NOT_WELL_FORMED, "email property must be a valid email address (see for more information: http://docs.jboss.org/ejb3/app-server/HibernateAnnotations/api/org/hibernate/validator/Email.html and http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690)");
+        propertyIsNot(
+                usernameS,
+                "invalid1",
+                nameS,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_WELL_FORMED,
+                "email property must be a valid email address (see for more information:"
+                        + "http://bit.ly/emailSpecRef and http://bit.ly/emailErrataRef"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotBlank() {
-        propertyIsNot(usernameS, emailS, "", lastNameS, passwordS, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                "",
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_BLANK,
+                "name property must not be blank"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotNull() {
-        propertyIsNot(usernameS, emailS, null, lastNameS, passwordS, CodeI18N.FIELD_NOT_NULL, "name property must not be null");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                null,
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_NOT_NULL,
+                "name property must not be null"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotOutOfRange() {
-        propertyIsNot(nameS, emailS, StringUtil.createJString(MAX_RANGE_255 + 1), lastNameS, passwordS, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                nameS,
+                emailS,
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                lastNameS,
+                passwordS,
+                CodeI18N.FIELD_SIZE,
+                "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void lastNameIsNotBlank() {
-        propertyIsNot(usernameS, emailS, nameS, "", passwordS, CodeI18N.FIELD_NOT_BLANK, "lastName property must not be blank");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                nameS,
+                "",
+                passwordS,
+                CodeI18N.FIELD_NOT_BLANK,
+                "lastName property must not be blank"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void lastNameIsNotNull() {
-        propertyIsNot(usernameS, emailS, nameS, null, passwordS, CodeI18N.FIELD_NOT_NULL, "lastName property must not be null");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                nameS,
+                null,
+                passwordS,
+                CodeI18N.FIELD_NOT_NULL,
+                "lastName property must not be null"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void lastNameIsNotOutOfRange() {
-        propertyIsNot(nameS, emailS, nameS, StringUtil.createJString(MAX_RANGE_255 + 1), passwordS, CodeI18N.FIELD_SIZE, "lastName property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                nameS,
+                emailS,
+                nameS,
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                passwordS, CodeI18N.FIELD_SIZE,
+                "lastName property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void passwordIsNotBlank() {
-        propertyIsNot(usernameS, emailS, nameS, lastNameS, "", CodeI18N.FIELD_NOT_BLANK, "password property must not be blank");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                nameS,
+                lastNameS,
+                "",
+                CodeI18N.FIELD_NOT_BLANK,
+                "password property must not be blank"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void passwordIsNotNull() {
-        propertyIsNot(usernameS, emailS, nameS, lastNameS, null, CodeI18N.FIELD_NOT_NULL, "password property must not be null");
+        propertyIsNot(
+                usernameS,
+                emailS,
+                nameS,
+                lastNameS,
+                null,
+                CodeI18N.FIELD_NOT_NULL,
+                "password property must not be null"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void passwordIsNotOutOfRange() {
-        propertyIsNot(nameS, emailS, nameS, StringUtil.createJString(MAX_RANGE_10485760 + 1), passwordS, CodeI18N.FIELD_SIZE, "password property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
+        propertyIsNot(
+                nameS,
+                emailS,
+                nameS,
+                StringUtil.createJString(MAX_RANGE_10485760 + 1),
+                passwordS,
+                CodeI18N.FIELD_SIZE,
+                "password property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760
+                        + " characters"
+        );
     }
 
-    private void propertyIsNot(String username, String email, String name, String lastName, String password, String messageTest, String assertMessage) {
+    private void propertyIsNot(
+            final String username,
+            final String email,
+            final String name,
+            final String lastName,
+            final String password,
+            final String messageTest,
+            final String assertMessage
+    ) {
         EUser e = new EUser(username, email, name, lastName, password);
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
+        assertTrue(assertMessage, PersistenceValidation.isObjectInvalidWithErrorMessage(e, messageTest));
     }
     //endregion
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getAuthorities() {
         cleanEntity0();
 
         ReflectionTestUtils.setField(entity0, "authorities", authoritiesS);
-        assertEquals(entity0.getAuthorities(), authoritiesS);
+        assertArrayEquals(entity0.getAuthorities().toArray(), authoritiesS.toArray());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isAccountNonExpired() {
         cleanEntity0();
@@ -181,6 +439,9 @@ public class EUserTest {
         assertEquals(entity0.isAccountNonExpired(), accountNonExpiredS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isAccountNonLocked() {
         cleanEntity0();
@@ -189,6 +450,9 @@ public class EUserTest {
         assertEquals(entity0.isAccountNonLocked(), accountNonLockedS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isCredentialsNonExpired() {
         cleanEntity0();
@@ -197,6 +461,9 @@ public class EUserTest {
         assertEquals(entity0.isCredentialsNonExpired(), credentialsNonExpiredS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isEnabled() {
         cleanEntity0();
@@ -205,6 +472,9 @@ public class EUserTest {
         assertEquals(entity0.isEnabled(), enabledS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isEmailVerified() {
         cleanEntity0();
@@ -213,6 +483,9 @@ public class EUserTest {
         assertEquals(entity0.isEmailVerified(), emailVerifiedS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -220,6 +493,9 @@ public class EUserTest {
         assertEquals(entity0, entity1);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -227,6 +503,9 @@ public class EUserTest {
         assertEquals(entity0.hashCode(), entity1.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getUsername() {
         cleanEntity0();
@@ -235,6 +514,9 @@ public class EUserTest {
         assertEquals(entity0.getUsername(), usernameS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getEmail() {
         cleanEntity0();
@@ -243,6 +525,9 @@ public class EUserTest {
         assertEquals(entity0.getEmail(), emailS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getName() {
         cleanEntity0();
@@ -251,6 +536,9 @@ public class EUserTest {
         assertEquals(entity0.getName(), nameS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getLastName() {
         cleanEntity0();
@@ -259,6 +547,9 @@ public class EUserTest {
         assertEquals(entity0.getLastName(), lastNameS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getPassword() {
         cleanEntity0();
@@ -267,6 +558,9 @@ public class EUserTest {
         assertEquals(entity0.getPassword(), passwordS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setEnabled() {
         cleanEntity0();
@@ -275,6 +569,9 @@ public class EUserTest {
         assertEquals(enabledS, ReflectionTestUtils.getField(entity0, "enabled"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setEmailVerified() {
         cleanEntity0();
@@ -283,6 +580,9 @@ public class EUserTest {
         assertEquals(emailVerifiedS, ReflectionTestUtils.getField(entity0, "emailVerified"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setAccountNonExpired() {
         cleanEntity0();
@@ -291,6 +591,9 @@ public class EUserTest {
         assertEquals(accountNonExpiredS, ReflectionTestUtils.getField(entity0, "accountNonExpired"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setAccountNonLocked() {
         cleanEntity0();
@@ -299,6 +602,9 @@ public class EUserTest {
         assertEquals(accountNonLockedS, ReflectionTestUtils.getField(entity0, "accountNonLocked"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setCredentialsNonExpired() {
         cleanEntity0();
@@ -307,6 +613,9 @@ public class EUserTest {
         assertEquals(credentialsNonExpiredS, ReflectionTestUtils.getField(entity0, "credentialsNonExpired"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setAuthorities() {
         cleanEntity0();
@@ -315,6 +624,9 @@ public class EUserTest {
         assertEquals(authoritiesS, ReflectionTestUtils.getField(entity0, "authorities"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -340,7 +652,7 @@ public class EUserTest {
         prepareEntityForEqualityTest(entity1);
     }
 
-    private void assertEntityCleanState(EUser entity) {
+    private void assertEntityCleanState(final EUser entity) {
         assertNull(ReflectionTestUtils.getField(entity, "username"));
         assertNull(ReflectionTestUtils.getField(entity, "email"));
         assertNull(ReflectionTestUtils.getField(entity, "name"));
@@ -355,13 +667,13 @@ public class EUserTest {
         assertNull(ReflectionTestUtils.getField(entity, "authorities"));
     }
 
-    private void assertBooleanFalseIfNotNull(Object field) {
+    private void assertBooleanFalseIfNotNull(final Object field) {
         if (field != null) {
             assertFalse(Boolean.parseBoolean(field.toString()));
         }
     }
 
-    private void prepareEntityForEqualityTest(EUser entity) {
+    private void prepareEntityForEqualityTest(final EUser entity) {
         ReflectionTestUtils.setField(entity, "username", usernameS);
         ReflectionTestUtils.setField(entity, "email", emailS);
         ReflectionTestUtils.setField(entity, "name", nameS);
@@ -374,4 +686,5 @@ public class EUserTest {
         ReflectionTestUtils.setField(entity, "credentialsNonExpired", credentialsNonExpiredS);
         ReflectionTestUtils.setField(entity, "authorities", authoritiesS);
     }
+
 }
