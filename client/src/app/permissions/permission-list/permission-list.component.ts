@@ -38,7 +38,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
    * Component constructor
    * @param permissionService PermissionService for making request to backend.
    */
-  constructor(private permissionService: PermissionService) { }
+  constructor(private permissionService: PermissionService) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.
@@ -59,10 +60,11 @@ export class PermissionListComponent implements OnInit, OnDestroy {
    * @param toPage number of page to which the list will move. `toPage` starts from 1 (first page).
    */
   loadList(toPage: number): void {
-    this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage).subscribe((permissionPd: PermissionPd) => {
-      this.permissionList = permissionPd._embedded.permission;
-      this.page.total = permissionPd.page.totalElements;
-      this.page.current = permissionPd.page.number + 1;
-    });
+    this.listSubscription = this.permissionService.getPermissions(this.page.size, toPage)
+      .subscribe((permissionPd: PermissionPd) => {
+        this.permissionList = permissionPd._embedded.permission;
+        this.page.total = permissionPd.page.totalElements;
+        this.page.current = permissionPd.page.number + 1;
+      });
   }
 }

@@ -23,31 +23,57 @@ import java.util.Map;
  */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
+    /**
+     * Instance of {@link SecurityConst}.
+     */
     private final SecurityConst sc;
-
+    /**
+     * Instance of {@link JWTService}.
+     */
     private final JWTService jwtService;
-
+    /**
+     * Instance of {@link AuthenticationFacade}.
+     */
     private final AuthenticationFacade authFacade;
 
     /**
-     * Password holder for storing the password (hashed) in the token's claims
+     * Password holder for storing the password (hashed) in the token's claims.
      */
     private static final String PASS_HOLDER = "password";
 
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, SecurityConst sc, JWTService jwtService,
-                                  AuthenticationFacade authenticationFacade) {
+    /**
+     * Creates a new {@link JWTAuthorizationFilter}.
+     *
+     * @param authenticationManager An instance of {@link AuthenticationManager}.
+     * @param securityConst         An instance of {@link SecurityConst}.
+     * @param jwtServiceArg         An instance of {@link JWTService}.
+     * @param authenticationFacade  An instance of {@link AuthenticationFacade}.
+     */
+    public JWTAuthorizationFilter(final AuthenticationManager authenticationManager, final SecurityConst securityConst,
+                                  final JWTService jwtServiceArg, final AuthenticationFacade authenticationFacade) {
         super(authenticationManager);
-        this.sc = sc;
-        this.jwtService = jwtService;
+        this.sc = securityConst;
+        this.jwtService = jwtServiceArg;
         this.authFacade = authenticationFacade;
     }
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param req   Incoming {@link HttpServletRequest}.
+     * @param res   {@link HttpServletResponse}
+     * @param chain {@link FilterChain}
+     * @throws IOException      may be thrown by the {@code chain} instance.
+     * @throws ServletException may be thrown by the {@code chain} instance.
+     */
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(final HttpServletRequest req, final HttpServletResponse res,
+                                    final FilterChain chain) throws IOException, ServletException {
         UsernamePasswordAuthenticationToken authToken = getAuthToken(req);
         if (authToken == null) {
             chain.doFilter(req, res);
+
             return;
         }
 
@@ -55,33 +81,36 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(req, res);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthToken(HttpServletRequest req) {
+    private UsernamePasswordAuthenticationToken getAuthToken(final HttpServletRequest req) {
         String token = req.getHeader(sc.getATokenHeader());
 
         if (token != null && token.startsWith(sc.getATokenType())) {
             try {
-                //parse the token
+                // parse the token
                 Map<String, Object> claims = jwtService.getClaimsExtended(
                         token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
                 );
                 String user = claims.get(JWTService.SUBJECT).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims.get(sc.getAuthoritiesHolder()).toString().split(SecurityConst.AUTHORITIES_SEPARATOR);
+                    final String[] authoritiesS = claims
+                            .get(sc.getAuthoritiesHolder()).toString()
+                            .split(SecurityConst.AUTHORITIES_SEPARATOR);
                     if (authoritiesS.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
                         for (String a : authoritiesS) {
                             authorities.add(new SimpleGrantedAuthority(a));
                         }
-                        String password = (String) claims.get(PASS_HOLDER);  // hashed password
+                        String password = String.valueOf(claims.get(PASS_HOLDER));  // hashed password
 
                         return new UsernamePasswordAuthenticationToken(user, password, authorities);
                     }
                 }
+            } catch (JwtException e) {  // any problem with token, do not authenticate
+                return null;
             }
-            // any problem with token, do not authenticate
-            catch (JwtException e) { return null; }
         }
+
         return null;
     }
 

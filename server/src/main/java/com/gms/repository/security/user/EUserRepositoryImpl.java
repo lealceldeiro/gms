@@ -17,28 +17,54 @@ import java.util.Iterator;
 @Transactional
 public class EUserRepositoryImpl implements EUserRepositoryCustom {
 
+    /**
+     * Instance of {@link BCryptPasswordEncoder}. This bean is provided by the Spring framework dependency manager.
+     */
     private final BCryptPasswordEncoder encoder;
 
-    @PersistenceContext private EntityManager entityManager;
+    /**
+     * Dependency on a container-managed {@link EntityManager} and its associated persistence context.
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method is not intended to be overridden. If a custom implementation is required, consider implementing
+     * {@link EUserRepositoryCustom}
+     */
     @Override
-    public <S extends EUser> S save(S s) {
+    public <S extends EUser> S save(final S s) {
         persist(s);
+
         return s;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method is not intended to be overridden. If a custom implementation is required, consider implementing
+     * {@link EUserRepositoryCustom}
+     */
     @Override
-    public <S extends EUser> Iterable<S> saveAll(Iterable<S> it) {
+    public <S extends EUser> Iterable<S> saveAll(final Iterable<S> it) {
         final Iterator<S> iterator = it.iterator();
         S s;
         while (iterator.hasNext()) {
             s = iterator.next();
             persist(s);
         }
+
         return it;
     }
 
-    private void persist(EUser u) {
+    /**
+     * Persist a single instance of {@link EUser}.
+     *
+     * @param u {@link EUser} to be persisted.
+     */
+    private void persist(final EUser u) {
         if (u.getPassword() != null) {
             u.setPassword(encoder.encode(u.getPassword()));
         }

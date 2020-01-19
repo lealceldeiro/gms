@@ -18,8 +18,8 @@ export class Util {
   }
 
   /**
-   * Takes an input as a seed and iterates over all of the keys of the object and replace the value of the key for the hash
-   * generated from the previous value associated to the same key. This does not modify the original object.
+   * Takes an input as a seed and iterates over all of the keys of the object and replace the value of the key for the
+   * hash generated from the previous value associated to the same key. This does not modify the original object.
    *
    * @param seed Object T to iterate over all of its keys.
    * @returns A cloned object from the provided object T as argument with the key replaced by the hashes.

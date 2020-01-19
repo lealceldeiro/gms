@@ -15,6 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = Application.class)
 public class NotFoundEntityExceptionTest {
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void testNotFoundEntityExceptionConstructor() {
         String msg = "test";
@@ -24,6 +27,7 @@ public class NotFoundEntityExceptionTest {
         Assert.assertEquals(msg, e.getMessage());
 
         e = new NotFoundEntityException(msg, ex);
-        Assert.assertEquals(msg + " because of " + ex.toString(), e.getMessage());
+        Assert.assertEquals(msg + " because of " + ex, e.getMessage());
     }
+
 }

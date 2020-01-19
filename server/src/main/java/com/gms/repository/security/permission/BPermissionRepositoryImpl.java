@@ -14,21 +14,23 @@ import java.util.List;
 @Transactional
 public class BPermissionRepositoryImpl implements BPermissionRepositoryCustom {
 
+    /**
+     * An instance of {@link BPermissionDAO}.
+     */
     private final BPermissionDAO permissionDAO;
 
-    BPermissionRepositoryImpl(DAOProvider daoProvider) {
+    BPermissionRepositoryImpl(final DAOProvider daoProvider) {
         permissionDAO = daoProvider.getBPermissionDAO();
     }
 
     /**
-     * Return the list of permissions associated to some role(s). This (theses) role(s) is(are) the one(s) associated to
-     * a user over an entity. Some conditions must be met in order to return the permissions:
-     * - The following properties from the user must be true: <code>enabled</code>, <code>accountNonExpired</code>,
-     * <code>accountNonLocked</code> and <code>credentialsNonExpired</code>
-     * - The following properties from the role must be true: <code>enabled</code>
+     * {@inheritDoc}
+     * <p>
+     * This method is not intended to be overridden. If a custom implementation is required, consider implementing
+     * {@link BPermissionRepositoryCustom}
      */
     @Override
-    public List<BPermission> findPermissionsByUserIdAndEntityId(long userId, long entityId) {
+    public List<BPermission> findPermissionsByUserIdAndEntityId(final long userId, final long entityId) {
         return permissionDAO.findPermissionsByUserIdAndEntityId(userId, entityId);
     }
 

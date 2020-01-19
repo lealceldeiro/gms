@@ -9,7 +9,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -19,11 +18,26 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class GmsEntityTest {
 
+    /**
+     * "id" field value.
+     */
     private final Long id = 1L;
-    private final Integer v = 1;
+    /**
+     * "version" field value.
+     */
+    private final Integer version = 1;
+    /**
+     * Instance of {@link GmsEntity}.
+     */
     private GmsEntity entity;
+    /**
+     * Instance of {@link GmsEntity}.
+     */
     private GmsEntity entity2;
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getId() {
         cleanEntity();
@@ -32,14 +46,20 @@ public class GmsEntityTest {
         assertEquals(entity.getId(), id);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getVersion() {
         cleanEntity();
 
-        ReflectionTestUtils.setField(entity, "version", v);
-        assertEquals(entity.getVersion(), v);
+        ReflectionTestUtils.setField(entity, "version", version);
+        assertEquals(entity.getVersion(), version);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setId() {
         cleanEntity();
@@ -48,15 +68,21 @@ public class GmsEntityTest {
         assertEquals(id, Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "id"))));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setVersion() {
         cleanEntity();
 
-        entity.setVersion(v);
-        assertEquals(v, Integer.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "version"))));
+        entity.setVersion(version);
+        assertEquals(version, Integer.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "version"))));
 
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         cleanEntity();
@@ -65,6 +91,9 @@ public class GmsEntityTest {
         assertEquals(entity, entity2);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -72,6 +101,9 @@ public class GmsEntityTest {
         assertEquals(entity.hashCode(), entity2.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -88,9 +120,9 @@ public class GmsEntityTest {
         assertEntityValidity(entity2);
     }
 
-    private void assertEntityValidity(GmsEntity entity) {
-        assertNull(ReflectionTestUtils.getField(entity, "id"));
-        assertNull(ReflectionTestUtils.getField(entity, "version"));
+    private void assertEntityValidity(final GmsEntity entityArg) {
+        assertNull(ReflectionTestUtils.getField(entityArg, "id"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "version"));
     }
 
     private void prepareEntitiesForEqualityTest() {
@@ -101,8 +133,9 @@ public class GmsEntityTest {
         prepareEntityForEqualityTest(entity2);
     }
 
-    private void prepareEntityForEqualityTest(GmsEntity e) {
-        ReflectionTestUtils.setField(e, "id", id);
-        ReflectionTestUtils.setField(e, "version", v);
+    private void prepareEntityForEqualityTest(final GmsEntity entityArg) {
+        ReflectionTestUtils.setField(entityArg, "id", id);
+        ReflectionTestUtils.setField(entityArg, "version", version);
     }
+
 }

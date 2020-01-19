@@ -28,8 +28,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,23 +40,52 @@ import java.util.Map;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+    /**
+     * URL separator.
+     */
+    private static final String URL_SEPARATOR = "/";
+    /**
+     * Instance of {@link SecurityConst}.
+     */
     private final SecurityConst sc;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
     private final DefaultConst dc;
+    /**
+     * Instance of {@link MessageResolver}.
+     */
     private final MessageResolver msg;
-
+    /**
+     * Instance of {@link UserDetailsService}.
+     */
     private final UserDetailsService userDetailsService;
-
+    /**
+     * Bean {@link BCryptPasswordEncoder}.
+     */
     private final BCryptPasswordEncoder passwordEncoder;
-
+    /**
+     * Instance of {@link ObjectMapper}.
+     */
     private final ObjectMapper oMapper;
-
+    /**
+     * Instance of {@link JWTService}.
+     */
     private final JWTService jwtService;
-
+    /**
+     * Instance of {@link AuthenticationFacade}.
+     */
     private final AuthenticationFacade authFacade;
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param http {@link HttpSecurity} instnace injected by the Spring framework.
+     * @throws Exception if there is any issue while configuring the security mechanisms.
+     */
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(
                 authenticationManager(), (UserService) userDetailsService, oMapper, jwtService, sc, dc, msg
         );
@@ -72,9 +101,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // needs to be authenticated by default to access anything within the scope of the API path
                 .antMatchers(dc.getApiBasePath()).authenticated()
                 // needs to be authenticated by default to access anything beyond the base ("/") path
-                .antMatchers(dc.getApiBasePath() + "/**").authenticated()
+                .antMatchers(dc.getApiBasePath() + URL_SEPARATOR + "**").authenticated()
                 // permit request to base url, not request to API
-                .antMatchers("/").permitAll()
+                .antMatchers(URL_SEPARATOR).permitAll()
                 .and()
                 .addFilter(authFilter)
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService, authFacade))
@@ -86,15 +115,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param auth {@link AuthenticationManagerBuilder} instance.
+     * @throws Exception if there is any issue while configuring the security mechanisms.
+     */
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @return A bean for the {@link CorsConfigurationSource} type.
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration(URL_SEPARATOR + "**", new CorsConfiguration().applyPermitDefaultValues());
+
         return source;
     }
 
@@ -110,23 +153,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return getFreeUrl(sc.getFreeURLsAnyRequest(), getAdditionalFreeAnyUrls());
     }
 
-    private String[] getFreeUrl(String[] urls, String ... additionalUrls) {
+    private String[] getFreeUrl(final String[] urls, final String... additionalUrls) {
 
         ArrayList<String> free = new ArrayList<>(urls.length);
-        for (String s: urls) {
+        for (String s : urls) {
             addUrl(free, s);
         }
-        for (String s: additionalUrls) {
+        for (String s : additionalUrls) {
             addUrl(free, s);
         }
 
         return free.toArray(new String[0]);
     }
 
-    private void addUrl(List<String> urlList, String url) {
+    private void addUrl(final Collection<? super String> urlCollection, final String url) {
         String b = dc.getApiBasePath();
-        if (url != null && !url.equals("")) {
-            urlList.add(b + (url.startsWith("/") ? url : "/" + url));
+        if (url != null && !"".equals(url)) {
+            urlCollection.add(b + (url.startsWith(URL_SEPARATOR) ? url : URL_SEPARATOR + url));
         }
     }
 
@@ -141,12 +184,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * For JUnit Tests purposes only!
+     *
      * @return Array of {@link Map}. Each Map contains the required parameters for executing the post request.
      */
     @SuppressWarnings("unused")
     private Map<String, String>[] getListOfParametersForFreePostUrl() {
-        @SuppressWarnings("unchecked")
-        final Map<String, String>[] r = new HashMap[3];
+        final int numberOfFixedFreeUrl = 3;
+        @SuppressWarnings("unchecked") final Map<String, String>[] r = new HashMap[numberOfFixedFreeUrl];
         Field[] fields;
 
         // region sign-up
@@ -163,10 +207,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final Class<RefreshTokenPayload> rTPayloadClass = RefreshTokenPayload.class;
         fields = rTPayloadClass.getDeclaredFields();
         for (Field f : fields) {
-            if (f.getName().equals("refreshToken")) {
+            if ("refreshToken".equals(f.getName())) {
                 r[1].put(f.getName(), jwtService.createRefreshToken("sub", "auth"));
-            }
-            else {
+            } else {
                 r[1].put(f.getName(), "1");
             }
         }
@@ -182,13 +225,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private String[] getAdditionalFreeGetUrls() {
-        return new String[]{
-        };
+        return new String[]{};
     }
 
     private String[] getAdditionalFreeAnyUrls() {
-        return new String[]{
-        };
+        return new String[]{};
     }
 
 }

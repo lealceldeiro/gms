@@ -19,40 +19,64 @@ import static org.junit.Assert.assertNotEquals;
 @SpringBootTest(classes = Application.class)
 public class GmsSecurityExceptionTest {
 
-    private static String testPath = "/testPath";
-    private static final String msg = "testMsg";
-    private static final Throwable th = new NullPointerException();
+    /**
+     * A sample request path.
+     */
+    private String testPath = "/testPath";
+    /**
+     * A sample request message.
+     */
+    private static final String MESSAGE = "testMsg";
+    /**
+     * A sample {@link Throwable}.
+     */
+    private static final Throwable THROWABLE = new NullPointerException();
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
-        assertNotEquals(msg, GmsSecurityException.DEFAULT_MESSAGE);
+        assertNotEquals(MESSAGE, GmsSecurityException.DEFAULT_MESSAGE);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void GmsSecurityExceptionPath() {
+    public void gmsSecurityExceptionPath() {
         testPath = "/sample1";
         GmsSecurityException e = new GmsSecurityException(testPath);
         pathIs(e, testPath);
         messageIs(e, GmsSecurityException.DEFAULT_MESSAGE);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void GmsSecurityExceptionPathMessage() {
+    public void gmsSecurityExceptionPathMessage() {
         testPath = "/sample2";
-        GmsSecurityException e = new GmsSecurityException(testPath, msg);
+        GmsSecurityException e = new GmsSecurityException(testPath, MESSAGE);
         pathIs(e, testPath);
-        messageIs(e, msg);
+        messageIs(e, MESSAGE);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void GmsSecurityExceptionPathMessageThrowable() {
+    public void gmsSecurityExceptionPathMessageThrowable() {
         testPath = "/sample3";
-        GmsSecurityException e = new GmsSecurityException(testPath, msg, th);
+        GmsSecurityException e = new GmsSecurityException(testPath, MESSAGE, THROWABLE);
         pathIs(e, testPath);
-        messageIs(e, msg);
-        exceptionIs(e, th);
+        messageIs(e, MESSAGE);
+        exceptionIs(e, THROWABLE);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getPath() {
         testPath = "/sample34";
@@ -61,15 +85,16 @@ public class GmsSecurityExceptionTest {
         assertEquals(testPath, e.getPath());
     }
 
-    private void messageIs(GmsSecurityException e, String message) {
+    private void messageIs(final GmsSecurityException e, final String message) {
         assertEquals(e.getMessage(), message);
     }
 
-    private void pathIs(GmsSecurityException e, String path) {
+    private void pathIs(final GmsSecurityException e, final String path) {
         assertEquals(ReflectionTestUtils.getField(e, "path"), path);
     }
 
-    private void exceptionIs(GmsSecurityException e, Throwable ex) {
+    private void exceptionIs(final GmsSecurityException e, final Throwable ex) {
         assertEquals(e.getCause(), ex);
     }
+
 }

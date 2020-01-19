@@ -12,15 +12,30 @@ import static org.springframework.restdocs.snippet.Attributes.key;
  * @version 0.1
  */
 public class ConstrainedFields {
+    /**
+     * Instance of {@link ConstraintDescriptions}.
+     */
     private final ConstraintDescriptions constraintDescriptions;
 
-    public ConstrainedFields(Class<?> input) {
+    /**
+     * Creates a {@link ConstrainedFields} from the given input.
+     *
+     * @param input {@link Class} to create the {@link ConstrainedFields} from.
+     */
+    public ConstrainedFields(final Class<?> input) {
         this.constraintDescriptions = new ConstraintDescriptions(input);
     }
 
-    public FieldDescriptor withPath(String path) {
+    /**
+     * Creates and returns a FieldDescriptor that describes a field with the given path.
+     *
+     * @param path Path to be described.
+     * @return FieldDescriptor
+     */
+    public FieldDescriptor withPath(final String path) {
         return fieldWithPath(path).attributes(key("constraints").value(StringUtils
                 .collectionToDelimitedString(this.constraintDescriptions
                         .descriptionsForProperty(path), ". ")));
     }
+
 }

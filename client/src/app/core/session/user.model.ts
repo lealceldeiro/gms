@@ -50,7 +50,8 @@ export class User extends Entity {
   accountNonLocked = true;
 
   /**
-   * Whether the user's credentials (combination of username, email, or whatsoever and the password) are not expired or are they.
+   * Whether the user's credentials (combination of username, email, or whatsoever and the password) are not expired or
+   * are they.
    */
   credentialsNonExpired = true;
 }

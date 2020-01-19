@@ -12,6 +12,14 @@ import { PreviewContentComponent } from './preview-content/preview-content.compo
 @NgModule({
   imports: [CommonModule, RouterModule, NgbModule, NgbCollapseModule],
   declarations: [JumbotronComponent, PreviewContentComponent, PaginationComponent, AlertComponent],
-  exports: [NgbModule, NgbCollapseModule, JumbotronComponent, PreviewContentComponent, PaginationComponent, AlertComponent]
+  exports: [
+    NgbModule,
+    NgbCollapseModule,
+    JumbotronComponent,
+    PreviewContentComponent,
+    PaginationComponent,
+    AlertComponent
+  ]
 })
-export class BootstrapComponentsModule { }
+export class BootstrapComponentsModule {
+}

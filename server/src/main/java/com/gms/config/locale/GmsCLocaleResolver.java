@@ -12,12 +12,20 @@ import java.util.Locale;
  */
 public class GmsCLocaleResolver extends CookieLocaleResolver {
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param request Incoming {@link HttpServletRequest} used to determine the proper locale.
+     * @return A {@link Locale} from the current request.
+     */
     @Override
-    public Locale resolveLocale(HttpServletRequest request) {
+    public Locale resolveLocale(final HttpServletRequest request) {
         String acceptLanguage = request.getHeader(DefaultConst.DEFAULT_LANGUAGE_HEADER);
         if (acceptLanguage == null || acceptLanguage.trim().isEmpty()) {
             return super.determineDefaultLocale(request);
         }
+
         return request.getLocale();
     }
 

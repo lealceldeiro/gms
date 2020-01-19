@@ -26,7 +26,10 @@ describe('LoginService', () => {
   // endregion
   const url = MockAppConfig.settings.apiServer.url;
   const loginUrl = MockAppConfig.settings.apiServer.loginUrl;
-  const intHelperServiceStub = { addExcludedFromErrorHandling: () => { } };
+  const intHelperServiceStub = {
+    addExcludedFromErrorHandling: () => {
+    }
+  };
 
   let httpTestingController: HttpTestingController;
   let loginService: LoginService;
@@ -71,31 +74,38 @@ describe('LoginService', () => {
   });
 
   it(`should post a 'LoginRequestModel' payload to the login url and, if it succeeds, set the auth data  in
-    SessionService and call the getUserMethod in the SessionUserService in order to retrieve the current User info`, fakeAsync(() => {
-    const body = { usernameOrEmail: userMock.username, password: 'test' };
-    const response: LoginResponseModel = { access_token: 'access_tokenS', username: userMock.username };
+    SessionService and call the getUserMethod in the SessionUserService in order to retrieve the current User info`,
+    fakeAsync(() => {
+        const body = { usernameOrEmail: userMock.username, password: 'test' };
+        const response: LoginResponseModel = { access_token: 'access_tokenS', username: userMock.username };
 
-    loginService.login(body).toPromise().then((data: LoginResponseModel) => {
-      expect(data).toBeTruthy('data is not ok');
-      expect(data.access_token).toBeTruthy('access token is not ok');
-      expect(sessionServiceSpy.setAuthData).toHaveBeenCalledTimes(1);
-      expect(sessionServiceSpy.setLoggedIn).toHaveBeenCalledTimes(1);
-      expect(sessionUserServiceSpy.getCurrentUser).toHaveBeenCalledTimes(1);
-      expect(sessionUserServiceSpy.getCurrentUser.calls.first().args[0]).toEqual(userMock.username, 'username used for calling ' +
-        'the `getCurrentUser` service is not the same as the one which came in the response');
-      expect(sessionServiceSpy.setUser).toHaveBeenCalledTimes(1);
-      expect(sessionServiceSpy.setUser.calls.first().args[0]).toEqual(userMock, 'sessionUserService not ' +
-        'called with the correct username');
-    });
+        loginService.login(body).toPromise().then((data: LoginResponseModel) => {
+          const usernameErrorMessage = 'username used for calling the `getCurrentUser` service is not the same as ' +
+            'the one which came in the response';
 
-    // request mock
-    const req = httpTestingController.match(r => r.url === url + loginUrl && r.method === 'POST' && r.body === body);
-    expect(req.length).toBeGreaterThan(0, 'no request was found');
-    req[0].flush(response);
+          expect(data).toBeTruthy('data is not ok');
+          expect(data.access_token).toBeTruthy('access token is not ok');
+          expect(sessionServiceSpy.setAuthData).toHaveBeenCalledTimes(1);
+          expect(sessionServiceSpy.setLoggedIn).toHaveBeenCalledTimes(1);
+          expect(sessionUserServiceSpy.getCurrentUser).toHaveBeenCalledTimes(1);
+          expect(sessionUserServiceSpy.getCurrentUser.calls.first().args[0])
+            .toEqual(userMock.username, usernameErrorMessage);
+          expect(sessionServiceSpy.setUser).toHaveBeenCalledTimes(1);
+          expect(sessionServiceSpy.setUser.calls.first().args[0]).toEqual(userMock, 'sessionUserService not ' +
+            'called with the correct username');
+        });
 
-    userModelSubject.next(value);
+        // request mock
+        const req = httpTestingController
+          .match(r => r.url === url + loginUrl && r.method === 'POST' && r.body === body);
 
-    tick();
-  }
-  ));
+        expect(req.length).toBeGreaterThan(0, 'no request was found');
+        req[0].flush(response);
+
+        userModelSubject.next(value);
+
+        tick();
+      }
+    )
+  );
 });

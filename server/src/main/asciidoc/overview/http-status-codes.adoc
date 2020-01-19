@@ -1,6 +1,8 @@
 [[overview-http-status-codes]]
 === HTTP status codes
-  GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes. See more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[HTTP response status codes,role=external,window=_blank].
+
+  GMS tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes. See
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[HTTP response status codes,role=external,window=_blank].
 
 |===
 | Status code | Usage
@@ -17,34 +19,48 @@
 `TRACE`: The message body contains the request message as received by the server.
 
 | `201 Created`
-| The request has succeeded and a new resource has been created as a result of it. This is typically the response sent after a `PUT` request.
+| The request has succeeded and a new resource has been created as a result of it. This is typically the response sent
+after a `PUT` request.
 
 | `204 No Content`
-| There is no content to send for this request, but the headers may be useful. The user-agent may update its cached headers for this resource with the new ones.
+| There is no content to send for this request, but the headers may be useful. The user-agent may update its cached
+headers for this resource with the new ones.
 
 | `400 Bad Request`
 | This response means that server could not understand the request due to invalid syntax.
 
 | `401 Unauthorized`
-| Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
+| Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the
+client must authenticate itself to get the requested response.
 
 | `404 Not Found`
-| The server can not find requested resource. This can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This app specifically redirects to "/" (or index.html) for keeping consistency with the living (Angular) client application in the WAR artifact.
+| The server can not find requested resource. This can also mean that the endpoint is valid but the resource itself
+does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an
+unauthorized client. This app specifically redirects to "/" (or index.html) for keeping consistency with the living
+(Angular) client application in the WAR artifact.
 
 | `405 Method Not Allowed`
-| The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid `DELETE`-ing a resource. The two mandatory methods, `GET` and `HEAD`, must never be disabled and should not return this error code.
+| The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid
+`DELETE`-ing a resource. The two mandatory methods, `GET` and `HEAD`, must never be disabled and should not return this
+error code.
 
 | `409 Conflict`
-| This response is sent when a request conflicts with the current state of the server. In the GMS this can be sent when a business rule is not properly fulfilled by a request (and its data) made by the client.
+| This response is sent when a request conflicts with the current state of the server. In the GMS this can be sent when
+a business rule is not properly fulfilled by a request (and its data) made by the client.
 
 | `413 Payload Too Large`
-| Request entity is larger than limits defined by server; the server might close the connection or return a **Retry-After** header field.
+| Request entity is larger than limits defined by server; the server might close the connection or return a
+**Retry-After** header field.
 
 | `415 Unsupported Media Type`
 | The media format of the requested data is not supported by the server, so the server is rejecting the request.
 
 | `422 Unsupported Media Type`
-| The server understands the content type of the request entity [.small]#(hence a 415 Unsupported Media Type status code is inappropriate)#, and the syntax of the request entity is correct [.small]#(thus a 400 Bad Request status code is inappropriate)# but was unable to process the contained instructions. [.small]#(For example, this error condition may occur if an XML request body contains well-formed (i.e., syntactically correct), but semantically erroneous, XML instructions)#.
+| The server understands the content type of the request entity [.small]#(hence a 415 Unsupported Media Type status
+code is inappropriate)#, and the syntax of the request entity is correct [.small]#(thus a 400 Bad Request status code
+is inappropriate)# but was unable to process the contained instructions. [.small]#(For example, this error condition
+may occur if an XML request body contains well-formed (i.e., syntactically correct), but semantically erroneous, XML
+instructions)#.
 
 | `429 Too Many Requests`
 | The user has sent too many requests in a given amount of time ("rate limiting").

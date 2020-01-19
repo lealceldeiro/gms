@@ -33,35 +33,83 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class BAuthorizationRepositoryTest {
 
-    @Autowired private AppService appService;
-    @Autowired private EUserRepository userRepository;
-    @Autowired private BRoleRepository roleRepository;
-    @Autowired private EOwnedEntityRepository entityRepository;
-    @Autowired private BAuthorizationRepository authorizationRepository;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link EUserRepository}.
+     */
+    @Autowired
+    private EUserRepository userRepository;
+    /**
+     * Instance of {@link BRoleRepository}.
+     */
+    @Autowired
+    private BRoleRepository roleRepository;
+    /**
+     * Instance of {@link EOwnedEntityRepository}.
+     */
+    @Autowired
+    private EOwnedEntityRepository entityRepository;
+    /**
+     * Instance of {@link BAuthorizationRepository}.
+     */
+    @Autowired
+    private BAuthorizationRepository authorizationRepository;
 
+    /**
+     * Instance of {@link EUser}.
+     */
     private EUser user;
+    /**
+     * Instance of {@link BRole}.
+     */
     private BRole role;
+    /**
+     * Instance of {@link BRole}.
+     */
     private BRole role2;
+    /**
+     * Instance of {@link EOwnedEntity}.
+     */
     private EOwnedEntity entity;
 
+    /**
+     * Instance of {@link GMSRandom}.
+     */
     private final GMSRandom random = new GMSRandom();
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void findFirstByUserAndEntityNotNullAndRoleEnabled() {
         createSampleAuthorization();
 
-        final BAuthorization authFound = authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(user, true);
+        final BAuthorization authFound =
+                authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(user, true);
 
         assertEquals("Current user and the one found in the authorization do not match", authFound.getUser(), user);
         assertEquals("Current role and the one found in the authorization do not match", authFound.getRole(), role);
-        assertEquals("Current entity and the one found in the authorization do not match", authFound.getEntity(), entity);
+        assertEquals(
+                "Current entity and the one found in the authorization do not match",
+                authFound.getEntity(), entity
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRolesForUserOverAllEntities() {
         final EOwnedEntity e1 = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
@@ -83,46 +131,50 @@ public class BAuthorizationRepositoryTest {
                 isRoleInList(data.get(e2.getUsername()), role));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRolesForUserOverEntity() {
-        final BRole role1 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
-        final BRole role2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        final BRole iRole1 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
+        final BRole iRole2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
 
-        createSampleAuthorization(role1, role2);
+        createSampleAuthorization(iRole1, iRole2);
 
         final List<BRole> foundRoles = authorizationRepository.getRolesForUserOverEntity(user.getId(), entity.getId());
-        boolean oldFound = isRoleInList(foundRoles, role1);
-        boolean newFound = isRoleInList(foundRoles, role2);
+        boolean oldFound = isRoleInList(foundRoles, iRole1);
+        boolean newFound = isRoleInList(foundRoles, iRole2);
 
-        assertTrue("The role " + role1.getLabel() + "(old) is not assigned to user over the entity", oldFound);
-        assertTrue("The role " + role2.getLabel() + "(new) is not assigned to user over the entity", newFound);
+        assertTrue("The role " + iRole1.getLabel() + "(old) is not assigned to user over the entity", oldFound);
+        assertTrue("The role " + iRole2.getLabel() + "(new) is not assigned to user over the entity", newFound);
 
     }
 
-    private boolean isRoleInList(List<BRole> list, BRole role) {
+    private boolean isRoleInList(final List<BRole> list, final BRole roleArg) {
         boolean found = false;
         int i = 0;
         while (!found && i < list.size()) {
-            found = list.get(i++).getId().equals(role.getId());
+            found = list.get(i).getId().equals(roleArg.getId());
+            i++;
         }
         return found;
     }
 
-    private void createSampleAuthorization(BRole... rolesSavedInRepository) {
+    private void createSampleAuthorization(final BRole... rolesSavedInRepository) {
         user = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         entity = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
-        for (BRole role: rolesSavedInRepository) {
-            createAuthorization(user, role, entity);
+        for (BRole iRole : rolesSavedInRepository) {
+            createAuthorization(user, iRole, entity);
         }
     }
 
-    private void createSampleAuthorization(EOwnedEntity... entitiesSavedInRepository) {
+    private void createSampleAuthorization(final EOwnedEntity... entitiesSavedInRepository) {
         user = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         role = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
         role2 = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
-        for (EOwnedEntity entity: entitiesSavedInRepository) {
-            createAuthorization(user, role, entity);
-            createAuthorization(user, role2, entity);
+        for (EOwnedEntity iEntity : entitiesSavedInRepository) {
+            createAuthorization(user, role, iEntity);
+            createAuthorization(user, role2, iEntity);
         }
     }
 
@@ -131,8 +183,10 @@ public class BAuthorizationRepositoryTest {
         createSampleAuthorization(role);
     }
 
-    private void createAuthorization(EUser user, BRole role, EOwnedEntity entity) {
-        BAuthorization.BAuthorizationPk pk = new BAuthorization.BAuthorizationPk(user.getId(), entity.getId(), role.getId());
-        assertNotNull(authorizationRepository.save(new BAuthorization(pk, user, entity, role)));
+    private void createAuthorization(final EUser userArg, final BRole roleArg, final EOwnedEntity entityArg) {
+        BAuthorization.BAuthorizationPk pk =
+                new BAuthorization.BAuthorizationPk(userArg.getId(), entityArg.getId(), roleArg.getId());
+        assertNotNull(authorizationRepository.save(new BAuthorization(pk, userArg, entityArg, roleArg)));
     }
+
 }

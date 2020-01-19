@@ -9,15 +9,27 @@ import javassist.NotFoundException;
 public class NotFoundEntityException extends NotFoundException {
 
     /**
-	 * Version number for a Serializable class.
-	 */
-	private static final long serialVersionUID = 4851392880749714321L;
+     * Version number for a Serializable class.
+     */
+    private static final long serialVersionUID = 4851392880749714321L;
 
-	public NotFoundEntityException(String msg) {
+    /**
+     * Creates a new {@link NotFoundEntityException} with a given message.
+     *
+     * @param msg Message to indicate some additional information.
+     */
+    public NotFoundEntityException(final String msg) {
         super(msg);
     }
 
-    public NotFoundEntityException(String msg, Exception e) {
+    /**
+     * Creates a new {@link NotFoundEntityException} with a given message and an exception indicating a possible reason
+     * of this exception.
+     *
+     * @param msg Message to indicate additional information.
+     * @param e   Possible exception that caused this.
+     */
+    public NotFoundEntityException(final String msg, final Exception e) {
         super(msg, e);
     }
 

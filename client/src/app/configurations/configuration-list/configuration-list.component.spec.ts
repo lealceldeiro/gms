@@ -18,7 +18,9 @@ describe('ConfigurationListComponent', () => {
   }
 
   beforeEach(async(() => {
-    configurationServiceSpy = jasmine.createSpyObj('ConfigurationService', ['getConfigurations', 'getUserConfigurations']);
+    configurationServiceSpy = jasmine.createSpyObj(
+      'ConfigurationService', ['getConfigurations', 'getUserConfigurations']
+    );
     configurationServiceSpy.getConfigurations.and.returnValue(of<object>(configurationObject));
     configurationServiceSpy.getUserConfigurations.and.returnValue(of<object>(configurationObject));
 
@@ -44,13 +46,15 @@ describe('ConfigurationListComponent', () => {
     expect(loadConfigurationsSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should call ConfigurationService#getConfigurations on call to loadConfigurations and set values from the observable ', () => {
+  it('should call ConfigurationService#getConfigurations on call to loadConfigurations and set values from the ' +
+    'observable ', () => {
     expect(configurationServiceSpy.getConfigurations).toHaveBeenCalledTimes(1);
     expect(component.keys.system).toEqual(Object.keys(configurationObject));
     expect(component.values.system).toEqual(Object.values(configurationObject));
   });
 
-  it('should call ConfigurationService#getUserConfigurations on call to loadUserConfigurations and set values from the observable ', () => {
+  it('should call ConfigurationService#getUserConfigurations on call to loadUserConfigurations and set values from ' +
+    'the observable ', () => {
     expect(configurationServiceSpy.getUserConfigurations).toHaveBeenCalledTimes(1);
     expect(component.keys.user).toEqual(Object.keys(configurationObject));
     expect(component.values.user).toEqual(Object.values(configurationObject));

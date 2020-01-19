@@ -9,7 +9,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import java.util.Set;
 
 /**
- * Configures the repositories for exposing the <code>id</code> property of the domain entities.
+ * Configures the repositories for exposing the {@code id} property of the domain entities.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
@@ -17,8 +17,14 @@ import java.util.Set;
 @Configuration
 public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param config Instance of {@link RepositoryRestConfiguration}.
+     */
     @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+    public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config) {
         Reflections reflections = new Reflections("com.gms.domain", new SubTypesScanner(false));
         Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
         for (Class<?> iClass : classes) {

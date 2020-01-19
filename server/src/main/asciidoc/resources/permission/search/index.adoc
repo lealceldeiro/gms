@@ -1,5 +1,6 @@
 [[resources-permission-search]]
 ==== Searching for permissions
+
 The following searches can be performed over the permission resource.
 
 include::label.adoc[]

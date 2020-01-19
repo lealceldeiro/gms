@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.gms.testutil.EntityUtil.getSampleUserResource;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -48,30 +49,84 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class SecurityControllerTest {
 
-    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
+    /**
+     * Instance of {@link JUnitRestDocumentation} to create the documentation for Asciidoc from the resutls of the
+     * mocked webrequests.
+     */
+    @Rule
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(RestDoc.APIDOC_LOCATION);
 
-    @Autowired private WebApplicationContext context;
-    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
+    /**
+     * Instance of {@link WebApplicationContext}.
+     */
+    @Autowired
+    private WebApplicationContext context;
+    /**
+     * Instance of {@link ObjectMapper}.
+     */
+    private final ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
-    @Autowired private FilterChainProxy springSecurityFilterChain;
+    /**
+     * Instance of {@link FilterChainProxy}.
+     */
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired private SecurityConst sc;
-    @Autowired private DefaultConst dc;
+    /**
+     * Instance of {@link SecurityConst}.
+     */
+    @Autowired
+    private SecurityConst sc;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
+    @Autowired
+    private DefaultConst dc;
 
-    @Autowired private AppService appService;
-    @Autowired private ConfigurationService configService;
-    @Autowired private MessageResolver msg;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link ConfigurationService}.
+     */
+    @Autowired
+    private ConfigurationService configService;
+    /**
+     * Instance of {@link MessageResolver}.
+     */
+    @Autowired
+    private MessageResolver msg;
 
+    /**
+     * Instance of {@link MockMvc} to perform web requests.
+     */
     private MockMvc mvc;
-    private RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
+    /**
+     * An instance of {@link RestDocumentationResultHandler} for the documenting RESTful APIs endpoints.
+     */
+    private final RestDocumentationResultHandler restDocResHandler = RestDoc.getRestDocumentationResultHandler();
 
+    /**
+     * The refresh token used to get access to some protected resource.
+     */
     private String refreshToken;
+    /**
+     * Base path for the API.
+     */
     private String apiPrefix;
 
+    /**
+     * An alphanumeric random generator.
+     */
     private final GMSRandom random = new GMSRandom(10);
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
@@ -81,6 +136,9 @@ public class SecurityControllerTest {
         refreshToken = GmsSecurityUtil.createSuperAdminRefreshToken(dc, sc, mvc, objectMapper, false);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signUp() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
@@ -104,12 +162,12 @@ public class SecurityControllerTest {
                 .andDo(
                         restDocResHandler.document(
                                 requestFields(
-                                        fields.withPath("username").description(EUserMeta.username),
-                                        fields.withPath("email").description(EUserMeta.email),
-                                        fields.withPath("name").description(EUserMeta.name),
-                                        fields.withPath("lastName").description(EUserMeta.lastName),
-                                        fields.withPath("password").description(EUserMeta.password),
-                                        fields.withPath("enabled").optional().description(EUserMeta.enabled),
+                                        fields.withPath("username").description(EUserMeta.USERNAME_INFO),
+                                        fields.withPath("email").description(EUserMeta.EMAIL_INFO),
+                                        fields.withPath("name").description(EUserMeta.NAME_INFO),
+                                        fields.withPath("lastName").description(EUserMeta.LAST_NAME_INFO),
+                                        fields.withPath("password").description(EUserMeta.PASSWORD_INFO),
+                                        fields.withPath("enabled").optional().description(EUserMeta.ENABLED_INFO),
                                         fields.withPath("authorities").optional().ignored(),
                                         fields.withPath("emailVerified").optional().ignored(),
                                         fields.withPath("accountNonExpired").optional().ignored(),
@@ -125,6 +183,9 @@ public class SecurityControllerTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signUpKO() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
@@ -143,6 +204,9 @@ public class SecurityControllerTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void refreshToken() throws Exception {
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
@@ -155,24 +219,31 @@ public class SecurityControllerTest {
                         restDocResHandler.document(
                                 requestFields(
                                         fields.withPath("refreshToken")
-                                                .description("The refresh token provided when login was previously performed")
+                                                .description("The refresh token provided when login was "
+                                                        + "previously performed")
                                 )
                         )
                 );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void refreshTokenNull() throws Exception {
         testRefreshTokenKO(null);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void refreshTokenInvalid() throws Exception{
+    public void refreshTokenInvalid() throws Exception {
         testRefreshTokenKO("invalidRefreshToken");
     }
 
-    private void testRefreshTokenKO(String refreshToken) throws Exception{
-        final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
+    private void testRefreshTokenKO(final String refreshTokenArg) throws Exception {
+        final RefreshTokenPayload payload = new RefreshTokenPayload(refreshTokenArg);
         String temp = mvc.perform(
                 post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -181,16 +252,22 @@ public class SecurityControllerTest {
         JSONObject json = new JSONObject(temp);
 
         int status = json.getInt("status");
-        assert status == HttpStatus.UNAUTHORIZED.value();
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), status);
 
         temp = json.getString("error");
-        assert temp.equals(msg.getMessage("security.unauthorized"));
+        assertEquals(temp, msg.getMessage("security.unauthorized"));
 
         temp = json.getString("path");
-        assert temp.equals(dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
+        assertEquals(temp, dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
 
         temp = json.getString(dc.getResMessageHolder());
 
-        assert temp.equals(msg.getMessage(refreshToken == null ? "security.token.refresh.required" : "security.token.refresh.invalid"));
+        String message = msg.getMessage(
+                refreshTokenArg == null
+                        ? "security.token.refresh.required"
+                        : "security.token.refresh.invalid"
+        );
+        assertEquals(temp, message);
     }
+
 }

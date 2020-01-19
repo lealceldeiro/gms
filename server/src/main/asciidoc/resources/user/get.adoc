@@ -1,5 +1,6 @@
 [[resource-user-get]]
 ==== Getting a user's info
+
 A `GET` request gets a user's information.
 
 include::../../util/H-REQUEST.adoc[]

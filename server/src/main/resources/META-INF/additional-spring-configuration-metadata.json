@@ -36,7 +36,6 @@
       "description": "[Optional | default = www.gms.com] Who provides the token.",
       "defaultValue": "www.gms.com"
     },
-
     {
       "name": "gms.security.jwt.token_holder",
       "type": "java.lang.String",
@@ -85,7 +84,6 @@
       "description": "[Optional | default = token_expires_in] Defines the holder for the  value of variable sent in the 'login' response indicating the time left before the access token expires.",
       "defaultValue": "token_expires_in"
     },
-
     {
       "name": "gms.security.jwt.refresh_token_holder",
       "type": "java.lang.String",
@@ -110,7 +108,6 @@
       "description": "[Optional | default = refresh_token_expires_in] Defines the holder for the  value of variable sent in the 'login' response indicating the time left before the refresh token expires.",
       "defaultValue": "refresh_token_expires_in"
     },
-
     {
       "name": "gms.security.sign_up_url",
       "type": "java.lang.String",
@@ -123,7 +120,6 @@
       "description": "[Optional | default = /login] Defines the url for logging in the user.",
       "defaultValue": "/login"
     },
-
     {
       "name": "gms.security.free_url_any",
       "type": "java.lang.String",
@@ -142,14 +138,12 @@
       "description": "[Optional | default = ] Defines the URLs which are not under the security control system through HTTP GET method.",
       "defaultValue": ""
     },
-
     {
       "name": "gms.application.env",
       "type": "java.lang.String",
       "description": "[Optional | default = Development] Defines the environment in which the application is running.",
       "defaultValue": "Development"
     },
-
     {
       "name": "gms.user.default.name",
       "type": "java.lang.String",
@@ -180,7 +174,6 @@
       "description": "[Optional | default = admin@gms.com] Defines email for the first user created by default for the application on first start-up.",
       "defaultValue": "admin@gms.com"
     },
-
     {
       "name": "gms.entity.default.name",
       "type": "java.lang.String",
@@ -199,7 +192,6 @@
       "description": "[Optional | default = Default entity] Defines description for the first entity created by default for the application on first start-up.",
       "defaultValue": "Default entity"
     },
-
     {
       "name": "gms.role.default.label",
       "type": "java.lang.String",
@@ -218,7 +210,6 @@
       "description": "[Optional | default = true] Defines whether the first role with administrative privileges created by default for the application on first start-up is enabled or not.",
       "defaultValue": true
     },
-
     {
       "name": "gms.config.multi-entity",
       "type": "java.lang.Boolean",

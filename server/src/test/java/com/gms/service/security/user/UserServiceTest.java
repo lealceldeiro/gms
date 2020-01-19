@@ -21,14 +21,27 @@ import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -38,29 +51,81 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class UserServiceTest {
 
-    @Autowired private EUserRepository userRepository;
-    @Autowired private BRoleRepository roleRepository;
-    @Autowired private BPermissionRepository permissionRepository;
-    @Autowired private EOwnedEntityRepository entityRepository;
-    @Autowired private BAuthorizationRepository authorizationRepository;
-    @Autowired private AppService appService;
-    @Autowired private UserService userService;
-    @Autowired private ConfigurationService configService;
-    @Autowired private DefaultConst dc;
+    /**
+     * Instance of {@link }.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
+    /**
+     * Instance of {@link EUserRepository}.
+     */
+    @Autowired
+    private EUserRepository userRepository;
+    /**
+     * Instance of {@link BRoleRepository}.
+     */
+    @Autowired
+    private BRoleRepository roleRepository;
+    /**
+     * Instance of {@link BPermissionRepository}.
+     */
+    @Autowired
+    private BPermissionRepository permissionRepository;
+    /**
+     * Instance of {@link EOwnedEntityRepository}.
+     */
+    @Autowired
+    private EOwnedEntityRepository entityRepository;
+    /**
+     * Instance of {@link BAuthorizationRepository}.
+     */
+    @Autowired
+    private BAuthorizationRepository authorizationRepository;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link UserService}.
+     */
+    @Autowired
+    private UserService userService;
+    /**
+     * Instance of {@link ConfigurationService}.
+     */
+    @Autowired
+    private ConfigurationService configService;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
+    @Autowired
+    private DefaultConst dc;
+
+    /**
+     * Instance of {@link GMSRandom}.
+     */
     private final GMSRandom random = new GMSRandom();
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
     }
 
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createDefaultUser() {
         assertNotNull(userRepository.findFirstByUsername(dc.getUserAdminDefaultUsername()));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signServiceUpOK() {
         final boolean registration = configService.isUserRegistrationAllowed();
@@ -68,7 +133,7 @@ public class UserServiceTest {
             configService.setUserRegistrationAllowed(true);
         }
         EUser u = getUser();
-        u = userService.signUp(u, true);
+        u = userService.signUp(u, UserService.EmailStatus.VERIFIED);
         assertNotNull(u);
 
         EUser ru = userRepository.findFirstByUsername(u.getUsername());
@@ -79,6 +144,9 @@ public class UserServiceTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signServiceUpKO() {
         final boolean registration = configService.isUserRegistrationAllowed();
@@ -86,13 +154,16 @@ public class UserServiceTest {
             configService.setUserRegistrationAllowed(false);
         }
 
-        assertNull(userService.signUp(getUser(), true));
+        assertNull(userService.signUp(getUser(), UserService.EmailStatus.VERIFIED));
 
         if (registration) {
             configService.setUserRegistrationAllowed(true);
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signUpSuperRegistrationConditionallyOK() {
         final boolean registration = configService.isUserRegistrationAllowed();
@@ -100,7 +171,7 @@ public class UserServiceTest {
             configService.setUserRegistrationAllowed(false);
         }
         EUser u = getUser();
-        u = userService.signUp(u, true, true);
+        u = userService.signUp(u, UserService.EmailStatus.VERIFIED, UserService.RegistrationPrivilege.SUPER_USER);
         assertNotNull(u);
 
         EUser ru = userRepository.findFirstByUsername(u.getUsername());
@@ -111,6 +182,9 @@ public class UserServiceTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void signUpSuperRegistrationConditionallyKO() {
         final boolean registration = configService.isUserRegistrationAllowed();
@@ -118,13 +192,18 @@ public class UserServiceTest {
             configService.setUserRegistrationAllowed(false);
         }
         EUser u = getUser();
-        assertNull(userService.signUp(u, true, false));
+        assertNull(
+                userService.signUp(u, UserService.EmailStatus.VERIFIED, UserService.RegistrationPrivilege.REGULAR_USER)
+        );
 
         if (registration) {
             configService.setUserRegistrationAllowed(true);
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void addRolesToUser() {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
@@ -138,7 +217,7 @@ public class UserServiceTest {
         List<Long> ids = new LinkedList<>();
         ids.add(r1.getId());
         ids.add(r2.getId());
-        assertEquals(ids.size(), 2);    // make sure later a java.lang.ArrayIndexOutOfBoundsException is not thrown
+        assertEquals(2, ids.size());    // make sure later a java.lang.ArrayIndexOutOfBoundsException is not thrown
         List<Long> added = null;
         try {
             added = userService.addRolesToUser(u.getId(), e.getId(), ids);
@@ -147,7 +226,7 @@ public class UserServiceTest {
             assertTrue(added.contains(ids.get(0)));
             assertTrue(added.contains(ids.get(1)));
         } catch (NotFoundEntityException e1) {
-            e1.printStackTrace();
+            LOGGER.error(e1.getLocalizedMessage());
             fail("Roles could not be saved");
         }
 
@@ -160,6 +239,9 @@ public class UserServiceTest {
         assertTrue(added.contains(roles.get(1).getId()));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void removeRolesFromUser() {
         // add roles to user via repository
@@ -184,7 +266,7 @@ public class UserServiceTest {
         BAuthorization auth2 = authorizationRepository.save(new BAuthorization(pk2, u, e, r2));
         assertNotNull(auth2);
 
-        List<Long> ids = new LinkedList<>();
+        Collection<Long> ids = new LinkedList<>();
         ids.add(r1.getId());
         ids.add(r2.getId());
 
@@ -198,9 +280,9 @@ public class UserServiceTest {
         // check the service method
         List<Long> removed = null;
         try {
-             removed = userService.removeRolesFromUser(u.getId(), e.getId(), ids);
+            removed = userService.removeRolesFromUser(u.getId(), e.getId(), ids);
         } catch (NotFoundEntityException e1) {
-            e1.printStackTrace();
+            LOGGER.error(e1.getLocalizedMessage());
             fail("Roles could not be removed");
         }
         assertNotNull(removed);
@@ -214,6 +296,9 @@ public class UserServiceTest {
         assertTrue(roles.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void loadUserByUsername() {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
@@ -223,6 +308,9 @@ public class UserServiceTest {
         assertEquals(su, u);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getUserAuthoritiesForToken() {
         // first set of permissions
@@ -274,6 +362,9 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRolesForUser() {
         // user
@@ -330,11 +421,14 @@ public class UserServiceTest {
             assertTrue(rolesForUser.get(e2.getUsername()).contains(r3));
             assertTrue(rolesForUser.get(e2.getUsername()).contains(r4));
         } catch (NotFoundEntityException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getLocalizedMessage());
             fail("The username was not found");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRolesForUserOverEntity() {
         // user
@@ -368,17 +462,24 @@ public class UserServiceTest {
             assertTrue(roles.contains(r1));
             assertTrue(roles.contains(r2));
         } catch (NotFoundEntityException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getLocalizedMessage());
             fail("Either the username or the entity was not found");
         }
     }
 
     private EUser getUser() {
-        return new EUser(StringUtil.EXAMPLE_USERNAME + random.nextString(), StringUtil.EXAMPLE_EMAIL + random.nextString(),
-                StringUtil.EXAMPLE_NAME + random.nextString(), StringUtil.EXAMPLE_LAST_NAME + random.nextString(),
-                StringUtil.EXAMPLE_PASSWORD + random.nextString());
+        return new EUser(
+                StringUtil.EXAMPLE_USERNAME + random.nextString(),
+                StringUtil.EXAMPLE_EMAIL + random.nextString(),
+                StringUtil.EXAMPLE_NAME + random.nextString(),
+                StringUtil.EXAMPLE_LAST_NAME + random.nextString(),
+                StringUtil.EXAMPLE_PASSWORD + random.nextString()
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getEntityIdByUserWithNoRoles() {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
@@ -386,4 +487,5 @@ public class UserServiceTest {
 
         assertNull(userService.getEntityIdByUser(u));
     }
+
 }

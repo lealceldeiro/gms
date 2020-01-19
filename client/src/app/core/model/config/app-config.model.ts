@@ -57,7 +57,8 @@ export interface ISecurityKey {
      */
     notLoggedIn: string;
     /**
-     * Key under which the value security parameters such as `access_token` and `refresh_token` are stored in the StorageService.
+     * Key under which the value security parameters such as `access_token` and `refresh_token` are stored in the
+     * StorageService.
      */
     loginData: string;
     /**

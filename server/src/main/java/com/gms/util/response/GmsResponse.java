@@ -13,7 +13,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GmsResponse {
 
+    /**
+     * Response message.
+     */
     private String message = "";
+    /**
+     * Array of {@link ResponseData} to be sent.
+     */
     private final ResponseData<?>[] data;
 
 }

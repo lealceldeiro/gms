@@ -1,13 +1,9 @@
 package com.gms.controller.security.permission;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import com.gms.domain.security.role.BRole;
 import com.gms.service.security.permission.PermissionService;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.exception.domain.NotFoundEntityException;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -20,7 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import lombok.RequiredArgsConstructor;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -30,12 +27,28 @@ import lombok.RequiredArgsConstructor;
 @BasePathAwareController
 public class PermissionController {
 
+    /**
+     * Instance of {@link PermissionService}.
+     */
     private final PermissionService permissionService;
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param id            {@link com.gms.domain.security.permission.BPermission} id to get the roles associated to.
+     * @param pageable      {@link Pageable} bean injected by spring.
+     * @param pageAssembler {@link PagedResourcesAssembler} bean injected by spring.
+     * @return A {@link ResponseEntity} of PagedResources of {@link Resource} of {@link BRole} containing the requested
+     * information.
+     */
     @GetMapping(path = ResourcePath.PERMISSION + "/{id}/" + ResourcePath.ROLE + "s", produces = "application/hal+json")
     @ResponseBody
-    public ResponseEntity<PagedResources<Resource<BRole>>> getAllRolesByPermission(@PathVariable long id,
-            Pageable pageable, PagedResourcesAssembler<BRole> pageAssembler) throws NotFoundEntityException {
+    public ResponseEntity<PagedResources<Resource<BRole>>> getAllRolesByPermission(
+            @PathVariable final long id,
+            final Pageable pageable,
+            final PagedResourcesAssembler<BRole> pageAssembler
+    ) {
         Page<BRole> page = permissionService.getAllRolesByPermissionId(id, pageable);
         Link link = linkTo(methodOn(PermissionController.class).getAllRolesByPermission(id, pageable, pageAssembler))
                 .withSelfRel();

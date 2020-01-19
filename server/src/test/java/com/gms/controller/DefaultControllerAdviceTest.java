@@ -38,8 +38,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static com.gms.testutil.EntityUtil.getSampleUserResource;
-import static com.gms.testutil.StringUtil.*;
+import static com.gms.testutil.StringUtil.EXAMPLE_EMAIL;
+import static com.gms.testutil.StringUtil.EXAMPLE_LAST_NAME;
+import static com.gms.testutil.StringUtil.EXAMPLE_NAME;
+import static com.gms.testutil.StringUtil.EXAMPLE_PASSWORD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,34 +56,94 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 public class DefaultControllerAdviceTest {
 
-    @Autowired private WebApplicationContext context;
-    private ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
+    /**
+     * Instance of {@link WebApplicationContext}.
+     */
+    @Autowired
+    private WebApplicationContext context;
+    /**
+     * Instance of {@link ObjectMapper}.
+     */
+    private final ObjectMapper objectMapper = GmsSecurityUtil.getObjectMapper();
 
-    @Autowired private FilterChainProxy springSecurityFilterChain;
+    /**
+     * Instance of {@link FilterChainProxy}.
+     */
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
 
-    @Autowired private SecurityConst sc;
-    @Autowired private DefaultConst dc;
+    /**
+     * Instance of {@link SecurityConst}.
+     */
+    @Autowired
+    private SecurityConst sc;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
+    @Autowired
+    private DefaultConst dc;
 
-    @Autowired private AppService appService;
-    @Autowired private ConfigurationService configService;
-    @Autowired private MessageResolver msg;
-    @Autowired private EUserRepository userRepository;
-    @Autowired private EOwnedEntityRepository entityRepository;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link ConfigurationService}.
+     */
+    @Autowired
+    private ConfigurationService configService;
+    /**
+     * Instance of {@link MessageResolver}.
+     */
+    @Autowired
+    private MessageResolver msg;
+    /**
+     * Instance of {@link EUserRepository}.
+     */
+    @Autowired
+    private EUserRepository userRepository;
+    /**
+     * Instance of {@link EOwnedEntityRepository}.
+     */
+    @Autowired
+    private EOwnedEntityRepository entityRepository;
 
+    /**
+     * Instance of {@link MockMvc}.
+     */
     private MockMvc mvc;
 
+    /**
+     * Header to be used for sending authentication credentials.
+     */
     private String authHeader;
+    /**
+     * Type of the authorization token.
+     */
     private String tokenType;
+    /**
+     * Access token used to get access to secured resources.
+     */
     private String accessToken;
+    /**
+     * Base path for the API.
+     */
     private String apiPrefix;
 
+    /**
+     * An alphanumeric random generator.
+     */
     private final GMSRandom random = new GMSRandom(10);
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc =  GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
+        mvc = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
         apiPrefix = dc.getApiBasePath();
         authHeader = sc.getATokenHeader();
@@ -88,34 +152,42 @@ public class DefaultControllerAdviceTest {
         accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleNotFoundEntityException() throws Exception {
         doNotFound("user");
         doNotFound("entity");
     }
 
-    private void doNotFound(String whichOne) throws Exception  {
-        final Long INVALID_ID = -999999999999999999L;
+    private void doNotFound(final String whichOne) throws Exception {
+        final long invalidId = -999999999999999999L;
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         EOwnedEntity e = entityRepository.save(EntityUtil.getSampleEntity(random.nextString()));
-        Long userId = INVALID_ID;
+        Long userId = invalidId;
         Long entityId = e.getId();
 
-        switch (whichOne) {
-            case "entity":
-                entityId = INVALID_ID;
-                userId = u.getId();
-                break;
-            default: //"user"
+        //"user"
+        if ("entity".equals(whichOne)) {
+            entityId = invalidId;
+            userId = u.getId();
         }
 
-        mvc.perform(post(apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}", userId, entityId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(new ArrayList<>()))
+        mvc.perform(post(
+                apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}",
+                userId,
+                entityId
+                )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(authHeader, tokenType + " " + accessToken)
+                        .content(objectMapper.writeValueAsString(new ArrayList<>()))
         ).andExpect(status().isNotFound());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleGmsSecurityException() throws Exception {
         RefreshTokenPayload payload = new RefreshTokenPayload(null);
@@ -124,20 +196,31 @@ public class DefaultControllerAdviceTest {
         checkResult(doRequest(payload));
     }
 
-    private void checkResult(MvcResult mvcResult) throws UnsupportedEncodingException, JSONException {
+    private void checkResult(final MvcResult mvcResult) throws UnsupportedEncodingException, JSONException {
         JSONObject res = new JSONObject(mvcResult.getResponse().getContentAsString());
-        assertEquals("HttpStatuses do not match.", res.getInt("status"), HttpStatus.UNAUTHORIZED.value());
-        assertEquals("Error messages do not match.", res.getString("error"), msg.getMessage("security.unauthorized"));
-        assertEquals("Paths do not match.", res.getString("path"), dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
+        assertEquals("HttpStatuses do not match.", HttpStatus.UNAUTHORIZED.value(), res.getInt("status"));
+        assertEquals(
+                "Error messages do not match.",
+                res.getString("error"),
+                msg.getMessage("security.unauthorized")
+        );
+        assertEquals(
+                "Paths do not match.",
+                res.getString("path"),
+                dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL
+        );
     }
 
-    private MvcResult doRequest(RefreshTokenPayload payload) throws Exception {
+    private MvcResult doRequest(final RefreshTokenPayload payload) throws Exception {
         return mvc.perform(
                 post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isUnauthorized()).andReturn();
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleGmsGeneralException() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
@@ -146,18 +229,19 @@ public class DefaultControllerAdviceTest {
             configService.setUserRegistrationAllowed(false);
         }
 
-        Resource<EUser> resource = EntityUtil.getSampleUserResource();
+        Resource<EUser> resource = getSampleUserResource();
         final MockHttpServletResponse result = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andReturn().getResponse();
 
-        assertTrue("Status expected: not <404> but was:<404>", result.getStatus() != HttpStatus.NOT_FOUND.value());
+        assertNotEquals("Status expected: not <404> but was:<404>", HttpStatus.NOT_FOUND.value(), result.getStatus());
 
         JSONObject resObj = new JSONObject(result.getContentAsString());
 
         String suffix = msg.getMessage("request.finished.KO"); // request is not supposed to finish ok in this scenario
-        assertTrue("Request is supposed to finish KO in this scenario", resObj.getString(dc.getResMessageHolder()).endsWith(suffix));
+        assertTrue("Request is supposed to finish KO in this scenario",
+                resObj.getString(dc.getResMessageHolder()).endsWith(suffix));
 
         // restart initial config
         if (initial) {
@@ -165,6 +249,9 @@ public class DefaultControllerAdviceTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleTransactionSystemException() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
@@ -174,7 +261,7 @@ public class DefaultControllerAdviceTest {
         }
 
         final String r = random.nextString();
-        EUser u = new EUser(null ,"a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
+        EUser u = new EUser(null, "a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
                 EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         Resource<EUser> resource = new Resource<>(u);
         mvc.perform(
@@ -188,6 +275,9 @@ public class DefaultControllerAdviceTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
         boolean initial = configService.isUserRegistrationAllowed();
@@ -214,4 +304,5 @@ public class DefaultControllerAdviceTest {
             configService.setUserRegistrationAllowed(false);
         }
     }
+
 }

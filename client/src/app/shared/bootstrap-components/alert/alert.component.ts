@@ -37,7 +37,8 @@ export class AlertComponent implements OnInit {
   @Input() dismissMilliseconds = 20000;
 
   /**
-   * Type of the alert. Current available values: 'success', 'info', 'warning', 'danger', 'primary', 'secondary', 'light' and 'dark'.
+   * Type of the alert. Current available values: 'success', 'info', 'warning', 'danger', 'primary', 'secondary',
+   * 'light' and 'dark'.
    */
   @Input() type = 'info';
 

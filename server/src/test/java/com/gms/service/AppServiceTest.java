@@ -23,19 +23,50 @@ import org.springframework.test.util.ReflectionTestUtils;
 @SpringBootTest(classes = Application.class)
 public class AppServiceTest {
 
-    @Autowired private BAuthorizationRepository authReporitory;
-    @Autowired private EUserRepository userRepository;
-    @Autowired private EOwnedEntityRepository entityRepository;
-    @Autowired private BRoleRepository roleRepository;
-    @Autowired private BPermissionRepository permissionRepository;
-    @Autowired private BConfigurationRepository configRepository;
+    /**
+     * Instance of {@link BAuthorizationRepository}.
+     */
+    @Autowired
+    private BAuthorizationRepository authRepository;
+    /**
+     * Instance of {@link EUserRepository}.
+     */
+    @Autowired
+    private EUserRepository userRepository;
+    /**
+     * Instance of {@link EOwnedEntityRepository}.
+     */
+    @Autowired
+    private EOwnedEntityRepository entityRepository;
+    /**
+     * Instance of {@link BRoleRepository}.
+     */
+    @Autowired
+    private BRoleRepository roleRepository;
+    /**
+     * Instance of {@link BPermissionRepository}.
+     */
+    @Autowired
+    private BPermissionRepository permissionRepository;
+    /**
+     * Instance of {@link BConfigurationRepository}.
+     */
+    @Autowired
+    private BConfigurationRepository configRepository;
 
-    @Autowired private AppService appService;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void isInitialLoadOKTest() {
         // clean
-        authReporitory.deleteAll();
+        authRepository.deleteAll();
         userRepository.deleteAll();
         entityRepository.deleteAll();
         roleRepository.deleteAll();
@@ -47,4 +78,5 @@ public class AppServiceTest {
         // create default config
         Assert.assertTrue(appService.isInitialLoadOK());
     }
+
 }

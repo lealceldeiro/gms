@@ -18,9 +18,19 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(classes = Application.class)
 public class ApplicationTest {
 
-    @Autowired AppService appService;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Sample arguments.
+     */
     private final String[] noArgs = {};
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void mainTest() {
         Runnable runnable = () -> Application.main(noArgs);
@@ -28,21 +38,31 @@ public class ApplicationTest {
         thread.start();
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void configureTest() {
         Application app = new Application();
         assertNotNull(app.configure(new SpringApplicationBuilder(Application.class)));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void commandLineRunnerBeanCreationIsOK() {
         Application app = new Application();
         assertNotNull(app.commandLineRunner(appService));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void bCryptPasswordEncoderTest() {
         Application app = new Application();
         assertNotNull(app.bCryptPasswordEncoder());
     }
+
 }

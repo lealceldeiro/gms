@@ -26,16 +26,40 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class EOwnedEntityTest {
 
+    /**
+     * A sample "name" value.
+     */
     private final String name = "sampleN";
+    /**
+     * A sample "username" value.
+     */
     private final String username = "sampleU";
+    /**
+     * A sample "description" value.
+     */
     private final String description = "sampleD";
-    private final int MAX_RANGE_255 = 255;
-    private final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * A range number for generating strings with lengths in-between.
+     */
+    private static final int MAX_RANGE_255 = 255;
+    /**
+     * A range number for generating strings with lengths in-between.
+     */
+    private static final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * Instance for testing purposes of {@link EOwnedEntity}.
+     */
     private EOwnedEntity entity;
+    /**
+     * Instance for testing purposes of {@link EOwnedEntity}.
+     */
     private EOwnedEntity entity3;
 
     //region persistence constraints validations
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void checkValidEntity() {
         cleanEntity();
@@ -44,76 +68,135 @@ public class EOwnedEntityTest {
         assertTrue(cv.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotBlank() {
         propertyIsNot("", username, description, CodeI18N.FIELD_NOT_BLANK, "name property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotNull() {
         propertyIsNot(null, username, description, CodeI18N.FIELD_NOT_NULL, "name property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void nameIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), username, description, CodeI18N.FIELD_SIZE, "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                username,
+                description,
+                CodeI18N.FIELD_SIZE,
+                "name property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotBlank() {
         propertyIsNot(name, "", description, CodeI18N.FIELD_NOT_BLANK, "username property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotNull() {
         propertyIsNot(name, null, description, CodeI18N.FIELD_NOT_NULL, "username property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotOutOfRange() {
-        propertyIsNot(name, StringUtil.createJString(MAX_RANGE_255 + 1), description, CodeI18N.FIELD_SIZE, "username property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                name,
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                description,
+                CodeI18N.FIELD_SIZE,
+                "username property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsNotWithInvalidPattern() {
         String[] invalidUsername = StringUtil.INVALID_USERNAME;
-        for (String username: invalidUsername) {
-            propertyIsNot(name, username, description, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
+        for (String iUsername : invalidUsername) {
+            propertyIsNot(name, iUsername, description, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
                     "username property does not fulfill the username pattern restrictions");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void usernameIsValidWithValidPattern() {
-        EOwnedEntity e;
+        EOwnedEntity iEntity;
         String[] validUsername = StringUtil.VALID_USERNAME;
-        for (String username: validUsername) {
-            e = new EOwnedEntity(name, username, description);
-            assertTrue("Owned entity is not valid with a valid username: " + username, PersistenceValidation.validate(e).isEmpty());
+        for (String iUsername : validUsername) {
+            iEntity = new EOwnedEntity(name, iUsername, description);
+            assertTrue(
+                    "Owned entity is not valid with a valid username: " + iUsername,
+                    PersistenceValidation.validate(iEntity).isEmpty()
+            );
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void descriptionIsNotBlank() {
         propertyIsNot(name, username, "", CodeI18N.FIELD_NOT_BLANK, "description property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void descriptionIsNotNull() {
         propertyIsNot(name, username, null, CodeI18N.FIELD_NOT_NULL, "description property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void descriptionIsNotOutOfRange() {
-        propertyIsNot(name, username, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
+        propertyIsNot(
+                name,
+                username,
+                StringUtil.createJString(MAX_RANGE_10485760 + 1),
+                CodeI18N.FIELD_SIZE,
+                "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760
+                        + " characters"
+        );
     }
 
-    private void propertyIsNot(String name, String username, String description, String messageTest, String assertMessage) {
-        EOwnedEntity e = new EOwnedEntity(name, username, description);
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
+    private void propertyIsNot(final String nameArg, final String usernameArg, final String descriptionArg,
+                               final String messageTest, final String assertMessage) {
+        EOwnedEntity e = new EOwnedEntity(nameArg, usernameArg, descriptionArg);
+        assertTrue(assertMessage, PersistenceValidation.isObjectInvalidWithErrorMessage(e, messageTest));
     }
     //endregion
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getName() {
         cleanEntity();
@@ -122,6 +205,9 @@ public class EOwnedEntityTest {
         assertEquals(entity.getName(), name);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getUsername() {
         cleanEntity();
@@ -130,6 +216,9 @@ public class EOwnedEntityTest {
         assertEquals(entity.getUsername(), username);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getDescription() {
         cleanEntity();
@@ -138,13 +227,19 @@ public class EOwnedEntityTest {
         assertEquals(entity.getDescription(), description);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
 
-        assertEquals(entity.hashCode(),entity3.hashCode());
+        assertEquals(entity.hashCode(), entity3.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -152,6 +247,9 @@ public class EOwnedEntityTest {
         assertEquals(entity, entity3);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -169,12 +267,11 @@ public class EOwnedEntityTest {
         assertEntityValidity(entity3);
     }
 
-    private void assertEntityValidity(EOwnedEntity entity) {
-        assertNull(ReflectionTestUtils.getField(entity, "name"));
-        assertNull(ReflectionTestUtils.getField(entity, "username"));
-        assertNull(ReflectionTestUtils.getField(entity, "description"));
+    private void assertEntityValidity(final EOwnedEntity entityArg) {
+        assertNull(ReflectionTestUtils.getField(entityArg, "name"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "username"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "description"));
     }
-
 
     private void prepareEntitiesForEqualityTest() {
         cleanEntity();
@@ -182,9 +279,11 @@ public class EOwnedEntityTest {
         prepareEntityForEqualityTest(entity);
         prepareEntityForEqualityTest(entity3);
     }
-    private void prepareEntityForEqualityTest(EOwnedEntity e) {
-        ReflectionTestUtils.setField(e, "name", name);
-        ReflectionTestUtils.setField(e, "username", username);
-        ReflectionTestUtils.setField(e, "description", description);
+
+    private void prepareEntityForEqualityTest(final EOwnedEntity entityArg) {
+        ReflectionTestUtils.setField(entityArg, "name", name);
+        ReflectionTestUtils.setField(entityArg, "username", username);
+        ReflectionTestUtils.setField(entityArg, "description", description);
     }
+
 }

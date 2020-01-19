@@ -17,11 +17,9 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(classes = Application.class)
 public class SQLExceptionCodeTest {
 
-    @Test
-    public void constructorTest() {
-        assertNotNull(SQLExceptionCode.getInstance());
-    }
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void constantsAreNotNull() {
         assertNotNull(SQLExceptionCode.NO_DATA);
@@ -74,8 +72,12 @@ public class SQLExceptionCodeTest {
         assertNotNull(SQLExceptionCode.EXTERNAL_ROUTINE_INVOCATION_EXCEPTION);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void fieldsAreNotRepeated() {
         StaticUtil.testFieldsAreNorRepeated(SQLExceptionCode.class);
     }
+
 }

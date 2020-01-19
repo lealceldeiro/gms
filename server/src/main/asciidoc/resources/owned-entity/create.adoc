@@ -1,6 +1,8 @@
 [[resource-owned-entity-create]]
 ==== Registering a new owned entity
-A `POST` request adds a new owned entity. This service is only available to users with administrative permissions to register new owned entities.
+
+A `POST` request adds a new owned entity.
+This service is only available to users with administrative permissions to register new owned entities.
 
 include::../../util/H-REQUEST.adoc[]
 
