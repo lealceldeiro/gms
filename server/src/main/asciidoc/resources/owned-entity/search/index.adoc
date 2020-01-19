@@ -1,5 +1,6 @@
 [[resources-owned-entity-search]]
 ==== Searching for owned entities
+
 The following searches can be performed over the owned entity resource.
 
 include::username.adoc[]

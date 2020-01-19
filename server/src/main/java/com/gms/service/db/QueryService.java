@@ -16,43 +16,50 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class QueryService {
 
+    /**
+     * An instance of an {@link EntityManager}.
+     */
     private final EntityManager entityManager;
 
     /**
      * Creates a query.
+     *
      * @param qls Hql or Sql string.
      * @return An executable {@link Query}
      */
-    public Query createQuery(String qls) {
+    public Query createQuery(final String qls) {
         return entityManager.createQuery(qls);
     }
 
     /**
      * Creates a query and map the result to a domain class.
-     * @param qls Hql or Sql string.
+     *
+     * @param qls   Hql or Sql string.
      * @param clazz Domain class to which the result will be mapped to.
      * @return An executable {@link Query}
      */
-    public Query createQuery(String qls, Class<?> clazz) {
+    public Query createQuery(final String qls, final Class<?> clazz) {
         return entityManager.createQuery(qls, clazz);
     }
 
     /**
      * Creates a query.
+     *
      * @param sql Sql string.
      * @return An executable {@link Query}
      */
-    public Query createNativeQuery(String sql) {
+    public Query createNativeQuery(final String sql) {
         return entityManager.createNativeQuery(sql);
     }
 
     /**
      * Creates a query and map the result to a domain class.
-     * @param sql Sql string.
+     *
+     * @param sql   Sql string.
      * @param clazz Domain class to which the result will be mapped to.
      * @return An executable {@link Query}
      */
-    public Query createNativeQuery(String sql, Class<?> clazz) {
+    public Query createNativeQuery(final String sql, final Class<?> clazz) {
         return entityManager.createNativeQuery(sql, clazz);
     }
 

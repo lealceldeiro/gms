@@ -4,9 +4,7 @@ package com.gms.util.i18n;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class CodeI18N {
-
-    private static final CodeI18N INSTANCE = new CodeI18N();
+public final class CodeI18N {
 
     /**
      * Code for the message indicating a field must not be blank.
@@ -35,10 +33,10 @@ public class CodeI18N {
      */
     public static final String FIELD_PATTERN_INCORRECT_USERNAME = "validation.field.incorrect.pattern.username";
 
-    private CodeI18N() {}
-
-    public static CodeI18N getInstance() {
-        return INSTANCE;
+    /**
+     * Privates constructor to make class un-instantiable.
+     */
+    private CodeI18N() {
     }
 
 }

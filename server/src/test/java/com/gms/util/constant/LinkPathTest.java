@@ -16,15 +16,21 @@ import org.springframework.test.util.ReflectionTestUtils;
 @SpringBootTest(classes = Application.class)
 public class LinkPathTest {
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getWhat() {
         Object field = ReflectionTestUtils.getField(LinkPath.class, "LINK");
         String link = field != null ? field.toString() : "";
         field = ReflectionTestUtils.getField(LinkPath.class, "HREF");
         String href = field != null ? field.toString() : "";
-        Assert.assertEquals(LinkPath.get("test"), String.format("%s.%s.%s", link, "test", href) );
+        Assert.assertEquals(LinkPath.get("test"), String.format("%s.%s.%s", link, "test", href));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getSelf() {
         Object field = ReflectionTestUtils.getField(LinkPath.class, "LINK");
@@ -33,9 +39,12 @@ public class LinkPathTest {
         String href = field != null ? field.toString() : "";
         field = ReflectionTestUtils.getField(LinkPath.class, "SELF");
         String self = field != null ? field.toString() : "";
-        Assert.assertEquals(LinkPath.get(self), String.format("%s.%s.%s", link, self, href) );
+        Assert.assertEquals(LinkPath.get(self), String.format("%s.%s.%s", link, self, href));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void get() {
         Object field = ReflectionTestUtils.getField(LinkPath.class, "LINK");
@@ -44,6 +53,7 @@ public class LinkPathTest {
         String href = field != null ? field.toString() : "";
         field = ReflectionTestUtils.getField(LinkPath.class, "SELF");
         String self = field != null ? field.toString() : "";
-        Assert.assertEquals(LinkPath.get(self), String.format("%s.%s.%s", link, self, href) );
+        Assert.assertEquals(LinkPath.get(self), String.format("%s.%s.%s", link, self, href));
     }
+
 }

@@ -1,5 +1,6 @@
 [[resource-owned-entity-get]]
 ==== Getting an owned entity's info
+
 A `GET` request gets an owned entity's information.
 
 include::../../util/H-REQUEST.adoc[]

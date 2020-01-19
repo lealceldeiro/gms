@@ -52,23 +52,28 @@ describe('AllRequestsInterceptor', () => {
     req[1].flush({});
   });
 
-  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and a successful response arrived',
-    () => {
-      httpClient.get(url).subscribe(() => {
-        expect(loaderServiceSpy.start).toHaveBeenCalledTimes(1);
-        expect(loaderServiceSpy.stopAll).toHaveBeenCalledTimes(1);
-      });
-      httpTestingController.expectOne(url).flush({});
+  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and a ' +
+    'successful response arrived', () => {
+    httpClient.get(url).subscribe(() => {
+      expect(loaderServiceSpy.start).toHaveBeenCalledTimes(1);
+      expect(loaderServiceSpy.stopAll).toHaveBeenCalledTimes(1);
     });
+    httpTestingController.expectOne(url).flush({});
+  });
 
-  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and an unsuccessful response arrived',
-    () => {
-      const error: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.UNAUTHORIZED, statusText: 'Server Error', url });
-      httpClient.get(url).subscribe(() => { }, () => {
-        // error
-        expect(loaderServiceSpy.start).toHaveBeenCalledTimes(1);
-        expect(loaderServiceSpy.stopAll).toHaveBeenCalledTimes(1);
-      });
-      httpTestingController.expectOne(url).flush({}, error);
+  it('should call <loader_service>#stopAll when the <loader_service>#start has been called previously and an ' +
+    'unsuccessful response arrived', () => {
+    const error: HttpErrorResponse = new HttpErrorResponse({
+      status: HttpStatusCode.UNAUTHORIZED,
+      statusText: 'Server Error',
+      url
     });
+    httpClient.get(url).subscribe(() => {
+    }, () => {
+      // error
+      expect(loaderServiceSpy.start).toHaveBeenCalledTimes(1);
+      expect(loaderServiceSpy.stopAll).toHaveBeenCalledTimes(1);
+    });
+    httpTestingController.expectOne(url).flush({}, error);
+  });
 });

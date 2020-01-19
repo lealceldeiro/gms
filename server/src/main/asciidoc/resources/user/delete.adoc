@@ -1,5 +1,6 @@
 [[resource-user-delete]]
 ==== Deleting a user's info
+
 A `DELETE` request deletes a user's information.
 
 include::../../util/H-REQUEST.adoc[]

@@ -18,24 +18,49 @@ import org.springframework.test.util.ReflectionTestUtils;
 @SpringBootTest(classes = Application.class)
 public class DAOProviderTest {
 
-    @Autowired private QueryService queryService;
+    /**
+     * Instance of {@link QueryService}.
+     */
+    @Autowired
+    private QueryService queryService;
 
+    /**
+     * Instance of {@link DAOProvider}.
+     */
     private DAOProvider daoProvider;
-    private final static String URL = "url";
-    private final static String URL_VALUE = "jdbc:postgresql://127.0.0.1/gms";
-    private final static String URL_VALUE_UNKNOWN = "jdbc:unknownValue";
-    private final static String URL_VALUE_UNKNOWN_MESSAGE = "DAOProvider did not throw NullPointerException with an" +
-            "unknownValue db connection url";
-    private final static String MESSAGE_WRONG_CONSTRUCTOR_PARAM = "DAOProvider did not throw NullPointerException with a" +
-            "null value as QueryService param in the constructor";
 
+    /**
+     * "url" string.
+     */
+    private static final String URL = "url";
+    /**
+     * BD connection string.
+     */
+    private static final String URL_VALUE = "jdbc:postgresql://127.0.0.1/gms";
+    /**
+     * DB invalid connection string.
+     */
+    private static final String URL_VALUE_UNKNOWN = "jdbc:unknownValue";
+    /**
+     * Assert message.
+     */
+    private static final String URL_VALUE_UNKNOWN_MESSAGE = "DAOProvider did not throw NullPointerException with an "
+            + "unknownValue db connection url";
+    /**
+     * Assert message.
+     */
+    private static final String MESSAGE_WRONG_CONSTRUCTOR_PARAM = "DAOProvider did not throw NullPointerException "
+            + "with a null value as QueryService param in the constructor";
+
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
-    public void DAOProviderConstructorMustProvideQueryServiceInstance() {
+    public void dAOProviderConstructorMustProvideQueryServiceInstance() {
         boolean threwException = false;
         try {
             new DAOProvider(null);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             threwException = true;
         }
         if (!threwException) {
@@ -43,6 +68,9 @@ public class DAOProviderTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getBAuthorizationDAOOK() {
         daoProvider = new DAOProvider(queryService);
@@ -50,6 +78,9 @@ public class DAOProviderTest {
         Assert.assertNotNull(daoProvider.getBAuthorizationDAO());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getBPermissionDAOOK() {
         daoProvider = new DAOProvider(queryService);
@@ -57,6 +88,9 @@ public class DAOProviderTest {
         Assert.assertNotNull(daoProvider.getBPermissionDAO());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getBAuthorizationDAOThrowNullPointer() {
         daoProvider = new DAOProvider(queryService);
@@ -64,8 +98,7 @@ public class DAOProviderTest {
         boolean threwException = false;
         try {
             Assert.assertNotNull(daoProvider.getBAuthorizationDAO());
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             threwException = true;
         }
         if (!threwException) {
@@ -73,6 +106,9 @@ public class DAOProviderTest {
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getBPermissionDAOOKThrowNullPointer() {
         daoProvider = new DAOProvider(queryService);
@@ -80,12 +116,12 @@ public class DAOProviderTest {
         boolean threwException = false;
         try {
             Assert.assertNotNull(daoProvider.getBPermissionDAO());
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             threwException = true;
         }
         if (!threwException) {
             Assert.fail(URL_VALUE_UNKNOWN_MESSAGE);
         }
     }
+
 }

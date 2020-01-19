@@ -14,10 +14,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.validation.ConstraintViolation;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -27,22 +32,56 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class BRoleTest {
 
+    /**
+     * "label" field value.
+     */
     private final String labelS = "sampleL";
+    /**
+     * "description" field value.
+     */
     private final String descriptionS = "sampleD";
+    /**
+     * "enabled" field value.
+     */
     private final Boolean enabledS = true;
+    /**
+     * "permissions" field value.
+     */
     private final Set<BPermission> permissionsS = new HashSet<>();
-    private final int MAX_RANGE_255 = 255;
-    private final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_255 = 255;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_10485760 = 10485760;
+    /**
+     * Instance of {@link BRole}.
+     */
     private BRole entity0;
+    /**
+     * Instance of {@link BRole}.
+     */
     private BRole entity1;
-    private BPermission sampleP = EntityUtil.getSamplePermission();
+    /**
+     * Instance of {@link BPermission}.
+     */
+    private final BPermission sampleP = EntityUtil.getSamplePermission();
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         permissionsS.add(EntityUtil.getSamplePermission());
     }
 
     //region persistence constraints validations
+
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void checkValidEntity() {
         cleanEntity0();
@@ -51,71 +90,107 @@ public class BRoleTest {
         assertTrue(cv.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotBlank() {
         propertyIsNot("", null, CodeI18N.FIELD_NOT_BLANK, "label property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotNull() {
         propertyIsNot(null, null, CodeI18N.FIELD_NOT_NULL, "name property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), null, CodeI18N.FIELD_SIZE, "label property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                null,
+                CodeI18N.FIELD_SIZE,
+                "label property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsNotWithInvalidPattern() {
         String[] invalidLabels = StringUtil.INVALID_USERNAME;
-        for (String label: invalidLabels) {
+        for (String label : invalidLabels) {
             propertyIsNot(label, descriptionS, CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME,
                     "label property does not fulfill the username pattern restrictions");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void labelIsValidWithValidPattern() {
         BRole r;
         String[] validLabels = StringUtil.VALID_USERNAME;
-        for (String label: validLabels) {
+        for (String label : validLabels) {
             r = new BRole(label);
             assertTrue("Role is not valid with a valid label: " + label, PersistenceValidation.validate(r).isEmpty());
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void descriptionIsNotOutOfRange() {
-        propertyIsNot(labelS, StringUtil.createJString(MAX_RANGE_10485760 + 1), CodeI18N.FIELD_SIZE, "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760 + " characters");
+        propertyIsNot(
+                labelS,
+                StringUtil.createJString(MAX_RANGE_10485760 + 1),
+                CodeI18N.FIELD_SIZE,
+                "description property must not be of size lesser than 0 and larger than " + MAX_RANGE_10485760
+                        + " characters"
+        );
     }
 
-    public void propertyIsNot(String label, String description, String messageTest, String assertMessage) {
+    private void propertyIsNot(final String label, final String description, final String messageTest,
+                               final String assertMessage) {
         BRole e = new BRole(label);
         if (description != null) {
             e.setDescription(description);
         }
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(e, messageTest));
+        assertTrue(assertMessage, PersistenceValidation.isObjectInvalidWithErrorMessage(e, messageTest));
     }
     //endregion
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void addPermission() {
         cleanEntity0();
         entity0.addPermission(sampleP);
 
-        final HashSet<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
+        final Collection<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
         assertTrue(permissions != null && permissions.contains(sampleP));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void removePermission() {
-        Set<BPermission> auxP = new HashSet<>();
+        Collection<BPermission> auxP = new HashSet<>();
         auxP.add(sampleP);
 
         cleanEntity0();
         ReflectionTestUtils.setField(entity0, "permissions", auxP);
-        HashSet<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
+        Collection<?> permissions = (HashSet<?>) ReflectionTestUtils.getField(entity0, "permissions");
         assertTrue(permissions != null && permissions.contains(sampleP));
 
         entity0.removePermission(sampleP);
@@ -123,6 +198,9 @@ public class BRoleTest {
         assertTrue(permissions != null && !permissions.contains(sampleP));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -130,6 +208,9 @@ public class BRoleTest {
         assertEquals(entity0, entity1);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -137,6 +218,9 @@ public class BRoleTest {
         assertEquals(entity0.hashCode(), entity1.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getLabel() {
         cleanEntity0();
@@ -145,6 +229,9 @@ public class BRoleTest {
         assertEquals(entity0.getLabel(), labelS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getDescription() {
         cleanEntity0();
@@ -153,6 +240,9 @@ public class BRoleTest {
         assertEquals(entity0.getDescription(), descriptionS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getEnabled() {
         cleanEntity0();
@@ -161,6 +251,9 @@ public class BRoleTest {
         assertEquals(entity0.getEnabled(), enabledS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getPermissions() {
         cleanEntity0();
@@ -169,6 +262,9 @@ public class BRoleTest {
         assertEquals(entity0.getPermissions(), permissionsS);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setDescription() {
         cleanEntity0();
@@ -177,6 +273,9 @@ public class BRoleTest {
         assertEquals(descriptionS, ReflectionTestUtils.getField(entity0, "description"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setEnabled() {
         cleanEntity0();
@@ -185,6 +284,9 @@ public class BRoleTest {
         assertEquals(enabledS, ReflectionTestUtils.getField(entity0, "enabled"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setPermissions() {
         cleanEntity0();
@@ -193,6 +295,9 @@ public class BRoleTest {
         assertEquals(permissionsS, ReflectionTestUtils.getField(entity0, "permissions"));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -218,7 +323,7 @@ public class BRoleTest {
         prepareEntityForEqualityTest(entity1);
     }
 
-    private void assertEntityCleanState(BRole entity) {
+    private void assertEntityCleanState(final BRole entity) {
         assertNull(ReflectionTestUtils.getField(entity, "label"));
         assertNull(ReflectionTestUtils.getField(entity, "description"));
         Object enabled = ReflectionTestUtils.getField(entity, "enabled");
@@ -227,10 +332,11 @@ public class BRoleTest {
         assertNull(ReflectionTestUtils.getField(entity, "permissions"));
     }
 
-    private void prepareEntityForEqualityTest(BRole entity) {
+    private void prepareEntityForEqualityTest(final BRole entity) {
         ReflectionTestUtils.setField(entity, "label", labelS);
         ReflectionTestUtils.setField(entity, "description", descriptionS);
         ReflectionTestUtils.setField(entity, "enabled", enabledS);
         ReflectionTestUtils.setField(entity, "permissions", permissionsS);
     }
+
 }

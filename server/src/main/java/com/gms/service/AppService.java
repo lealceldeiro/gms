@@ -19,32 +19,54 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class AppService {
 
-     private final ConfigurationService configurationService;
-     private final PermissionService permissionService;
-     private final RoleService roleService;
-     private final UserService userService;
-     private final OwnedEntityService oeService;
-     private Boolean initialLoadOK;
+    /**
+     * Instance of a {@link ConfigurationService}.
+     */
+    private final ConfigurationService configurationService;
+
+    /**
+     * Instance of a {@link PermissionService}.
+     */
+    private final PermissionService permissionService;
+    /**
+     * Instance of a {@link RoleService}.
+     */
+    private final RoleService roleService;
+    /**
+     * Instance of a {@link UserService}.
+     */
+    private final UserService userService;
+    /**
+     * Instance of a {@link OwnedEntityService}.
+     */
+    private final OwnedEntityService oeService;
+    /**
+     * Indicates whether the application has performed an initial load ({@code null}), loaded OK ({@code true} or not
+     * ({@code false}).
+     */
+    private Boolean initialLoadOK;
 
     /**
      * Returns whether the application started successfully or not. In order to start the application successfully there
      * are some requisites that must be fulfilled.
-     * @return <code>true</code> if the application started successfully, <code>false</code> otherwise.
+     *
+     * @return {@code true} if the application started successfully, {@code false} otherwise.
      */
-     public boolean isInitialLoadOK() {
-         if (initialLoadOK == null) {
-             boolean ok = true;
-             if (!configurationService.configurationExist()) { //first app start up
-                 ok = configurationService.createDefaultConfig();
-                 ok = ok && permissionService.createDefaultPermissions();
-                 ok = ok && roleService.createDefaultRole() != null;
-                 ok = ok && userService.createDefaultUser() != null;
-                 ok = ok && oeService.createDefaultEntity() != null;
-                 ok = ok && configurationService.assignDefaultUserToEntityWithRole();
-             }
-             initialLoadOK = ok;
-         }
-         return initialLoadOK;
-     }
+    public boolean isInitialLoadOK() {
+        if (initialLoadOK == null) {
+            boolean ok = true;
+            if (!configurationService.isApplicationConfigured()) { //first app start up
+                ok = configurationService.isDefaultConfigurationCreated();
+                ok = ok && permissionService.areDefaultPermissionsCreatedSuccessfully();
+                ok = ok && roleService.createDefaultRole() != null;
+                ok = ok && userService.createDefaultUser() != null;
+                ok = ok && oeService.createDefaultEntity() != null;
+                ok = ok && configurationService.isDefaultUserAssignedToEntityWithRole();
+            }
+            initialLoadOK = ok;
+        }
+
+        return initialLoadOK;
+    }
 
 }

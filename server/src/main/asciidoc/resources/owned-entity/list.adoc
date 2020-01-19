@@ -1,5 +1,6 @@
 [[resource-owned-entity-list]]
 ==== Listing owned entities
+
 A `GET` request lists owned entities.
 
 include::../../util/H-REQUEST.adoc[]

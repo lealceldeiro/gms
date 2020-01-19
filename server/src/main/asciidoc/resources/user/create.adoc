@@ -1,6 +1,9 @@
 [[resource-user-register]]
 ==== Registering a new user
-A `POST` request adds a new user. This service is only available to users with administrative permissions to register new users directly without going through the signing up process. When using this service the user is created by default with the option `emailVerfied` to true which means she/he won't have to go through the verification email process in order to activate the account.
+
+A `POST` request adds a new user.
+This service is only available to users with administrative permissions to register new users directly without going through the signing up process.
+When using this service the user is created by default with the option `emailVerfied` to true which means she/he won't have to go through the verification email process in order to activate the account.
 
 include::../../util/H-REQUEST.adoc[]
 
@@ -20,7 +23,9 @@ include::{snippets}/rest-user-controller-test/create/http-response.adoc[]
 
 [[resource-user-signup]]
 ==== Signing up a new user
-A `POST` request adds a new user. This service is only available if the system is configured to accept new users via signing up process.
+
+A `POST` request adds a new user.
+This service is only available if the system is configured to accept new users via signing up process.
 
 *Request*
 

@@ -61,7 +61,8 @@ export class StorageService {
    * @param cookieService CookieService for storing values in cookies.
    * @param localStorage LocalStorage for storing values in the browser local storage.
    */
-  constructor(private cookieService: CookieService, private localStorage: LocalStorage) { } // todo: change to StorageMap
+  constructor(private cookieService: CookieService, private localStorage: LocalStorage) {
+  }
 
   // region local storage
   /**
@@ -90,11 +91,12 @@ export class StorageService {
    * @param value Value to be stored
    */
   private trySet(key: string, value: any): void {
-    this.localStorage.setItem(key, value).subscribe(() => { }, () => {
+    this.localStorage.setItem(key, value).subscribe(() => {
+    }, () => {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
       } else {
-        console.warn(`Couldn't set ${value} under key ${key}`);
+        console.warn(`Couldn't set ${ value } under key ${ key }`);
       }
     });
   }
@@ -159,12 +161,17 @@ export class StorageService {
    */
   private tryClear(key: string): Observable<boolean> {
     return this.localStorage.removeItem(key).pipe(tap(
-      (removed) => { if (removed) { this.cache[key].next(null); } }, // null for next value in this.cache$[key]
+      (removed) => {
+        if (removed) {
+          this.cache[key].next(null);
+        }
+      }, // null for next value in this.cache$[key]
       () => {
-        this.tryClearCount[key]++ < 2 ? this.tryClear(key) : console.warn(`Couldn't delete value for ${key}`);
+        this.tryClearCount[key]++ < 2 ? this.tryClear(key) : console.warn(`Couldn't delete value for ${ key }`);
       }
     ));
   }
+
   // endregion
 
   // region cookies
@@ -227,6 +234,7 @@ export class StorageService {
 
     return this.booleanSubj$;
   }
+
   // endregion
 
   /**

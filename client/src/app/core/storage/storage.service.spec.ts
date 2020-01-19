@@ -13,7 +13,10 @@ describe('StorageService', () => {
   const objectValue = { mKey: 'mKey' };
   const objectValue$ = new BehaviorSubject(objectValue).asObservable();
   const boolObs$ = new BehaviorSubject(true).asObservable();
-  const error$ = new Observable<boolean>(observer => { observer.error(new Error('test error')); observer.complete(); });
+  const error$ = new Observable<boolean>(observer => {
+    observer.error(new Error('test error'));
+    observer.complete();
+  });
 
   let localStorageSpy: jasmine.SpyObj<LocalStorage>;
   let cookieServiceSpy: jasmine.SpyObj<CookieService>;
@@ -22,7 +25,10 @@ describe('StorageService', () => {
   let storageService: StorageService;
 
   beforeEach(() => {
-    cookieServiceSpy = jasmine.createSpyObj('CookieService', ['put', 'putObject', 'get', 'getObject', 'getAll', 'remove', 'removeAll']);
+    cookieServiceSpy = jasmine.createSpyObj(
+      'CookieService',
+      ['put', 'putObject', 'get', 'getObject', 'getAll', 'remove', 'removeAll']
+    );
     cookieServiceSpy.get.and.returnValue(stringValue);
     cookieServiceSpy.getObject.and.returnValue(objectValue);
     cookieServiceSpy.getAll.and.returnValue(objectValue);
@@ -77,7 +83,7 @@ describe('StorageService', () => {
   it('set should return null if the key is not valid', () => {
     storageService['isValidKey'] = () => false;
 
-    expect(storageService.set(`key${getRandomNumber()}`, `value${getRandomNumber()}`)).toBe(null);
+    expect(storageService.set(`key${ getRandomNumber() }`, `value${ getRandomNumber() }`)).toBe(null);
   });
 
   it('should re-try to set the value 2 times more if the first time it fails', fakeAsync(() => {
@@ -87,7 +93,7 @@ describe('StorageService', () => {
     tick();
     expect(localStorageSpy.setItem).toHaveBeenCalledTimes(3);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ob} under key ${key}`);
+    expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ ob } under key ${ key }`);
   }));
 
   it('should get an Observable with the value specified under the key (value is cached)', (done) => {
@@ -145,7 +151,7 @@ describe('StorageService', () => {
   it('putCookie should return null if the key is not valid', () => {
     storageService['isValidKey'] = () => false;
 
-    expect(storageService.putCookie(`key${getRandomNumber()}`, `value${getRandomNumber()}`)).toBe(null);
+    expect(storageService.putCookie(`key${ getRandomNumber() }`, `value${ getRandomNumber() }`)).toBe(null);
   });
 
   it('should get an Observable with the value (object) specified under the key (value is cached)', (done) => {
@@ -186,7 +192,7 @@ describe('StorageService', () => {
 
   it(`should get an Observable with the 'null' value when there is no specified value(object) under the key
     (and it is NOT cached)`, () => {
-    const sampleValue = { mKey: `random ${getRandomNumber()}MKey` };
+    const sampleValue = { mKey: `random ${ getRandomNumber() }MKey` };
     cookieServiceSpy.getObject.and.returnValue(sampleValue);
     storageService.getCookie(key, true).subscribe(val => expect(val).toEqual(sampleValue));
 
@@ -211,10 +217,10 @@ describe('StorageService', () => {
   const valuePutterSetterChecker = (isReset: boolean, newVal: any) => {
     if (!isReset) {
       expect(newVal)
-        .toEqual(objectValue, `cache not set for ${key}: ${JSON.stringify(objectValue)}`);
+        .toEqual(objectValue, `cache not set for ${ key }: ${ JSON.stringify(objectValue) }`);
     } else {
       expect(newVal)
-        .toEqual(stringValue, `cache not set for ${key}: ${stringValue}`);
+        .toEqual(stringValue, `cache not set for ${ key }: ${ stringValue }`);
     }
   };
 });

@@ -16,11 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = Application.class)
 public class CodeI18NTest {
 
-    @Test
-    public void constructorTest() {
-        Assert.assertNotNull(CodeI18N.getInstance());
-    }
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void constantsAreNotNull() {
         Assert.assertNotNull(CodeI18N.FIELD_NOT_BLANK);
@@ -30,8 +28,12 @@ public class CodeI18NTest {
         Assert.assertNotNull(CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void fieldsAreNotRepeated() {
         StaticUtil.testFieldsAreNorRepeated(CodeI18N.class);
     }
+
 }

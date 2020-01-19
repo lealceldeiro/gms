@@ -66,7 +66,8 @@ describe('ErrorInterceptor', () => {
 
   it('should do nothing when InterceptorHelperService#isExcludedFromErrorHandling returns `true`', () => {
     interceptorHelperServiceSpy.isExcludedFromErrorHandling.and.returnValue(true);
-    httpClient.get(url).subscribe(() => { }, (error) => {
+    httpClient.get(url).subscribe(() => {
+    }, (error) => {
       expect(error).toBeTruthy();
       expect(interceptorHelperServiceSpy.isExcludedFromErrorHandling).toHaveBeenCalled();
       expect(notificationServiceSpy.error).not.toHaveBeenCalled();
@@ -89,7 +90,8 @@ describe('ErrorInterceptor', () => {
   });
 
   it('should show as `title` "Error" as default and an empty string as `message`', () => {
-    httpClient.get(url).subscribe(() => { }, (error) => {
+    httpClient.get(url).subscribe(() => {
+    }, (error) => {
       expect(error).toBeTruthy();
       expect(interceptorHelperServiceSpy.isExcludedFromErrorHandling).toHaveBeenCalled();
       expect(notificationServiceSpy.error).toHaveBeenCalled();
@@ -97,13 +99,16 @@ describe('ErrorInterceptor', () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Error');
     });
     // flush response with an HttpErrorResponse in order to meet second condition: event instanceof HttpErrorResponse
-    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: errMock.status, statusText: 'Server Error', url });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
+      status: errMock.status, statusText: 'Server Error', url
+    });
 
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 
   it('should show as `title` "Unauthorized" when status is "Unauthorized"', () => {
-    httpClient.get(url).subscribe(() => { }, () => {
+    httpClient.get(url).subscribe(() => {
+    }, () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Unauthorized');
     });
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
@@ -114,7 +119,8 @@ describe('ErrorInterceptor', () => {
   });
 
   it('should show as `title` "Not found" when status is "Not found"', () => {
-    httpClient.get(url).subscribe(() => { }, () => {
+    httpClient.get(url).subscribe(() => {
+    }, () => {
       expect(notificationServiceSpy.error.calls.first().args[1]).toBe('Not found');
     });
     const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
@@ -125,17 +131,23 @@ describe('ErrorInterceptor', () => {
   });
 
   it('should navigate to base url when a "Not found" error is detected', () => {
-    httpClient.get(url).subscribe(() => { }, () => {
+    httpClient.get(url).subscribe(() => {
+    }, () => {
       expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
       expect(navigateByUrlSpy.calls.first().args[0]).toEqual('/', 'should navigate to `home` once user is logged in');
     });
-    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({ status: HttpStatusCode.NOT_FOUND, statusText: '', url });
+    const copyHttpErr: HttpErrorResponse = new HttpErrorResponse({
+      status: HttpStatusCode.NOT_FOUND,
+      statusText: '',
+      url
+    });
     httpTestingController.expectOne(url).flush({}, copyHttpErr);
   });
 
   it(`should show as title 'Error' as default and add 'title' and message if error object is present with
     both values inside it`, () => {
-    httpClient.get(url).subscribe(() => { }, (error) => {
+    httpClient.get(url).subscribe(() => {
+    }, (error) => {
       expect(error).toBeTruthy();
       expect(interceptorHelperServiceSpy.isExcludedFromErrorHandling).toHaveBeenCalled();
       expect(notificationServiceSpy.error).toHaveBeenCalled();

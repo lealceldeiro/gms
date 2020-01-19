@@ -13,17 +13,24 @@ import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -33,27 +40,66 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = Application.class)
 public class RoleServiceTest {
 
-    @Autowired private RoleService roleService;
-    @Autowired private BRoleRepository roleRepository;
-    @Autowired private BPermissionRepository permissionRepository;
-    @Autowired private AppService appService;
-    @Autowired private DefaultConst dc;
+    /**
+     * Instance of {@link Logger}.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoleServiceTest.class);
 
-    private GMSRandom random = new GMSRandom();
+    /**
+     * Instance of {@link RoleService}.
+     */
+    @Autowired
+    private RoleService roleService;
+    /**
+     * Instance of {@link BRoleRepository}.
+     */
+    @Autowired
+    private BRoleRepository roleRepository;
+    /**
+     * Instance of {@link BPermissionRepository}.
+     */
+    @Autowired
+    private BPermissionRepository permissionRepository;
+    /**
+     * Instance of {@link AppService}.
+     */
+    @Autowired
+    private AppService appService;
+    /**
+     * Instance of {@link DefaultConst}.
+     */
+    @Autowired
+    private DefaultConst dc;
+
+    /**
+     * Instance of {@link GMSRandom}.
+     */
+    private final GMSRandom random = new GMSRandom();
+    /**
+     * An invalid id.
+     */
     private static final long INVALID_ID = -99999999999L;
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
     }
 
-
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createDefaultRole() {
         BRole r = roleRepository.findFirstByLabel(dc.getRoleAdminDefaultLabel());
         assertNotNull("Default role not created", r);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void addPermissionsToRole() {
         BRole r = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
@@ -65,7 +111,7 @@ public class RoleServiceTest {
         BPermission p2 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         assertNotNull(p2);
 
-        List<Long> pIDs = new LinkedList<>();
+        Collection<Long> pIDs = new LinkedList<>();
         pIDs.add(p1.getId());
         pIDs.add(p2.getId());
         try {
@@ -75,17 +121,20 @@ public class RoleServiceTest {
             assertTrue(added.contains(p1.getId()));
             assertTrue(added.contains(p2.getId()));
         } catch (NotFoundEntityException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getLocalizedMessage());
             fail("Could not add permissions to  role");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void addPermissionsNotFoundToRole() {
         BRole r = roleRepository.save(EntityUtil.getSampleRole(random.nextString()));
         assertNotNull(r);
 
-        List<Long> pIDs = new LinkedList<>();
+        Collection<Long> pIDs = new LinkedList<>();
         pIDs.add(INVALID_ID);
 
         boolean success = false;
@@ -93,11 +142,14 @@ public class RoleServiceTest {
             roleService.addPermissionsToRole(r.getId(), pIDs);
         } catch (NotFoundEntityException e) {
             success = true;
-            assertEquals(e.getMessage(), "role.add.permissions.found.none");
+            assertEquals("role.add.permissions.found.none", e.getMessage());
         }
         assertTrue(success);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getRoleNotFound() {
         boolean success = false;
@@ -105,11 +157,14 @@ public class RoleServiceTest {
             roleService.getRole(INVALID_ID);
         } catch (NotFoundEntityException e) {
             success = true;
-            assertEquals(e.getMessage(), RoleService.ROLE_NOT_FOUND);
+            assertEquals(RoleService.ROLE_NOT_FOUND, e.getMessage());
         }
         assertTrue(success);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void removePermissionsFromRole() {
         BPermission p1 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
@@ -122,7 +177,7 @@ public class RoleServiceTest {
         r.addPermission(p1, p2);
         roleRepository.save(r);
         assertNotNull(r);
-        List<Long> pIDs = new LinkedList<>();
+        Collection<Long> pIDs = new LinkedList<>();
         pIDs.add(p1.getId());
         pIDs.add(p2.getId());
 
@@ -133,11 +188,14 @@ public class RoleServiceTest {
             assertTrue(deleted.contains(p1.getId()));
             assertTrue(deleted.contains(p2.getId()));
         } catch (NotFoundEntityException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getLocalizedMessage());
             fail("Could not remove element");
         }
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     @Transactional
     public void updatePermissionsInRole() {
@@ -156,7 +214,7 @@ public class RoleServiceTest {
         assertNotNull(p3);
         BPermission p4 = permissionRepository.save(EntityUtil.getSamplePermission(random.nextString()));
         assertNotNull(p4);
-        List<Long> pIDs = new LinkedList<>();
+        Collection<Long> pIDs = new LinkedList<>();
         pIDs.add(p3.getId());
         pIDs.add(p4.getId());
 
@@ -179,8 +237,9 @@ public class RoleServiceTest {
             assertTrue(rPermissions.contains(p3));
             assertTrue(rPermissions.contains(p4));
         } catch (NotFoundEntityException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getLocalizedMessage());
             fail("Could not update the role permissions");
         }
     }
+
 }

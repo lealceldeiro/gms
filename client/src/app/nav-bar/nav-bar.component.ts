@@ -16,7 +16,8 @@ import { User } from '../core/session/user.model';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   /**
-   * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
+   * Indicates whether the nav bar is collapsed or not when it's is in a resolution lower than the specified as
+   * breakpoint.
    */
   isCollapsed = true;
   /**
@@ -82,7 +83,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @param router Router component for handling routes.
    * @param sessionService SessionUserService for handling session-related information.
    */
-  constructor(private router: Router, private sessionService: SessionService) { }
+  constructor(private router: Router, private sessionService: SessionService) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties are initialized.

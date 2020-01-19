@@ -1,5 +1,6 @@
 [[resource-roles-get-permission]]
 ==== Getting permissions
+
 A `GET` request lists all permissions assigned to a role.
 
 include::../../util/H-REQUEST.adoc[]

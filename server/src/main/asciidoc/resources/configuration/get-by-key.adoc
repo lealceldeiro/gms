@@ -1,8 +1,11 @@
 [[system-configuration-get-by-key]]
 ==== Getting a configuration value by its key
+
 A `GET` request gets a specific configuration by providing the config key which is desired to get the value of.
 
-In this example the key `is_server_multi_entity_app_in_server` was used to retrieved its configuration value. The value, of course, varies depending on what it represents. It can be any kind of object.
+In this example the key `is_server_multi_entity_app_in_server` was used to retrieved its configuration value.
+The value, of course, varies depending on what it represents.
+It can be any kind of object.
 
 include::../../util/H-REQUEST.adoc[]
 

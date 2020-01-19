@@ -2,7 +2,7 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
-import { BehaviorSubject, of } from 'rxjs/index';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { SessionService } from '../session/session.service';
 import { SecurityInterceptor } from './security.interceptor';

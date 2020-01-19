@@ -29,7 +29,10 @@ describe('NavBarComponent', () => {
   ];
 
   beforeEach(async(() => {
-    sessionServiceSpy = jasmine.createSpyObj('SessionService', ['isNotLoggedIn', 'isLoggedIn', 'getUser', 'closeSession']);
+    sessionServiceSpy = jasmine.createSpyObj(
+      'SessionService',
+      ['isNotLoggedIn', 'isLoggedIn', 'getUser', 'closeSession']
+    );
     sessionServiceSpy.isNotLoggedIn.and.returnValue(of(true));
     sessionServiceSpy.isLoggedIn.and.returnValue(of(false));
     sessionServiceSpy.getUser.and.returnValue(of(userMock));

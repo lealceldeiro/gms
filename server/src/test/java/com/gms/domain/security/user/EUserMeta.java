@@ -4,19 +4,61 @@ package com.gms.domain.security.user;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class EUserMeta {
-    private EUserMeta() {}
+public final class EUserMeta {
 
-    public static final String id = "User's identifier";
-    public static final String username = "User's username";
-    public static final String email = "User's email";
-    public static final String name = "User's name";
-    public static final String lastName = "User's last name";
-    public static final String password = "User's password";
-    public static final String passwordHashed = "Hashed user's password";
-    public static final String enabled = "Whether the user is enabled or not.";
-    public static final String emailVerified = "Whether the user has verified the associated email or not.";
-    public static final String accountNonExpired = "Whether the user's account has expired or not.";
-    public static final String accountNonLocked = "Whether the user's account has been locked or not.";
-    public static final String credentialsNonExpired = "Whether the user's credentials has expired or not.";
+    /**
+     * Privates constructor to make class un-instantiable.
+     */
+    private EUserMeta() {
+    }
+
+    /**
+     * Meta documentation.
+     */
+    public static final String ID_INFO = "User's identifier";
+    /**
+     * Meta documentation.
+     */
+    public static final String USERNAME_INFO = "User's username";
+    /**
+     * Meta documentation.
+     */
+    public static final String EMAIL_INFO = "User's email";
+    /**
+     * Meta documentation.
+     */
+    public static final String NAME_INFO = "User's name";
+    /**
+     * Meta documentation.
+     */
+    public static final String LAST_NAME_INFO = "User's last name";
+    /**
+     * Meta documentation.
+     */
+    public static final String PASSWORD_INFO = "User's password";
+    /**
+     * Meta documentation.
+     */
+    public static final String PASSWORD_HASHED_INFO = "Hashed user's password";
+    /**
+     * Meta documentation.
+     */
+    public static final String ENABLED_INFO = "Whether the user is enabled or not.";
+    /**
+     * Meta documentation.
+     */
+    public static final String EMAIL_VERIFIED_INFO = "Whether the user has verified the associated email or not.";
+    /**
+     * Meta documentation.
+     */
+    public static final String ACCOUNT_NON_EXPIRED_INFO = "Whether the user's account has expired or not.";
+    /**
+     * Meta documentation.
+     */
+    public static final String ACCOUNT_NON_LOCKED_INFO = "Whether the user's account has been locked or not.";
+    /**
+     * Meta documentation.
+     */
+    public static final String CREDENTIALS_NON_EXPIRED_INFO = "Whether the user's credentials has expired or not.";
+
 }

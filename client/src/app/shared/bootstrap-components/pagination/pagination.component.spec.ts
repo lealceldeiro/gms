@@ -63,8 +63,8 @@ describe('GmsPaginationComponent', () => {
 
   it('should call EventEmitter(pageChangeAction)#emit on click to a new page, different from the selected one', () => {
     let anotherPage = getRandomNumber();
-    if (component['previous'] === anotherPage) { // make sure that the random generated for anotherPage doesn't collide with the previous
-      anotherPage++;
+    if (component['previous'] === anotherPage) {  // make sure that the random generated for anotherPage
+      anotherPage++;                              // doesn't collide with the previous
     }
     component.onPageChange(anotherPage);
     fixture.detectChanges();

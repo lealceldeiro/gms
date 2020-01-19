@@ -1,72 +1,113 @@
 package com.gms.controller.configuration;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
 class SampleConfigurationPayload {
-    private Boolean is_multi_entity_app_in_server;
-    private Boolean is_user_registration_allowed_in_server;
+
+    /**
+     * Payload argument: is the app handling multiple entities?
+     */
+    private Boolean isMultiEntityAppInServer;
+    /**
+     * Payload argument: is the app handling user registration?
+     */
+    private Boolean isUserRegistrationAllowedInServer;
+    /**
+     * Payload argument: language.
+     */
     private String language;
-    private Long last_accessed_entity;
+    /**
+     * Payload argument: last accessed entity by a user.
+     */
+    private Long lastAccessedEntity;
+    /**
+     * Payload argument: user id.
+     */
     private Long userId;
+    /**
+     * Payload argument: user id.
+     */
     private Long user;
 
-    SampleConfigurationPayload(Boolean is_multi_entity_app_in_server, Boolean is_user_registration_allowed_in_server) {
-        this.is_multi_entity_app_in_server = is_multi_entity_app_in_server;
-        this.is_user_registration_allowed_in_server = is_user_registration_allowed_in_server;
+    SampleConfigurationPayload(final Boolean isMultiEntityAppInServer,
+                               final Boolean isUserRegistrationAllowedInServer) {
+        this.isMultiEntityAppInServer = isMultiEntityAppInServer;
+        this.isUserRegistrationAllowedInServer = isUserRegistrationAllowedInServer;
     }
 
-    SampleConfigurationPayload(String language, Long last_accessed_entity) {
+    SampleConfigurationPayload(final String language, final Long lastAccessedEntity) {
         this.language = language;
-        this.last_accessed_entity = last_accessed_entity;
+        this.lastAccessedEntity = lastAccessedEntity;
     }
 
-    public Boolean isIs_multi_entity_app_in_server() {
-        return is_multi_entity_app_in_server;
+    /**
+     * Returns whether the app iss the app handling multiple entities or not.
+     *
+     * @return {@code true} if it is handling multiple entities, {@code false} otherwise.
+     */
+    @JsonGetter("is_multi_entity_app_in_server")
+    public Boolean isMultiEntityAppInServer() {
+        return isMultiEntityAppInServer;
     }
 
-    public void setIs_multi_entity_app_in_server(boolean is_multi_entity_app_in_server) {
-        this.is_multi_entity_app_in_server = is_multi_entity_app_in_server;
+    @JsonSetter("is_multi_entity_app_in_server")
+    public void setIsMultiEntityAppInServer(final boolean isMultiEntityAppInServer) {
+        this.isMultiEntityAppInServer = isMultiEntityAppInServer;
     }
 
-    public Boolean isIs_user_registration_allowed_in_server() {
-        return is_user_registration_allowed_in_server;
+    @JsonGetter("is_user_registration_allowed_in_server")
+    public Boolean isUserRegistrationAllowedInServer() {
+        return isUserRegistrationAllowedInServer;
     }
 
-    public void setIs_user_registration_allowed_in_server(boolean is_user_registration_allowed_in_server) {
-        this.is_user_registration_allowed_in_server = is_user_registration_allowed_in_server;
+    @JsonSetter("is_user_registration_allowed_in_server")
+    public void setIsUserRegistrationAllowedInServer(final boolean isUserRegistrationAllowedInServer) {
+        this.isUserRegistrationAllowedInServer = isUserRegistrationAllowedInServer;
     }
 
+    @JsonGetter("userId")
     public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    @JsonSetter("userId")
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 
+    @JsonGetter("language")
     public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    @JsonSetter("language")
+    public void setLanguage(final String language) {
         this.language = language;
     }
 
-    public Long getLast_accessed_entity() {
-        return last_accessed_entity;
+    @JsonGetter("last_accessed_entity")
+    public Long getLastAccessedEntity() {
+        return lastAccessedEntity;
     }
 
-    public void setLast_accessed_entity(Long last_accessed_entity) {
-        this.last_accessed_entity = last_accessed_entity;
+    @JsonSetter("last_accessed_entity")
+    public void setLastAccessedEntity(final Long lastAccessedEntity) {
+        this.lastAccessedEntity = lastAccessedEntity;
     }
 
+    @JsonGetter("user")
     public Long getUser() {
         return user;
     }
 
-    public void setUser(Long user) {
+    @JsonSetter("user")
+    public void setUser(final Long user) {
         this.user = user;
     }
+
 }

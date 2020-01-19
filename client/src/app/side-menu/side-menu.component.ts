@@ -13,7 +13,8 @@ import { excluded, routes } from '../app-routing.module';
 })
 export class SideMenuComponent implements OnInit {
   /**
-   * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as breakpoint.
+   * Indicates whether the nav bar is collapsed or not when is is in a resolution lower than the specified as
+   * breakpoint.
    */
   isCollapsed = true;
 
@@ -25,13 +26,16 @@ export class SideMenuComponent implements OnInit {
   /**
    * Component constructor.
    */
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   /**
    * Lifecycle hook that is called after data-bound properties of a directive are initialized.
    */
   ngOnInit() {
-    this.urls = routes.map<{ path: string, name: string }>(r => ({ path: r.path || 'not-found', name: this.getNameFrom(r.path) }));
+    this.urls = routes.map<{ path: string, name: string }>(r => (
+      { path: r.path || 'not-found', name: this.getNameFrom(r.path) }
+    ));
   }
 
   /**

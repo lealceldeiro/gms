@@ -1,5 +1,6 @@
 [[system-configuration-get]]
 ==== Getting all system-related configurations
+
 A `GET` request list all system-wide available configurations.
 
 include::../../util/H-REQUEST.adoc[]

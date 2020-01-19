@@ -1,19 +1,20 @@
 <table class="table table-hover table-bordered" *ngIf="roleList?.length">
   <thead>
-    <tr>
-      <th scope="col">Label</th>
-      <th scope="col">Description</th>
-      <th scope="col">Enabled</th>
-    </tr>
+  <tr>
+    <th scope="col">Label</th>
+    <th scope="col">Description</th>
+    <th scope="col">Enabled</th>
+  </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let r of roleList" class="p-row cursor-pointer" [routerLink]="['./', r.id]">
-      <td>{{r.label}}</td>
-      <td>{{r.description}}</td>
-      <td>{{r.enabled | boolean : 'Yes' : 'No'}}</td>
-    </tr>
+  <tr *ngFor="let r of roleList" class="p-row cursor-pointer" [routerLink]="['./', r.id]">
+    <td>{{r.label}}</td>
+    <td>{{r.description}}</td>
+    <td>{{r.enabled | boolean : 'Yes' : 'No'}}</td>
+  </tr>
   </tbody>
 </table>
 
-<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true" (pageChangeAction)="loadList($event)"
-  *ngIf="roleList?.length"> </gms-pagination>
+<gms-pagination [(page)]="page.current" [collectionSize]="page.total" [pageSize]="page.size" [boundaryLinks]="true"
+                (pageChangeAction)="loadList($event)"
+                *ngIf="roleList?.length"></gms-pagination>

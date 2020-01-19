@@ -1,5 +1,6 @@
 [[resource-user-remove-roles]]
 ==== Removing roles
+
 A `DELETE` request removes some roles for a user from an owned entity.
 
 include::../../util/H-REQUEST.adoc[]

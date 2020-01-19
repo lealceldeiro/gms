@@ -36,7 +36,8 @@ describe('AppConfig', () => {
     tick();
   }));
 
-  it('should call HttpClient#get to get the configuration values and report an error when the config files are not found', fakeAsync(() => {
+  it('should call HttpClient#get to get the configuration values and report an error when the config files are not' +
+    ' found', fakeAsync(() => {
     appConfig.load()
       .then(() => expect(AppConfig.settings).toBeFalsy())
       .catch(error => expect(error).toBeTruthy());

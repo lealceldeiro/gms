@@ -28,6 +28,7 @@
     "space-before-function-paren": [
       "error",
       "never"
-    ]
+    ],
+    "max-len": ["error", { "code": 120, "ignoreUrls": true }]
   }
 }

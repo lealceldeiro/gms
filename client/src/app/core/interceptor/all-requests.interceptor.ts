@@ -34,7 +34,9 @@ export class AllRequestsInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Intercepts all requests responses for setting/un-setting the loading indicator while doing all requests to the backend API.
+   * Intercepts all requests responses for setting/un-setting the loading indicator while doing all requests to the
+   * backend API.
+   *
    * @param req Request performed.
    * @param next Next http handler.
    * @returns Observable<HttpEvent<any>>

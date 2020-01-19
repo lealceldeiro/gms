@@ -22,66 +22,123 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class BConfigurationTest {
 
-    private final String k = "sampleK";
-    private final String v = "sampleV";
+    /**
+     * Key field value.
+     */
+    private final String key = "sampleK";
+    /**
+     * Value field value.
+     */
+    private final String value = "sampleV";
+    /**
+     * "id" value.
+     */
     private final Long id = 1L;
+    /**
+     * Instance of {@link BConfiguration}.
+     */
     private BConfiguration entity;
+    /**
+     * Instance of {@link BConfiguration}.
+     */
     private BConfiguration entity1;
-    private final int MAX_RANGE_255 = 255;
+    /**
+     * Max length range for creating a string.
+     */
+    private static final int MAX_RANGE_255 = 255;
 
     //region persistence constraints validations
+
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void keyIsNotBlank() {
-        propertyIsNot("", v, CodeI18N.FIELD_NOT_BLANK, "key property must not be blank");
+        propertyIsNot("", value, CodeI18N.FIELD_NOT_BLANK, "key property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void keyIsNotNull() {
-        propertyIsNot(null, v, CodeI18N.FIELD_NOT_NULL, "key property must not be null");
+        propertyIsNot(null, value, CodeI18N.FIELD_NOT_NULL, "key property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void keyIsNotOutOfRange() {
-        propertyIsNot(StringUtil.createJString(MAX_RANGE_255 + 1), v, CodeI18N.FIELD_SIZE, "key property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                value,
+                CodeI18N.FIELD_SIZE,
+                "key property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void valueIsNotBlank() {
-        propertyIsNot(k, "", CodeI18N.FIELD_NOT_BLANK, "value property must not be blank");
+        propertyIsNot(key, "", CodeI18N.FIELD_NOT_BLANK, "value property must not be blank");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void valueIsNotNull() {
-        propertyIsNot(k, null, CodeI18N.FIELD_NOT_NULL, "value property must not be null");
+        propertyIsNot(key, null, CodeI18N.FIELD_NOT_NULL, "value property must not be null");
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void valueIsNotOutOfRange() {
-        propertyIsNot(k, StringUtil.createJString(MAX_RANGE_255 + 1), CodeI18N.FIELD_SIZE, "value property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters");
+        propertyIsNot(
+                key,
+                StringUtil.createJString(MAX_RANGE_255 + 1),
+                CodeI18N.FIELD_SIZE,
+                "value property must not be of size lesser than 0 and larger than " + MAX_RANGE_255 + " characters"
+        );
     }
 
-    public void propertyIsNot(String keyVal, String valueVal, String messageTest, String assertMessage) {
+    private void propertyIsNot(final String keyVal, final String valueVal, final String messageTest,
+                               final String assertMessage) {
         BConfiguration c = new BConfiguration(keyVal, valueVal);
-        assertTrue(assertMessage, PersistenceValidation.objectIsInvalidWithErrorMessage(c, messageTest));
+        assertTrue(assertMessage, PersistenceValidation.isObjectInvalidWithErrorMessage(c, messageTest));
     }
     //endregion
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setKey() {
         cleanEntity();
 
-        entity.setKey(k);
-        assertEquals(k, String.valueOf(ReflectionTestUtils.getField(entity, "key")));
+        entity.setKey(key);
+        assertEquals(key, String.valueOf(ReflectionTestUtils.getField(entity, "key")));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setValue() {
         cleanEntity();
 
-        entity.setValue(v);
-        assertEquals(v, String.valueOf(ReflectionTestUtils.getField(entity, "value")));
+        entity.setValue(value);
+        assertEquals(value, String.valueOf(ReflectionTestUtils.getField(entity, "value")));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void setUserId() {
         cleanEntity();
@@ -90,22 +147,31 @@ public class BConfigurationTest {
         assertEquals(id, Long.valueOf(String.valueOf(ReflectionTestUtils.getField(entity, "userId"))));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getKey() {
         cleanEntity();
 
-        ReflectionTestUtils.setField(entity, "key", k);
-        assertEquals(entity.getKey(), k);
+        ReflectionTestUtils.setField(entity, "key", key);
+        assertEquals(entity.getKey(), key);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getValue() {
         cleanEntity();
 
-        ReflectionTestUtils.setField(entity, "value", v);
-        assertEquals(entity.getValue(), v);
+        ReflectionTestUtils.setField(entity, "value", value);
+        assertEquals(entity.getValue(), value);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void getUserId() {
         cleanEntity();
@@ -114,6 +180,9 @@ public class BConfigurationTest {
         assertEquals(entity.getUserId(), id);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void hashCodeTest() {
         prepareEntitiesForEqualityTest();
@@ -121,6 +190,9 @@ public class BConfigurationTest {
         assertEquals(entity.hashCode(), entity1.hashCode());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void equalsTest() {
         prepareEntitiesForEqualityTest();
@@ -128,6 +200,9 @@ public class BConfigurationTest {
         assertEquals(entity, entity1);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void toStringTest() {
         prepareEntitiesForEqualityTest();
@@ -145,10 +220,10 @@ public class BConfigurationTest {
         assertEntityValidity(entity1);
     }
 
-    private void assertEntityValidity(BConfiguration entity) {
-        assertNull(ReflectionTestUtils.getField(entity, "key"));
-        assertNull(ReflectionTestUtils.getField(entity, "value"));
-        assertNull(ReflectionTestUtils.getField(entity, "userId"));
+    private void assertEntityValidity(final BConfiguration entityArg) {
+        assertNull(ReflectionTestUtils.getField(entityArg, "key"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "value"));
+        assertNull(ReflectionTestUtils.getField(entityArg, "userId"));
     }
 
     private void prepareEntitiesForEqualityTest() {
@@ -157,9 +232,11 @@ public class BConfigurationTest {
         setEntityFields(entity);
         setEntityFields(entity1);
     }
-    private void setEntityFields(BConfiguration entity) {
-        ReflectionTestUtils.setField(entity, "key", k);
-        ReflectionTestUtils.setField(entity, "value", v);
-        ReflectionTestUtils.setField(entity, "userId", id);
+
+    private void setEntityFields(final BConfiguration entityArg) {
+        ReflectionTestUtils.setField(entityArg, "key", key);
+        ReflectionTestUtils.setField(entityArg, "value", value);
+        ReflectionTestUtils.setField(entityArg, "userId", id);
     }
+
 }

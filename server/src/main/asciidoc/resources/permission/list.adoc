@@ -1,5 +1,6 @@
 [[resource-permission-list]]
 ==== Listing permissions
+
 A `GET` request lists all permissions.
 
 include::../../util/H-REQUEST.adoc[]

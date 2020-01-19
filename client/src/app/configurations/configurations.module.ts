@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ConfigurationListComponent } from '../configurations/configuration-list/configuration-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { ConfigurationListComponent } from './configuration-list/configuration-list.component';
 import { ConfigurationsRoutingModule } from './configurations-routing.module';
 import { ConfigurationService } from './shared/configuration.service';
 
@@ -13,4 +13,5 @@ import { ConfigurationService } from './shared/configuration.service';
   imports: [SharedModule, ConfigurationsRoutingModule],
   providers: [ConfigurationService]
 })
-export class ConfigurationsModule { }
+export class ConfigurationsModule {
+}

@@ -27,17 +27,34 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = Application.class)
 public class QueryServiceTest {
 
-    @Autowired private EntityManager entityManager;
+    /**
+     * Instance of {@link EntityManager}.
+     */
+    @Autowired
+    private EntityManager entityManager;
 
+    /**
+     * Instance of {@link QueryService}.
+     */
     private QueryService queryService;
 
-    @Autowired private BPermissionRepository repository;
+    /**
+     * Instance of {@link BPermissionRepository}.
+     */
+    @Autowired
+    private BPermissionRepository repository;
 
+    /**
+     * Sets up the tests resources.
+     */
     @Before
     public void setUp() {
         queryService = new QueryService(entityManager);
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createQuery() {
         assertNotNull(repository.save(EntityUtil.getSamplePermission()));
@@ -49,6 +66,9 @@ public class QueryServiceTest {
         assertFalse(resultList.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createQueryWithResultClass() {
         BPermission p = repository.save(EntityUtil.getSamplePermission());
@@ -62,6 +82,9 @@ public class QueryServiceTest {
         assertTrue(resultList.contains(p));
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createNativeQuery() {
         assertNotNull(repository.save(EntityUtil.getSamplePermission()));
@@ -71,9 +94,12 @@ public class QueryServiceTest {
 
         final List<?> resultList = nativeQuery.getResultList();
         assertNotNull(resultList);
-        assertTrue(!resultList.isEmpty());
+        assertFalse(resultList.isEmpty());
     }
 
+    /**
+     * Test to be executed by JUnit.
+     */
     @Test
     public void createNativeQueryWithResultClass() {
         BPermission p = repository.save(EntityUtil.getSamplePermission());
@@ -86,4 +112,5 @@ public class QueryServiceTest {
         assertNotNull(resultList);
         assertTrue(resultList.contains(p));
     }
+
 }

@@ -1,5 +1,6 @@
 [[resource-owned-entity-update]]
 ==== Updating an owned entity's info
+
 A `PUT` (full update) or `PATCH` (partial update) request updates an owned entity's information.
 
 include::../../util/H-REQUEST.adoc[]

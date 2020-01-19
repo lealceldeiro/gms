@@ -4,16 +4,40 @@ package com.gms.domain.security.role;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class BRoleMeta {
+public final class BRoleMeta {
 
-    private BRoleMeta() {}
+    /**
+     * Privates constructor to make class un-instantiable.
+     */
+    private BRoleMeta() {
+    }
 
-    public static final String id = "Role's identifier";
-    public static final String label = "Label to which the role can be referred to";
-    public static final String description = "A description of what is this role for";
-    public static final String permissions = "Permissions which this role will be associated to. These must be links to the permission resource";
-    public static final String enabled = "Whether the role is enabled or not." +
-            " If a role associated to a user is not enabled, the user will no be granted the" +
-            " associated permissions to this role.";
-    public static final String permissionsLink = "Link to get the associated permissions to the role";
+    /**
+     * Meta documentation.
+     */
+    public static final String ID_INFO = "Role's identifier";
+    /**
+     * Meta documentation.
+     */
+    public static final String LABEL_INFO = "Label to which the role can be referred to";
+    /**
+     * Meta documentation.
+     */
+    public static final String DESCRIPTION_INFO = "A description of what is this role for";
+    /**
+     * Meta documentation.
+     */
+    public static final String PERMISSIONS_INFO = "Permissions which this role will be associated to. "
+            + "These must be links to the permission resource";
+    /**
+     * Meta documentation.
+     */
+    public static final String ENABLED_INFO = "Whether the role is enabled or not."
+            + " If a role associated to a user is not enabled, the user will no be granted the"
+            + " associated permissions to this role.";
+    /**
+     * Meta documentation.
+     */
+    public static final String PERMISSION_LINK_INFO = "Link to get the associated permissions to the role";
+
 }

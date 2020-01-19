@@ -1,5 +1,6 @@
 [[resource-permission-get]]
 ==== Getting a permission's info
+
 A `GET` request gets a permission's information.
 
 include::../../util/H-REQUEST.adoc[]

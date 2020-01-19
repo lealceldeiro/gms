@@ -1,5 +1,6 @@
 [[resource-user-list]]
 ==== Listing users
+
 A `GET` request lists users.
 
 include::../../util/H-REQUEST.adoc[]

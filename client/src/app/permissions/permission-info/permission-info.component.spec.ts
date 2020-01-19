@@ -95,27 +95,30 @@ describe('PermissionInfoComponent', () => {
     expect(locationSpy.back).toHaveBeenCalledTimes(1);
   });
 
-  it('should show a text to allow retrieving the roles using the selected permission and hide the table of roles', () => {
-    expect(component.rolesLoaded).toEqual(false);
-    expect(component.roles).toEqual([]);
-    expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeTruthy();
-    expect(fixture.debugElement.query(By.css('#rolesTable'))).toBeFalsy();
-  });
+  it('should show a text to allow retrieving the roles using the selected permission and hide the table of roles',
+    () => {
+      expect(component.rolesLoaded).toEqual(false);
+      expect(component.roles).toEqual([]);
+      expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('#rolesTable'))).toBeFalsy();
+    }
+  );
 
-  it('should hide the text to allow retrieving the roles using the selected permission and show the table of roles', fakeAsync(() => {
-    const size = getRandomNumber();
-    const page = getRandomNumber();
-    component.page.size = size;
-    component.showInRoles(page);
-    fixture.detectChanges();
-    tick();
-    expect(permissionServiceSpy.getPermissionRoles).toHaveBeenCalledTimes(1);
-    expect(permissionServiceSpy.getPermissionRoles).toHaveBeenCalledWith(id, size, page);
-    expect(component.rolesLoaded).toEqual(true);
-    expect(component.roles).toEqual(fakeRoles);
-    expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeFalsy();
-    expect(fixture.debugElement.query(By.css('#rolesTable'))).toBeTruthy();
-  }));
+  it('should hide the text to allow retrieving the roles using the selected permission and show the table of roles',
+    fakeAsync(() => {
+      const size = getRandomNumber();
+      const page = getRandomNumber();
+      component.page.size = size;
+      component.showInRoles(page);
+      fixture.detectChanges();
+      tick();
+      expect(permissionServiceSpy.getPermissionRoles).toHaveBeenCalledTimes(1);
+      expect(permissionServiceSpy.getPermissionRoles).toHaveBeenCalledWith(id, size, page);
+      expect(component.rolesLoaded).toEqual(true);
+      expect(component.roles).toEqual(fakeRoles);
+      expect(fixture.debugElement.query(By.css('#showRolesLnk'))).toBeFalsy();
+      expect(fixture.debugElement.query(By.css('#rolesTable'))).toBeTruthy();
+    }));
 
   it('should use `this.page.current` as default if not page is provided to `#showInPermissions`', () => {
     const size = getRandomNumber();

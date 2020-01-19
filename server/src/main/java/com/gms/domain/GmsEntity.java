@@ -17,15 +17,21 @@ import java.io.Serializable;
 public class GmsEntity implements Serializable {
 
     /**
-	 * Version number for a Serializable class.
-	 */
-	private static final long serialVersionUID = -7947488456967226793L;
+     * Version number for a Serializable class.
+     */
+    private static final long serialVersionUID = -7947488456967226793L;
 
-	@Id
+    /**
+     * Entity's id.
+     */
+    @Id
     @GeneratedValue
-    protected Long id;
+    private Long id;
 
+    /**
+     * Entity's version. Used by Hibernate.
+     */
     @Version
-    protected Integer version;
+    private Integer version;
 
 }

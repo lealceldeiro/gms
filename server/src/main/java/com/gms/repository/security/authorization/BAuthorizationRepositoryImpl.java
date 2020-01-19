@@ -15,19 +15,40 @@ import java.util.Map;
 @Transactional
 public class BAuthorizationRepositoryImpl implements BAuthorizationRepositoryCustom {
 
+    /**
+     * An instance of {@link BAuthorizationDAO}.
+     */
     private final BAuthorizationDAO bAuthorizationDAO;
 
-    public BAuthorizationRepositoryImpl(DAOProvider daoProvider) {
+    /**
+     * Creates a new instance of {@link BAuthorizationRepositoryCustom} (specifically a new
+     * BAuthorizationRepositoryImpl).
+     *
+     * @param daoProvider An instance of a {@link DAOProvider}.
+     */
+    public BAuthorizationRepositoryImpl(final DAOProvider daoProvider) {
         this.bAuthorizationDAO = daoProvider.getBAuthorizationDAO();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method is not intended to be overridden. If a custom implementation is required, consider implementing
+     * {@link BAuthorizationRepositoryCustom}
+     */
     @Override
-    public Map<String, List<BRole>> getRolesForUserOverAllEntities(long userId) {
+    public Map<String, List<BRole>> getRolesForUserOverAllEntities(final long userId) {
         return bAuthorizationDAO.getRolesForUserOverAllEntities(userId);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method is not intended to be overridden. If a custom implementation is required, consider implementing
+     * {@link BAuthorizationRepositoryCustom}
+     */
     @Override
-    public List<BRole> getRolesForUserOverEntity(long userId, long entityId) {
+    public List<BRole> getRolesForUserOverEntity(final long userId, final long entityId) {
         return bAuthorizationDAO.getRolesForUserOverEntity(userId, entityId);
     }
 

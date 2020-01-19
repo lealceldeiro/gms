@@ -1,15 +1,10 @@
 package com.gms.controller.security.role;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.util.List;
-
 import com.gms.domain.security.permission.BPermission;
 import com.gms.service.security.role.RoleService;
 import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.domain.NotFoundEntityException;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -26,7 +21,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -36,34 +34,83 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoleController {
 
+    /**
+     * Instance of {@link RoleService}.
+     */
     private final RoleService roleService;
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param id            {@link com.gms.domain.security.role.BRole} id.
+     * @param permissionsId {@link BPermission} id.
+     * @return A {@link List} of {@link Long} with all of the {@link BPermission} IDs added to the role.
+     * @throws NotFoundEntityException if none of the permissions with an {@code id} is found from the specified list
+     *                                 of {@code id}s.
+     */
     @PostMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
     @ResponseBody
-    public List<Long> addPermissionsRole(@PathVariable Long id, @RequestBody List<Long> permissionsId)
+    public List<Long> addPermissionsRole(@PathVariable final Long id, @RequestBody final List<Long> permissionsId)
             throws NotFoundEntityException {
         return roleService.addPermissionsToRole(id, permissionsId);
     }
 
-    @DeleteMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION
-            + "s", produces = "application/hal+json")
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param id            {@link com.gms.domain.security.role.BRole} id.
+     * @param permissionsId {@link BPermission} id.
+     * @return A {@link List} of {@link Long} with all of the {@link BPermission} IDs removed from the role.
+     * @throws NotFoundEntityException if none of the permissions with an {@code id} is found from the specified list
+     *                                 *                                 of {@code id}s.
+     */
+    @DeleteMapping(
+            path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json"
+    )
     @ResponseBody
-    public List<Long> removePermissionsFromRole(@PathVariable Long id, @RequestBody List<Long> permissionsId)
+    public List<Long> removePermissionsFromRole(@PathVariable final Long id,
+                                                @RequestBody final List<Long> permissionsId)
             throws NotFoundEntityException {
         return roleService.removePermissionsFromRole(id, permissionsId);
     }
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param id            {@link com.gms.domain.security.role.BRole} id.
+     * @param permissionsId {@link BPermission} id.
+     * @return A {@link List} of {@link Long} with all of the {@link BPermission} IDs updated from the role.
+     * @throws NotFoundEntityException if none of the permissions with an {@code id} is found from the specified list
+     *                                 of {@code id}s.
+     */
     @PutMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
     @ResponseBody
-    public List<Long> updatePermissionsFromRole(@PathVariable Long id, @RequestBody List<Long> permissionsId)
+    public List<Long> updatePermissionsFromRole(@PathVariable final Long id,
+                                                @RequestBody final List<Long> permissionsId)
             throws NotFoundEntityException {
         return roleService.updatePermissionsInRole(id, permissionsId);
     }
 
+    /**
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * unexpected results.
+     *
+     * @param id            {@link com.gms.domain.security.role.BRole} id.
+     * @param pageable      {@link Pageable} bean injected by spring.
+     * @param pageAssembler {@link PagedResourcesAssembler} bean injected by spring.
+     * @return A {@link ResponseEntity} of {@link PagedResources} of {@link Resource} of {@link BPermission}
+     * containing the requested information.
+     */
     @GetMapping(path = ResourcePath.ROLE + "/{id}/" + ResourcePath.PERMISSION + "s", produces = "application/hal+json")
     @ResponseBody
-    public ResponseEntity<PagedResources<Resource<BPermission>>> getAllPermissionsByRole(@PathVariable long id,
-            Pageable pageable, PagedResourcesAssembler<BPermission> pageAssembler) throws NotFoundEntityException {
+    public ResponseEntity<PagedResources<Resource<BPermission>>> getAllPermissionsByRole(
+            @PathVariable final long id,
+            final Pageable pageable,
+            final PagedResourcesAssembler<BPermission> pageAssembler
+    ) {
         Page<BPermission> page = roleService.getAllPermissionsByRoleId(id, pageable);
         Link link = linkTo(methodOn(RoleController.class).getAllPermissionsByRole(id, pageable, pageAssembler))
                 .withSelfRel();
