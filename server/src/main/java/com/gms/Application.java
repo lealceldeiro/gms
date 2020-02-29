@@ -11,7 +11,6 @@ import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,9 +35,8 @@ public class Application extends SpringBootServletInitializer {
      * @param args Command line arguments.
      */
     public static void main(final String[] args) {
-        try (ConfigurableApplicationContext ignored = SpringApplication.run(Application.class, args)) {
-            GMS_LOGGER.info("App is running...");
-        }
+        SpringApplication.run(Application.class, args);
+        GMS_LOGGER.info("Application is running...");
     }
 
     /**
