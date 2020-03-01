@@ -37,7 +37,7 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     /**
-     * An instance of .
+     * An instance of {@link EUserRepository}.
      */
     private final EUserRepository userRepository;
     /**
