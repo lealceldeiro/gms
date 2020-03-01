@@ -1,6 +1,6 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
-import { LocalStorage } from '@ngx-pwa/local-storage';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -12,13 +12,13 @@ describe('StorageService', () => {
   const stringValue = 'sampleValue';
   const objectValue = { mKey: 'mKey' };
   const objectValue$ = new BehaviorSubject(objectValue).asObservable();
-  const boolObs$ = new BehaviorSubject(true).asObservable();
-  const error$ = new Observable<boolean>(observer => {
+  const undefinedObservable$ = new BehaviorSubject(undefined).asObservable();
+  const error$ = new Observable<undefined>(observer => {
     observer.error(new Error('test error'));
     observer.complete();
   });
 
-  let localStorageSpy: jasmine.SpyObj<LocalStorage>;
+  let localStorageSpy: jasmine.SpyObj<StorageMap>;
   let cookieServiceSpy: jasmine.SpyObj<CookieService>;
   let consoleWarnSpy: jasmine.Spy;
 
@@ -33,17 +33,17 @@ describe('StorageService', () => {
     cookieServiceSpy.getObject.and.returnValue(objectValue);
     cookieServiceSpy.getAll.and.returnValue(objectValue);
 
-    localStorageSpy = jasmine.createSpyObj('LocalStorage', ['setItem', 'getItem', 'clear', 'removeItem']);
-    localStorageSpy.setItem.and.returnValue(boolObs$);
-    localStorageSpy.getItem.and.returnValue(objectValue$);
-    localStorageSpy.clear.and.returnValue(boolObs$);
-    localStorageSpy.removeItem.and.returnValue(boolObs$);
+    localStorageSpy = jasmine.createSpyObj('StorageMap', ['set', 'get', 'clear', 'delete']);
+    localStorageSpy.set.and.returnValue(undefinedObservable$);
+    localStorageSpy.get.and.returnValue(objectValue$);
+    localStorageSpy.clear.and.returnValue(undefinedObservable$);
+    localStorageSpy.delete.and.returnValue(undefinedObservable$);
 
     TestBed.configureTestingModule({
       providers: [
         StorageService,
         { provide: CookieService, useValue: cookieServiceSpy },
-        { provide: LocalStorage, useValue: localStorageSpy }
+        { provide: StorageMap, useValue: localStorageSpy }
       ]
     });
     storageService = TestBed.get(StorageService);
@@ -70,7 +70,7 @@ describe('StorageService', () => {
       done();
     });
 
-    const args = localStorageSpy.setItem.calls.allArgs();
+    const args = localStorageSpy.set.calls.allArgs();
 
     expect(args[0][0]).toEqual(key);
     expect(args[0][1]).toEqual(objectValue);
@@ -87,11 +87,11 @@ describe('StorageService', () => {
   });
 
   it('should re-try to set the value 2 times more if the first time it fails', fakeAsync(() => {
-    localStorageSpy.setItem.and.returnValue(error$);
+    localStorageSpy.set.and.returnValue(error$);
     const ob = 'test';
     storageService.set(key, ob);
     tick();
-    expect(localStorageSpy.setItem).toHaveBeenCalledTimes(3);
+    expect(localStorageSpy.set).toHaveBeenCalledTimes(3);
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     expect(consoleWarnSpy.calls.allArgs()[0][0]).toEqual(`Couldn't set ${ ob } under key ${ key }`);
   }));
@@ -107,7 +107,7 @@ describe('StorageService', () => {
   it('should get an Observable with the value specified under the key (value is NOT cached)', () => {
     storageService.get(key).subscribe(val => expect(val).toEqual(objectValue));
 
-    const args = localStorageSpy.getItem.calls.allArgs();
+    const args = localStorageSpy.get.calls.allArgs();
     expect(args[0][0]).toEqual(key);
   });
 
@@ -121,7 +121,7 @@ describe('StorageService', () => {
       expect((storageService['cache'][key] as BehaviorSubject<any>).getValue()).toBeNull();
       done();
     });
-    expect(localStorageSpy.removeItem).toHaveBeenCalled();
+    expect(localStorageSpy.delete).toHaveBeenCalled();
   });
   // endregion
 

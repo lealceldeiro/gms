@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { LocalStorage } from '@ngx-pwa/local-storage';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { CookieOptions, CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { TruthyPredicate } from '../predicate/truthy.predicate';
 import { Util } from '../util/util';
@@ -59,9 +59,9 @@ export class StorageService {
    * Service constructor.
    *
    * @param cookieService CookieService for storing values in cookies.
-   * @param localStorage LocalStorage for storing values in the browser local storage.
+   * @param localStorage StorageMap for storing values in the browser local storage.
    */
-  constructor(private cookieService: CookieService, private localStorage: LocalStorage) {
+  constructor(private cookieService: CookieService, private localStorage: StorageMap) {
   }
 
   // region local storage
@@ -91,7 +91,7 @@ export class StorageService {
    * @param value Value to be stored
    */
   private trySet(key: string, value: any): void {
-    this.localStorage.setItem(key, value).subscribe(() => {
+    this.localStorage.set(key, value).subscribe(() => {
     }, () => {
       if (this.trySetCount[key]++ < 2) {
         this.trySet(key, value);
@@ -111,7 +111,7 @@ export class StorageService {
    */
   get(key: string): Observable<any> {
     const value$ = this.cache$[key];
-    return value$ || this.localStorage.getItem(key).pipe(tap((val) => this.setCache(key, val)));
+    return value$ || this.localStorage.get(key).pipe(tap((val) => this.setCache(key, val)));
   }
 
   /**
@@ -156,20 +156,20 @@ export class StorageService {
    * Tries to clear a value under a key or all values if no key is specified. This function uses the StorageService#get
    * function in order to return the value. If the method fails it will retry 2 times more to clear the value.
    *
-   * @param string key
+   * @param key Key under where the value that is going to be clear is stored.
    * @returns Observable<boolean>
    */
   private tryClear(key: string): Observable<boolean> {
-    return this.localStorage.removeItem(key).pipe(tap(
-      (removed) => {
-        if (removed) {
+    return this.localStorage.delete(key).pipe(tap(
+      () => {
           this.cache[key].next(null);
-        }
       }, // null for next value in this.cache$[key]
       () => {
         this.tryClearCount[key]++ < 2 ? this.tryClear(key) : console.warn(`Couldn't delete value for ${ key }`);
       }
-    ));
+    ),
+      map(() => true) // return true to keep legacy behavior
+    );
   }
 
   // endregion
