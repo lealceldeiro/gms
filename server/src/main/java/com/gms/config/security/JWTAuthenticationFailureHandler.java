@@ -1,12 +1,13 @@
 package com.gms.config.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -55,11 +56,13 @@ public class JWTAuthenticationFailureHandler implements AuthenticationFailureHan
         }
     }
 
-    private String getBody() {
-        GmsSecurityException ex = new GmsSecurityException(sc.getSignInUrl(),
+    private String getBody() throws JsonProcessingException {
+        final GmsSecurityException ex = new GmsSecurityException(sc.getSignInUrl(),
                 msg.getMessage("security.bad.credentials"));
 
-        return new JSONObject(ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc)).toString();
+        final ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.writeValueAsString(ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc));
     }
 
 }
