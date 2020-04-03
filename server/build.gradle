@@ -50,11 +50,11 @@ node {
 
 dependencies {
     annotationProcessor ("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor")
 
     compile ("io.jsonwebtoken:jjwt:${jwtVersion}")
     compile ("org.flywaydb:flyway-core:${flywayVersion}")
     compile ("org.reflections:reflections:${refVersion}")
-    compile ("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
     compile ("org.springframework.boot:spring-boot-starter-data-jpa")
     compile ("org.springframework.boot:spring-boot-starter-data-rest")
     compile ("org.springframework.boot:spring-boot-starter-hateoas")
@@ -301,7 +301,7 @@ private String getClientDeployUrl() {
 }
 
 private String getClientBaseUrl() {
-    String defaultUrl = "/${getAppName()}-${version}/"
-    String configUrl  = project.getProperties().get("clientBaseUrl")
-    return configUrl ? configUrl : defaultUrl
+    final String defaultUrl = "/${getAppName()}-${version}/"
+    final String configUrl  = project.getProperties().get("clientBaseUrl")
+    return configUrl ?: defaultUrl
 }
