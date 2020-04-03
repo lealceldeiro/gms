@@ -79,7 +79,7 @@ public class LocaleConfig implements WebMvcConfigurer {
      * @return A {@link MessageResolver} for some {@code messageSource}.
      */
     @Bean
-    public MessageResolver messageResolver() {
+    public MessageResolver gmsMessageResolver() {
         return new MessageResolver(messageSource());
     }
 

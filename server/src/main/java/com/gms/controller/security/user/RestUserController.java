@@ -6,7 +6,7 @@ import com.gms.util.constant.ResourcePath;
 import com.gms.util.exception.GmsGeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +44,7 @@ public class RestUserController {
     @PostMapping(path = ResourcePath.USER, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<EUser> register(@RequestBody @Valid final Resource<? extends EUser> user)
+    public ResponseEntity<EUser> register(@RequestBody @Valid final EntityModel<? extends EUser> user)
             throws GmsGeneralException {
         EUser u = userService.signUp(
                 user.getContent(),

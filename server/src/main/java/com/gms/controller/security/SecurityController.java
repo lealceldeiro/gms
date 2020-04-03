@@ -10,7 +10,7 @@ import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +57,7 @@ public class SecurityController {
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final Resource<? extends EUser> user)
+    public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final EntityModel<? extends EUser> user)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), UserService.EmailStatus.NOT_VERIFIED);
         if (u != null) {

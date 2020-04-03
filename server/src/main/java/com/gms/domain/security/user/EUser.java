@@ -4,10 +4,10 @@ import com.gms.domain.GmsEntity;
 import com.gms.util.i18n.CodeI18N;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,7 +37,8 @@ import static com.gms.util.i18n.CodeI18N.FIELD_SIZE;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
@@ -58,7 +59,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Pattern(regexp = USERNAME_REGEXP, message = FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false)
-    private final String username;
+    @Setter(AccessLevel.NONE)
+    private String username;
 
     /**
      * For emails max length as described at http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 and explained
@@ -69,7 +71,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Email(message = CodeI18N.FIELD_NOT_WELL_FORMED)
     @Column(unique = true, nullable = false, length = STRING_LENGTH_254)
-    private final String email;
+    @Setter(AccessLevel.NONE)
+    private String email;
 
     /**
      * User's name.
@@ -78,7 +81,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Column(nullable = false)
-    private final String name;
+    @Setter(AccessLevel.NONE)
+    private String name;
 
     /**
      * User's last name.
@@ -87,7 +91,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_DEFAULT, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false)
-    private final String lastName;
+    @Setter(AccessLevel.NONE)
+    private String lastName;
 
     /**
      * User's password.

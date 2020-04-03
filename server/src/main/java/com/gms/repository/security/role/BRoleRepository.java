@@ -59,6 +59,6 @@ public interface BRoleRepository extends PagingAndSortingRepository<BRole, Long>
      * @return A {@link Page} of {@link BPermission}
      */
     @RestResource(exported = false)
-    Page<BRole> findAllByPermissions(Set<BPermission> permissions, Pageable pageable);
+    Page<BRole> findAllByPermissionsIn(Set<BPermission> permissions, Pageable pageable);
 
 }

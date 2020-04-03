@@ -128,6 +128,6 @@ public interface BPermissionRepository extends PagingAndSortingRepository<BPermi
      * @return A {@link Page} of {@link BPermission}
      */
     @RestResource(exported = false)
-    Page<BPermission> findAllByRoles(Set<BRole> roles, Pageable pageable);
+    Page<BPermission> findAllByRolesIn(Set<BRole> roles, Pageable pageable);
 
 }
