@@ -1,6 +1,5 @@
 package com.gms.util.constant;
 
-import com.gms.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,10 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = SecurityConst.class)
 public class SecurityConstTest {
 
     /**

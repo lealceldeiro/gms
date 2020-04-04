@@ -1,20 +1,14 @@
 package com.gms.util.constant;
 
-import com.gms.Application;
 import com.gms.testutil.StaticUtil;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
 public class ResourcePathTest {
 
     /**

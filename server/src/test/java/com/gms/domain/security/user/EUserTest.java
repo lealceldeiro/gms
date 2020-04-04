@@ -1,17 +1,13 @@
 package com.gms.domain.security.user;
 
-import com.gms.Application;
 import com.gms.testutil.EntityUtil;
 import com.gms.testutil.StringUtil;
 import com.gms.testutil.validation.PersistenceValidation;
 import com.gms.util.i18n.CodeI18N;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.validation.ConstraintViolation;
@@ -28,8 +24,6 @@ import static org.junit.Assert.assertTrue;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
 public class EUserTest {
 
     /**
