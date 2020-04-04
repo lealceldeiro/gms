@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,12 +50,11 @@ public class SecurityController {
      * results.
      *
      * @param user {@link EUser} data to be created
-     * @return A {@link EUser} mapped into a @{@link ResponseBody}
+     * @return A {@link EUser} mapped into a @{@link org.springframework.web.bind.annotation.ResponseBody}
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final EntityModel<? extends EUser> user)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), UserService.EmailStatus.NOT_VERIFIED);
