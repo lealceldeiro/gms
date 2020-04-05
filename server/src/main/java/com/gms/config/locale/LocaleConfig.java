@@ -9,7 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+import java.util.Locale;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -49,7 +52,10 @@ public class LocaleConfig implements WebMvcConfigurer {
      */
     @Bean
     public LocaleResolver localeResolver() {
-        return new GmsCLocaleResolver();
+        CookieLocaleResolver localeResolver = new GmsCLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.forLanguageTag(dc.getDefaultLanguage()));
+
+        return localeResolver;
     }
 
     /**
