@@ -90,7 +90,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 Map<String, Object> claims = jwtService.getClaimsExtended(
                         token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
                 );
-                String user = claims.get(JWTService.SUBJECT).toString();
+                String user = claims.get(jwtService.subjectKey()).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
                     final String[] authoritiesS = claims

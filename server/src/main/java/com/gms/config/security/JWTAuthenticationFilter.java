@@ -125,7 +125,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             String accessToken = jwtService.createToken(sub, authorities);
             Map<String, Object> claims = jwtService.getClaimsExtended(accessToken);
-            Date iat = (Date) claims.get(JWTService.ISSUED_AT);
+            Date iat = (Date) claims.get(jwtService.issuedAtKey());
 
             String refreshToken = jwtService.createRefreshToken(sub, authorities);
 

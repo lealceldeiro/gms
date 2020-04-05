@@ -83,9 +83,9 @@ public class SecurityController {
             try {
                 String[] keys = {sc.getAuthoritiesHolder()};
                 Map<String, Object> claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
-                String sub = claims.get(JWTService.SUBJECT).toString();
+                String sub = claims.get(jwtService.subjectKey()).toString();
                 String authorities = claims.get(keys[0]).toString();
-                Date iat = (Date) claims.get(JWTService.ISSUED_AT);
+                Date iat = (Date) claims.get(jwtService.issuedAtKey());
 
                 String newAccessToken = jwtService.createToken(sub, authorities);
                 String newRefreshToken = jwtService.createRefreshToken(sub, authorities);
