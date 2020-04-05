@@ -2,7 +2,6 @@ package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.component.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
@@ -10,6 +9,7 @@ import com.gms.util.constant.SecurityConst;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
+import com.gms.util.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

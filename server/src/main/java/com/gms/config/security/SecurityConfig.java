@@ -2,13 +2,13 @@ package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.component.security.authentication.AuthenticationFacade;
-import com.gms.component.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
+import com.gms.util.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

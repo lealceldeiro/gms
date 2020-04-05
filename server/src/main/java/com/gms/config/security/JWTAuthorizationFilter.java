@@ -1,8 +1,8 @@
 package com.gms.config.security;
 
 import com.gms.component.security.authentication.AuthenticationFacade;
-import com.gms.component.security.token.JWTService;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.security.token.JWTService;
 import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,6 +1,6 @@
 package com.gms.controller.security;
 
-import com.gms.component.security.token.JWTService;
+import com.gms.util.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.SecurityConst;

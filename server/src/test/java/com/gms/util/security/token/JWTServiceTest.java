@@ -1,4 +1,4 @@
-package com.gms.component.security.token;
+package com.gms.util.security.token;
 
 import com.gms.Application;
 import com.gms.util.constant.SecurityConst;
