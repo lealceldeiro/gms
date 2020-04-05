@@ -6,14 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -24,53 +20,15 @@ import java.nio.charset.StandardCharsets;
 public class LocaleConfig implements WebMvcConfigurer {
 
     /**
-     * File separator.
-     */
-    private static final String SEP = File.pathSeparator;
-    /**
-     * Classpath for the resources.
-     */
-    private static final String CLASSPATH = "classpath:";
-    /**
-     * i18n path for the resources.
-     */
-    private static final String I18N = "i18n";
-    /**
-     * Base path for each of the i18n resources.
-     */
-    private static final String BASE_PATH = CLASSPATH + SEP + I18N + SEP;
-    /**
-     * Base paths for the i18n resources.
-     */
-    private static final String[] I_18_N_BASE_NAMES = {
-            BASE_PATH + "user",
-            BASE_PATH + "role",
-            BASE_PATH + "configuration",
-            BASE_PATH + "label",
-            BASE_PATH + "messages",
-            BASE_PATH + "frameworkoverride",
-            BASE_PATH + "validations",
-            BASE_PATH + "field",
-    };
-    /**
      * Instance of {@link DefaultConst}.
      */
     private final DefaultConst dc;
 
     /**
-     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
-     * unexpected results.
-     *
-     * @return A {@link MessageSource} for the {@link #I_18_N_BASE_NAMES} paths.
+     * Strategy interface for resolving messages, with support for the parameterization and internationalization of
+     * such messages.
      */
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames(I_18_N_BASE_NAMES);
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
-
-        return messageSource;
-    }
+    private final MessageSource messageSource;
 
     /**
      * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
@@ -80,7 +38,7 @@ public class LocaleConfig implements WebMvcConfigurer {
      */
     @Bean
     public MessageResolver gmsMessageResolver() {
-        return new MessageResolver(messageSource());
+        return new MessageResolver(messageSource);
     }
 
     /**
