@@ -13,7 +13,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
- * @version 0.1
+ * @version 0.2
  */
 @RequiredArgsConstructor
 @Configuration
