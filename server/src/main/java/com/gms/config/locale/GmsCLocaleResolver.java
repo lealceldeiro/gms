@@ -23,7 +23,7 @@ public class GmsCLocaleResolver extends CookieLocaleResolver {
     public Locale resolveLocale(final HttpServletRequest request) {
         String acceptLanguage = request.getHeader(DefaultConst.DEFAULT_LANGUAGE_HEADER);
         if (acceptLanguage == null || acceptLanguage.trim().isEmpty()) {
-            return super.determineDefaultLocale(request);
+            return super.resolveLocale(request);
         }
 
         return request.getLocale();
