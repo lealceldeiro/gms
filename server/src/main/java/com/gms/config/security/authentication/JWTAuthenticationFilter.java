@@ -1,4 +1,4 @@
-package com.gms.config.security;
+package com.gms.config.security.authentication;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @version 0.1
  */
 @RequiredArgsConstructor
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public final class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * Instance of {@link AuthenticationManager}.

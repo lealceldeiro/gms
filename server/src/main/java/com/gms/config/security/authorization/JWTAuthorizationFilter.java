@@ -1,6 +1,6 @@
-package com.gms.config.security;
+package com.gms.config.security.authorization;
 
-import com.gms.component.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.security.token.JWTService;
 import io.jsonwebtoken.JwtException;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     /**
      * Instance of {@link SecurityConst}.

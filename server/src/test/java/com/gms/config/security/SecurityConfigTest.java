@@ -2,7 +2,7 @@ package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.Application;
-import com.gms.component.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;

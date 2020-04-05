@@ -1,7 +1,10 @@
 package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.component.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.JWTAuthenticationFailureHandler;
+import com.gms.config.security.authentication.JWTAuthenticationFilter;
+import com.gms.config.security.authorization.JWTAuthorizationFilter;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;

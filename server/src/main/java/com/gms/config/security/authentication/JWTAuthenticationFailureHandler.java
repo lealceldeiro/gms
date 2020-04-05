@@ -1,4 +1,4 @@
-package com.gms.config.security;
+package com.gms.config.security.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  * @version 0.1
  */
 @RequiredArgsConstructor
-public class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public final class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     /**
      * Instance of {@link DefaultConst}.
