@@ -1,0 +1,21 @@
+[[language]]
+== Language
+
+By default all requests will be handled in English Language. Additionally there is support for the following languages:
+
+  - Spanish
+
+The language in which the request will be handle can be specified in the following ways:
+
+[[sending-accept-language]]
+=== Sending an `Accept-Language` header
+
+include::example/language-header-en.adoc[]
+
+[[sending-request-parameter]]
+=== Sending a special parameter in the request (by default `lang`, but it may change due to server configuration)
+
+include::example/language-param-es.adoc[]
+
+[[sending-cookie]]
+=== Sending a cookie
