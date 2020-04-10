@@ -256,7 +256,7 @@ public class SecurityControllerTest {
         assertEquals(temp, msg.getMessage("security.unauthorized"));
 
         temp = json.getString("path");
-        assertEquals(temp, dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
+        assertEquals(SecurityConst.ACCESS_TOKEN_URL, temp);
 
         temp = json.getString(dc.getResMessageHolder());
 

@@ -206,8 +206,8 @@ public class DefaultControllerAdviceTest {
         );
         assertEquals(
                 "Paths do not match.",
-                res.getString("path"),
-                dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL
+                SecurityConst.ACCESS_TOKEN_URL,
+                res.getString("path")
         );
     }
 

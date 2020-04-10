@@ -55,7 +55,7 @@ public final class ExceptionUtil {
         additionalData.put("timestamp", System.currentTimeMillis());
         additionalData.put("status", HttpStatus.UNAUTHORIZED.value());
         additionalData.put("error", msg.getMessage("security.unauthorized"));
-        additionalData.put("path", (dc.getApiBasePath() + "/" + ex.getPath()).replaceAll("//", "/"));
+        additionalData.put("path", ex.getPath());
         return createResponseBodyAsMap(msg.getMessage(ex.getMessage()), dc, additionalData);
     }
 

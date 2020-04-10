@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.config.security.authentication.JWTAuthenticationFailureHandler;
 import com.gms.config.security.authentication.JWTAuthenticationFilter;
+import com.gms.config.security.authentication.entrypoint.GmsHttpStatusAndBodyEntryPoint;
 import com.gms.config.security.authorization.JWTAuthorizationFilter;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
@@ -15,7 +16,6 @@ import com.gms.util.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,7 +24,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -115,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 401 instead as "unauthorized" response HttpStatus
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .authenticationEntryPoint(new GmsHttpStatusAndBodyEntryPoint(UNAUTHORIZED, dc, msg));
     }
 
     /**
