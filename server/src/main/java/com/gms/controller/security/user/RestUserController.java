@@ -37,17 +37,17 @@ public class RestUserController {
      * controller annotated as {@code @BasePathAwareController}. This method is intended to be used by the Spring
      * framework and should not be overridden. Doing so may produce unexpected results.
      *
-     * @param user {@link EUser} data to be created.
+     * @param userEntityModel {@link EUser} data to be created.
      * @return A {@link EUser} mapped into a @{@link ResponseBody}.
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
     @PostMapping(path = ResourcePath.USER, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<EUser> register(@RequestBody @Valid final EntityModel<? extends EUser> user)
+    public ResponseEntity<EUser> register(@RequestBody @Valid final EntityModel<? extends EUser> userEntityModel)
             throws GmsGeneralException {
         EUser u = userService.signUp(
-                user.getContent(),
+                userEntityModel.getContent(),
                 UserService.EmailStatus.VERIFIED,
                 UserService.RegistrationPrivilege.SUPER_USER
         );

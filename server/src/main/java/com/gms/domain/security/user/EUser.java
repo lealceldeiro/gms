@@ -89,7 +89,7 @@ public class EUser extends GmsEntity implements UserDetails {
      */
     @NotNull(message = FIELD_NOT_NULL)
     @NotBlank(message = FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_DEFAULT, message = CodeI18N.FIELD_SIZE)
+    @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Column(nullable = false)
     @Setter(AccessLevel.NONE)
     private String lastName;
@@ -97,9 +97,9 @@ public class EUser extends GmsEntity implements UserDetails {
     /**
      * User's password.
      */
-    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
-    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_MAX, message = CodeI18N.FIELD_SIZE)
+    @NotNull(message = FIELD_NOT_NULL)
+    @NotBlank(message = FIELD_NOT_BLANK)
+    @Size(max = STRING_LENGTH_MAX, message = FIELD_SIZE)
     // the bean can actually have a LOT of chars, in database it will be stored as a hashed (a LOT LESSER characters)
     @Column(nullable = false, length = STRING_LENGTH_MAX)
     @RestResource(exported = false)
