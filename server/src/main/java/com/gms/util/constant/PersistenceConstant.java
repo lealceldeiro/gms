@@ -25,6 +25,11 @@ public final class PersistenceConstant {
     /**
      * Max string length.
      */
-    public static final int STRING_LENGTH_MAX = 10485760;
+    public static final int STRING_LENGTH_MAX = 10_485_760;
+
+    /**
+     * Length defined for password string holders..
+     */
+    public static final int STRING_LENGTH_PASSWORD = 150;
 
 }

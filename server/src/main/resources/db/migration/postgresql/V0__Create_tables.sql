@@ -61,7 +61,7 @@ CREATE TABLE euser (
   enabled BOOLEAN,
   last_name VARCHAR(255) NOT NULL,
   name VARCHAR(255) NOT NULL,
-  password VARCHAR(10485760) NOT NULL,
+  password VARCHAR(150) NOT NULL,
   username VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 );

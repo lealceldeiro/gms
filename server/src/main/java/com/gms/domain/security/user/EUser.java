@@ -26,7 +26,7 @@ import java.util.HashSet;
 
 import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_254;
 import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_DEFAULT;
-import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_MAX;
+import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_PASSWORD;
 import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_BLANK;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_NULL;
@@ -99,9 +99,9 @@ public class EUser extends GmsEntity implements UserDetails {
      */
     @NotNull(message = FIELD_NOT_NULL)
     @NotBlank(message = FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_MAX, message = FIELD_SIZE)
+    @Size(max = STRING_LENGTH_PASSWORD, message = FIELD_SIZE)
     // the bean can actually have a LOT of chars, in database it will be stored as a hashed (a LOT LESSER characters)
-    @Column(nullable = false, length = STRING_LENGTH_MAX)
+    @Column(nullable = false, length = STRING_LENGTH_PASSWORD)
     @RestResource(exported = false)
     private String password;
 
