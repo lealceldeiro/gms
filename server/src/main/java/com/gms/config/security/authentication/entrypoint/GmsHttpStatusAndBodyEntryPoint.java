@@ -17,7 +17,7 @@ import static com.gms.util.exception.ExceptionUtil.getResponseBodyForGmsSecurity
 
 /**
  * Provides custom means to customize the response on authentication failure requests by allowing to be set an
- * {@link org.springframework.http.HttpStatus} and a response body.
+ * {@link org.springframework.http.HttpStatus}.
  *
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
@@ -39,7 +39,8 @@ public final class GmsHttpStatusAndBodyEntryPoint implements GmsEntryPoint {
 
     /**
      * Creates a new {@link GmsHttpStatusAndBodyEntryPoint} which will provide the response with the given
-     * {@code httpStatus} and as a body the given {@code responseBody}.
+     * {@code httpStatus} and a specific value as the body. How the body is shaped depends on the provided
+     * {@code httpStatus}, that's it, the {@code httpStatus} determines which will the body be in the response.
      *
      * @param dc         A {@link DefaultConst} instance to help in creating the response body.
      * @param msg        A {@link MessageResolver} instance to help in creating the response body.
