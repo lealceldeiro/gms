@@ -5,6 +5,7 @@ import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.config.security.authentication.JWTAuthenticationFailureHandler;
 import com.gms.config.security.authentication.JWTAuthenticationFilter;
 import com.gms.config.security.authentication.entrypoint.GmsHttpStatusAndBodyEntryPoint;
+import com.gms.config.security.authorization.GmsAccessDeniedHandler;
 import com.gms.config.security.authorization.JWTAuthorizationFilter;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
@@ -120,6 +121,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 401 instead as "unauthorized" response HttpStatus
                 .exceptionHandling()
+                .accessDeniedHandler(new GmsAccessDeniedHandler(dc, msg))
                 .authenticationEntryPoint(new GmsHttpStatusAndBodyEntryPoint(UNAUTHORIZED, dc, msg));
     }
 
