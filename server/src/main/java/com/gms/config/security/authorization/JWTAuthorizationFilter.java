@@ -93,13 +93,13 @@ public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 String user = claims.get(jwtService.subjectKey()).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims
-                            .get(sc.getAuthoritiesHolder()).toString()
-                            .split(SecurityConst.AUTHORITIES_SEPARATOR);
-                    if (authoritiesS.length > 0) {
+                    final String[] authorityValues = claims.get(sc.getAuthoritiesHolder())
+                                                           .toString()
+                                                           .split(SecurityConst.AUTHORITIES_SEPARATOR);
+                    if (authorityValues.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
-                        for (String a : authoritiesS) {
-                            authorities.add(new SimpleGrantedAuthority(a));
+                        for (String authorityValue : authorityValues) {
+                            authorities.add(new SimpleGrantedAuthority(authorityValue));
                         }
                         String password = String.valueOf(claims.get(PASS_HOLDER));  // hashed password
 
