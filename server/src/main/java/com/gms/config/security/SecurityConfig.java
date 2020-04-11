@@ -98,7 +98,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authFilter.setPostOnly(true);
         authFilter.setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler(dc, sc, msg));
         http
-                .cors().and().formLogin().disable().csrf().disable().authorizeRequests()
+                .cors().and()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
