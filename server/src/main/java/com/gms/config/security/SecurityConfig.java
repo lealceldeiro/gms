@@ -23,7 +23,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -65,9 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private final UserDetailsService userDetailsService;
     /**
-     * Bean {@link BCryptPasswordEncoder}.
+     * Bean {@link PasswordEncoder}.
      */
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     /**
      * Instance of {@link ObjectMapper}.
      */
