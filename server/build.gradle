@@ -79,7 +79,9 @@ dependencies {
 //region custom tasks
 
 //region client task
-task clientBuild(type: NpmTask, dependsOn: ["npmInstall", "copyClientDocBuild",  "configPackageJsonDeployUrl", "configPackageJsonBaseUrl"]) {
+task clientBuild(type: NpmTask, dependsOn: ["npmInstall", "copyClientDocBuild",  "configPackageJsonDeployUrl",
+                                            "configPackageJsonBaseUrl"]
+                ) {
     group = "client"
     description = "Compiles client side folder for production"
     args = ["run", "build"]
@@ -112,7 +114,8 @@ task clientDocBuild(type: NpmTask, dependsOn: ["npmInstall"]) {
 
 task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
     group = "client"
-    description = "Checks all client app documentation resources are ready for deployment and copy them into the `static` folder"
+    description = "Checks all client app documentation resources are ready for deployment and copy them into the"
+                  + "`static` folder"
     from "../client/documentation"
     into "build/resources/main/static/appdocs"
 }
@@ -130,8 +133,8 @@ task setDevConfig() {
     group = "other"
     description = "Sets the environment for development mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild("spring.profiles.active")
-        if (p && p  != "development") {
+        final def property = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (property && property  != "development") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "development")
             }
@@ -149,8 +152,8 @@ task setTestingConfig() {
     group = "other"
     description = "Sets the environment for testing mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild("spring.profiles.active")
-        if (p && p != "test") {
+        final def property = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (property && property != "test") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "test")
             }
@@ -168,8 +171,8 @@ task setProductionConfig() {
     group = "other"
     description = "Sets the environment for production mode"
     doFirst {
-        def p = getSpringAppPropertyInBuild("spring.profiles.active")
-        if (p && p  != "production") {
+        final def property = getSpringAppPropertyInBuild("spring.profiles.active")
+        if (property && property  != "production") {
             ant.propertyfile(file: buildPropertiesFilePath) {
                 entry(key: "spring.profiles.active", value: "production")
             }
@@ -184,18 +187,18 @@ task setProductionConfig() {
 }
 
 @SuppressWarnings("GrMethodMayBeStatic")
-private String getSpringAppPropertyInBuild(String key, String filePath = null){
-    def props = new Properties()
-    def propFile = new File(filePath ?: buildPropertiesFilePath)
-    def p = null
+private String getSpringAppPropertyInBuild(final String propertyKey, final String filePath = null) {
+    final def props = new Properties()
+    final def propFile = new File(filePath ?: buildPropertiesFilePath)
+    def property = null
 
     if (propFile.exists() && propFile.canRead()){
         props.load(new FileInputStream(propFile))
-        if (props!=null && props.containsKey(key)) {
-            p = props[key]
+        if (props != null && props.containsKey(propertyKey)) {
+            property = props[propertyKey]
         }
     }
-    return p
+    return property
 }
 
 //endregion
@@ -295,13 +298,15 @@ private String getAppName() {
 }
 
 private String getClientDeployUrl() {
-    String defaultUrl = "/${getAppName()}-${version}/"
-    String configUrl  = project.getProperties().get("clientDeployUrl")
+    final String defaultUrl = "/${getAppName()}-${version}/"
+    final String configUrl  = project.getProperties().get("clientDeployUrl")
+
     return (configUrl || configUrl == "<default>") ? (configUrl == "<default>" ? "" : configUrl) : defaultUrl
 }
 
 private String getClientBaseUrl() {
     final String defaultUrl = "/${getAppName()}-${version}/"
     final String configUrl  = project.getProperties().get("clientBaseUrl")
+
     return configUrl ?: defaultUrl
 }
