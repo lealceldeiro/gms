@@ -114,8 +114,8 @@ task clientDocBuild(type: NpmTask, dependsOn: ["npmInstall"]) {
 
 task copyClientDocBuild(type: Copy, dependsOn: ["clientDocBuild"]) {
     group = "client"
-    description = "Checks all client app documentation resources are ready for deployment and copy them into the"
-                  + "`static` folder"
+    description = """Checks all client app documentation resources are ready for deployment and copy them into the
+                  `static` folder"""
     from "../client/documentation"
     into "build/resources/main/static/appdocs"
 }
