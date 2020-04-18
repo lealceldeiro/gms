@@ -6,7 +6,7 @@ buildscript {
         flywayVersion = "6.3.3"
         javaassistVersion = "3.26.0-GA"
         jaxbVersion = 2.1
-        jwtVersion = "0.9.0"
+        jwtVersion = "0.9.1"
         lombokVersion = "1.18.12"
         refVersion = "0.9.11"
         springBootVersion = "2.2.6.RELEASE"     // keep synced with plugin org.springframework.boot declared below
