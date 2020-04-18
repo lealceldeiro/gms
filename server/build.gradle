@@ -8,7 +8,7 @@ buildscript {
         jaxbVersion = 2.1
         jwtVersion = "0.9.1"
         lombokVersion = "1.18.12"
-        refVersion = "0.9.11"
+        refVersion = "0.9.12"
         springBootVersion = "2.2.6.RELEASE"     // keep synced with plugin org.springframework.boot declared below
         targetSource = 1.8
         // other vars
