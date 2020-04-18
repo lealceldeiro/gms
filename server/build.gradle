@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        appVersion = "0.0.1"
+        appVersion = "0.0.2"
         // versions (ordered alphabetically)
         checkStyleVersion = "8.28"
         flywayVersion = "6.3.3"
