@@ -138,6 +138,8 @@ task setDevConfig() {
                 entry(key: "spring.profiles.active", value: "development")
             }
             envSet = true
+
+            return
         }
     }
     doLast {
@@ -157,6 +159,8 @@ task setTestingConfig() {
                 entry(key: "spring.profiles.active", value: "test")
             }
             envSet = true
+
+            return
         }
     }
     doLast {
@@ -176,6 +180,8 @@ task setProductionConfig() {
                 entry(key: "spring.profiles.active", value: "production")
             }
             envSet = true
+
+            return
         }
     }
     doLast {
