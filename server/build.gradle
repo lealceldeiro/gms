@@ -52,28 +52,27 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor")
 
-    compile ("io.jsonwebtoken:jjwt:${jwtVersion}")
-    compile ("org.flywaydb:flyway-core:${flywayVersion}")
-    compile ("org.reflections:reflections:${refVersion}")
-    compile ("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile ("org.springframework.boot:spring-boot-starter-data-rest")
-    compile ("org.springframework.boot:spring-boot-starter-hateoas")
-    compile ("org.springframework.boot:spring-boot-starter-mail")
-    compile ("org.springframework.boot:spring-boot-starter-security")
-    compile ("org.springframework.boot:spring-boot-starter-web")
-    compile ("javax.xml.bind:jaxb-api:${jaxbVersion}")
-    compile ("org.javassist:javassist:${javaassistVersion}")
-
+    implementation ("io.jsonwebtoken:jjwt:${jwtVersion}")
+    implementation ("org.flywaydb:flyway-core:${flywayVersion}")
+    implementation ("org.reflections:reflections:${refVersion}")
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("org.springframework.boot:spring-boot-starter-data-rest")
+    implementation ("org.springframework.boot:spring-boot-starter-hateoas")
+    implementation ("org.springframework.boot:spring-boot-starter-mail")
+    implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation ("org.springframework.boot:spring-boot-starter-web")
+    implementation ("javax.xml.bind:jaxb-api:${jaxbVersion}")
+    implementation ("org.javassist:javassist:${javaassistVersion}")
 
     compileOnly ("org.projectlombok:lombok:${lombokVersion}")
 
-    runtime ("org.postgresql:postgresql")
-    runtime ("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly ("org.postgresql:postgresql")
+    runtimeOnly ("org.springframework.boot:spring-boot-devtools")
 
-    testCompile ("com.jayway.jsonpath:json-path")
-    testCompile ("org.springframework.boot:spring-boot-starter-test")
-    testCompile ("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testCompile ("org.springframework.security:spring-security-test")
+    testImplementation ("com.jayway.jsonpath:json-path")
+    testImplementation ("org.springframework.boot:spring-boot-starter-test")
+    testImplementation ("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation ("org.springframework.security:spring-security-test")
 }
 
 //region custom tasks
@@ -275,7 +274,7 @@ testClasses.dependsOn(setTestingConfig)
 
 bootWar {
     dependsOn setProductionConfig, processApiDocs, copyClientBuild
-    baseName = getAppName()
+    archivesBaseName = getAppName()
 }
 
 // In order to generate our own metadata by Using the Annotation Processor
