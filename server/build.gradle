@@ -3,7 +3,7 @@ buildscript {
         appVersion = "0.0.1"
         // versions (ordered alphabetically)
         checkStyleVersion = "8.28"
-        flywayVersion = "6.3.2"
+        flywayVersion = "6.3.3"
         javaassistVersion = "3.26.0-GA"
         jaxbVersion = 2.1
         jwtVersion = "0.9.0"
