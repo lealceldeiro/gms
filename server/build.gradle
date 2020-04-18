@@ -20,10 +20,10 @@ buildscript {
 }
 
 plugins {
-    id "com.github.kt3k.coveralls" version "2.8.4"                  // coverage reports for coveralls.io
+    id "com.github.kt3k.coveralls" version "2.10.1"                  // coverage reports for coveralls.io
     id "com.moowork.node" version "1.3.1"
     id "io.spring.dependency-management" version "1.0.8.RELEASE"
-    id "net.saliman.cobertura" version "2.6.1"                      // coverage generator
+    id "net.saliman.cobertura" version "3.0.0"                      // coverage generator
     id "org.asciidoctor.convert" version "2.3.0"
     id "org.springframework.boot" version "2.2.6.RELEASE"           // keep synced with var springBootVersion
     id 'checkstyle'
