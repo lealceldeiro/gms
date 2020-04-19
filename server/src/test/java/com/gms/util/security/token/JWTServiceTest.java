@@ -1,4 +1,4 @@
-package com.gms.component.security.token;
+package com.gms.util.security.token;
 
 import com.gms.Application;
 import com.gms.util.constant.SecurityConst;
@@ -44,7 +44,7 @@ public class JWTServiceTest {
      */
     @Before
     public void setUp() {
-        jwtService = new JWTService(sc);
+        jwtService = new JWTServiceImpl(sc);
     }
 
     /**
@@ -154,13 +154,13 @@ public class JWTServiceTest {
 
         Map<String, Object> tokenClaims = jwtService.getClaimsExtended(accessToken);
         Map<String, Object> rTokenClaims = jwtService.getClaimsExtended(refreshToken);
-        assertTrue(message, tokenClaims.get(JWTService.EXPIRATION) instanceof Date);
-        assertTrue(message, rTokenClaims.get(JWTService.EXPIRATION) instanceof Date);
+        assertTrue(message, tokenClaims.get(jwtService.expirationKey()) instanceof Date);
+        assertTrue(message, rTokenClaims.get(jwtService.expirationKey()) instanceof Date);
 
-        if (tokenClaims.get(JWTService.EXPIRATION) instanceof Date
-                && rTokenClaims.get(JWTService.EXPIRATION) instanceof Date) {
-            long rTokenTime = ((Date) rTokenClaims.get(JWTService.EXPIRATION)).getTime();
-            long tokenTime = ((Date) tokenClaims.get(JWTService.EXPIRATION)).getTime();
+        if (tokenClaims.get(jwtService.expirationKey()) instanceof Date
+                && rTokenClaims.get(jwtService.expirationKey()) instanceof Date) {
+            long rTokenTime = ((Date) rTokenClaims.get(jwtService.expirationKey())).getTime();
+            long tokenTime = ((Date) tokenClaims.get(jwtService.expirationKey())).getTime();
 
             assertTrue("Expiration time for refresh token must be greater than expiration time for access "
                     + "token when default values are used", rTokenTime > tokenTime);
@@ -176,7 +176,8 @@ public class JWTServiceTest {
         final String auth = "ROLE_1;ROLE_2";
         final String token = jwtService.createToken(sub, auth);
         final Map<String, Object> claims =
-                jwtService.getClaims(token, JWTService.SUBJECT, sc.getAuthoritiesHolder(), JWTService.EXPIRATION);
+                jwtService.getClaims(token, jwtService.subjectKey(), sc.getAuthoritiesHolder(),
+                        jwtService.expirationKey());
 
         assertClaimsState(claims, sub, auth);
     }
@@ -196,13 +197,13 @@ public class JWTServiceTest {
         assertClaimsState(claims, sub, auth);
 
         assertNull("Claims contains an incorrect pair key-value", claims.get(randomKey));
-        assertNotNull("Expiration time is null", claims.get(JWTService.EXPIRATION));
+        assertNotNull("Expiration time is null", claims.get(jwtService.expirationKey()));
         assertTrue("Expiration time is not an instance of Date",
-                claims.get(JWTService.EXPIRATION) instanceof Date);
+                claims.get(jwtService.expirationKey()) instanceof Date);
 
-        if (claims.get(JWTService.EXPIRATION) != null && claims.get(JWTService.EXPIRATION) instanceof Date) {
+        if (claims.get(jwtService.expirationKey()) != null && claims.get(jwtService.expirationKey()) instanceof Date) {
             assertTrue("Expiration time is not greater than the creation time of the token",
-                    ((Date) claims.get(JWTService.EXPIRATION)).getTime() > expiresIn);
+                    ((Date) claims.get(jwtService.expirationKey())).getTime() > expiresIn);
         }
     }
 
@@ -210,12 +211,12 @@ public class JWTServiceTest {
         assertFalse("Claims map is empty", claims.isEmpty());
 
         assertNotNull("Claims map is null", claims);
-        assertNotNull("Expiration time claims is null", claims.get(JWTService.EXPIRATION));
-        assertNotNull("Subject claims is null", claims.get(JWTService.SUBJECT));
+        assertNotNull("Expiration time claims is null", claims.get(jwtService.expirationKey()));
+        assertNotNull("Subject claims is null", claims.get(jwtService.subjectKey()));
         assertNotNull("Authorities claims is null", claims.get(sc.getAuthoritiesHolder()));
 
-        if (claims.get(JWTService.SUBJECT) != null) {
-            assertEquals("Subjects are not equals", subject, claims.get(JWTService.SUBJECT).toString());
+        if (claims.get(jwtService.subjectKey()) != null) {
+            assertEquals("Subjects are not equals", subject, claims.get(jwtService.subjectKey()).toString());
         }
         if (claims.get(sc.getAuthoritiesHolder()) != null) {
             assertEquals(

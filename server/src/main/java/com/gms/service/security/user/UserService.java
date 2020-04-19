@@ -118,7 +118,8 @@ public class UserService implements UserDetailsService {
      * @param emailStatus           One of {@link EmailStatus} which specify whether the email is verified or not.
      * @param registrationPrivilege One of {@link RegistrationPrivilege} which indicates whether this action is being
      *                              performed by a superuser or not.
-     * @return The registered {@link EUser}'s data
+     * @return The registered {@link EUser}'s data or {@code null} if the user registration is not allowed and the
+     * provided {@code registrationPrivilege} is not {@link RegistrationPrivilege#SUPER_USER}.
      */
     public EUser signUp(final EUser u, final EmailStatus emailStatus,
                         final RegistrationPrivilege registrationPrivilege) {

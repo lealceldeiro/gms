@@ -1,8 +1,7 @@
-package com.gms.config.security;
+package com.gms.config.security.authentication;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.component.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
@@ -10,6 +9,7 @@ import com.gms.util.constant.SecurityConst;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
+import com.gms.util.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @version 0.1
  */
 @RequiredArgsConstructor
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public final class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * Instance of {@link AuthenticationManager}.
@@ -125,7 +125,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             String accessToken = jwtService.createToken(sub, authorities);
             Map<String, Object> claims = jwtService.getClaimsExtended(accessToken);
-            Date iat = (Date) claims.get(JWTService.ISSUED_AT);
+            Date iat = (Date) claims.get(jwtService.issuedAtKey());
 
             String refreshToken = jwtService.createRefreshToken(sub, authorities);
 

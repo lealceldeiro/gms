@@ -60,9 +60,9 @@ public class ApplicationTest {
      * Test to be executed by JUnit.
      */
     @Test
-    public void bCryptPasswordEncoderTest() {
+    public void passwordEncoderTest() {
         Application app = new Application();
-        assertNotNull(app.bCryptPasswordEncoder());
+        assertNotNull(app.gmsPasswordEncoder());
     }
 
 }

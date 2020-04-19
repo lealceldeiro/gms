@@ -85,7 +85,7 @@ public class PermissionService {
         Set<BPermission> set = new HashSet<>();
         set.add(permission);
 
-        return roleRepository.findAllByPermissions(set, pageable);
+        return roleRepository.findAllByPermissionsIn(set, pageable);
     }
 
 }

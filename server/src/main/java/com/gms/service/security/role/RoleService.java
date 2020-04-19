@@ -182,7 +182,7 @@ public class RoleService {
         Set<BRole> set = new HashSet<>();
         set.add(role);
 
-        return permissionRepository.findAllByRoles(set, pageable);
+        return permissionRepository.findAllByRolesIn(set, pageable);
     }
 
     public enum ActionOverRolePermissions {

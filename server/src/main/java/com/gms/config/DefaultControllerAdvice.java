@@ -1,6 +1,6 @@
 package com.gms.config;
 
-import com.gms.component.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;

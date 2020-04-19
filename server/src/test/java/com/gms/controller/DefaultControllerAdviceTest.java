@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -206,8 +206,8 @@ public class DefaultControllerAdviceTest {
         );
         assertEquals(
                 "Paths do not match.",
-                res.getString("path"),
-                dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL
+                SecurityConst.ACCESS_TOKEN_URL,
+                res.getString("path")
         );
     }
 
@@ -229,7 +229,7 @@ public class DefaultControllerAdviceTest {
             configService.setUserRegistrationAllowed(false);
         }
 
-        Resource<EUser> resource = getSampleUserResource();
+        EntityModel<EUser> resource = getSampleUserResource();
         final MockHttpServletResponse result = mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
@@ -263,7 +263,7 @@ public class DefaultControllerAdviceTest {
         final String r = random.nextString();
         EUser u = new EUser(null, "a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
                 EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
-        Resource<EUser> resource = new Resource<>(u);
+        EntityModel<EUser> resource = new EntityModel<>(u);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
@@ -287,7 +287,7 @@ public class DefaultControllerAdviceTest {
         }
 
         final String r = random.nextString();
-        Resource<EUser> resource = getSampleUserResource(r);
+        EntityModel<EUser> resource = getSampleUserResource(r);
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))

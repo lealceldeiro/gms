@@ -1,6 +1,6 @@
 package com.gms.controller.security;
 
-import com.gms.component.security.token.JWTService;
+import com.gms.util.security.token.JWTService;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.SecurityConst;
@@ -10,12 +10,11 @@ import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,13 +50,12 @@ public class SecurityController {
      * results.
      *
      * @param user {@link EUser} data to be created
-     * @return A {@link EUser} mapped into a @{@link ResponseBody}
+     * @return A {@link EUser} mapped into a @{@link org.springframework.web.bind.annotation.ResponseBody}
      * @throws GmsGeneralException when an unhandled exception occurs.
      */
     @PostMapping("${gms.security.sign_up_url}")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final Resource<? extends EUser> user)
+    public ResponseEntity<EUser> signUpUser(@RequestBody @Valid final EntityModel<? extends EUser> user)
             throws GmsGeneralException {
         EUser u = userService.signUp(user.getContent(), UserService.EmailStatus.NOT_VERIFIED);
         if (u != null) {
@@ -85,9 +83,9 @@ public class SecurityController {
             try {
                 String[] keys = {sc.getAuthoritiesHolder()};
                 Map<String, Object> claims = jwtService.getClaimsExtended(oldRefreshToken, keys);
-                String sub = claims.get(JWTService.SUBJECT).toString();
+                String sub = claims.get(jwtService.subjectKey()).toString();
                 String authorities = claims.get(keys[0]).toString();
-                Date iat = (Date) claims.get(JWTService.ISSUED_AT);
+                Date iat = (Date) claims.get(jwtService.issuedAtKey());
 
                 String newAccessToken = jwtService.createToken(sub, authorities);
                 String newRefreshToken = jwtService.createRefreshToken(sub, authorities);

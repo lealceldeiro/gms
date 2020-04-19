@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -211,7 +211,7 @@ public class RestOwnedEntityControllerTest {
         final String r = random.nextString();
         EOwnedEntity e = new EOwnedEntity(null, StringUtil.EXAMPLE_USERNAME + r,
                 StringUtil.EXAMPLE_DESCRIPTION + r);
-        Resource<EOwnedEntity> resource = new Resource<>(e);
+        EntityModel<EOwnedEntity> resource = new EntityModel<>(e);
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -237,7 +237,7 @@ public class RestOwnedEntityControllerTest {
         }
 
         final String r = random.nextString();
-        Resource<EOwnedEntity> resource = EntityUtil.getSampleEntityResource(r);
+        EntityModel<EOwnedEntity> resource = EntityUtil.getSampleEntityResource(r);
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
                         .contentType(MediaType.APPLICATION_JSON)

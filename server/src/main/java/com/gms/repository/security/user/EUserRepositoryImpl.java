@@ -2,7 +2,7 @@ package com.gms.repository.security.user;
 
 import com.gms.domain.security.user.EUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,9 +18,9 @@ import java.util.Iterator;
 public class EUserRepositoryImpl implements EUserRepositoryCustom {
 
     /**
-     * Instance of {@link BCryptPasswordEncoder}. This bean is provided by the Spring framework dependency manager.
+     * Instance of {@link PasswordEncoder}. This bean is provided by the Spring framework dependency manager.
      */
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Dependency on a container-managed {@link EntityManager} and its associated persistence context.
@@ -49,11 +49,11 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
      */
     @Override
     public <S extends EUser> Iterable<S> saveAll(final Iterable<S> it) {
-        final Iterator<S> iterator = it.iterator();
-        S s;
-        while (iterator.hasNext()) {
-            s = iterator.next();
-            persist(s);
+        final Iterator<S> userIterator = it.iterator();
+        S user;
+        while (userIterator.hasNext()) {
+            user = userIterator.next();
+            persist(user);
         }
 
         return it;
@@ -66,7 +66,7 @@ public class EUserRepositoryImpl implements EUserRepositoryCustom {
      */
     private void persist(final EUser u) {
         if (u.getPassword() != null) {
-            u.setPassword(encoder.encode(u.getPassword()));
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
         }
         entityManager.persist(u);
     }

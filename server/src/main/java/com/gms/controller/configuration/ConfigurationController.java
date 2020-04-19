@@ -6,6 +6,7 @@ import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,6 +64,7 @@ public class ConfigurationController {
      * @return Object which represent the configuration value for the given parameters.
      */
     @GetMapping
+    @PreAuthorize("hasAuthority('MANAGE_CONFIGURATION')")
     public Object getConfig(@RequestParam(value = "key", required = false) final String key,
                             @RequestParam(value = "id", required = false) final Long id)
             throws NotFoundEntityException {
@@ -77,6 +79,7 @@ public class ConfigurationController {
      * @return Map which represent the configurations key-value pairs for the given parameter.
      */
     @GetMapping("{id}")
+    @PreAuthorize("isFullyAuthenticated()")
     public Map<String, Object> getConfigByUser(@PathVariable(value = "id") final Long id) {
         return configService.getConfigByUser(id);
     }
@@ -92,6 +95,7 @@ public class ConfigurationController {
      */
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("isFullyAuthenticated()")
     public void saveConfig(@RequestBody final Map<String, Object> configs)
             throws NotFoundEntityException, GmsGeneralException {
         configService.saveConfig(configs);

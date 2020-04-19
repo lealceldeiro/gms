@@ -3,10 +3,10 @@ package com.gms.domain.security.ownedentity;
 import com.gms.domain.GmsEntity;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.CodeI18N;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -26,9 +26,9 @@ import static com.gms.util.i18n.CodeI18N.FIELD_SIZE;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@Data
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = "description")
 @Entity
@@ -46,7 +46,7 @@ public final class EOwnedEntity extends GmsEntity {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Column(nullable = false)
-    private final String name;
+    private String name;
 
     /**
      * A unique string representation of the {@link #name}. Useful when there are other entities with the same
@@ -57,7 +57,7 @@ public final class EOwnedEntity extends GmsEntity {
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Pattern(regexp = SecurityConst.USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false)
-    private final String username;
+    private String username;
 
     /**
      * A brief description of the entity.
@@ -66,6 +66,6 @@ public final class EOwnedEntity extends GmsEntity {
     @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_MAX, message = CodeI18N.FIELD_SIZE)
     @Column(nullable = false, length = STRING_LENGTH_MAX)
-    private final String description;
+    private String description;
 
 }

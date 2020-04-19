@@ -4,7 +4,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 0.1
  */
 @Configuration
-public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
+public class RepositoryConfig implements RepositoryRestConfigurer {
 
     /**
      * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce

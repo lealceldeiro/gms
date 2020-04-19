@@ -1,18 +1,22 @@
 package com.gms.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.component.security.authentication.AuthenticationFacade;
-import com.gms.component.security.token.JWTService;
+import com.gms.config.security.authentication.AuthenticationFacade;
+import com.gms.config.security.authentication.JWTAuthenticationFailureHandler;
+import com.gms.config.security.authentication.JWTAuthenticationFilter;
+import com.gms.config.security.authentication.entrypoint.GmsHttpStatusAndBodyEntryPoint;
+import com.gms.config.security.authorization.GmsAccessDeniedHandler;
+import com.gms.config.security.authorization.JWTAuthorizationFilter;
 import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
+import com.gms.util.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,8 +24,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -61,9 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private final UserDetailsService userDetailsService;
     /**
-     * Bean {@link BCryptPasswordEncoder}.
+     * Bean {@link PasswordEncoder}.
      */
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     /**
      * Instance of {@link ObjectMapper}.
      */
@@ -94,7 +99,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authFilter.setPostOnly(true);
         authFilter.setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler(dc, sc, msg));
         http
-                .cors().and().formLogin().disable().csrf().disable().authorizeRequests()
+                .cors().and()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
@@ -112,7 +121,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 401 instead as "unauthorized" response HttpStatus
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .accessDeniedHandler(new GmsAccessDeniedHandler(dc, msg))
+                .authenticationEntryPoint(new GmsHttpStatusAndBodyEntryPoint(UNAUTHORIZED, dc, msg));
     }
 
     /**

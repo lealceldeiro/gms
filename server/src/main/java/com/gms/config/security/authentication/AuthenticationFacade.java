@@ -1,4 +1,4 @@
-package com.gms.component.security.authentication;
+package com.gms.config.security.authentication;
 
 import org.springframework.security.core.Authentication;
 

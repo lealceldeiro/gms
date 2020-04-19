@@ -44,20 +44,21 @@ public abstract class BAuthorizationDAO {
      */
     public abstract List<BRole> getRolesForUserOverEntity(long userId, long entityId);
 
-    final List<BRole> getRolesListFrom(final Iterable<Object[]> rawVal) {
+    final List<BRole> getRolesListFrom(final Iterable<Object[]> resultSet) {
         final int idIndex = 0;
         final int versionIndex = 1;
         final int labelIndex = 2;
         final int descriptionIndex = 3;
         final int enabledIndex = 4;
-        BRole role;
+
         List<BRole> roles = new LinkedList<>();
-        for (Object[] oVal : rawVal) {
-            role = new BRole(oVal[labelIndex].toString());
-            role.setId(Long.valueOf(oVal[idIndex].toString()));
-            role.setVersion(Integer.valueOf(oVal[versionIndex].toString()));
-            role.setEnabled(Boolean.valueOf(oVal[enabledIndex].toString()));
-            role.setDescription(oVal[descriptionIndex].toString());
+
+        for (Object[] resultSetRoleValue : resultSet) {
+            final BRole role = new BRole(resultSetRoleValue[labelIndex].toString());
+            role.setId(Long.valueOf(resultSetRoleValue[idIndex].toString()));
+            role.setVersion(Integer.valueOf(resultSetRoleValue[versionIndex].toString()));
+            role.setEnabled(Boolean.valueOf(resultSetRoleValue[enabledIndex].toString()));
+            role.setDescription(resultSetRoleValue[descriptionIndex].toString());
             roles.add(role);
         }
 

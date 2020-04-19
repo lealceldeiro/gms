@@ -1,8 +1,8 @@
-package com.gms.config.security;
+package com.gms.config.security.authorization;
 
-import com.gms.component.security.authentication.AuthenticationFacade;
-import com.gms.component.security.token.JWTService;
+import com.gms.config.security.authentication.AuthenticationFacade;
 import com.gms.util.constant.SecurityConst;
+import com.gms.util.security.token.JWTService;
 import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     /**
      * Instance of {@link SecurityConst}.
@@ -90,16 +90,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 Map<String, Object> claims = jwtService.getClaimsExtended(
                         token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
                 );
-                String user = claims.get(JWTService.SUBJECT).toString();
+                String user = claims.get(jwtService.subjectKey()).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authoritiesS = claims
-                            .get(sc.getAuthoritiesHolder()).toString()
-                            .split(SecurityConst.AUTHORITIES_SEPARATOR);
-                    if (authoritiesS.length > 0) {
+                    final String[] authorityValues = claims.get(sc.getAuthoritiesHolder())
+                                                           .toString()
+                                                           .split(SecurityConst.AUTHORITIES_SEPARATOR);
+                    if (authorityValues.length > 0) {
                         HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
-                        for (String a : authoritiesS) {
-                            authorities.add(new SimpleGrantedAuthority(a));
+                        for (String authorityValue : authorityValues) {
+                            authorities.add(new SimpleGrantedAuthority(authorityValue));
                         }
                         String password = String.valueOf(claims.get(PASS_HOLDER));  // hashed password
 

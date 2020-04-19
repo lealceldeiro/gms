@@ -1,4 +1,4 @@
-package com.gms.component.security.authentication;
+package com.gms.config.security.authentication;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @version 0.1
  */
 @Component
-public final class AuthenticationFacadeImpl implements AuthenticationFacade {
+final class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     @Override
     public Authentication getAuthentication() {

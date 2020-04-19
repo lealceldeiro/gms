@@ -1,0 +1,11 @@
+include::../../util/H-REQUEST.adoc[]
+
+include::../../util/H-EXAMPLE.adoc[]
+
+include::{snippets}/locale-config-test/delete-roles-e-n/curl-request.adoc[]
+
+include::../../util/H-RESPONSE.adoc[]
+
+include::../../util/H-EXAMPLE-BARE.adoc[]
+
+include::{snippets}/locale-config-test/delete-roles-e-n/http-response.adoc[]

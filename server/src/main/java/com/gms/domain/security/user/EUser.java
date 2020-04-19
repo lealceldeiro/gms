@@ -4,10 +4,10 @@ import com.gms.domain.GmsEntity;
 import com.gms.util.i18n.CodeI18N;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +26,7 @@ import java.util.HashSet;
 
 import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_254;
 import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_DEFAULT;
-import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_MAX;
+import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_PASSWORD;
 import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_BLANK;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_NULL;
@@ -37,7 +37,8 @@ import static com.gms.util.i18n.CodeI18N.FIELD_SIZE;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"authorities", "password"})
@@ -58,7 +59,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Pattern(regexp = USERNAME_REGEXP, message = FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false)
-    private final String username;
+    @Setter(AccessLevel.NONE)
+    private String username;
 
     /**
      * For emails max length as described at http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 and explained
@@ -69,7 +71,8 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Email(message = CodeI18N.FIELD_NOT_WELL_FORMED)
     @Column(unique = true, nullable = false, length = STRING_LENGTH_254)
-    private final String email;
+    @Setter(AccessLevel.NONE)
+    private String email;
 
     /**
      * User's name.
@@ -78,25 +81,27 @@ public class EUser extends GmsEntity implements UserDetails {
     @NotBlank(message = FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Column(nullable = false)
-    private final String name;
+    @Setter(AccessLevel.NONE)
+    private String name;
 
     /**
      * User's last name.
      */
     @NotNull(message = FIELD_NOT_NULL)
     @NotBlank(message = FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_DEFAULT, message = CodeI18N.FIELD_SIZE)
+    @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Column(nullable = false)
-    private final String lastName;
+    @Setter(AccessLevel.NONE)
+    private String lastName;
 
     /**
      * User's password.
      */
-    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
-    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_MAX, message = CodeI18N.FIELD_SIZE)
+    @NotNull(message = FIELD_NOT_NULL)
+    @NotBlank(message = FIELD_NOT_BLANK)
+    @Size(max = STRING_LENGTH_PASSWORD, message = FIELD_SIZE)
     // the bean can actually have a LOT of chars, in database it will be stored as a hashed (a LOT LESSER characters)
-    @Column(nullable = false, length = STRING_LENGTH_MAX)
+    @Column(nullable = false, length = STRING_LENGTH_PASSWORD)
     @RestResource(exported = false)
     private String password;
 

@@ -1,7 +1,7 @@
 [[resource-roles-add-permission]]
 ==== Adding permissions
 
-A `POST` request add new permissions to a role if this has not this permission already assigned.
+A `POST` request adds new permissions to a role if this has not this permission already assigned.
 This request does not delete eny of the existing permissions assigned to the role.
 
 include::../../util/H-REQUEST.adoc[]

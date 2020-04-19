@@ -23,14 +23,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -150,8 +149,7 @@ public class SecurityControllerTest {
         EUser u = EntityUtil.getSampleUser(r);
         u.setEnabled(false);
 
-        Resource<EUser> resource = new Resource<>(u);
-        ReflectionTestUtils.setField(resource, "links", null);
+        EntityModel<EUser> resource = new EntityModel<>(u);
 
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
@@ -193,7 +191,7 @@ public class SecurityControllerTest {
         if (initial) {
             configService.setUserRegistrationAllowed(false);
         }
-        Resource<EUser> resource = getSampleUserResource(random.nextString());
+        EntityModel<EUser> resource = getSampleUserResource(random.nextString());
         mvc.perform(
                 post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
@@ -258,7 +256,7 @@ public class SecurityControllerTest {
         assertEquals(temp, msg.getMessage("security.unauthorized"));
 
         temp = json.getString("path");
-        assertEquals(temp, dc.getApiBasePath() + "/" + SecurityConst.ACCESS_TOKEN_URL);
+        assertEquals(SecurityConst.ACCESS_TOKEN_URL, temp);
 
         temp = json.getString(dc.getResMessageHolder());
 

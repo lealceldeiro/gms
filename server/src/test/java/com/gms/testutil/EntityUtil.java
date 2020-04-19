@@ -5,7 +5,7 @@ import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.domain.security.user.EUser;
 import com.gms.util.GMSRandom;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 
 import static com.gms.testutil.StringUtil.EXAMPLE_DESCRIPTION;
 import static com.gms.testutil.StringUtil.EXAMPLE_EMAIL;
@@ -51,24 +51,24 @@ public final class EntityUtil {
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link EUser} as content. The {@link EUser} is generated with random
+     * Creates a sample {@link EntityModel} with a {@link EUser} as content. The {@link EUser} is generated with random
      * values in its attributes.
      *
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<EUser> getSampleUserResource() {
+    public static EntityModel<EUser> getSampleUserResource() {
         return getSampleUserResource(new GMSRandom().nextString());
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link EUser} as content. The {@link EUser} is generated with random
+     * Creates a sample {@link EntityModel} with a {@link EUser} as content. The {@link EUser} is generated with random
      * values in its attributes.
      *
      * @param random Random generator for getting the random values to be used.
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<EUser> getSampleUserResource(final String random) {
-        return new Resource<>(getSampleUser(random));
+    public static EntityModel<EUser> getSampleUserResource(final String random) {
+        return new EntityModel<>(getSampleUser(random));
     }
 
     /**
@@ -91,24 +91,24 @@ public final class EntityUtil {
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link EOwnedEntity} as content. The {@link EOwnedEntity} is generated
-     * with random values in its attributes.
+     * Creates a sample {@link EntityModel} with a {@link EOwnedEntity} as content. The {@link EOwnedEntity} is
+     * generated with random values in its attributes.
      *
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<EOwnedEntity> getSampleEntityResource() {
+    public static EntityModel<EOwnedEntity> getSampleEntityResource() {
         return getSampleEntityResource(new GMSRandom().nextString());
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link EOwnedEntity} as content. The {@link EOwnedEntity} is generated
-     * with random values in its attributes.
+     * Creates a sample {@link EntityModel} with a {@link EOwnedEntity} as content. The {@link EOwnedEntity} is
+     * generated with random values in its attributes.
      *
      * @param random Random generator for getting the random values to be used.
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<EOwnedEntity> getSampleEntityResource(final String random) {
-        return new Resource<>(getSampleEntity(random));
+    public static EntityModel<EOwnedEntity> getSampleEntityResource(final String random) {
+        return new EntityModel<>(getSampleEntity(random));
     }
 
     /**
@@ -136,24 +136,24 @@ public final class EntityUtil {
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link BRole} as content. The {@link BRole} is generated with random
+     * Creates a sample {@link EntityModel} with a {@link BRole} as content. The {@link BRole} is generated with random
      * values in its attributes and its enabled attribute set to {@code true}.
      *
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<BRole> getSampleRoleResource() {
+    public static EntityModel<BRole> getSampleRoleResource() {
         return getSampleRoleResource(new GMSRandom().nextString());
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link BRole} as content. The {@link BRole} is generated with random
+     * Creates a sample {@link EntityModel} with a {@link BRole} as content. The {@link BRole} is generated with random
      * values in its attributes and its enabled attribute set to {@code true}.
      *
      * @param random Random generator for getting the random values to be used.
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<BRole> getSampleRoleResource(final String random) {
-        return new Resource<>(getSampleRole(random));
+    public static EntityModel<BRole> getSampleRoleResource(final String random) {
+        return new EntityModel<>(getSampleRole(random));
     }
 
     /**
@@ -176,24 +176,24 @@ public final class EntityUtil {
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link BPermission} as content. The {@link BPermission} is generated
+     * Creates a sample {@link EntityModel} with a {@link BPermission} as content. The {@link BPermission} is generated
      * with random values in its attributes.
      *
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<BPermission> getSamplePermissionResource() {
+    public static EntityModel<BPermission> getSamplePermissionResource() {
         return getSamplePermissionResource(new GMSRandom().nextString());
     }
 
     /**
-     * Creates a sample {@link Resource} with a {@link BPermission} as content. The {@link BPermission} is generated
+     * Creates a sample {@link EntityModel} with a {@link BPermission} as content. The {@link BPermission} is generated
      * with random values in its attributes.
      *
      * @param random Random generator for getting the random values to be used.
-     * @return A {@link Resource}
+     * @return A {@link EntityModel}
      */
-    public static Resource<BPermission> getSamplePermissionResource(final String random) {
-        return new Resource<>(getSamplePermission(random));
+    public static EntityModel<BPermission> getSamplePermissionResource(final String random) {
+        return new EntityModel<>(getSamplePermission(random));
     }
 
 }

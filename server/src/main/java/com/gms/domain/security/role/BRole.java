@@ -2,10 +2,12 @@ package com.gms.domain.security.role;
 
 import com.gms.domain.GmsEntity;
 import com.gms.domain.security.permission.BPermission;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -33,9 +35,10 @@ import static com.gms.util.i18n.CodeI18N.FIELD_SIZE;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "permissions")
 @ToString(of = {"label"})
 @Entity
@@ -54,7 +57,8 @@ public final class BRole extends GmsEntity {
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
     @Pattern(regexp = USERNAME_REGEXP, message = FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false)
-    private final String label;
+    @Setter(AccessLevel.NONE)
+    private String label;
 
     /**
      * A description of what is this role for.
@@ -79,6 +83,15 @@ public final class BRole extends GmsEntity {
             inverseJoinColumns = @JoinColumn(name = "bpermission_id")
     )
     private Set<BPermission> permissions;
+
+    /**
+     * Creates a new {@link BRole} with a label given by parameter.
+     *
+     * @param label Label to assign to the new role.
+     */
+    public BRole(final String label) {
+        this.label = label;
+    }
 
     /**
      * Adds a permission p to a role.

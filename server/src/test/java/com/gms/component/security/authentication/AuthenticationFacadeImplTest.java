@@ -1,6 +1,7 @@
 package com.gms.component.security.authentication;
 
 import com.gms.Application;
+import com.gms.config.security.authentication.AuthenticationFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

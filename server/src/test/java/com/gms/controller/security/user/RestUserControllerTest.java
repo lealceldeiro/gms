@@ -20,13 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -141,8 +140,7 @@ public class RestUserControllerTest {
     public void create() throws Exception {
         final String r = random.nextString();
         EUser u = EntityUtil.getSampleUser(r);
-        Resource<EUser> resource = new Resource<>(u);
-        ReflectionTestUtils.setField(resource, "links", null);
+        EntityModel<EUser> resource = new EntityModel<>(u);
 
         ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
@@ -176,7 +174,7 @@ public class RestUserControllerTest {
         String r = random.nextString();
         EUser u = new EUser(null, "a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
                 EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
-        Resource<EUser> resource = new Resource<>(u);
+        EntityModel<EUser> resource = new EntityModel<>(u);
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)
@@ -190,7 +188,7 @@ public class RestUserControllerTest {
     @Test
     public void handleDataIntegrityViolationException() throws Exception {
         String r = random.nextString();
-        Resource<EUser> resource = EntityUtil.getSampleUserResource(r);
+        EntityModel<EUser> resource = EntityUtil.getSampleUserResource(r);
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.USER).contentType(MediaType.APPLICATION_JSON)
                         .header(authHeader, tokenType + " " + accessToken)

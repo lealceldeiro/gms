@@ -8,16 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -39,12 +39,12 @@ public class PermissionController {
      * @param id            {@link com.gms.domain.security.permission.BPermission} id to get the roles associated to.
      * @param pageable      {@link Pageable} bean injected by spring.
      * @param pageAssembler {@link PagedResourcesAssembler} bean injected by spring.
-     * @return A {@link ResponseEntity} of PagedResources of {@link Resource} of {@link BRole} containing the requested
+     * @return A {@link ResponseEntity} of PagedModel of {@link EntityModel} of {@link BRole} containing the requested
      * information.
      */
     @GetMapping(path = ResourcePath.PERMISSION + "/{id}/" + ResourcePath.ROLE + "s", produces = "application/hal+json")
     @ResponseBody
-    public ResponseEntity<PagedResources<Resource<BRole>>> getAllRolesByPermission(
+    public ResponseEntity<PagedModel<EntityModel<BRole>>> getAllRolesByPermission(
             @PathVariable final long id,
             final Pageable pageable,
             final PagedResourcesAssembler<BRole> pageAssembler
@@ -52,7 +52,7 @@ public class PermissionController {
         Page<BRole> page = permissionService.getAllRolesByPermissionId(id, pageable);
         Link link = linkTo(methodOn(PermissionController.class).getAllRolesByPermission(id, pageable, pageAssembler))
                 .withSelfRel();
-        PagedResources<Resource<BRole>> pagedResources = pageAssembler.toResource(page, link);
+        PagedModel<EntityModel<BRole>> pagedResources = pageAssembler.toModel(page, link);
 
         return ResponseEntity.ok(pagedResources);
     }

@@ -2,6 +2,7 @@ package com.gms.util.constant;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 /**
@@ -187,6 +188,6 @@ public class DefaultConst {
      *
      * @see DefaultConst#languageHolder
      */
-    public static final String DEFAULT_LANGUAGE_HEADER = "Accept-Language";
+    public static final String DEFAULT_LANGUAGE_HEADER = HttpHeaders.ACCEPT_LANGUAGE;
     //endregion
 }

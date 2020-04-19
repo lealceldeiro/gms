@@ -14,6 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Entry point to the application.
@@ -77,12 +78,12 @@ public class Application extends SpringBootServletInitializer {
     //bCrypt
 
     /**
-     * Creates a {@link BCryptPasswordEncoder} to be provided to the Spring framework.
+     * Creates a {@link PasswordEncoder} to be provided to the Spring framework.
      *
-     * @return A {@link BCryptPasswordEncoder}.
+     * @return A {@link PasswordEncoder}.
      */
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder gmsPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
