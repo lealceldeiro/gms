@@ -3,7 +3,7 @@ package com.gms.testutil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.config.security.LoginPayloadSample;
+import com.gms.appconfiguration.security.LoginPayloadSample;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.constant.DefaultConst;
 import com.gms.util.constant.SecurityConst;
