@@ -1,4 +1,4 @@
-package com.gms.util.security.token;
+package com.gms.service.security.token;
 
 import java.util.Date;
 import java.util.Map;
@@ -101,9 +101,9 @@ public interface JWTService {
      * @param authoritiesString The principal authorities in the format of
      *                          {@code AUTHORITY_NAME-separator-AUTHORITY_NAME}
      *                          where {@code -separator-} is defined in
-     *                          {@link com.gms.util.constant.SecurityConst#AUTHORITIES_SEPARATOR}.
+     *                          {@link com.gms.util.constant.SecurityConstant#AUTHORITIES_SEPARATOR}.
      * @param refreshToken      Refresh token generated in this request.
-     * @return Map with all this information set under the key defined in {@link com.gms.util.constant.SecurityConst}
+     * @return Map with all this information set under the key defined in {@link com.gms.util.constant.SecurityConstant}
      * intended for that.
      */
     Map<String, Object> createLoginData(String subject, String accessToken, Date issuedAt, String authoritiesString,

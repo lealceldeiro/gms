@@ -1,11 +1,12 @@
 package com.gms.appconfiguration.security.authorization;
 
 import com.gms.appconfiguration.security.authentication.AuthenticationFacade;
-import com.gms.util.constant.SecurityConst;
-import com.gms.util.security.token.JWTService;
+import com.gms.util.constant.SecurityConstant;
+import com.gms.service.security.token.JWTService;
 import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -14,8 +15,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -24,9 +27,9 @@ import java.util.Map;
 public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
-    private final SecurityConst sc;
+    private final SecurityConstant securityConstant;
     /**
      * Instance of {@link JWTService}.
      */
@@ -45,14 +48,15 @@ public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
      * Creates a new {@link JWTAuthorizationFilter}.
      *
      * @param authenticationManager An instance of {@link AuthenticationManager}.
-     * @param securityConst         An instance of {@link SecurityConst}.
+     * @param securityConstant      An instance of {@link SecurityConstant}.
      * @param jwtServiceArg         An instance of {@link JWTService}.
      * @param authenticationFacade  An instance of {@link AuthenticationFacade}.
      */
-    public JWTAuthorizationFilter(final AuthenticationManager authenticationManager, final SecurityConst securityConst,
-                                  final JWTService jwtServiceArg, final AuthenticationFacade authenticationFacade) {
+    public JWTAuthorizationFilter(final AuthenticationManager authenticationManager,
+                                  final SecurityConstant securityConstant, final JWTService jwtServiceArg,
+                                  final AuthenticationFacade authenticationFacade) {
         super(authenticationManager);
-        this.sc = securityConst;
+        this.securityConstant = securityConstant;
         this.jwtService = jwtServiceArg;
         this.authFacade = authenticationFacade;
     }
@@ -82,28 +86,24 @@ public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(final HttpServletRequest req) {
-        String token = req.getHeader(sc.getATokenHeader());
+        String token = req.getHeader(securityConstant.getATokenHeader());
 
-        if (token != null && token.startsWith(sc.getATokenType())) {
+        if (token != null && token.startsWith(securityConstant.getATokenType())) {
             try {
                 // parse the token
-                Map<String, Object> claims = jwtService.getClaimsExtended(
-                        token.replace(sc.getATokenType(), ""), sc.getAuthoritiesHolder(), PASS_HOLDER
-                );
-                String user = claims.get(jwtService.subjectKey()).toString();
+                final String claimsJTW = token.replace(securityConstant.getATokenType(), "");
+                final Map<String, Object> claims = jwtService.getClaimsExtended(claimsJTW,
+                        securityConstant.getAuthoritiesHolder(), PASS_HOLDER);
+
+                final String user = claims.get(jwtService.subjectKey()).toString();
                 if (user != null) {
                     // split into an array the string holding the authorities by the defined separator
-                    final String[] authorityValues = claims.get(sc.getAuthoritiesHolder())
-                                                           .toString()
-                                                           .split(SecurityConst.AUTHORITIES_SEPARATOR);
+                    final String[] authorityValues = authoritiesFrom(claims);
                     if (authorityValues.length > 0) {
-                        HashSet<SimpleGrantedAuthority> authorities = new HashSet<>();
-                        for (String authorityValue : authorityValues) {
-                            authorities.add(new SimpleGrantedAuthority(authorityValue));
-                        }
-                        String password = String.valueOf(claims.get(PASS_HOLDER));  // hashed password
+                        final Set<GrantedAuthority> authorities = grantedAuthoritiesFrom(authorityValues);
+                        final String hashedPassword = String.valueOf(claims.get(PASS_HOLDER));
 
-                        return new UsernamePasswordAuthenticationToken(user, password, authorities);
+                        return new UsernamePasswordAuthenticationToken(user, hashedPassword, authorities);
                     }
                 }
             } catch (JwtException e) {  // any problem with token, do not authenticate
@@ -114,4 +114,13 @@ public final class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
     }
 
+    private static Set<GrantedAuthority> grantedAuthoritiesFrom(final String[] authorities) {
+        return Arrays.stream(authorities).map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+    }
+
+    private String[] authoritiesFrom(final Map<?, ?> jwtClaims) {
+        return jwtClaims.get(securityConstant.getAuthoritiesHolder())
+                        .toString()
+                        .split(SecurityConstant.AUTHORITIES_SEPARATOR);
+    }
 }

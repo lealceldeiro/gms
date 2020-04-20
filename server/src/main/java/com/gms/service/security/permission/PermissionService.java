@@ -4,7 +4,7 @@ import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
-import com.gms.util.permission.BPermissionConst;
+import com.gms.util.permission.BPermissionDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ public class PermissionService {
     /**
      * An instance of a {@link BPermissionRepository}.
      */
-    private final BPermissionRepository repository;
+    private final BPermissionRepository permissionRepository;
 
     /**
      * An instance of {@link BRoleRepository}.
@@ -43,13 +43,9 @@ public class PermissionService {
      */
     public boolean areDefaultPermissionsCreatedSuccessfully() {
         boolean ok = true;
-        final BPermissionConst[] constPermissions = BPermissionConst.values();
-        for (BPermissionConst p : constPermissions) {
-            ok = ok && repository.save(
-                    new com.gms.domain.security.permission.BPermission(
-                            p.toString(), p.toString().replace("__", " ").replace("_", " ")
-                    )
-            ) != null;
+        final BPermissionDefinition[] permissionDefinitions = BPermissionDefinition.values();
+        for (BPermissionDefinition permissionDefinition : permissionDefinitions) {
+            ok = ok && savePermission(permissionDefinition, permissionRepository) != null;
         }
 
         return ok;
@@ -68,7 +64,7 @@ public class PermissionService {
      * @see com.gms.domain.GmsEntity
      */
     public List<BPermission> findPermissionsByUserIdAndEntityId(final long userId, final long entityId) {
-        return repository.findPermissionsByUserIdAndEntityId(userId, entityId);
+        return permissionRepository.findPermissionsByUserIdAndEntityId(userId, entityId);
     }
 
     /**
@@ -81,11 +77,26 @@ public class PermissionService {
      * argument.
      */
     public Page<BRole> getAllRolesByPermissionId(final long id, final Pageable pageable) {
-        BPermission permission = repository.findById(id).orElse(new BPermission());
-        Set<BPermission> set = new HashSet<>();
-        set.add(permission);
+        final Set<BPermission> permissions = new HashSet<>();
+        permissions.add(permissionRepository.findById(id).orElse(new BPermission()));
 
-        return roleRepository.findAllByPermissionsIn(set, pageable);
+        return roleRepository.findAllByPermissionsIn(permissions, pageable);
+    }
+
+    /**
+     * Saves the {@code permissionDefinition} as a {@link BPermission} and returns it.
+     *
+     * @param permissionDefinition {@link BPermissionDefinition} to save.
+     * @param permissionRepository {@link BPermissionRepository} used to persist a new instance of {@link BPermission}.
+     * @return The newly created instance of {@link BPermission}.
+     */
+    private static BPermission savePermission(final BPermissionDefinition permissionDefinition,
+                                              final BPermissionRepository permissionRepository) {
+        final BPermission permission = new BPermission(permissionDefinition.toString(),
+                                                       permissionDefinition
+                                                               .toString()
+                                                               .replace("__", " ").replace("_", " "));
+        return permissionRepository.save(permission);
     }
 
 }

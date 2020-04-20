@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 import static com.gms.util.constant.PersistenceConstant.STRING_LENGTH_DEFAULT;
-import static com.gms.util.constant.SecurityConst.USERNAME_REGEXP;
+import static com.gms.util.constant.SecurityConstant.USERNAME_REGEXP;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_BLANK;
 import static com.gms.util.i18n.CodeI18N.FIELD_NOT_NULL;
 import static com.gms.util.i18n.CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME;

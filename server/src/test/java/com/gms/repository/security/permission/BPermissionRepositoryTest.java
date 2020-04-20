@@ -11,10 +11,10 @@ import com.gms.testutil.GmsMockUtil;
 import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Before;
@@ -35,6 +35,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
@@ -54,6 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class BPermissionRepositoryTest {
 
     /**
@@ -80,15 +82,15 @@ public class BPermissionRepositoryTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -165,15 +167,19 @@ public class BPermissionRepositoryTest {
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
         mvcNonDocumentary = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        pageSizeAttr = dc.getPageSizeParam();
-        pageSortAttr = dc.getPageSortParam();
-        pageSize = dc.getPageSize();
+        pageSizeAttr = defaultConstant.getPageSizeParam();
+        pageSortAttr = defaultConstant.getPageSortParam();
+        pageSize = defaultConstant.getPageSize();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -186,10 +192,10 @@ public class BPermissionRepositoryTest {
         String embeddedReqString = LinkPath.EMBEDDED + REQ_STRING;
         String[] sortParams = {"name,desc", "label"};
         mvc.perform(get(apiPrefix + "/" + REQ_STRING)
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON)
-                .param(pageSizeAttr, pageSize)
-                .param(pageSortAttr, sortParams))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .param(pageSizeAttr, pageSize)
+                            .param(pageSortAttr, sortParams))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
@@ -211,7 +217,7 @@ public class BPermissionRepositoryTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters(dc)
+                        RestDoc.getRelaxedPagingParameters(defaultConstant)
                 )));
     }
 
@@ -223,8 +229,8 @@ public class BPermissionRepositoryTest {
         BPermission p = createPermissionUsingRepository();
 
         mvc.perform(get(apiPrefix + "/" + REQ_STRING + "/{id}", p.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(

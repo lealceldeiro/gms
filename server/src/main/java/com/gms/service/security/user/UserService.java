@@ -1,7 +1,6 @@
 package com.gms.service.security.user;
 
 import com.gms.domain.security.BAuthorization;
-import com.gms.domain.security.BAuthorization.BAuthorizationPk;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
@@ -12,20 +11,23 @@ import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.service.security.permission.PermissionService;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.gms.domain.security.BAuthorization.BAuthorizationPk;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -55,15 +57,15 @@ public class UserService implements UserDetailsService {
     /**
      * An instance of {@link ConfigurationService}.
      */
-    private final ConfigurationService configService;
+    private final ConfigurationService configurationService;
     /**
-     * An instance of {@link DefaultConst}.
+     * An instance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
     /**
      * An instance of {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
     /**
      * An instance of {@link PermissionService}.
      */
@@ -86,13 +88,11 @@ public class UserService implements UserDetailsService {
      * @return The created {@link EUser}.
      */
     public EUser createDefaultUser() {
-        EUser u = new EUser(
-                dc.getUserAdminDefaultUsername(),
-                dc.getUserAdminDefaultEmail(),
-                dc.getUserAdminDefaultName(),
-                dc.getUserAdminDefaultLastName(),
-                dc.getUserAdminDefaultPassword()
-        );
+        final EUser u = new EUser(defaultConstant.getUserAdminDefaultUsername(),
+                                  defaultConstant.getUserAdminDefaultEmail(),
+                                  defaultConstant.getUserAdminDefaultName(),
+                                  defaultConstant.getUserAdminDefaultLastName(),
+                                  defaultConstant.getUserAdminDefaultPassword());
         u.setEnabled(true);
 
         return signUp(u, EmailStatus.VERIFIED);
@@ -114,18 +114,20 @@ public class UserService implements UserDetailsService {
      * Registers a new user specifying his/her email verification status and  whether this is a
      * user registration performed by a superuser or not.
      *
-     * @param u                     User's data ({@link EUser})
+     * @param user                  User's data ({@link EUser})
      * @param emailStatus           One of {@link EmailStatus} which specify whether the email is verified or not.
      * @param registrationPrivilege One of {@link RegistrationPrivilege} which indicates whether this action is being
      *                              performed by a superuser or not.
      * @return The registered {@link EUser}'s data or {@code null} if the user registration is not allowed and the
      * provided {@code registrationPrivilege} is not {@link RegistrationPrivilege#SUPER_USER}.
      */
-    public EUser signUp(final EUser u, final EmailStatus emailStatus,
+    public EUser signUp(final EUser user, final EmailStatus emailStatus,
                         final RegistrationPrivilege registrationPrivilege) {
-        if (registrationPrivilege == RegistrationPrivilege.SUPER_USER || configService.isUserRegistrationAllowed()) {
-            u.setEmailVerified(emailStatus == EmailStatus.VERIFIED);
-            return userRepository.save(u);
+        if (registrationPrivilege == RegistrationPrivilege.SUPER_USER
+                || configurationService.isUserRegistrationAllowed()) {
+            user.setEmailVerified(emailStatus == EmailStatus.VERIFIED);
+
+            return userRepository.save(user);
         }
 
         return null;
@@ -145,7 +147,7 @@ public class UserService implements UserDetailsService {
      */
     public List<Long> addRolesToUser(final Long userId, final Long entityId,
                                      final Iterable<Long> rolesId) throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userId, entityId, rolesId, true);
+        return addRemoveRolesToFromUser(userId, entityId, rolesId, ActionOverUserRoles.ADD_ROLES);
     }
 
     /**
@@ -162,39 +164,23 @@ public class UserService implements UserDetailsService {
      */
     public List<Long> removeRolesFromUser(final Long userId, final Long entityId, final Iterable<Long> rolesId)
             throws NotFoundEntityException {
-        return addRemoveRolesToFromUser(userId, entityId, rolesId, false);
+        return addRemoveRolesToFromUser(userId, entityId, rolesId, ActionOverUserRoles.REMOVE_ROLES);
     }
 
-    private List<Long> addRemoveRolesToFromUser(final long userId, final long entityId, final Iterable<Long> rolesId,
-                                                final boolean add) throws NotFoundEntityException {
-        LinkedList<Long> addedOrRemoved = new LinkedList<>();
-
-        BAuthorizationPk pk;
-        BAuthorization newUserAuth;
-
-        EUser u = getUser(userId);
-        EOwnedEntity e = getOwnedEntity(entityId);
-        Optional<BRole> r;
-
-        for (long iRoleId : rolesId) {
-            r = roleRepository.findById(iRoleId);
-            if (r.isPresent()) {
-                pk = new BAuthorizationPk(u.getId(), e.getId(), r.get().getId());
-                newUserAuth = new BAuthorization(pk, u, e, r.get());
-                if (add) {
-                    authorizationRepository.save(newUserAuth);
-                } else {
-                    authorizationRepository.delete(newUserAuth);
-                }
-                addedOrRemoved.add(iRoleId);
-            }
-        }
-        //none of the roles was found
-        if (addedOrRemoved.isEmpty()) {
+    private List<Long> addRemoveRolesToFromUser(final long userId, final long entityId,
+                                                final Iterable<Long> roleIdentifiers,
+                                                final ActionOverUserRoles operation) throws NotFoundEntityException {
+        List<Long> rolesWorkCollection = updateUserRoles(roleIdentifiers,
+                                                         operation,
+                                                         getUser(userId),
+                                                         getOwnedEntity(entityId),
+                                                         roleRepository,
+                                                         authorizationRepository);
+        if (rolesWorkCollection.isEmpty()) {
             throw new NotFoundEntityException("user.add.roles.found.none");
         }
 
-        return addedOrRemoved;
+        return rolesWorkCollection;
     }
 
     /**
@@ -205,40 +191,32 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(final String usernameOrEmail) {
-        EUser u = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        if (u != null) {
-            return u;
+        final EUser user = userRepository.findFirstByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+
+        if (user != null) {
+            return user;
         }
-        throw new UsernameNotFoundException(msg.getMessage(USER_NOT_FOUND));
+
+        throw new UsernameNotFoundException(messageResolver.getMessage(USER_NOT_FOUND));
     }
 
     /**
      * Gets a {@link EUser}'s permissions as string separated by a specified separator.
      *
      * @param usernameOrEmail {@link EUser}'s username to who the permissions are associated.
-     * @param separator       {@link String} indicating the separator will be used for separating the permissions in the
+     * @param separator       Indicates the separator will be used for separating the permissions in the
      *                        string.
      * @return A {@link String} with all the permissions found separated by the specified {@code separator}.
      */
-    public String getUserAuthoritiesForToken(final String usernameOrEmail, final String separator) {
-        StringBuilder authBuilder = new StringBuilder();
-        EUser u = (EUser) loadUserByUsername(usernameOrEmail);
+    public String getUserAuthoritiesForToken(final String usernameOrEmail, final CharSequence separator) {
+        final EUser user = (EUser) loadUserByUsername(usernameOrEmail);
+        final Long entityId = getLastAccessedEntityIdByUser(user);
 
-        if (u != null) { // got user
-            Long entityId = getEntityIdByUser(u);
-
-            if (entityId == null) {
-                return "";
-            }    // has not any role over any entity
-
-            List<BPermission> pFromDB = permissionService.findPermissionsByUserIdAndEntityId(u.getId(), entityId);
-
-            for (BPermission p : pFromDB) {
-                authBuilder.append(p.getName()).append(separator);
-            }
-        }
-
-        return authBuilder.toString();
+        return permissionService
+                .findPermissionsByUserIdAndEntityId(user.getId(), entityId)
+                .stream()
+                .map(BPermission::getName)
+                .collect(Collectors.joining(separator));
     }
 
     /**
@@ -251,8 +229,7 @@ public class UserService implements UserDetailsService {
      * @throws NotFoundEntityException if there is not any username with the specified {@code userUsername}.
      */
     public Map<String, List<BRole>> getRolesForUser(final Long id) throws NotFoundEntityException {
-        EUser u = getUser(id);
-        return authorizationRepository.getRolesForUserOverAllEntities(u.getId());
+        return authorizationRepository.getRolesForUserOverAllEntities(getUser(id).getId());
     }
 
     /**
@@ -267,46 +244,69 @@ public class UserService implements UserDetailsService {
      */
     public List<BRole> getRolesForUserOverEntity(final Long userId, final Long entityId)
             throws NotFoundEntityException {
-        return authorizationRepository.getRolesForUserOverEntity(
-                getUser(userId).getId(), getOwnedEntity(entityId).getId()
-        );
+        return authorizationRepository.getRolesForUserOverEntity(getUser(userId).getId(),
+                                                                 getOwnedEntity(entityId).getId());
     }
 
     /**
      * Returns the id of the last accessed entity by a user. If the user has never accessed an entity before then a
      * search will be performed in order to know which entities the user has access to. The id of the first of theses
-     * found will be returned. If no entities is found, then {@code null} is returned.
+     * found will be returned. If no entities is found, then {@code null} is returned. This method updates the value
+     * of the last accessed entity by the given user in the configuration values.
      *
-     * @param u {@link EUser} which is being trying to find the association to.
+     * @param userWhoAccessedEntity {@link EUser} which is being trying to find the association to.
      * @return The identifier of the entity or {@code null} if none is found.
      */
-    public Long getEntityIdByUser(final EUser u) {
-        Long entityId = configService.getLastAccessedEntityIdByUser(u.getId());
+    public Long getLastAccessedEntityIdByUser(final EUser userWhoAccessedEntity) {
+        Long entityId = configurationService.getLastAccessedEntityIdByUser(userWhoAccessedEntity.getId());
+
         if (entityId == null) {
-            BAuthorization anAuth = authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(u, true);
-            if (anAuth == null) {   // this user has no assigned roles or they are not enabled
+            final BAuthorization anAuthorizationValue =
+                    authorizationRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(userWhoAccessedEntity, true);
+            if (anAuthorizationValue == null) {   // this user has no assigned roles or they are not enabled
                 return null;
             }
-            entityId = anAuth.getEntity().getId();
-            configService.setLastAccessedEntityIdByUser(u.getId(), entityId);
+
+            entityId = anAuthorizationValue.getEntity().getId();
+            configurationService.setLastAccessedEntityIdByUser(userWhoAccessedEntity.getId(), entityId);
         }
+
         return entityId;
     }
 
     private EUser getUser(final Long id) throws NotFoundEntityException {
-        Optional<EUser> u = userRepository.findById(id);
-        if (!u.isPresent()) {
-            throw new NotFoundEntityException(USER_NOT_FOUND);
-        }
-        return u.get();
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundEntityException(USER_NOT_FOUND));
     }
 
     private EOwnedEntity getOwnedEntity(final Long id) throws NotFoundEntityException {
-        Optional<EOwnedEntity> e = entityRepository.findById(id);
-        if (!e.isPresent()) {
-            throw new NotFoundEntityException(O_ENTITY_NOT_FOUND);
-        }
-        return e.get();
+        return entityRepository.findById(id).orElseThrow(() -> new NotFoundEntityException(O_ENTITY_NOT_FOUND));
+    }
+
+    private static List<Long> updateUserRoles(final Iterable<Long> roleIdentifiers, final ActionOverUserRoles operation,
+                                              final EUser user, final EOwnedEntity entity,
+                                              final CrudRepository<BRole, ? super Long> bRoleRepository,
+                                              final BAuthorizationRepository bAuthorizationRepository) {
+        List<Long> rolesWorkCollection = new ArrayList<>();
+
+        roleIdentifiers.forEach(roleIdentifier -> bRoleRepository
+                .findById(roleIdentifier)
+                .ifPresent(role -> {
+                    final BAuthorizationPk authorizationPk = new BAuthorizationPk(user.getId(),
+                                                                                  entity.getId(),
+                                                                                  role.getId());
+                    final BAuthorization authorization = new BAuthorization(authorizationPk, user, entity, role);
+
+                    if (operation == ActionOverUserRoles.ADD_ROLES) {
+                        bAuthorizationRepository.save(authorization);
+                    } else {
+                        bAuthorizationRepository.delete(authorization);
+                    }
+
+                    rolesWorkCollection.add(roleIdentifier);
+                })
+        );
+
+        return rolesWorkCollection;
     }
 
     /**
@@ -336,6 +336,24 @@ public class UserService implements UserDetailsService {
          * Used to indicate that the user is being registered as a regular user with no special privileges.
          */
         REGULAR_USER
+    }
+
+    /**
+     * Indicates an action for a role over a user.
+     */
+    public enum ActionOverUserRoles {
+        /**
+         * Indicates that the roles should be added to the user.
+         */
+        ADD_ROLES,
+        /**
+         * Indicates that the roles should be removed from the user.
+         */
+        REMOVE_ROLES,
+        /**
+         * Indicates that the roles should be updated to the user.
+         */
+        UPDATE_ROLES
     }
 
 }

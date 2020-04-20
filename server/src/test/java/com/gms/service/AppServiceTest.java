@@ -15,12 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.transaction.Transactional;
+
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class AppServiceTest {
 
     /**

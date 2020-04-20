@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.appconfiguration.security.authentication.AuthenticationFacade;
 import com.gms.appconfiguration.security.authentication.JWTAuthenticationFailureHandler;
 import com.gms.appconfiguration.security.authentication.JWTAuthenticationFilter;
-import com.gms.appconfiguration.security.authentication.entrypoint.GmsHttpStatusAndBodyEntryPoint;
+import com.gms.appconfiguration.security.authentication.entrypoint.GmsHttpStatusAndBodyAuthenticationEntryPoint;
 import com.gms.appconfiguration.security.authorization.GmsAccessDeniedHandler;
 import com.gms.appconfiguration.security.authorization.JWTAuthorizationFilter;
-import com.gms.domain.security.user.EUser;
 import com.gms.service.security.user.UserService;
-import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.DefaultConstant;
+import com.gms.util.constant.SecurityConstant;
 import com.gms.util.i18n.MessageResolver;
-import com.gms.util.request.mapping.security.RefreshTokenPayload;
-import com.gms.util.security.token.JWTService;
+import com.gms.service.security.token.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -25,15 +23,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -44,23 +41,23 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class GmsSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
     /**
      * URL separator.
      */
     private static final String URL_SEPARATOR = "/";
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
-    private final SecurityConst sc;
+    private final SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
     /**
      * Instance of {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
     /**
      * Instance of {@link UserDetailsService}.
      */
@@ -72,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Instance of {@link ObjectMapper}.
      */
-    private final ObjectMapper oMapper;
+    private final ObjectMapper objectMapper;
     /**
      * Instance of {@link JWTService}.
      */
@@ -91,38 +88,61 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        final JWTAuthenticationFilter authFilter = new JWTAuthenticationFilter(
-                authenticationManager(), (UserService) userDetailsService, oMapper, jwtService, sc, dc, msg
-        );
-        authFilter.setAllowSessionCreation(false);
-        authFilter.setFilterProcessesUrl(dc.getApiBasePath() + sc.getSignInUrl());
-        authFilter.setPostOnly(true);
-        authFilter.setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler(dc, sc, msg));
+        final JWTAuthenticationFilter authenticationFilter =
+                new JWTAuthenticationFilter(authenticationManager(),
+                                            (UserService) userDetailsService,
+                                            objectMapper,
+                                            jwtService,
+                                            securityConstant,
+                                            defaultConstant,
+                                            messageResolver);
+        final JWTAuthorizationFilter authorizationFilter =
+                new JWTAuthorizationFilter(authenticationManager(), securityConstant, jwtService, authFacade);
+
+        final AuthenticationFailureHandler authenticationFailureHandler =
+                new JWTAuthenticationFailureHandler(defaultConstant, securityConstant, messageResolver);
+
+        final AuthenticationEntryPoint authenticationEntryPoint =
+                new GmsHttpStatusAndBodyAuthenticationEntryPoint(UNAUTHORIZED, defaultConstant, messageResolver);
+
+        authenticationFilter.setAllowSessionCreation(false);
+        authenticationFilter.setFilterProcessesUrl(defaultConstant.getApiBasePath() + securityConstant.getSignInUrl());
+        authenticationFilter.setPostOnly(true);
+        authenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         http
                 .cors().and()
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
+
                 .authorizeRequests()
+
                 .antMatchers(HttpMethod.GET, getFreeGet()).permitAll()
                 .antMatchers(HttpMethod.POST, getFreePost()).permitAll()
                 .antMatchers(getFreeAny()).permitAll()
+
                 // needs to be authenticated by default to access anything within the scope of the API path
-                .antMatchers(dc.getApiBasePath()).authenticated()
+                .antMatchers(defaultConstant.getApiBasePath()).authenticated()
+
                 // needs to be authenticated by default to access anything beyond the base ("/") path
-                .antMatchers(dc.getApiBasePath() + URL_SEPARATOR + "**").authenticated()
+                .antMatchers(defaultConstant.getApiBasePath() + URL_SEPARATOR + "**").authenticated()
+
                 // permit request to base url, not request to API
                 .antMatchers(URL_SEPARATOR).permitAll()
+
                 .and()
-                .addFilter(authFilter)
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), sc, jwtService, authFacade))
+                .addFilter(authenticationFilter)
+                .addFilter(authorizationFilter)
+
                 // disable session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 // 401 instead as "unauthorized" response HttpStatus
                 .exceptionHandling()
-                .accessDeniedHandler(new GmsAccessDeniedHandler(dc, msg))
-                .authenticationEntryPoint(new GmsHttpStatusAndBodyEntryPoint(UNAUTHORIZED, dc, msg));
+                .accessDeniedHandler(new GmsAccessDeniedHandler(defaultConstant, messageResolver))
+
+                .authenticationEntryPoint(authenticationEntryPoint);
     }
 
     /**
@@ -152,15 +172,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private String[] getFreePost() {
-        return getFreeUrl(sc.getFreeURLsPostRequest(), getAdditionalFreePostUrls());
+        return getFreeUrl(securityConstant.getFreeURLsPostRequest(), getAdditionalFreePostUrls());
     }
 
     private String[] getFreeGet() {
-        return getFreeUrl(sc.getFreeURLsGetRequest(), getAdditionalFreeGetUrls());
+        return getFreeUrl(securityConstant.getFreeURLsGetRequest(), getAdditionalFreeGetUrls());
     }
 
     private String[] getFreeAny() {
-        return getFreeUrl(sc.getFreeURLsAnyRequest(), getAdditionalFreeAnyUrls());
+        return getFreeUrl(securityConstant.getFreeURLsAnyRequest(), getAdditionalFreeAnyUrls());
     }
 
     private String[] getFreeUrl(final String[] urls, final String... additionalUrls) {
@@ -177,7 +197,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private void addUrl(final Collection<? super String> urlCollection, final String url) {
-        String b = dc.getApiBasePath();
+        String b = defaultConstant.getApiBasePath();
         if (url != null && !"".equals(url)) {
             urlCollection.add(b + (url.startsWith(URL_SEPARATOR) ? url : URL_SEPARATOR + url));
         }
@@ -185,53 +205,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] getAdditionalFreePostUrls() {
         return new String[]{
-                sc.getSignUpUrl(),
-                SecurityConst.ACCESS_TOKEN_URL,
-                sc.getSignInUrl()
-                //every time this list is updated, so it must be updated the method getListOfParametersForFreePostUrl
+                securityConstant.getSignUpUrl(),
+                SecurityConstant.ACCESS_TOKEN_URL,
+                securityConstant.getSignInUrl()
         };
-    }
-
-    /**
-     * For JUnit Tests purposes only!
-     *
-     * @return Array of {@link Map}. Each Map contains the required parameters for executing the post request.
-     */
-    @SuppressWarnings("unused")
-    private Map<String, String>[] getListOfParametersForFreePostUrl() {
-        final int numberOfFixedFreeUrl = 3;
-        @SuppressWarnings("unchecked") final Map<String, String>[] r = new HashMap[numberOfFixedFreeUrl];
-        Field[] fields;
-
-        // region sign-up
-        r[0] = new HashMap<>();
-        final Class<EUser> eUserClass = EUser.class;
-        fields = eUserClass.getDeclaredFields();
-        for (Field f : fields) {
-            r[0].put(f.getName(), "1");
-        }
-        // endregion
-
-        // region access token
-        r[1] = new HashMap<>();
-        final Class<RefreshTokenPayload> rTPayloadClass = RefreshTokenPayload.class;
-        fields = rTPayloadClass.getDeclaredFields();
-        for (Field f : fields) {
-            if ("refreshToken".equals(f.getName())) {
-                r[1].put(f.getName(), jwtService.createRefreshToken("sub", "auth"));
-            } else {
-                r[1].put(f.getName(), "1");
-            }
-        }
-        // endregion
-
-        // region sign-in
-        r[2] = new HashMap<>();
-        r[2].put(sc.getReqUsernameHolder(), dc.getUserAdminDefaultUsername());
-        r[2].put(sc.getReqPasswordHolder(), dc.getUserAdminDefaultPassword());
-        // endregion
-
-        return r;
     }
 
     private String[] getAdditionalFreeGetUrls() {

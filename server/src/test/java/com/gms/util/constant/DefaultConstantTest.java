@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
  * @version 0.2
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DefaultConst.class)
-public class DefaultConstTest {
+@SpringBootTest(classes = DefaultConstant.class)
+public class DefaultConstantTest {
 
     /**
      * Injected (by framework) config value.
@@ -151,12 +151,12 @@ public class DefaultConstTest {
      * Injected (by framework) config value.
      */
     @Autowired
-    private DefaultConst autowiredDc;
+    private DefaultConstant autowiredDc;
 
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
-    private DefaultConst entity0;
+    private DefaultConstant entity0;
 
     /**
      * Test to be executed by JUnit.
@@ -418,11 +418,11 @@ public class DefaultConstTest {
     }
 
     private void cleanEntity() {
-        entity0 = new DefaultConst();
+        entity0 = new DefaultConstant();
         assertEntityValidity(entity0);
     }
 
-    private void assertEntityValidity(final DefaultConst entity) {
+    private void assertEntityValidity(final DefaultConstant entity) {
         assertNull(ReflectionTestUtils.getField(entity, "roleAdminDefaultLabel"));
         assertNull(ReflectionTestUtils.getField(entity, "roleAdminDefaultDescription"));
         assertFalse(Boolean.parseBoolean(

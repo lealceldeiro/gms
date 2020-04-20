@@ -1,7 +1,7 @@
-package com.gms.util.security.token;
+package com.gms.service.security.token;
 
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -62,9 +62,9 @@ final class JWTServiceImpl implements JWTService {
      */
     private static final long DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME = 2592000000L;
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
-    private final SecurityConst sc;
+    private final SecurityConstant sc;
     /**
      * Instance of {@link GMSRandom}.
      */
@@ -119,14 +119,14 @@ final class JWTServiceImpl implements JWTService {
                                                final Date issuedAt, final String authoritiesString,
                                                final String refreshToken) {
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put(SecurityConst.USERNAME_HOLDER, subject);
+        returnMap.put(SecurityConstant.USERNAME_HOLDER, subject);
         returnMap.put(sc.getATokenHolder(), accessToken);
         returnMap.put(sc.getATokenTypeHolder(), sc.getATokenType());
         returnMap.put(sc.getATokenHeaderToBeSentHolder(), sc.getATokenHeader());
         returnMap.put(sc.getATokenExpirationTimeHolder(), issuedAt.getTime() + getATokenExpirationTime());
         returnMap.put(sc.getATokenExpiresInHolder(), getATokenExpirationTime());
         returnMap.put(sc.getIssuedTimeHolder(), issuedAt.getTime());
-        returnMap.put(sc.getAuthoritiesHolder(), authoritiesString.split(SecurityConst.AUTHORITIES_SEPARATOR));
+        returnMap.put(sc.getAuthoritiesHolder(), authoritiesString.split(SecurityConstant.AUTHORITIES_SEPARATOR));
         returnMap.put(sc.getRTokenHolder(), refreshToken);
         returnMap.put(sc.getRTokenExpirationTimeHolder(), issuedAt.getTime() + getRTokenExpirationTime());
         returnMap.put(sc.getRTokenExpiresInHolder(), getRTokenExpirationTime());

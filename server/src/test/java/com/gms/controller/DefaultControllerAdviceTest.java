@@ -12,9 +12,9 @@ import com.gms.testutil.EntityUtil;
 import com.gms.testutil.GmsMockUtil;
 import com.gms.testutil.GmsSecurityUtil;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import org.json.JSONException;
@@ -73,15 +73,15 @@ public class DefaultControllerAdviceTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -112,7 +112,7 @@ public class DefaultControllerAdviceTest {
     /**
      * Instance of {@link MockMvc}.
      */
-    private MockMvc mvc;
+    private MockMvc mockMvc;
 
     /**
      * Header to be used for sending authentication credentials.
@@ -143,13 +143,17 @@ public class DefaultControllerAdviceTest {
     public void setUp() throws Exception {
         assertTrue("Application initial configuration failed", appService.isInitialLoadOK());
 
-        mvc = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
+        mockMvc = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mockMvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -174,14 +178,14 @@ public class DefaultControllerAdviceTest {
             userId = u.getId();
         }
 
-        mvc.perform(post(
+        mockMvc.perform(post(
                 apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}",
                 userId,
                 entityId
-                )
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(authHeader, tokenType + " " + accessToken)
-                        .content(objectMapper.writeValueAsString(new ArrayList<>()))
+                        )
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header(authHeader, tokenType + " " + accessToken)
+                                .content(objectMapper.writeValueAsString(new ArrayList<>()))
         ).andExpect(status().isNotFound());
     }
 
@@ -206,14 +210,14 @@ public class DefaultControllerAdviceTest {
         );
         assertEquals(
                 "Paths do not match.",
-                SecurityConst.ACCESS_TOKEN_URL,
+                SecurityConstant.ACCESS_TOKEN_URL,
                 res.getString("path")
         );
     }
 
     private MvcResult doRequest(final RefreshTokenPayload payload) throws Exception {
-        return mvc.perform(
-                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
+        return mockMvc.perform(
+                post(apiPrefix + "/" + SecurityConstant.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isUnauthorized()).andReturn();
     }
@@ -230,8 +234,8 @@ public class DefaultControllerAdviceTest {
         }
 
         EntityModel<EUser> resource = getSampleUserResource();
-        final MockHttpServletResponse result = mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+        final MockHttpServletResponse result = mockMvc.perform(
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andReturn().getResponse();
 
@@ -241,7 +245,7 @@ public class DefaultControllerAdviceTest {
 
         String suffix = msg.getMessage("request.finished.KO"); // request is not supposed to finish ok in this scenario
         assertTrue("Request is supposed to finish KO in this scenario",
-                resObj.getString(dc.getResMessageHolder()).endsWith(suffix));
+                   resObj.getString(defaultConstant.getResMessageHolder()).endsWith(suffix));
 
         // restart initial config
         if (initial) {
@@ -262,10 +266,10 @@ public class DefaultControllerAdviceTest {
 
         final String r = random.nextString();
         EUser u = new EUser(null, "a" + r + EXAMPLE_EMAIL, EXAMPLE_NAME + r,
-                EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
+                            EXAMPLE_LAST_NAME, EXAMPLE_PASSWORD);
         EntityModel<EUser> resource = new EntityModel<>(u);
-        mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
 
@@ -288,14 +292,14 @@ public class DefaultControllerAdviceTest {
 
         final String r = random.nextString();
         EntityModel<EUser> resource = getSampleUserResource(r);
-        mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());
 
         resource = getSampleUserResource(r);
-        mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
 

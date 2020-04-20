@@ -6,7 +6,7 @@ import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.service.AppService;
 import com.gms.service.configuration.ConfigurationService;
 import com.gms.testutil.EntityUtil;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsGeneralException;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -30,6 +31,7 @@ import static org.junit.Assert.fail;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class OwnedEntityServiceTest {
 
     /**
@@ -48,10 +50,10 @@ public class OwnedEntityServiceTest {
     @Autowired
     private EOwnedEntityRepository repository;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
     /**
      * Instance of {@link AppService}.
      */
@@ -76,7 +78,7 @@ public class OwnedEntityServiceTest {
      */
     @Test
     public void createDefaultEntity() {
-        assertNotNull(repository.findFirstByUsername(dc.getEntityDefaultUsername())); // username is unique
+        assertNotNull(repository.findFirstByUsername(defaultConstant.getEntityDefaultUsername())); // username is unique
     }
 
     /**

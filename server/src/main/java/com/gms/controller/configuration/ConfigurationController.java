@@ -68,7 +68,7 @@ public class ConfigurationController {
     public Object getConfig(@RequestParam(value = "key", required = false) final String key,
                             @RequestParam(value = "id", required = false) final Long id)
             throws NotFoundEntityException {
-        return key != null ? getConfigByKey(key, id) : configService.getConfig();
+        return key != null ? getConfigByKey(key, id) : configService.getNonUserSpecificConfigurations();
     }
 
     /**
@@ -81,7 +81,7 @@ public class ConfigurationController {
     @GetMapping("{id}")
     @PreAuthorize("isFullyAuthenticated()")
     public Map<String, Object> getConfigByUser(@PathVariable(value = "id") final Long id) {
-        return configService.getConfigByUser(id);
+        return configService.getConfigurationsByUser(id);
     }
 
     /**
@@ -98,7 +98,7 @@ public class ConfigurationController {
     @PreAuthorize("isFullyAuthenticated()")
     public void saveConfig(@RequestBody final Map<String, Object> configs)
             throws NotFoundEntityException, GmsGeneralException {
-        configService.saveConfig(configs);
+        configService.saveConfigurations(configs);
     }
 
     /**
@@ -111,7 +111,9 @@ public class ConfigurationController {
      * @throws NotFoundEntityException if there is no configuration with the provided id.
      */
     private Object getConfigByKey(final String key, final Long userId) throws NotFoundEntityException {
-        return userId != null ? configService.getConfig(key, userId) : configService.getConfig(key);
+        return userId != null
+                ? configService.getNonUserSpecificConfigurations(key, userId)
+                : configService.getNonUserSpecificConfigurations(key);
     }
 
 }

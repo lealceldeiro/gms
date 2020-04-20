@@ -3,7 +3,7 @@ package com.gms.service.security.ownedentity;
 import com.gms.domain.security.ownedentity.EOwnedEntity;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.service.configuration.ConfigurationService;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsGeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,27 +26,27 @@ public class OwnedEntityService {
     private final EOwnedEntityRepository entityRepository;
 
     /**
-     * An instance of a {@link DefaultConst}.
+     * An instance of a {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
 
     /**
      * An instance of a {@link ConfigurationService}.
      */
-    private final ConfigurationService configService;
+    private final ConfigurationService configurationService;
 
     //region default entity
 
     /**
-     * Creates the default Owned Entity according to the values regarding to this resource in {@link DefaultConst}.
+     * Creates the default Owned Entity according to the values regarding to this resource in {@link DefaultConstant}.
      *
      * @return The just created resource {@link EOwnedEntity}
      */
     public EOwnedEntity createDefaultEntity() {
         return entityRepository.save(new EOwnedEntity(
-                dc.getEntityDefaultName(),
-                dc.getEntityDefaultUsername(),
-                dc.getEntityDefaultDescription())
+                defaultConstant.getEntityDefaultName(),
+                defaultConstant.getEntityDefaultUsername(),
+                defaultConstant.getEntityDefaultDescription())
         );
     }
     //endregion
@@ -59,9 +59,10 @@ public class OwnedEntityService {
      * @throws GmsGeneralException if the server configuration is no set in order to create new Owned Entities
      */
     public EOwnedEntity create(final EOwnedEntity e) throws GmsGeneralException {
-        if (configService.isMultiEntity()) {
+        if (configurationService.isMultiEntity()) {
             return entityRepository.save(e);
         }
+
         throw GmsGeneralException.builder()
                 .messageI18N("entity.add.not_allowed")
                 .finishedOK(true).httpStatus(HttpStatus.CONFLICT)

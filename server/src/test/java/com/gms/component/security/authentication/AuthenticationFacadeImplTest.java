@@ -40,7 +40,7 @@ public class AuthenticationFacadeImplTest {
     /**
      * Instance of {@link UsernamePasswordAuthenticationToken}.
      */
-    private UsernamePasswordAuthenticationToken auth;
+    private UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken;
 
     /**
      * Sets up the tests resources.
@@ -49,7 +49,9 @@ public class AuthenticationFacadeImplTest {
     public void setUp() {
         authorities.add(new SimpleGrantedAuthority("a1"));
         authorities.add(new SimpleGrantedAuthority("a2"));
-        auth = new UsernamePasswordAuthenticationToken("principalTest", "credentialsTest", authorities);
+        usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken("principalTest",
+                                                                                      "credentialsTest",
+                                                                                      authorities);
     }
 
     /**
@@ -58,19 +60,19 @@ public class AuthenticationFacadeImplTest {
     @Test
     public void getAuthentication() {
         SecurityContextHolder.clearContext();
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         final Authentication realAuthInfo = SecurityContextHolder.getContext().getAuthentication();
         final Authentication facadeAuthInfo = authFacade.getAuthentication();
 
         assertEquals("(getAuthentication)The \"principal\" set in the authentication in the facade context "
-                        + "does not match the \"principal\" set in the authentication in the real context",
-                realAuthInfo.getPrincipal(), facadeAuthInfo.getPrincipal());
+                             + "does not match the \"principal\" set in the authentication in the real context",
+                     realAuthInfo.getPrincipal(), facadeAuthInfo.getPrincipal());
         assertEquals("(getAuthentication)The \"authorities\" set in the authentication in the facade context"
-                        + " does not match the \"authorities\" set in the authentication in the real context",
-                realAuthInfo.getAuthorities(), facadeAuthInfo.getAuthorities());
+                             + " does not match the \"authorities\" set in the authentication in the real context",
+                     realAuthInfo.getAuthorities(), facadeAuthInfo.getAuthorities());
         assertEquals("(getAuthentication)The \"credentials\" set in the authentication in the facade context"
-                        + " does not match the \"credentials\" set in the authentication in the real context",
-                realAuthInfo.getCredentials(), facadeAuthInfo.getCredentials());
+                             + " does not match the \"credentials\" set in the authentication in the real context",
+                     realAuthInfo.getCredentials(), facadeAuthInfo.getCredentials());
     }
 
     /**
@@ -79,19 +81,19 @@ public class AuthenticationFacadeImplTest {
     @Test
     public void setAuthentication() {
         SecurityContextHolder.clearContext();
-        authFacade.setAuthentication(auth);
+        authFacade.setAuthentication(usernamePasswordAuthenticationToken);
         final Authentication realAuthInfo = SecurityContextHolder.getContext().getAuthentication();
         final Authentication facadeAuthInfo = authFacade.getAuthentication();
 
         assertEquals("(setAuthentication)The \"principal\" set in the authentication in the facade context "
-                        + "does not match the \"principal\" set in the authentication in the real context",
-                realAuthInfo.getPrincipal(), facadeAuthInfo.getPrincipal());
+                             + "does not match the \"principal\" set in the authentication in the real context",
+                     realAuthInfo.getPrincipal(), facadeAuthInfo.getPrincipal());
         assertEquals("(setAuthentication)The \"authorities\" set in the authentication in the facade context "
-                        + "does not match the \"authorities\" set in the authentication in the real context",
-                realAuthInfo.getAuthorities(), facadeAuthInfo.getAuthorities());
+                             + "does not match the \"authorities\" set in the authentication in the real context",
+                     realAuthInfo.getAuthorities(), facadeAuthInfo.getAuthorities());
         assertEquals("(setAuthentication)The \"credentials\" set in the authentication in the facade context "
-                        + "does not match the \"credentials\" set in the authentication in the real context",
-                realAuthInfo.getCredentials(), facadeAuthInfo.getCredentials());
+                             + "does not match the \"credentials\" set in the authentication in the real context",
+                     realAuthInfo.getCredentials(), facadeAuthInfo.getCredentials());
     }
 
 }

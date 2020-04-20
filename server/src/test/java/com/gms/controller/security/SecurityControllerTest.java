@@ -12,8 +12,8 @@ import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.DefaultConstant;
+import com.gms.util.constant.SecurityConstant;
 import com.gms.util.i18n.MessageResolver;
 import com.gms.util.request.mapping.security.RefreshTokenPayload;
 import org.json.JSONObject;
@@ -33,6 +33,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
+
 import static com.gms.testutil.EntityUtil.getSampleUserResource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -46,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class SecurityControllerTest {
 
     /**
@@ -72,15 +75,15 @@ public class SecurityControllerTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -96,7 +99,7 @@ public class SecurityControllerTest {
      * Instance of {@link MessageResolver}.
      */
     @Autowired
-    private MessageResolver msg;
+    private MessageResolver messageResolver;
 
     /**
      * Instance of {@link MockMvc} to perform web requests.
@@ -130,9 +133,13 @@ public class SecurityControllerTest {
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
+        apiPrefix = defaultConstant.getApiBasePath();
 
-        refreshToken = GmsSecurityUtil.createSuperAdminRefreshToken(dc, sc, mvc, objectMapper, false);
+        refreshToken = GmsSecurityUtil.createSuperAdminRefreshToken(defaultConstant,
+                                                                    securityConstant,
+                                                                    mvc,
+                                                                    objectMapper,
+                                                                    false);
     }
 
     /**
@@ -154,7 +161,7 @@ public class SecurityControllerTest {
         final ConstrainedFields fields = new ConstrainedFields(EUser.class);
 
         mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated())
                 .andDo(
@@ -193,7 +200,7 @@ public class SecurityControllerTest {
         }
         EntityModel<EUser> resource = getSampleUserResource(random.nextString());
         mvc.perform(
-                post(apiPrefix + sc.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + securityConstant.getSignUpUrl()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isConflict());
 
@@ -210,7 +217,7 @@ public class SecurityControllerTest {
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshToken);
         final ConstrainedFields fields = new ConstrainedFields(RefreshTokenPayload.class);
         mvc.perform(
-                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + SecurityConstant.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isOk())
                 .andDo(
@@ -218,7 +225,7 @@ public class SecurityControllerTest {
                                 requestFields(
                                         fields.withPath("refreshToken")
                                                 .description("The refresh token provided when login was "
-                                                        + "previously performed")
+                                                                     + "previously performed")
                                 )
                         )
                 );
@@ -243,7 +250,7 @@ public class SecurityControllerTest {
     private void testRefreshTokenKO(final String refreshTokenArg) throws Exception {
         final RefreshTokenPayload payload = new RefreshTokenPayload(refreshTokenArg);
         String temp = mvc.perform(
-                post(apiPrefix + "/" + SecurityConst.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
+                post(apiPrefix + "/" + SecurityConstant.ACCESS_TOKEN_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
         ).andExpect(status().isUnauthorized()).andReturn().getResponse().getContentAsString();
 
@@ -253,14 +260,14 @@ public class SecurityControllerTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), status);
 
         temp = json.getString("error");
-        assertEquals(temp, msg.getMessage("security.unauthorized"));
+        assertEquals(temp, messageResolver.getMessage("security.unauthorized"));
 
         temp = json.getString("path");
-        assertEquals(SecurityConst.ACCESS_TOKEN_URL, temp);
+        assertEquals(SecurityConstant.ACCESS_TOKEN_URL, temp);
 
-        temp = json.getString(dc.getResMessageHolder());
+        temp = json.getString(defaultConstant.getResMessageHolder());
 
-        String message = msg.getMessage(
+        String message = messageResolver.getMessage(
                 refreshTokenArg == null
                         ? "security.token.refresh.required"
                         : "security.token.refresh.invalid"

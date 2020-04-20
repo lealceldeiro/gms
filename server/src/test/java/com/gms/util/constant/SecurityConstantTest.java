@@ -16,8 +16,8 @@ import static org.junit.Assert.assertEquals;
  * @version 0.2
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SecurityConst.class)
-public class SecurityConstTest {
+@SpringBootTest(classes = SecurityConstant.class)
+public class SecurityConstantTest {
 
     /**
      * Injected (by framework) config value.
@@ -167,11 +167,11 @@ public class SecurityConstTest {
      * Injected (by framework) config value.
      */
     @Autowired
-    private SecurityConst autowiredSc;
+    private SecurityConstant autowiredSc;
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
-    private SecurityConst entity;
+    private SecurityConstant entity;
 
     /**
      * Semicolon ({@code ;}) separator.
@@ -487,7 +487,7 @@ public class SecurityConstTest {
     }
 
     private void cleanEntity() {
-        entity = new SecurityConst();
+        entity = new SecurityConstant();
     }
 
 }

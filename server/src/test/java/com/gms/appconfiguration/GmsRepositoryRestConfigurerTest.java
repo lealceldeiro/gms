@@ -8,9 +8,9 @@ import com.gms.service.AppService;
 import com.gms.testutil.EntityUtil;
 import com.gms.testutil.GmsMockUtil;
 import com.gms.testutil.GmsSecurityUtil;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +21,8 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.transaction.Transactional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class RepositoryConfigTest {
+@Transactional
+public class GmsRepositoryRestConfigurerTest {
 
     /**
      * Instance of {@link WebApplicationContext}.
@@ -52,15 +55,15 @@ public class RepositoryConfigTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -109,16 +112,20 @@ public class RepositoryConfigTest {
 
         mvc = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
      * Tests with only one domain class. The same behavior must be specified for all domain classes in method
-     * {@link RepositoryConfig#configureRepositoryRestConfiguration
+     * {@link GmsRepositoryRestConfigurer#configureRepositoryRestConfiguration
      * (org.springframework.data.rest.core.config.RepositoryRestConfiguration)}
      */
     @Test

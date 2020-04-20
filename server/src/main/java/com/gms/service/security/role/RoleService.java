@@ -4,18 +4,18 @@ import com.gms.domain.security.permission.BPermission;
 import com.gms.domain.security.role.BRole;
 import com.gms.repository.security.permission.BPermissionRepository;
 import com.gms.repository.security.role.BRoleRepository;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,7 +30,7 @@ public class RoleService {
     /**
      * An instance of a {@link BRoleRepository}.
      */
-    private final BRoleRepository repository;
+    private final BRoleRepository roleRepository;
 
     /**
      * An instance of a {@link BPermissionRepository}.
@@ -38,34 +38,30 @@ public class RoleService {
     private final BPermissionRepository permissionRepository;
 
     /**
-     * An instance of a {@link DefaultConst}.
+     * An instance of a {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
 
     /**
      * i18n key for the message shown when a role with the provided arguments is not found.
      */
-    public static final String ROLE_NOT_FOUND = "role.not.found";
+    public static final String ROLE_NOT_FOUND_MESSAGE_KEY = "role.not.found";
 
     // region default role
 
     /**
-     * Creates the default Role according to the values regarding to this resource in {@link DefaultConst}.
+     * Creates the default Role according to the values regarding to this resource in {@link DefaultConstant}.
      *
      * @return The just created resource {@link BRole}
      */
     public BRole createDefaultRole() {
-        BRole role = new BRole(dc.getRoleAdminDefaultLabel());
-        role.setDescription(dc.getRoleAdminDefaultDescription());
-        role.setEnabled(dc.isRoleAdminDefaultEnabled());
+        final BRole role = new BRole(defaultConstant.getRoleAdminDefaultLabel());
+        role.setDescription(defaultConstant.getRoleAdminDefaultDescription());
+        role.setEnabled(defaultConstant.isRoleAdminDefaultEnabled());
 
-        final Iterable<BPermission> permissions = permissionRepository.findAll();
+        permissionRepository.findAll().forEach(role::addPermission);
 
-        for (BPermission p : permissions) {
-            role.addPermission(p);
-        }
-
-        return repository.save(role);
+        return roleRepository.save(role);
     }
     // endregion
 
@@ -132,42 +128,24 @@ public class RoleService {
      * @throws NotFoundEntityException If there is no role with the provided id.
      */
     public BRole getRole(final long id) throws NotFoundEntityException {
-        Optional<BRole> r = repository.findById(id);
-        if (!r.isPresent()) {
-            throw new NotFoundEntityException(ROLE_NOT_FOUND);
-        }
-
-        return r.get();
+        return roleRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(ROLE_NOT_FOUND_MESSAGE_KEY));
     }
 
-    private List<Long> addRemovePermissionToFromRole(final long id, final Iterable<Long> permissionsId,
+    private List<Long> addRemovePermissionToFromRole(final long id, final Iterable<Long> permissionIdentifiers,
                                                      final ActionOverRolePermissions operation)
             throws NotFoundEntityException {
-        BRole r = getRole(id);
-        List<Long> set = new LinkedList<>();
-        Optional<BPermission> p;
 
-        if (operation == ActionOverRolePermissions.UPDATE_PERMISSIONS) {
-            r.removeAllPermissions();
-        }
-
-        for (Long pId : permissionsId) {
-            p = permissionRepository.findById(pId);
-            if (p.isPresent()) {
-                if (operation == ActionOverRolePermissions.REMOVE_PERMISSIONS) {
-                    r.removePermission(p.get());
-                } else {
-                    r.addPermission(p.get());
-                }
-                set.add(pId);
-            }
-        }
-
-        if (set.isEmpty()) {
+        final List<Long> permissionWorkCollection = updateRolePermissions(permissionIdentifiers,
+                                                                          operation,
+                                                                          getRole(id),
+                                                                          permissionRepository);
+        if (permissionWorkCollection.isEmpty()) {
             throw new NotFoundEntityException("role.add.permissions.found.none");
         }
 
-        return set;
+        return permissionWorkCollection;
     }
 
     /**
@@ -178,13 +156,15 @@ public class RoleService {
      * @return A {@link Page} of {@link BPermission}'s.
      */
     public Page<BPermission> getAllPermissionsByRoleId(final long id, final Pageable pageable) {
-        BRole role = repository.findById(id).orElse(new BRole());
-        Set<BRole> set = new HashSet<>();
-        set.add(role);
+        final Set<BRole> roles = new HashSet<>();
+        roles.add(roleRepository.findById(id).orElse(new BRole()));
 
-        return permissionRepository.findAllByRolesIn(set, pageable);
+        return permissionRepository.findAllByRolesIn(roles, pageable);
     }
 
+    /**
+     * Indicates an action for a permission over a role.
+     */
     public enum ActionOverRolePermissions {
         /**
          * Indicates that the permissions should be added to the role.
@@ -198,6 +178,32 @@ public class RoleService {
          * Indicates that the permissions should be updated to the role.
          */
         UPDATE_PERMISSIONS
+    }
+
+    private static List<Long> updateRolePermissions(final Iterable<Long> permissionIdentifiers,
+                                                    final ActionOverRolePermissions operation,
+                                                    final BRole role,
+                                                    final CrudRepository<? extends BPermission, ? super Long> repository
+    ) {
+        final List<Long> permissionWorkCollection = new ArrayList<>();
+
+        if (operation == ActionOverRolePermissions.UPDATE_PERMISSIONS) {
+            role.removeAllPermissions();
+        }
+
+        permissionIdentifiers.forEach(permissionId -> repository
+                .findById(permissionId)
+                .ifPresent(permission -> {
+                    if (operation == ActionOverRolePermissions.REMOVE_PERMISSIONS) {
+                        role.removePermission(permission);
+                    } else {
+                        role.addPermission(permission);
+                    }
+                    permissionWorkCollection.add(permissionId);
+                })
+        );
+
+        return permissionWorkCollection;
     }
 
 }

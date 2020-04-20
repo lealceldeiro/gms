@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gms.appconfiguration.security.LoginPayloadSample;
 import com.gms.testutil.validation.ConstrainedFields;
-import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.DefaultConstant;
+import com.gms.util.constant.SecurityConstant;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -50,8 +50,8 @@ public final class GmsSecurityUtil {
      * Creates an access token with the privileges of a Super Admin (an user with all of the possible privileges)
      * managed in the application.
      *
-     * @param dc           A {@link DefaultConst} instance.
-     * @param sc           A {@link SecurityConst} instance
+     * @param dc           A {@link DefaultConstant} instance.
+     * @param sc           A {@link SecurityConstant} instance
      * @param mvc          An {@link MockMvc} instance.
      * @param objectMapper An {@link ObjectMapper} instance.
      * @param shouldIFail  Whether the token should produce a failure while trying to access a secured resource with it
@@ -59,8 +59,9 @@ public final class GmsSecurityUtil {
      * @return A {@link String} with the newly created token.
      * @throws Exception If there is a failure in the request performed by the {@code mvc}.
      */
-    public static String createSuperAdminAuthToken(final DefaultConst dc, final SecurityConst sc, final MockMvc mvc,
-                                                   final ObjectMapper objectMapper, final boolean shouldIFail)
+    public static String createSuperAdminAuthToken(final DefaultConstant dc, final SecurityConstant sc,
+                                                   final MockMvc mvc, final ObjectMapper objectMapper,
+                                                   final boolean shouldIFail)
             throws Exception {
         final MvcResult mvcResult =
                 createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapper, shouldIFail).andReturn();
@@ -71,8 +72,8 @@ public final class GmsSecurityUtil {
     /**
      * Creates a refresh token.
      *
-     * @param dc              A {@link DefaultConst} instance.
-     * @param sc              A {@link SecurityConst} instance
+     * @param dc              A {@link DefaultConstant} instance.
+     * @param sc              A {@link SecurityConstant} instance
      * @param mvc             An {@link MockMvc} instance.
      * @param objectMapperArg An {@link ObjectMapper} instance.
      * @param shouldIFail     Whether the token should produce a failure while trying to access a secured resource with
@@ -80,8 +81,9 @@ public final class GmsSecurityUtil {
      * @return A {@link String} with the newly created token.
      * @throws Exception If there is a failure in the request performed by the {@code mvc}.
      */
-    public static String createSuperAdminRefreshToken(final DefaultConst dc, final SecurityConst sc, final MockMvc mvc,
-                                                      final ObjectMapper objectMapperArg, final boolean shouldIFail)
+    public static String createSuperAdminRefreshToken(final DefaultConstant dc, final SecurityConstant sc,
+                                                      final MockMvc mvc, final ObjectMapper objectMapperArg,
+                                                      final boolean shouldIFail)
             throws Exception {
         final MvcResult mvcResult =
                 createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapperArg, shouldIFail).andReturn();
@@ -93,8 +95,8 @@ public final class GmsSecurityUtil {
      * Creates an access token with the privileges of a Super Admin (an user with all of the possible privileges)
      * managed in the application and document the request performed to create the token.
      *
-     * @param dc                A {@link DefaultConst} instance.
-     * @param sc                A {@link SecurityConst} instance
+     * @param dc                A {@link DefaultConstant} instance.
+     * @param sc                A {@link SecurityConstant} instance
      * @param mvc               An {@link MockMvc} instance.
      * @param objectMapperArg   An {@link ObjectMapper} instance.
      * @param restDocResHandler A {@link RestDocumentationResultHandler} for documenting the request.
@@ -103,8 +105,8 @@ public final class GmsSecurityUtil {
      * @return A {@link String} with the newly created token.
      * @throws Exception If there is a failure in the request performed by the {@code mvc}.
      */
-    public static String createSuperAdminAuthToken(final DefaultConst dc, final SecurityConst sc, final MockMvc mvc,
-                                                   final ObjectMapper objectMapperArg,
+    public static String createSuperAdminAuthToken(final DefaultConstant dc, final SecurityConstant sc,
+                                                   final MockMvc mvc, final ObjectMapper objectMapperArg,
                                                    final RestDocumentationResultHandler restDocResHandler,
                                                    final boolean shouldIFail) throws Exception {
 
@@ -136,7 +138,7 @@ public final class GmsSecurityUtil {
                                             .description("Time where the access and refresh tokens were issued at."),
                                     fieldWithPath(sc.getAuthoritiesHolder())
                                             .description("User's authorities."),
-                                    fieldWithPath(SecurityConst.USERNAME_HOLDER)
+                                    fieldWithPath(SecurityConstant.USERNAME_HOLDER)
                                             .description("User's username."),
 
                                     // access token
@@ -146,10 +148,10 @@ public final class GmsSecurityUtil {
                                             .description("Token scheme to be used."),
                                     fieldWithPath(sc.getATokenHeaderToBeSentHolder())
                                             .description("Name of the header you have to use for sending the access"
-                                                    + " token in every subsequent request."),
+                                                                 + " token in every subsequent request."),
                                     fieldWithPath(sc.getATokenExpirationTimeHolder())
                                             .description("Time (expressed in milliseconds) in which the access token"
-                                                    + " will expire."),
+                                                                 + " will expire."),
                                     fieldWithPath(sc.getATokenExpiresInHolder())
                                             .description("Time of validity of the access token."),
 
@@ -158,7 +160,7 @@ public final class GmsSecurityUtil {
                                             .description("Refresh token."),
                                     fieldWithPath(sc.getRTokenExpirationTimeHolder())
                                             .description("Time (expressed in milliseconds) in which the refresh token"
-                                                    + " will expire."),
+                                                                 + " will expire."),
                                     fieldWithPath(sc.getRTokenExpiresInHolder())
                                             .description("Time of validity of the refresh token.")
                             )
@@ -173,7 +175,7 @@ public final class GmsSecurityUtil {
         return "";
     }
 
-    private static ResultActions createSuperAdminAuthTokenMvcResult(final DefaultConst dc, final SecurityConst sc,
+    private static ResultActions createSuperAdminAuthTokenMvcResult(final DefaultConstant dc, final SecurityConstant sc,
                                                                     final MockMvc mvc,
                                                                     final ObjectMapper objectMapperArg,
                                                                     final boolean shouldIFail) throws Exception {
@@ -184,7 +186,7 @@ public final class GmsSecurityUtil {
         return createSuperAdminAuthTokenMvcResult(dc, sc, mvc, objectMapperArg, loginData, shouldIFail);
     }
 
-    private static ResultActions createSuperAdminAuthTokenMvcResult(final DefaultConst dc, final SecurityConst sc,
+    private static ResultActions createSuperAdminAuthTokenMvcResult(final DefaultConstant dc, final SecurityConstant sc,
                                                                     final MockMvc mvc, final ObjectMapper objectMapper,
                                                                     final Object loginData, final boolean shouldIFail)
             throws Exception {

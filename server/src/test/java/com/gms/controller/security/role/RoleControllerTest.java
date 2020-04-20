@@ -16,10 +16,10 @@ import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,6 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,6 +58,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class RoleControllerTest {
 
     /**
@@ -83,15 +85,15 @@ public class RoleControllerTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -172,11 +174,15 @@ public class RoleControllerTest {
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
 
@@ -191,14 +197,14 @@ public class RoleControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
         mvc.perform(post(apiPrefix + "/" + REQ_STRING + "/{id}/" + PERMISSIONS_PATH, r.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(permissions)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         requestFields(
                                 fields.withPath("[]").description("Identifiers of permissions which are intended to "
-                                        + "be added to the role")
+                                                                          + "be added to the role")
                         )
                 ))
                 .andDo(restDocResHandler.document(
@@ -222,14 +228,14 @@ public class RoleControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
         mvc.perform(delete(apiPrefix + "/" + REQ_STRING + "/{id}/" + PERMISSIONS_PATH, r.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(permissions)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         requestFields(
                                 fields.withPath("[]").description("Identifiers of permissions which are intended to "
-                                        + "be removed from the role")
+                                                                          + "be removed from the role")
                         )
                 ))
                 .andDo(restDocResHandler.document(
@@ -256,14 +262,14 @@ public class RoleControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(List.class);
         mvc.perform(put(apiPrefix + "/" + REQ_STRING + "/{id}/" + PERMISSIONS_PATH, r.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(permissions)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(permissions)))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         requestFields(
                                 fields.withPath("[]").description("Identifiers of permissions which are intended to "
-                                        + "be set for the role")
+                                                                          + "be set for the role")
                         )
                 ))
                 .andDo(restDocResHandler.document(
@@ -282,9 +288,9 @@ public class RoleControllerTest {
         r.addPermission(permission1, permission2);
         repository.save(r);
         mvc.perform(get(apiPrefix + "/" + REQ_STRING + "/{id}/" + ResourcePath.PERMISSION + "s", r.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept("application/hal+json")
-                .param(dc.getPageSizeParam(), dc.getPageSize()))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept("application/hal+json")
+                            .param(defaultConstant.getPageSizeParam(), defaultConstant.getPageSize()))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
@@ -303,7 +309,7 @@ public class RoleControllerTest {
                         pathParameters(parameterWithName("id").description(BRoleMeta.ID_INFO))
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters(dc)
+                        RestDoc.getRelaxedPagingParameters(defaultConstant)
                 )));
     }
 

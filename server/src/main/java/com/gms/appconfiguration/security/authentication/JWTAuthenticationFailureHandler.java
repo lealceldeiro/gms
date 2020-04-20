@@ -2,9 +2,8 @@ package com.gms.appconfiguration.security.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.util.constant.DefaultConst;
-import com.gms.util.constant.SecurityConst;
-import com.gms.util.exception.ExceptionUtil;
+import com.gms.util.constant.DefaultConstant;
+import com.gms.util.constant.SecurityConstant;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+
+import static com.gms.util.exception.ExceptionUtil.getResponseBodyForGmsSecurityException;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -26,17 +28,17 @@ import java.io.PrintWriter;
 public final class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
-    private final SecurityConst sc;
+    private final SecurityConstant securityConstant;
     /**
      * Instance of {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
 
     /**
      * Called when an authentication attempt fails. This method is intended to be used by the Spring framework and
@@ -57,12 +59,12 @@ public final class JWTAuthenticationFailureHandler implements AuthenticationFail
     }
 
     private String getBody() throws JsonProcessingException {
-        final GmsSecurityException ex = new GmsSecurityException(sc.getSignInUrl(),
-                msg.getMessage("security.bad.credentials"));
+        final GmsSecurityException ex = new GmsSecurityException(securityConstant.getSignInUrl(),
+                messageResolver.getMessage("security.bad.credentials"));
+        final Map<String, Object> responseBody =
+                getResponseBodyForGmsSecurityException(ex, messageResolver, defaultConstant);
 
-        final ObjectMapper objectMapper = new ObjectMapper();
-
-        return objectMapper.writeValueAsString(ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc));
+        return new ObjectMapper().writeValueAsString((responseBody));
     }
 
 }

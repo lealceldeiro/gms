@@ -1,6 +1,6 @@
 package com.gms.appconfiguration.locale;
 
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -20,12 +20,12 @@ import java.util.Locale;
  */
 @RequiredArgsConstructor
 @Configuration
-public class LocaleConfig implements WebMvcConfigurer {
+public class GmsLocaleConfigurer implements WebMvcConfigurer {
 
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
 
     /**
      * Strategy interface for resolving messages, with support for the parameterization and internationalization of
@@ -52,8 +52,8 @@ public class LocaleConfig implements WebMvcConfigurer {
      */
     @Bean
     public LocaleResolver localeResolver() {
-        CookieLocaleResolver localeResolver = new GmsCLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.forLanguageTag(dc.getDefaultLanguage()));
+        CookieLocaleResolver localeResolver = new GmsCookieLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.forLanguageTag(defaultConstant.getDefaultLanguage()));
 
         return localeResolver;
     }
@@ -67,7 +67,7 @@ public class LocaleConfig implements WebMvcConfigurer {
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName(dc.getLanguageHolder());
+        lci.setParamName(defaultConstant.getLanguageHolder());
 
         return lci;
     }

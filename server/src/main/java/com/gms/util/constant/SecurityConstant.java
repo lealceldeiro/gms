@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Getter
-public class SecurityConst {
+public class SecurityConstant {
 
     //region auth request
     /**
@@ -68,8 +68,8 @@ public class SecurityConst {
     private String aTokenType;
 
     /**
-     * Variable in which the {@link SecurityConst#aTokenType} will be sent in the response in the login information to
-     * the client.
+     * Variable in which the {@link SecurityConstant#aTokenType} will be sent in the response in the login information
+     * to the client.
      */
     @Value("${gms.security.jwt.token_type_holder:token_type}")
     private String aTokenTypeHolder;
@@ -81,8 +81,8 @@ public class SecurityConst {
     private String aTokenHeader;
 
     /**
-     * Variable in which the {@link SecurityConst#aTokenHeader} will be sent  in the response in the login information
-     * to the client.
+     * Variable in which the {@link SecurityConstant#aTokenHeader} will be sent  in the response in the login
+     * information to the client.
      */
     @Value("${gms.security.jwt.token_header_to_be_sent_holder:header_to_be_sent}")
     private String aTokenHeaderToBeSentHolder;

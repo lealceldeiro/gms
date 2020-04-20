@@ -17,11 +17,11 @@ public class GMSRandom {
     /**
      * Letters in uppercase.
      */
-    private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     /**
      * Letters in lowercase.
      */
-    private static final String LOWER = UPPER.toLowerCase(Locale.ROOT);
+    private static final String LOWERCASE_LETTERS = UPPERCASE_LETTERS.toLowerCase(Locale.ENGLISH);
     /**
      * Numbers as a String.
      */
@@ -29,7 +29,7 @@ public class GMSRandom {
     /**
      * Alphanumeric string.
      */
-    private static final String ALPHANUMERIC = UPPER + LOWER + DIGITS;
+    private static final String ALPHANUMERIC = UPPERCASE_LETTERS + LOWERCASE_LETTERS + DIGITS;
 
     /**
      * A {@link Random} instance.
@@ -42,7 +42,7 @@ public class GMSRandom {
     /**
      * The buffer.
      */
-    private final char[] buf;
+    private final char[] buffer;
 
     /**
      * Creates a new {@link GMSRandom} alphanumeric random generator for a given length of string to be generated,
@@ -62,7 +62,7 @@ public class GMSRandom {
 
         this.random = Objects.requireNonNull(random);
         this.symbols = symbols.toCharArray();
-        this.buf = new char[length];
+        this.buffer = new char[length];
     }
 
     /**
@@ -98,11 +98,11 @@ public class GMSRandom {
      * @return A randomly generated alphanumeric {@link String}.
      */
     public String nextString() {
-        for (int idx = 0; idx < buf.length; ++idx) {
-            buf[idx] = symbols[random.nextInt(symbols.length)];
+        for (int idx = 0; idx < buffer.length; ++idx) {
+            buffer[idx] = symbols[random.nextInt(symbols.length)];
         }
 
-        return new String(buf) + System.currentTimeMillis() + "";
+        return new String(buffer) + System.currentTimeMillis() + "";
     }
 
 }

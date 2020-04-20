@@ -10,8 +10,8 @@ import com.gms.repository.security.authorization.BAuthorizationRepository;
 import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.role.BRoleRepository;
 import com.gms.repository.security.user.EUserRepository;
-import com.gms.util.configuration.ConfigKey;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.configuration.BusinessConfigurationKey;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import lombok.Getter;
@@ -21,10 +21,12 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.gms.domain.security.BAuthorization.BAuthorizationPk;
 
 /**
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
@@ -35,9 +37,9 @@ import java.util.Map;
 public class ConfigurationService {
 
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link BConfiguration}.
@@ -74,7 +76,7 @@ public class ConfigurationService {
     /**
      * Configuration keys.
      */
-    private static final List<ConfigKey> KEYS = Arrays.asList(ConfigKey.values());
+    private static final List<BusinessConfigurationKey> KEYS = Arrays.asList(BusinessConfigurationKey.values());
     /**
      * Suffix to store app configuration.
      */
@@ -98,19 +100,19 @@ public class ConfigurationService {
      * @param entityRepository        An instance of an {@link EOwnedEntityRepository}.
      * @param roleRepository          An instance of a {@link BRoleRepository}.
      * @param authRepository          An instance of an {@link BAuthorizationRepository}.
-     * @param defaultConst            An instance of a {@link DefaultConst}.
+     * @param defaultConstant         An instance of a {@link DefaultConstant}.
      */
     @Autowired
     public ConfigurationService(final BConfigurationRepository configurationRepository,
                                 final EUserRepository userRepository, final EOwnedEntityRepository entityRepository,
                                 final BRoleRepository roleRepository, final BAuthorizationRepository authRepository,
-                                final DefaultConst defaultConst) {
+                                final DefaultConstant defaultConstant) {
         this.configurationRepository = configurationRepository;
         this.userRepository = userRepository;
         this.entityRepository = entityRepository;
         this.roleRepository = roleRepository;
         this.authRepository = authRepository;
-        this.dc = defaultConst;
+        this.defaultConstant = defaultConstant;
 
         loadDBConfig();
     }
@@ -134,13 +136,12 @@ public class ConfigurationService {
      * @return {@code true} if the configurations are created properly, {@code false} otherwise.
      */
     public boolean isDefaultConfigurationCreated() {
-        BConfiguration isMultiEntity = new BConfiguration(
-                ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString(),
-                String.valueOf(dc.getIsMultiEntity())
-        );
-        BConfiguration isUserRegistrationAllowed = new BConfiguration(
-                String.valueOf(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER),
-                String.valueOf(dc.getIsUserRegistrationAllowed())
+        final BConfiguration isMultiEntity =
+                new BConfiguration(BusinessConfigurationKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString(),
+                                   String.valueOf(defaultConstant.getIsMultiEntity()));
+        final BConfiguration isUserRegistrationAllowed = new BConfiguration(
+                String.valueOf(BusinessConfigurationKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER),
+                String.valueOf(defaultConstant.getIsUserRegistrationAllowed())
         );
 
         configurationRepository.save(isMultiEntity);
@@ -158,42 +159,41 @@ public class ConfigurationService {
      * @return {@code true} if the authorization is created properly, {@code false} otherwise.
      */
     public boolean isDefaultUserAssignedToEntityWithRole() {
-        EUser u =
-                userRepository.findFirstByUsernameOrEmail(dc.getUserAdminDefaultName(), dc.getUserAdminDefaultEmail());
-
-        if (u != null) { //got default user
-            EOwnedEntity e = entityRepository.findFirstByUsername(dc.getEntityDefaultUsername());
-            if (e != null) { //got entity
-                BRole role = roleRepository.findFirstByLabel(dc.getRoleAdminDefaultLabel());
-                if (role != null) {
-                    com.gms.domain.security.BAuthorization.BAuthorizationPk pk =
-                            new BAuthorization.BAuthorizationPk(u.getId(), e.getId(), role.getId());
-                    authRepository.save(new BAuthorization(pk, u, e, role));
-
-                    return true;
-                }
-            }
+        final EUser user = userRepository.findFirstByUsernameOrEmail(defaultConstant.getUserAdminDefaultName(),
+                                                                     defaultConstant.getUserAdminDefaultEmail());
+        if (user == null) {
+            return false;
         }
 
-        return false;
+        final EOwnedEntity entity = entityRepository.findFirstByUsername(defaultConstant.getEntityDefaultUsername());
+        if (entity == null) {
+            return false;
+        }
+
+        final BRole role = roleRepository.findFirstByLabel(defaultConstant.getRoleAdminDefaultLabel());
+        if (role == null) {
+            return false;
+        }
+
+        final BAuthorizationPk primaryKey = new BAuthorizationPk(user.getId(), entity.getId(), role.getId());
+        authRepository.save(new BAuthorization(primaryKey, user, entity, role));
+
+        return true;
     }
 
     //endregion
 
     /**
-     * Gets all configuration that are not "user-specific".
+     * Returns all configuration that are not "user-specific".
      *
      * @return A {@link Map} with all the configuration where every key is the configuration key and every value is the
      * configuration value.
      */
-    public Map<String, String> getConfig() {
-        List<BConfiguration> configs = configurationRepository.findAllByKeyEndingWith(IN_SERVER);
-        Map<String, String> map = new HashMap<>();
-        for (BConfiguration c : configs) {
-            map.put(c.getKey(), c.getValue());
-        }
-
-        return map;
+    public Map<String, String> getNonUserSpecificConfigurations() {
+        return configurationRepository
+                .findAllByKeyEndingWith(IN_SERVER)
+                .stream()
+                .collect(Collectors.toMap(BConfiguration::getKey, BConfiguration::getValue));
     }
 
     /**
@@ -204,12 +204,12 @@ public class ConfigurationService {
      * configuration value.
      * @throws NotFoundEntityException if the configuration key is not valid.
      */
-    public Object getConfig(final String key) throws NotFoundEntityException {
-        String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
+    public Object getNonUserSpecificConfigurations(final String key) throws NotFoundEntityException {
+        final String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
         checkKey(uppercaseKey);
 
         if (uppercaseKey.endsWith(IN_SERVER)) {
-            switch (ConfigKey.valueOf(uppercaseKey)) {
+            switch (BusinessConfigurationKey.valueOf(uppercaseKey)) {
                 case IS_MULTI_ENTITY_APP_IN_SERVER:
                     return isMultiEntity();
                 case IS_USER_REGISTRATION_ALLOWED_IN_SERVER:
@@ -219,10 +219,11 @@ public class ConfigurationService {
             }
         }
 
-        BConfiguration c = getValue(uppercaseKey);
-        if (c != null) {
-            return c;
+        final BConfiguration configuration = getValueByKey(uppercaseKey);
+        if (configuration != null) {
+            return configuration;
         }
+
         throw new NotFoundEntityException(CONFIG_NOT_FOUND);
     }
 
@@ -237,8 +238,8 @@ public class ConfigurationService {
      * is returned.
      * @throws NotFoundEntityException if the configuration key is not valid.
      */
-    public String getConfig(final String key, final long userId) throws NotFoundEntityException {
-        String upperCaseKey = key.toUpperCase(Locale.ENGLISH);
+    public String getNonUserSpecificConfigurations(final String key, final long userId) throws NotFoundEntityException {
+        final String upperCaseKey = key.toUpperCase(Locale.ENGLISH);
         checkKey(upperCaseKey);
 
         return getValueByUser(upperCaseKey, userId);
@@ -253,30 +254,29 @@ public class ConfigurationService {
      * @see EUser
      * @see BConfiguration
      */
-    public Map<String, Object> getConfigByUser(final long userId) {
-        final List<BConfiguration> configs = configurationRepository.findAllByUserId(userId);
-        Map<String, Object> map = new HashMap<>();
-        for (BConfiguration c : configs) {
-            map.put(c.getKey(), c.getValue());
-        }
-
-        return map;
+    public Map<String, Object> getConfigurationsByUser(final long userId) {
+        return configurationRepository
+                .findAllByUserId(userId)
+                .stream()
+                .collect(Collectors.toMap(BConfiguration::getKey, BConfiguration::getValue));
     }
 
     /**
      * Saves various configurations at once.
      *
-     * @param configs A {@link Map} of configurations. Every key in the Map is the configuration key, and the
-     *                corresponding value is the configuration value.
+     * @param configurations A {@link Map} of configurations. Every key in the Map is the configuration key, and the
+     *                       corresponding value is the configuration value.
      * @throws NotFoundEntityException if any of the provided keys is not a valid key. Keys must correspond to any of
-     *                                 the values in {@link ConfigKey} as String.
-     * @see ConfigKey
+     *                                 the values in {@link BusinessConfigurationKey} as String.
+     * @see BusinessConfigurationKey
      */
-    public void saveConfig(final Map<String, Object> configs) throws NotFoundEntityException, GmsGeneralException {
-        if (configs.get("user") != null) {
+    public void saveConfigurations(final Map<String, Object> configurations) throws NotFoundEntityException,
+            GmsGeneralException {
+
+        if (configurations.get("user") != null) {
             try {
-                long id = Long.parseLong(configs.remove("user").toString());
-                saveConfig(configs, id);
+                long id = Long.parseLong(configurations.remove("user").toString());
+                saveConfigurations(configurations, id);
             } catch (NumberFormatException e) {
                 throw GmsGeneralException.builder()
                         .messageI18N(CONFIG_USER_PARAM_NUMBER)
@@ -288,11 +288,11 @@ public class ConfigurationService {
         }
 
         String uppercaseKey;
-        for (Map.Entry<String, Object> entry : configs.entrySet()) {
+        for (Map.Entry<String, Object> entry : configurations.entrySet()) {
             uppercaseKey = entry.getKey().toUpperCase(Locale.ENGLISH);
 
             if (isValidKey(uppercaseKey) && uppercaseKey.endsWith(IN_SERVER)) {
-                switch (ConfigKey.valueOf(uppercaseKey)) {
+                switch (BusinessConfigurationKey.valueOf(uppercaseKey)) {
                     case IS_MULTI_ENTITY_APP_IN_SERVER:
                         setIsMultiEntity(Boolean.parseBoolean(entry.getValue().toString()));
                         break;
@@ -309,17 +309,18 @@ public class ConfigurationService {
     /**
      * Saves various configurations at once for a specific user.
      *
-     * @param configs A {@link Map} of configurations. Every key in the Map is the configuration key, and the
-     *                corresponding value is the configuration value.
-     * @param userId  {@link EUser}'s id.
+     * @param configurations A {@link Map} of configurations. Every key in the Map is the configuration key, and the
+     *                       corresponding value is the configuration value.
+     * @param userId         {@link EUser}'s id.
      * @throws NotFoundEntityException if any of the provided keys is not a valid key. Keys must correspond to any of
-     *                                 the values in {@link ConfigKey} as String.
-     * @see ConfigKey
+     *                                 the values in {@link BusinessConfigurationKey} as String.
+     * @see BusinessConfigurationKey
      */
-    public void saveConfig(final Map<String, Object> configs, final long userId) throws NotFoundEntityException {
-        for (Map.Entry<String, Object> entry : configs.entrySet()) {
-            checkKey(entry.getKey().toUpperCase(Locale.ENGLISH));
-            insertOrUpdateValue(entry.getKey(), entry.getValue().toString(), userId);
+    public void saveConfigurations(final Map<String, Object> configurations,
+                                   final long userId) throws NotFoundEntityException {
+        for (Map.Entry<String, Object> configuration : configurations.entrySet()) {
+            checkKey(configuration.getKey().toUpperCase(Locale.ENGLISH));
+            insertOrUpdateValue(configuration.getKey(), configuration.getValue().toString(), userId);
         }
     }
 
@@ -329,7 +330,7 @@ public class ConfigurationService {
      * @param userRegistrationAllowed Indicates whether the user registration via sign-up is allowed or not.
      */
     public void setUserRegistrationAllowed(final boolean userRegistrationAllowed) {
-        insertOrUpdateValue(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER, userRegistrationAllowed);
+        insertOrUpdateValue(BusinessConfigurationKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER, userRegistrationAllowed);
         this.userRegistrationAllowed = userRegistrationAllowed;
     }
 
@@ -339,7 +340,7 @@ public class ConfigurationService {
      * @param isMultiEntity Indicates whether the application will handle multiple entities or not.
      */
     public void setIsMultiEntity(final boolean isMultiEntity) {
-        insertOrUpdateValue(ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER, isMultiEntity);
+        insertOrUpdateValue(BusinessConfigurationKey.IS_MULTI_ENTITY_APP_IN_SERVER, isMultiEntity);
         this.multiEntity = isMultiEntity;
     }
 
@@ -350,8 +351,9 @@ public class ConfigurationService {
      * @return The identifier of the last accessed entity or {@code null} if not found any.
      */
     public Long getLastAccessedEntityIdByUser(final long userId) {
-        String v = getValueByUser(ConfigKey.LAST_ACCESSED_ENTITY.toString(), userId);
-        return v != null ? Long.parseLong(v) : null;
+        String lastAccessedEntityId = getValueByUser(BusinessConfigurationKey.LAST_ACCESSED_ENTITY.toString(), userId);
+
+        return lastAccessedEntityId != null ? Long.parseLong(lastAccessedEntityId) : null;
     }
 
     /**
@@ -363,19 +365,19 @@ public class ConfigurationService {
      * @see EOwnedEntity
      */
     public void setLastAccessedEntityIdByUser(final long userId, final long entityId) {
-        insertOrUpdateValue(ConfigKey.LAST_ACCESSED_ENTITY, entityId, userId);
+        insertOrUpdateValue(BusinessConfigurationKey.LAST_ACCESSED_ENTITY, entityId, userId);
     }
 
     //region private stuff
-    private boolean isValidKey(final ConfigKey key) {
+    private boolean isValidKey(final BusinessConfigurationKey key) {
         return (KEYS.contains(key));
     }
 
     private boolean isValidKey(final String key) {
-        return isValidKey(ConfigKey.valueOf(key));
+        return isValidKey(BusinessConfigurationKey.valueOf(key));
     }
 
-    private void checkKey(final ConfigKey key) throws NotFoundEntityException {
+    private void checkKey(final BusinessConfigurationKey key) throws NotFoundEntityException {
         if (!isValidKey(key)) {
             throw new NotFoundEntityException(CONFIG_NOT_FOUND);
         }
@@ -383,7 +385,7 @@ public class ConfigurationService {
 
     private void checkKey(final String key) throws NotFoundEntityException {
         try {
-            checkKey(ConfigKey.valueOf(key));
+            checkKey(BusinessConfigurationKey.valueOf(key));
         } catch (IllegalArgumentException e) {
             throw new NotFoundEntityException(CONFIG_NOT_FOUND);
         }
@@ -394,75 +396,79 @@ public class ConfigurationService {
      */
     private void loadDBConfig() {
         if (isApplicationConfigured()) {
-            final BConfiguration multi =
-                    configurationRepository.findFirstByKey(ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString());
-            if (multi != null) {
-                multiEntity = Boolean.parseBoolean(multi.getValue());
+            final BConfiguration isMultiEntity =
+                    configurationRepository
+                            .findFirstByKey(BusinessConfigurationKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString());
+
+            if (isMultiEntity != null) {
+                multiEntity = Boolean.parseBoolean(isMultiEntity.getValue());
             } else {
-                setIsMultiEntity(dc.getIsMultiEntity());
+                setIsMultiEntity(defaultConstant.getIsMultiEntity());
             }
-            final BConfiguration registration =
-                    configurationRepository.findFirstByKey(ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString());
-            if (registration != null) {
-                userRegistrationAllowed = Boolean.parseBoolean(registration.getValue());
+
+            final BConfiguration isUserRegistrationAllowedConfiguration =
+                    configurationRepository
+                            .findFirstByKey(BusinessConfigurationKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString());
+
+            if (isUserRegistrationAllowedConfiguration != null) {
+                userRegistrationAllowed = Boolean.parseBoolean(isUserRegistrationAllowedConfiguration.getValue());
             } else {
-                setUserRegistrationAllowed(dc.getIsUserRegistrationAllowed());
+                setUserRegistrationAllowed(defaultConstant.getIsUserRegistrationAllowed());
             }
         } else {
-            multiEntity = dc.getIsMultiEntity();
-            userRegistrationAllowed = dc.getIsUserRegistrationAllowed();
+            multiEntity = defaultConstant.getIsMultiEntity();
+            userRegistrationAllowed = defaultConstant.getIsUserRegistrationAllowed();
         }
     }
 
     private void insertOrUpdateValue(final String key, final String value) {
-        String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
-        BConfiguration c = configurationRepository.findFirstByKey(uppercaseKey);
-        if (c == null) {
-            c = new BConfiguration(uppercaseKey, value);
+        final String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
+        BConfiguration configuration = configurationRepository.findFirstByKey(uppercaseKey);
+
+        if (configuration == null) {
+            configuration = new BConfiguration(uppercaseKey, value);
         } else {
-            c.setValue(value);
+            configuration.setValue(value);
         }
-        configurationRepository.save(c);
+        configurationRepository.save(configuration);
     }
 
     private void insertOrUpdateValue(final String key, final String value, final long userId) {
-        String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
-        BConfiguration c = configurationRepository.findFirstByKeyAndUserId(uppercaseKey, userId);
-        if (c == null) {
-            c = new BConfiguration(uppercaseKey, value, userId);
+        final String uppercaseKey = key.toUpperCase(Locale.ENGLISH);
+        BConfiguration configuration = configurationRepository.findFirstByKeyAndUserId(uppercaseKey, userId);
+
+        if (configuration == null) {
+            configuration = new BConfiguration(uppercaseKey, value, userId);
         } else {
-            c.setValue(value);
+            configuration.setValue(value);
         }
-        configurationRepository.save(c);
+        configurationRepository.save(configuration);
     }
 
-    private void insertOrUpdateValue(final ConfigKey key, final String value) {
+    private void insertOrUpdateValue(final BusinessConfigurationKey key, final String value) {
         insertOrUpdateValue(key.toString(), value);
     }
 
-    private void insertOrUpdateValue(final ConfigKey key, final String value, final long userId) {
+    private void insertOrUpdateValue(final BusinessConfigurationKey key, final String value, final long userId) {
         insertOrUpdateValue(key.toString(), value, userId);
     }
 
-    private void insertOrUpdateValue(final ConfigKey key, final Object value) {
+    private void insertOrUpdateValue(final BusinessConfigurationKey key, final Object value) {
         insertOrUpdateValue(key, String.valueOf(value));
     }
 
-    private void insertOrUpdateValue(final ConfigKey key, final Object value, final long userId) {
+    private void insertOrUpdateValue(final BusinessConfigurationKey key, final Object value, final long userId) {
         insertOrUpdateValue(key, String.valueOf(value), userId);
     }
 
     private String getValueByUser(final String key, final long userId) {
-        final BConfiguration c =
+        final BConfiguration configuration =
                 configurationRepository.findFirstByKeyAndUserId(key.toUpperCase(Locale.ENGLISH), userId);
-        if (c != null) {
-            return c.getValue();
-        }
 
-        return null;
+        return configuration != null ? configuration.getValue() : null;
     }
 
-    private BConfiguration getValue(final String key) {
+    private BConfiguration getValueByKey(final String key) {
         return configurationRepository.findFirstByKey(key.toUpperCase(Locale.ENGLISH));
     }
     //endregion

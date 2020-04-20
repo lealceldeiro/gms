@@ -11,9 +11,9 @@ import com.gms.testutil.EntityUtil;
 import com.gms.testutil.GmsMockUtil;
 import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,13 +28,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
+
 import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class LocaleConfigTest {
+@Transactional
+public class GmsLocaleConfigurerTest {
 
     /**
      * Instance of {@link JUnitRestDocumentation} to create the documentation for Asciidoc from the resutls of the
@@ -60,15 +63,15 @@ public class LocaleConfigTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -133,11 +136,15 @@ public class LocaleConfigTest {
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
-        url = dc.getApiBasePath() + "/" + ResourcePath.USER + "/roles/{userId}/{entityId}";
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        url = defaultConstant.getApiBasePath() + "/" + ResourcePath.USER + "/roles/{userId}/{entityId}";
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -152,7 +159,7 @@ public class LocaleConfigTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
                 .content(objectMapper.writeValueAsString(new int[]{-1}))
-                .header(DefaultConst.DEFAULT_LANGUAGE_HEADER, "en")
+                .header(DefaultConstant.DEFAULT_LANGUAGE_HEADER, "en")
         ).andExpect(status().isNotFound());
     }
 
@@ -167,7 +174,7 @@ public class LocaleConfigTest {
         mvc.perform(delete(url, user.getId(), entity.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(authHeader, tokenType + " " + accessToken)
-                .param(dc.getLanguageHolder(), "es")
+                .param(defaultConstant.getLanguageHolder(), "es")
                 .content(objectMapper.writeValueAsString(new int[]{-1}))
         ).andExpect(status().isNotFound());
     }

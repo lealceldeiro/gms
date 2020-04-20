@@ -8,7 +8,7 @@ import com.gms.repository.security.role.BRoleRepository;
 import com.gms.service.AppService;
 import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +38,7 @@ import static org.junit.Assert.fail;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class RoleServiceTest {
 
     /**
@@ -66,10 +67,10 @@ public class RoleServiceTest {
     @Autowired
     private AppService appService;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link GMSRandom}.
@@ -93,7 +94,7 @@ public class RoleServiceTest {
      */
     @Test
     public void createDefaultRole() {
-        BRole r = roleRepository.findFirstByLabel(dc.getRoleAdminDefaultLabel());
+        BRole r = roleRepository.findFirstByLabel(defaultConstant.getRoleAdminDefaultLabel());
         assertNotNull("Default role not created", r);
     }
 
@@ -157,7 +158,7 @@ public class RoleServiceTest {
             roleService.getRole(INVALID_ID);
         } catch (NotFoundEntityException e) {
             success = true;
-            assertEquals(RoleService.ROLE_NOT_FOUND, e.getMessage());
+            assertEquals(RoleService.ROLE_NOT_FOUND_MESSAGE_KEY, e.getMessage());
         }
         assertTrue(success);
     }

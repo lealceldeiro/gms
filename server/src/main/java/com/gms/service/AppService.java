@@ -39,7 +39,7 @@ public class AppService {
     /**
      * Instance of a {@link OwnedEntityService}.
      */
-    private final OwnedEntityService oeService;
+    private final OwnedEntityService ownedEntityService;
     /**
      * Indicates whether the application has performed an initial load ({@code null}), loaded OK ({@code true} or not
      * ({@code false}).
@@ -55,12 +55,12 @@ public class AppService {
     public boolean isInitialLoadOK() {
         if (initialLoadOK == null) {
             boolean ok = true;
-            if (!configurationService.isApplicationConfigured()) { //first app start up
+            if (!configurationService.isApplicationConfigured()) { // first app start up
                 ok = configurationService.isDefaultConfigurationCreated();
                 ok = ok && permissionService.areDefaultPermissionsCreatedSuccessfully();
                 ok = ok && roleService.createDefaultRole() != null;
                 ok = ok && userService.createDefaultUser() != null;
-                ok = ok && oeService.createDefaultEntity() != null;
+                ok = ok && ownedEntityService.createDefaultEntity() != null;
                 ok = ok && configurationService.isDefaultUserAssignedToEntityWithRole();
             }
             initialLoadOK = ok;

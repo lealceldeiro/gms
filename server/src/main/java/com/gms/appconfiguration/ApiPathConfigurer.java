@@ -19,10 +19,10 @@ import java.lang.reflect.Method;
  */
 @PropertySource("classpath:application.properties")
 @Configuration
-public class ApiPathConfig {
+public class ApiPathConfigurer {
 
     /**
-     * this method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
+     * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
      * unexpected results.
      *
      * @return a {@link WebMvcRegistrations}
@@ -39,10 +39,10 @@ public class ApiPathConfig {
                     @Override
                     protected void registerHandlerMethod(final Object handler, final Method method,
                                                          final RequestMappingInfo mapping) {
-                        PatternsRequestCondition apiPattern = new PatternsRequestCondition(apiBasePath)
-                                .combine(mapping.getPatternsCondition());
+                        final PatternsRequestCondition apiPattern =
+                                new PatternsRequestCondition(apiBasePath).combine(mapping.getPatternsCondition());
 
-                        RequestMappingInfo requestMappingInfo = new RequestMappingInfo(
+                        final RequestMappingInfo requestMappingInfo = new RequestMappingInfo(
                                 mapping.getName(),
                                 apiPattern,
                                 mapping.getMethodsCondition(),

@@ -1,7 +1,7 @@
-package com.gms.util.security.token;
+package com.gms.service.security.token;
 
 import com.gms.Application;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,10 +29,10 @@ import static org.junit.Assert.assertTrue;
 public class JWTServiceTest {
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
 
     /**
      * Instance of {@link JWTService}.
@@ -44,7 +44,7 @@ public class JWTServiceTest {
      */
     @Before
     public void setUp() {
-        jwtService = new JWTServiceImpl(sc);
+        jwtService = new JWTServiceImpl(securityConstant);
     }
 
     /**
@@ -52,13 +52,13 @@ public class JWTServiceTest {
      */
     @Test
     public void getATokenExpirationTime() {
-        final Object aTokenExpirationTime = ReflectionTestUtils.getField(sc, "aTokenExpirationTime");
+        final Object aTokenExpirationTime = ReflectionTestUtils.getField(securityConstant, "aTokenExpirationTime");
         long prev = aTokenExpirationTime != null ? Long.parseLong(aTokenExpirationTime.toString()) : -1;
         final long expTime = -10;
-        ReflectionTestUtils.setField(sc, "aTokenExpirationTime", expTime);
+        ReflectionTestUtils.setField(securityConstant, "aTokenExpirationTime", expTime);
         assertTrue("Expiration time for access token must be greater than zero",
-                jwtService.getATokenExpirationTime() > 0);
-        ReflectionTestUtils.setField(sc, "aTokenExpirationTime", prev);
+                   jwtService.getATokenExpirationTime() > 0);
+        ReflectionTestUtils.setField(securityConstant, "aTokenExpirationTime", prev);
     }
 
     /**
@@ -66,13 +66,14 @@ public class JWTServiceTest {
      */
     @Test
     public void getRTokenExpirationTime() {
-        long prev = Long.parseLong(String.valueOf(ReflectionTestUtils.getField(sc, "rTokenExpirationTime")));
+        final Object awValue = ReflectionTestUtils.getField(securityConstant, "rTokenExpirationTime");
+        final long prev = Long.parseLong(String.valueOf(awValue));
         final long expTime = -10;
-        ReflectionTestUtils.setField(sc, "rTokenExpirationTime", expTime);
+        ReflectionTestUtils.setField(securityConstant, "rTokenExpirationTime", expTime);
         assertTrue("Expiration time for refresh token must be greater than zero",
-                jwtService.getRTokenExpirationTime() > 0);
+                   jwtService.getRTokenExpirationTime() > 0);
         // restore value
-        ReflectionTestUtils.setField(sc, "rTokenExpirationTime", prev);
+        ReflectionTestUtils.setField(securityConstant, "rTokenExpirationTime", prev);
     }
 
     /**
@@ -84,7 +85,7 @@ public class JWTServiceTest {
         final String token1 = jwtService.createToken(sub);
         final String token2 = jwtService.createToken(sub);
         assertNotEquals("The JWTService#createToken(String subject) method never should create two tokens "
-                + "which are equals", token1, token2);
+                                + "which are equals", token1, token2);
     }
 
     /**
@@ -97,7 +98,7 @@ public class JWTServiceTest {
         final String token1 = jwtService.createToken(sub, exp);
         final String token2 = jwtService.createToken(sub, exp);
         assertNotEquals("The JWTService#createToken(String subject, long expiresIn) method never should "
-                + "create two tokens which are equals", token1, token2);
+                                + "create two tokens which are equals", token1, token2);
 
     }
 
@@ -111,7 +112,7 @@ public class JWTServiceTest {
         final String token1 = jwtService.createToken(sub, auth);
         final String token2 = jwtService.createToken(sub, auth);
         assertNotEquals("The JWTService#createToken(String subject, String authorities) method never should "
-                + "create two tokens which are equals", token1, token2);
+                                + "create two tokens which are equals", token1, token2);
     }
 
     /**
@@ -125,7 +126,7 @@ public class JWTServiceTest {
         final String token1 = jwtService.createToken(sub, auth, exp);
         final String token2 = jwtService.createToken(sub, auth, exp);
         assertNotEquals("The JWTService#createToken(String subject, String authorities, long expiresIn) "
-                + "method never should create two tokens which are equals", token1, token2);
+                                + "method never should create two tokens which are equals", token1, token2);
     }
 
     /**
@@ -138,7 +139,7 @@ public class JWTServiceTest {
         final String token1 = jwtService.createRefreshToken(sub, auth);
         final String token2 = jwtService.createRefreshToken(sub, auth);
         assertNotEquals("The JWTService#createRefreshToken(String subject, String authorities) method never "
-                + "should create two tokens which are equals", token1, token2);
+                                + "should create two tokens which are equals", token1, token2);
     }
 
     /**
@@ -163,7 +164,7 @@ public class JWTServiceTest {
             long tokenTime = ((Date) tokenClaims.get(jwtService.expirationKey())).getTime();
 
             assertTrue("Expiration time for refresh token must be greater than expiration time for access "
-                    + "token when default values are used", rTokenTime > tokenTime);
+                               + "token when default values are used", rTokenTime > tokenTime);
         }
     }
 
@@ -176,8 +177,8 @@ public class JWTServiceTest {
         final String auth = "ROLE_1;ROLE_2";
         final String token = jwtService.createToken(sub, auth);
         final Map<String, Object> claims =
-                jwtService.getClaims(token, jwtService.subjectKey(), sc.getAuthoritiesHolder(),
-                        jwtService.expirationKey());
+                jwtService.getClaims(token, jwtService.subjectKey(), securityConstant.getAuthoritiesHolder(),
+                                     jwtService.expirationKey());
 
         assertClaimsState(claims, sub, auth);
     }
@@ -192,18 +193,20 @@ public class JWTServiceTest {
         final long expiresIn = 99999999;
         final String token = jwtService.createToken(sub, auth, expiresIn);
         final String randomKey = "randomKey";
-        final Map<String, Object> claims = jwtService.getClaimsExtended(token, randomKey, sc.getAuthoritiesHolder());
+        final Map<String, Object> claims = jwtService.getClaimsExtended(token,
+                                                                        randomKey,
+                                                                        securityConstant.getAuthoritiesHolder());
 
         assertClaimsState(claims, sub, auth);
 
         assertNull("Claims contains an incorrect pair key-value", claims.get(randomKey));
         assertNotNull("Expiration time is null", claims.get(jwtService.expirationKey()));
         assertTrue("Expiration time is not an instance of Date",
-                claims.get(jwtService.expirationKey()) instanceof Date);
+                   claims.get(jwtService.expirationKey()) instanceof Date);
 
         if (claims.get(jwtService.expirationKey()) != null && claims.get(jwtService.expirationKey()) instanceof Date) {
             assertTrue("Expiration time is not greater than the creation time of the token",
-                    ((Date) claims.get(jwtService.expirationKey())).getTime() > expiresIn);
+                       ((Date) claims.get(jwtService.expirationKey())).getTime() > expiresIn);
         }
     }
 
@@ -213,16 +216,16 @@ public class JWTServiceTest {
         assertNotNull("Claims map is null", claims);
         assertNotNull("Expiration time claims is null", claims.get(jwtService.expirationKey()));
         assertNotNull("Subject claims is null", claims.get(jwtService.subjectKey()));
-        assertNotNull("Authorities claims is null", claims.get(sc.getAuthoritiesHolder()));
+        assertNotNull("Authorities claims is null", claims.get(securityConstant.getAuthoritiesHolder()));
 
         if (claims.get(jwtService.subjectKey()) != null) {
             assertEquals("Subjects are not equals", subject, claims.get(jwtService.subjectKey()).toString());
         }
-        if (claims.get(sc.getAuthoritiesHolder()) != null) {
+        if (claims.get(securityConstant.getAuthoritiesHolder()) != null) {
             assertEquals(
                     "Authorities are not equals",
                     authorities,
-                    claims.get(sc.getAuthoritiesHolder()).toString()
+                    claims.get(securityConstant.getAuthoritiesHolder()).toString()
             );
         }
     }

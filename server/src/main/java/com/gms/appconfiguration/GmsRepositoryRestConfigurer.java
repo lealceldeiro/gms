@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 0.1
  */
 @Configuration
-public class RepositoryConfig implements RepositoryRestConfigurer {
+public class GmsRepositoryRestConfigurer implements RepositoryRestConfigurer {
 
     /**
      * This method is intended to be used by the Spring framework and should not be overridden. Doing so may produce
@@ -25,8 +25,8 @@ public class RepositoryConfig implements RepositoryRestConfigurer {
      */
     @Override
     public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config) {
-        Reflections reflections = new Reflections("com.gms.domain", new SubTypesScanner(false));
-        Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
+        final Reflections reflections = new Reflections("com.gms.domain", new SubTypesScanner(false));
+        final Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
         for (Class<?> iClass : classes) {
             config.exposeIdsFor(iClass);
         }

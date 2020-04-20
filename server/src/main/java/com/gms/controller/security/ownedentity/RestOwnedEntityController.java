@@ -36,18 +36,18 @@ public class RestOwnedEntityController {
      * {@code produces = 'application/hal+json'} and by putting in within a controller annotated as
      * {@code `@BasePathAwareController}.
      *
-     * @param entity {@link com.gms.domain.security.ownedentity.EOwnedEntity} data to be created.
+     * @param entityModel {@link com.gms.domain.security.ownedentity.EOwnedEntity} data to be created.
      * @return A {@link com.gms.domain.security.ownedentity.EOwnedEntity} mapped into a
      * {@link org.springframework.web.bind.annotation.ResponseBody}.
      * @throws GmsGeneralException when there is an error creating the entity.
      */
     @PostMapping(path = ResourcePath.OWNED_ENTITY, produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<EOwnedEntity> create(@Valid @RequestBody final EntityModel<EOwnedEntity> entity)
+    public ResponseEntity<EOwnedEntity> create(@Valid @RequestBody final EntityModel<EOwnedEntity> entityModel)
             throws GmsGeneralException {
-        EOwnedEntity e = entityService.create(entity.getContent());
+        final EOwnedEntity entity = entityService.create(entityModel.getContent());
 
-        if (e != null) {
+        if (entity != null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             throw GmsGeneralException.builder().messageI18N("entity.add.error").finishedOK(false).build();

@@ -35,7 +35,7 @@ public class DAOProvider {
     /**
      * Creates a new {@link DAOProvider} from the given arguments.
      *
-     * @param queryService
+     * @param queryService A {@link QueryService} instance to execute sql queries.
      */
     @Autowired
     public DAOProvider(final QueryService queryService) {

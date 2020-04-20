@@ -1,7 +1,7 @@
 package com.gms.appconfiguration;
 
 import com.gms.appconfiguration.security.authentication.AuthenticationFacade;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.ExceptionUtil;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.GmsSecurityException;
@@ -34,15 +34,15 @@ public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
     /**
      * Instance of {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
     /**
      * nstance of {@link AuthenticationFacade}.
      */
     private final AuthenticationFacade authenticationFacade;
     /**
-     * nstance of {@link DefaultConst}.
+     * nstance of {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
 
     //region exceptions handling
 
@@ -57,7 +57,8 @@ public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundEntityException.class)
     public ResponseEntity<Object> handleNotFoundEntityException(final NotFoundEntityException ex,
                                                                 final WebRequest req) {
-        Object resBody = ExceptionUtil.createResponseBodyAsMap(msg.getMessage(ex.getMessage()), dc);
+        final Object resBody = ExceptionUtil.createResponseBodyAsMap(messageResolver.getMessage(ex.getMessage()),
+                                                                     defaultConstant);
 
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
     }
@@ -73,7 +74,7 @@ public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(GmsSecurityException.class)
     public ResponseEntity<Object> handleGmsSecurityException(final GmsSecurityException ex, final WebRequest req) {
         authenticationFacade.setAuthentication(null);
-        Object resBody = ExceptionUtil.getResponseBodyForGmsSecurityException(ex, msg, dc);
+        Object resBody = ExceptionUtil.getResponseBodyForGmsSecurityException(ex, messageResolver, defaultConstant);
 
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNAUTHORIZED, req);
     }
@@ -88,7 +89,7 @@ public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(GmsGeneralException.class)
     public ResponseEntity<Object> handleGmsGeneralException(final GmsGeneralException ex, final WebRequest req) {
-        Object resBody = ExceptionUtil.getResponseBodyForGmsGeneralException(ex, msg, dc);
+        Object resBody = ExceptionUtil.getResponseBodyForGmsGeneralException(ex, messageResolver, defaultConstant);
 
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), ex.getHttpStatus(), req);
     }
@@ -136,18 +137,21 @@ public class DefaultControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     public ResponseEntity<Object> handleInvalidDataAccessApiUsageException(final InvalidDataAccessApiUsageException ex,
                                                                            final WebRequest req) {
+        final String message = messageResolver.getMessage("validation.fields.incorrect");
         return handleExceptionInternal(ex,
-                ExceptionUtil.createResponseBodyAsMap(msg.getMessage("validation.fields.incorrect"), dc),
-                new HttpHeaders(),
-                HttpStatus.BAD_REQUEST,
-                req
+                                       ExceptionUtil.createResponseBodyAsMap(message, defaultConstant),
+                                       new HttpHeaders(),
+                                       HttpStatus.BAD_REQUEST,
+                                       req
         );
     }
 
     //endregion
 
     private ResponseEntity<Object> handleConstraintViolationException(final Exception ex, final WebRequest req) {
-        Object resBody = ExceptionUtil.getResponseBodyForConstraintViolationException(ex, msg, dc);
+        final Object resBody = ExceptionUtil.getResponseBodyForConstraintViolationException(ex,
+                                                                                            messageResolver,
+                                                                                            defaultConstant);
 
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, req);
     }

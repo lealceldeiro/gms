@@ -53,9 +53,7 @@ public class Application extends SpringBootServletInitializer {
         return builder.sources(Application.class);
     }
 
-    //region beans
-
-    //start up runner
+    // region beans
 
     /**
      * Creates a command line runner bean to be provided to the Spring framework. This checks whether the application
@@ -69,13 +67,11 @@ public class Application extends SpringBootServletInitializer {
     public CommandLineRunner commandLineRunner(final AppService appService) {
         return strings -> {
             if (!appService.isInitialLoadOK()) {
-                GMS_LOGGER.error("App did not start properly and probably will fail at some point. Restarting it is "
-                        + "highly advisable");
+                GMS_LOGGER.error("GMS Application did not start properly and probably will fail at some point. "
+                                         + "Restarting it is highly advisable");
             }
         };
     }
-
-    //bCrypt
 
     /**
      * Creates a {@link PasswordEncoder} to be provided to the Spring framework.
@@ -97,7 +93,6 @@ public class Application extends SpringBootServletInitializer {
         return new IndexRedirectionPageRegistrar();
     }
 
-    // used by bean
     private static class IndexRedirectionPageRegistrar implements ErrorPageRegistrar {
         @Override
         public void registerErrorPages(final ErrorPageRegistry registry) {
@@ -106,5 +101,5 @@ public class Application extends SpringBootServletInitializer {
 
     }
 
-    //endregion
+    // endregion
 }

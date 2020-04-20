@@ -9,5 +9,5 @@ import org.springframework.security.web.AuthenticationEntryPoint;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-interface GmsEntryPoint extends AuthenticationEntryPoint {
+interface GmsAuthenticationEntryPoint extends AuthenticationEntryPoint {
 }

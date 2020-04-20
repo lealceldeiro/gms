@@ -45,24 +45,27 @@ public abstract class BAuthorizationDAO {
     public abstract List<BRole> getRolesForUserOverEntity(long userId, long entityId);
 
     final List<BRole> getRolesListFrom(final Iterable<Object[]> resultSet) {
+        final List<BRole> roles = new LinkedList<>();
+
+        resultSet.forEach(resultSetRoleValue -> roles.add(mapResultSetToRole(resultSetRoleValue)));
+
+        return roles;
+    }
+
+    private static BRole mapResultSetToRole(final Object[] resultSet) {
         final int idIndex = 0;
         final int versionIndex = 1;
         final int labelIndex = 2;
         final int descriptionIndex = 3;
         final int enabledIndex = 4;
 
-        List<BRole> roles = new LinkedList<>();
+        final BRole role = new BRole(resultSet[labelIndex].toString());
+        role.setId(Long.valueOf(resultSet[idIndex].toString()));
+        role.setVersion(Integer.valueOf(resultSet[versionIndex].toString()));
+        role.setEnabled(Boolean.valueOf(resultSet[enabledIndex].toString()));
+        role.setDescription(resultSet[descriptionIndex].toString());
 
-        for (Object[] resultSetRoleValue : resultSet) {
-            final BRole role = new BRole(resultSetRoleValue[labelIndex].toString());
-            role.setId(Long.valueOf(resultSetRoleValue[idIndex].toString()));
-            role.setVersion(Integer.valueOf(resultSetRoleValue[versionIndex].toString()));
-            role.setEnabled(Boolean.valueOf(resultSetRoleValue[enabledIndex].toString()));
-            role.setDescription(resultSetRoleValue[descriptionIndex].toString());
-            roles.add(role);
-        }
-
-        return roles;
+        return role;
     }
 
 }

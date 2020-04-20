@@ -1,7 +1,7 @@
 package com.gms.appconfiguration.security.authentication.entrypoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +23,20 @@ import static com.gms.util.exception.ExceptionUtil.getResponseBodyForGmsSecurity
  * @version 0.1
  */
 @RequiredArgsConstructor
-public final class GmsHttpStatusAndBodyEntryPoint implements GmsEntryPoint {
+public final class GmsHttpStatusAndBodyAuthenticationEntryPoint implements GmsAuthenticationEntryPoint {
     /**
      * {@link HttpStatus} to be sent in the response.
      */
     private final HttpStatus httpStatus;
 
     /**
-     * An instance of a {@link DefaultConst}.
+     * An instance of a {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
     /**
      * An instance of a {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
 
     @Override
     public void commence(final HttpServletRequest request, final HttpServletResponse response,
@@ -49,6 +49,6 @@ public final class GmsHttpStatusAndBodyEntryPoint implements GmsEntryPoint {
 
     private Object responseBody(final String url) {
         // update latter to return objects with a different information as different HttpStatus are handled
-        return getResponseBodyForGmsSecurityException(new GmsSecurityException(url), msg, dc);
+        return getResponseBodyForGmsSecurityException(new GmsSecurityException(url), messageResolver, defaultConstant);
     }
 }

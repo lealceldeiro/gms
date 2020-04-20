@@ -49,10 +49,12 @@ public class PermissionController {
             final Pageable pageable,
             final PagedResourcesAssembler<BRole> pageAssembler
     ) {
-        Page<BRole> page = permissionService.getAllRolesByPermissionId(id, pageable);
-        Link link = linkTo(methodOn(PermissionController.class).getAllRolesByPermission(id, pageable, pageAssembler))
-                .withSelfRel();
-        PagedModel<EntityModel<BRole>> pagedResources = pageAssembler.toModel(page, link);
+        final Page<BRole> page = permissionService.getAllRolesByPermissionId(id, pageable);
+        final Link link =
+                linkTo(methodOn(PermissionController.class).getAllRolesByPermission(id,
+                                                                                    pageable,
+                                                                                    pageAssembler)).withSelfRel();
+        final PagedModel<EntityModel<BRole>> pagedResources = pageAssembler.toModel(page, link);
 
         return ResponseEntity.ok(pagedResources);
     }

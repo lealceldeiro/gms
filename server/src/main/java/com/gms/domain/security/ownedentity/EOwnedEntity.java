@@ -1,7 +1,7 @@
 package com.gms.domain.security.ownedentity;
 
 import com.gms.domain.GmsEntity;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import com.gms.util.i18n.CodeI18N;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -55,16 +55,16 @@ public final class EOwnedEntity extends GmsEntity {
     @NotNull(message = FIELD_NOT_NULL)
     @NotBlank(message = FIELD_NOT_BLANK)
     @Size(max = STRING_LENGTH_DEFAULT, message = FIELD_SIZE)
-    @Pattern(regexp = SecurityConst.USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
+    @Pattern(regexp = SecurityConstant.USERNAME_REGEXP, message = CodeI18N.FIELD_PATTERN_INCORRECT_USERNAME)
     @Column(unique = true, nullable = false)
     private String username;
 
     /**
      * A brief description of the entity.
      */
-    @NotNull(message = CodeI18N.FIELD_NOT_NULL)
-    @NotBlank(message = CodeI18N.FIELD_NOT_BLANK)
-    @Size(max = STRING_LENGTH_MAX, message = CodeI18N.FIELD_SIZE)
+    @NotNull(message = FIELD_NOT_NULL)
+    @NotBlank(message = FIELD_NOT_BLANK)
+    @Size(max = STRING_LENGTH_MAX, message = FIELD_SIZE)
     @Column(nullable = false, length = STRING_LENGTH_MAX)
     private String description;
 

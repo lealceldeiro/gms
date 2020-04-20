@@ -16,7 +16,7 @@ import com.gms.service.configuration.ConfigurationService;
 import com.gms.testutil.EntityUtil;
 import com.gms.testutil.StringUtil;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -49,6 +50,7 @@ import static org.junit.Assert.fail;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class UserServiceTest {
 
     /**
@@ -97,10 +99,10 @@ public class UserServiceTest {
     @Autowired
     private ConfigurationService configService;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link GMSRandom}.
@@ -120,7 +122,7 @@ public class UserServiceTest {
      */
     @Test
     public void createDefaultUser() {
-        assertNotNull(userRepository.findFirstByUsername(dc.getUserAdminDefaultUsername()));
+        assertNotNull(userRepository.findFirstByUsername(defaultConstant.getUserAdminDefaultUsername()));
     }
 
     /**
@@ -485,7 +487,7 @@ public class UserServiceTest {
         EUser u = userRepository.save(EntityUtil.getSampleUser(random.nextString()));
         assertNotNull(u);
 
-        assertNull(userService.getEntityIdByUser(u));
+        assertNull(userService.getLastAccessedEntityIdByUser(u));
     }
 
 }

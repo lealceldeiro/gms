@@ -46,12 +46,10 @@ public class RestUserController {
     @ResponseBody
     public ResponseEntity<EUser> register(@RequestBody @Valid final EntityModel<? extends EUser> userEntityModel)
             throws GmsGeneralException {
-        EUser u = userService.signUp(
-                userEntityModel.getContent(),
-                UserService.EmailStatus.VERIFIED,
-                UserService.RegistrationPrivilege.SUPER_USER
-        );
-        if (u != null) {
+        final EUser user = userService.signUp(userEntityModel.getContent(),
+                                              UserService.EmailStatus.VERIFIED,
+                                              UserService.RegistrationPrivilege.SUPER_USER);
+        if (user != null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             throw GmsGeneralException.builder().messageI18N("user.add.error").finishedOK(false).build();

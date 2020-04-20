@@ -1,6 +1,6 @@
 package com.gms.testutil;
 
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.LinkPath;
 import org.springframework.restdocs.hypermedia.HypermediaDocumentation;
 import org.springframework.restdocs.hypermedia.LinkDescriptor;
@@ -127,11 +127,11 @@ public final class RestDoc {
      * Returns the common fields specified for page attributes along with the provided descriptors (which may be
      * optional) in the services requests.
      *
-     * @param dc          Instance of {@link DefaultConst}.
+     * @param dc          Instance of {@link DefaultConstant}.
      * @param descriptors Optional {@link javax.management.Descriptor}s to include in the returned array of descriptors.
      * @return An array of {@link ParameterDescriptor}s.
      */
-    public static ParameterDescriptor[] getRelaxedPagingParameters(final DefaultConst dc,
+    public static ParameterDescriptor[] getRelaxedPagingParameters(final DefaultConstant dc,
                                                                    final ParameterDescriptor... descriptors) {
         ParameterDescriptor[] common = {
                 parameterWithName(dc.getPageSortParam()).optional().description(LinkPath.PAGE_SORT_PARAM_META),

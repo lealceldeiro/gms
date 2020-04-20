@@ -111,10 +111,10 @@ public class RoleController {
             final Pageable pageable,
             final PagedResourcesAssembler<BPermission> pageAssembler
     ) {
-        Page<BPermission> page = roleService.getAllPermissionsByRoleId(id, pageable);
-        Link link = linkTo(methodOn(RoleController.class).getAllPermissionsByRole(id, pageable, pageAssembler))
+        final Page<BPermission> page = roleService.getAllPermissionsByRoleId(id, pageable);
+        final Link link = linkTo(methodOn(RoleController.class).getAllPermissionsByRole(id, pageable, pageAssembler))
                 .withSelfRel();
-        PagedModel<EntityModel<BPermission>> pagedResources = pageAssembler.toModel(page, link);
+        final PagedModel<EntityModel<BPermission>> pagedResources = pageAssembler.toModel(page, link);
 
         return ResponseEntity.ok(pagedResources);
     }

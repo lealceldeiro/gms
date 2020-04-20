@@ -12,9 +12,9 @@ import com.gms.testutil.RestDoc;
 import com.gms.testutil.StringUtil;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,15 +67,15 @@ public class RestOwnedEntityControllerTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -134,11 +134,15 @@ public class RestOwnedEntityControllerTest {
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -154,9 +158,9 @@ public class RestOwnedEntityControllerTest {
         ConstrainedFields fields = new ConstrainedFields(EOwnedEntity.class);
 
         mvc.perform(post(apiPrefix + "/" + REQ_STRING)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(e)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(e)))
                 .andExpect(status().isCreated())
                 .andDo(restDocResHandler.document(
                         requestFields(
@@ -164,7 +168,8 @@ public class RestOwnedEntityControllerTest {
                                         .description("Natural name which is used commonly for referring to the entity"),
                                 fields.withPath("username")
                                         .description("A unique string representation of the {@LINK #name}. Useful "
-                                                + "when there are other entities with the same {@LINK #name}"),
+                                                             + "when there are other entities with the same "
+                                                             + "{@LINK #name}"),
                                 fields.withPath("description")
                                         .description("A brief description of the entity")
                         )
@@ -210,12 +215,12 @@ public class RestOwnedEntityControllerTest {
 
         final String r = random.nextString();
         EOwnedEntity e = new EOwnedEntity(null, StringUtil.EXAMPLE_USERNAME + r,
-                StringUtil.EXAMPLE_DESCRIPTION + r);
+                                          StringUtil.EXAMPLE_DESCRIPTION + r);
         EntityModel<EOwnedEntity> resource = new EntityModel<>(e);
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .header(securityConstant.getATokenHeader(), tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
 
@@ -241,7 +246,7 @@ public class RestOwnedEntityControllerTest {
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .header(securityConstant.getATokenHeader(), tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isCreated());
 
@@ -249,7 +254,7 @@ public class RestOwnedEntityControllerTest {
         mvc.perform(
                 post(apiPrefix + "/" + ResourcePath.OWNED_ENTITY)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(sc.getATokenHeader(), tokenType + " " + accessToken)
+                        .header(securityConstant.getATokenHeader(), tokenType + " " + accessToken)
                         .content(objectMapper.writeValueAsString(resource))
         ).andExpect(status().isUnprocessableEntity());
 

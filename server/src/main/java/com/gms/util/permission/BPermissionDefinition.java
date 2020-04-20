@@ -4,7 +4,7 @@ package com.gms.util.permission;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public enum BPermissionConst {
+public enum BPermissionDefinition {
 
     /*USER*/
     /**

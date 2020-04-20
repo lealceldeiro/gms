@@ -20,9 +20,9 @@ import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
 import com.gms.testutil.validation.ConstrainedFields;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +39,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class UserControllerTest {
 
     /**
@@ -87,15 +89,15 @@ public class UserControllerTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -176,11 +178,15 @@ public class UserControllerTest {
 
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -194,9 +200,9 @@ public class UserControllerTest {
 
         String url = apiPrefix + "/" + ResourcePath.USER + "/roles/{userId}/{entityId}";
         mvc.perform(post(url, user.getId(), entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds)))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         requestFields(
@@ -205,7 +211,7 @@ public class UserControllerTest {
                 ))
                 .andDo(restDocResHandler.document(
                         responseFields(fieldWithPath("[]")
-                                .description("List of roles added to the user over the entity"))
+                                               .description("List of roles added to the user over the entity"))
                 ))
                 .andDo(restDocResHandler.document(pathParameters(
                         parameterWithName("userId").description(EUserMeta.ID_INFO),
@@ -226,16 +232,16 @@ public class UserControllerTest {
         String url = apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}";
         //entity not found
         mvc.perform(post(url, user.getId(), invalidId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
 
         //user not found
         mvc.perform(post(url, invalidId, entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
 
         //none of the roles was found
@@ -243,9 +249,9 @@ public class UserControllerTest {
         roleIds.add(invalidId);
 
         mvc.perform(post(url, user.getId(), entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
     }
 
@@ -260,16 +266,16 @@ public class UserControllerTest {
 
         String url = apiPrefix + "/" + ResourcePath.USER + "/" + ResourcePath.ROLE + "s/{userId}/{entityId}";
         mvc.perform(delete(url, user.getId(), entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds)))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(requestFields(
                         fields.withPath("[]").description("List of " + BAuthorizationMeta.ROLE_ID_REMOVE_INFO)
                 )))
                 .andDo(restDocResHandler.document(
                         responseFields(fieldWithPath("[]")
-                                .description("List of roles removed to the user from the entity"))
+                                               .description("List of roles removed to the user from the entity"))
                 ))
                 .andDo(restDocResHandler.document(pathParameters(
                         parameterWithName("userId").description(EUserMeta.ID_INFO),
@@ -290,16 +296,16 @@ public class UserControllerTest {
         String url = apiPrefix + "/" + ResourcePath.USER + "/roles/{userId}/{entityId}";
         //entity not found
         mvc.perform(delete(url, user.getId(), invalidId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
 
         //user not found
         mvc.perform(delete(url, invalidId, entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
 
         //none of the roles was found
@@ -307,9 +313,9 @@ public class UserControllerTest {
         roleIds.add(invalidId);
 
         mvc.perform(delete(url, user.getId(), entity.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken)
-                .content(objectMapper.writeValueAsString(roleIds))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .content(objectMapper.writeValueAsString(roleIds))
         ).andExpect(status().isNotFound());
     }
 
@@ -322,8 +328,8 @@ public class UserControllerTest {
         assignRolesForUserOverEntity();
 
         mvc.perform(get(apiPrefix + "/" + ResourcePath.USER + "/roles/{userId}", user.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(pathParameters(
                         parameterWithName("userId").description(EUserMeta.ID_INFO)
@@ -343,8 +349,8 @@ public class UserControllerTest {
                 user.getId(),
                 entity.getId()
         )
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(authHeader, tokenType + " " + accessToken))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(authHeader, tokenType + " " + accessToken))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(pathParameters(
                         parameterWithName("userId").description(EUserMeta.ID_INFO),
@@ -389,14 +395,14 @@ public class UserControllerTest {
                         apiPrefix + "/" + ResourcePath.USER + "/roles/{userId}/{entityId}",
                         user.getId(),
                         entity.getId()
-                        )
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(authHeader, tokenType + " " + accessToken)
-                                .content(objectMapper.writeValueAsString(roleIds))
+                            )
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .header(authHeader, tokenType + " " + accessToken)
+                                    .content(objectMapper.writeValueAsString(roleIds))
                 ).andReturn();
 
         assertEquals("The relationship among user, entity and role(s) could not be saved",
-                HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
+                     HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
     }
 
 }

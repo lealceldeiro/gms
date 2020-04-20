@@ -1,7 +1,7 @@
 package com.gms.appconfiguration.security.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsSecurityException;
 import com.gms.util.i18n.MessageResolver;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +27,19 @@ import static com.gms.util.exception.ExceptionUtil.getResponseBodyForGmsSecurity
 @RequiredArgsConstructor
 public final class GmsAccessDeniedHandler implements AccessDeniedHandler {
     /**
-     * An instance of a {@link DefaultConst}.
+     * An instance of a {@link DefaultConstant}.
      */
-    private final DefaultConst dc;
+    private final DefaultConstant defaultConstant;
     /**
      * An instance of a {@link MessageResolver}.
      */
-    private final MessageResolver msg;
+    private final MessageResolver messageResolver;
 
     @Override
     public void handle(final HttpServletRequest request, final HttpServletResponse response,
                        final AccessDeniedException accessDeniedException) throws IOException {
         final GmsSecurityException exception = new GmsSecurityException(request.getRequestURL().toString());
-        final Object body = getResponseBodyForGmsSecurityException(exception, msg, dc);
+        final Object body = getResponseBodyForGmsSecurityException(exception, messageResolver, defaultConstant);
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         try (PrintWriter writer = response.getWriter()) {

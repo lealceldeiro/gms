@@ -11,8 +11,8 @@ import com.gms.repository.security.ownedentity.EOwnedEntityRepository;
 import com.gms.repository.security.user.EUserRepository;
 import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
-import com.gms.util.configuration.ConfigKey;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.configuration.BusinessConfigurationKey;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.exception.GmsGeneralException;
 import com.gms.util.exception.domain.NotFoundEntityException;
 import org.junit.Test;
@@ -42,6 +42,7 @@ import static org.junit.Assert.fail;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class ConfigurationServiceTest {
 
     /**
@@ -75,27 +76,28 @@ public class ConfigurationServiceTest {
     @Autowired
     private BAuthorizationRepository authRepository;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Key for argument "userRegistrationAllowed".
      */
-    private final String keyUserRegistrationAllowed = ConfigKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString();
+    private final String keyUserRegistrationAllowed =
+            BusinessConfigurationKey.IS_USER_REGISTRATION_ALLOWED_IN_SERVER.toString();
     /**
      * Key for argument "isMultientityAPp".
      */
-    private final String keyMultiEntityApp = ConfigKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString();
+    private final String keyMultiEntityApp = BusinessConfigurationKey.IS_MULTI_ENTITY_APP_IN_SERVER.toString();
     /**
      * Key for argument "language".
      */
-    private final String keyLang = ConfigKey.LANGUAGE.toString();
+    private final String keyLang = BusinessConfigurationKey.LANGUAGE.toString();
     /**
      * Key for argument "lastAccessedEntity".
      */
-    private final String keyLastAccessedEntity = ConfigKey.LAST_ACCESSED_ENTITY.toString();
+    private final String keyLastAccessedEntity = BusinessConfigurationKey.LAST_ACCESSED_ENTITY.toString();
 
     /**
      * Instance of {@link GMSRandom}.
@@ -137,8 +139,8 @@ public class ConfigurationServiceTest {
         final boolean ok = configurationService.isDefaultUserAssignedToEntityWithRole();
         assertTrue(msg, ok);
 
-        final EUser u = userRepository.findFirstByUsername(dc.getUserAdminDefaultUsername());
-        final EOwnedEntity e = entityRepository.findFirstByUsername(dc.getEntityDefaultUsername());
+        final EUser u = userRepository.findFirstByUsername(defaultConstant.getUserAdminDefaultUsername());
+        final EOwnedEntity e = entityRepository.findFirstByUsername(defaultConstant.getEntityDefaultUsername());
         assertNotNull(u);
         assertNotNull(e);
         final List<BRole> roles = authRepository.getRolesForUserOverEntity(u.getId(), e.getId());
@@ -164,14 +166,14 @@ public class ConfigurationServiceTest {
             assertNotNull(configurationRepository.save(new BConfiguration(key, value)));
         }
 
-        Map<String, String> configs = configurationService.getConfig();
+        Map<String, String> configs = configurationService.getNonUserSpecificConfigurations();
         Object config;
         for (int i = 0; i < keys.size(); i++) {
             config = configs.get(keys.get(i));
             assertNotNull("Configuration found if null", config);
             value = values.get(i);
             assertEquals("Configuration value returned by server (" + config
-                    + ") does not match the expected", config, value);
+                                 + ") does not match the expected", config, value);
         }
 
     }
@@ -191,10 +193,10 @@ public class ConfigurationServiceTest {
         ReflectionTestUtils.setField(configurationService, "userRegistrationAllowed", true);
         assertNotNull(c);
         try {
-            Object value = configurationService.getConfig(c.getKey());
+            Object value = configurationService.getNonUserSpecificConfigurations(c.getKey());
             assertNotNull("Configuration value is null despite it was saved via repository.", value);
             assertEquals("Value gotten from service is not equals to the previously saved configuration",
-                    value.toString(), c.getValue());
+                         value.toString(), c.getValue());
         } catch (NotFoundEntityException e) {
             LOGGER.error(e.getLocalizedMessage());
             fail("Configuration with key " + c.getKey() + " not found despite it was saved via repository.");
@@ -217,14 +219,14 @@ public class ConfigurationServiceTest {
         assertNotNull(c);
 
         try {
-            String value = configurationService.getConfig(keyLang, u.getId());
+            String value = configurationService.getNonUserSpecificConfigurations(keyLang, u.getId());
             assertNotNull("Configuration value is null despite it was saved via repository.", value);
             assertEquals("Value gotten from service is not equals to the previously saved configuration",
-                    value, c.getValue());
+                         value, c.getValue());
         } catch (NotFoundEntityException e) {
             LOGGER.error(e.getLocalizedMessage());
             fail("Configuration with key " + c.getKey() + " for user with id " + u.getId()
-                    + " not found despite it was saved via repository.");
+                         + " not found despite it was saved via repository.");
         }
     }
 
@@ -243,14 +245,14 @@ public class ConfigurationServiceTest {
                 new BConfiguration(keyLastAccessedEntity, String.valueOf(e.getId()), u.getId())
         );
         assertNotNull(c2);
-        Map<String, Object> configs = configurationService.getConfigByUser(u.getId());
+        Map<String, Object> configs = configurationService.getConfigurationsByUser(u.getId());
 
         assertNotNull(configs.get(keyLang));
         assertNotNull(configs.get(keyLastAccessedEntity));
 
         assertEquals("Configuration values (language) do not match", "es", configs.get(keyLang));
         assertEquals("Configuration values (last accessed entity) do not match",
-                configs.get(keyLastAccessedEntity), String.valueOf(e.getId()));
+                     configs.get(keyLastAccessedEntity), String.valueOf(e.getId()));
     }
 
     /**
@@ -267,7 +269,7 @@ public class ConfigurationServiceTest {
         configs.put(keyMultiEntityApp, true);
 
         try {
-            configurationService.saveConfig(configs);
+            configurationService.saveConfigurations(configs);
             BConfiguration cR = configurationRepository.findFirstByKey(keyUserRegistrationAllowed);
             assertNotNull(cR);
             assertEquals(Boolean.toString(false), cR.getValue());
@@ -298,7 +300,7 @@ public class ConfigurationServiceTest {
         configs.put(keyLang, "fr");
         configs.put(keyLastAccessedEntity, e.getId());
         try {
-            configurationService.saveConfig(configs, u.getId());
+            configurationService.saveConfigurations(configs, u.getId());
         } catch (NotFoundEntityException e1) {
             LOGGER.error(e1.getLocalizedMessage());
             fail("At least one of the keys was not found.");
@@ -392,10 +394,10 @@ public class ConfigurationServiceTest {
     public void isUserRegistrationAllowed() {
         //getter method
         Object userRegistrationAllowedString = ReflectionTestUtils.getField(configurationService,
-                "userRegistrationAllowed");
+                                                                            "userRegistrationAllowed");
         assertNotNull(userRegistrationAllowedString);
         assertEquals(configurationService.isUserRegistrationAllowed(),
-                Boolean.parseBoolean(userRegistrationAllowedString.toString()));
+                     Boolean.parseBoolean(userRegistrationAllowedString.toString()));
     }
 
     private List<Iterable<BConfiguration>> deleteAllServerConfig() {
@@ -428,7 +430,7 @@ public class ConfigurationServiceTest {
     public void getConfigInServerNotFound() {
         boolean success = false;
         try {
-            configurationService.getConfig(random.nextString() + ConfigurationService.IN_SERVER);
+            configurationService.getNonUserSpecificConfigurations(random.nextString() + ConfigurationService.IN_SERVER);
         } catch (NotFoundEntityException e) {
             assertEquals(ConfigurationService.CONFIG_NOT_FOUND, e.getMessage());
             success = true;
@@ -443,7 +445,8 @@ public class ConfigurationServiceTest {
     public void getConfigNotFound() {
         boolean success = false;
         try {
-            configurationService.getConfig(random.nextString().replace(ConfigurationService.IN_SERVER, ""));
+            final String sampleConfiguration = random.nextString().replace(ConfigurationService.IN_SERVER, "");
+            configurationService.getNonUserSpecificConfigurations(sampleConfiguration);
         } catch (NotFoundEntityException e) {
             assertEquals(ConfigurationService.CONFIG_NOT_FOUND, e.getMessage());
             success = true;
@@ -461,7 +464,7 @@ public class ConfigurationServiceTest {
         configs.put(random.nextString(), random.nextString());
         boolean success = false;
         try {
-            configurationService.saveConfig(configs);
+            configurationService.saveConfigurations(configs);
         } catch (GmsGeneralException e) {
             LOGGER.error(e.getLocalizedMessage());
             fail("There was not provided user and the test still failed because of it");
@@ -478,8 +481,8 @@ public class ConfigurationServiceTest {
     @Test
     public void assignDefaultUserToEntityWithRoleDefaultUserNotFound() {
         // Must return false when no default user is found
-        EUser defaultUser = userRepository.findFirstByUsernameOrEmail(dc.getUserAdminDefaultName(),
-                dc.getUserAdminDefaultEmail());
+        EUser defaultUser = userRepository.findFirstByUsernameOrEmail(defaultConstant.getUserAdminDefaultName(),
+                                                                      defaultConstant.getUserAdminDefaultEmail());
         authRepository.delete(authRepository.findFirstByUserAndEntityNotNullAndRoleEnabled(defaultUser, true));
         userRepository.delete(defaultUser);
         assertFalse(configurationService.isDefaultUserAssignedToEntityWithRole());

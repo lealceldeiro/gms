@@ -14,7 +14,7 @@ import com.gms.repository.security.user.EUserRepository;
 import com.gms.service.AppService;
 import com.gms.testutil.EntityUtil;
 import com.gms.util.GMSRandom;
-import com.gms.util.permission.BPermissionConst;
+import com.gms.util.permission.BPermissionDefinition;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -33,6 +34,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class PermissionServiceTest {
 
     /**
@@ -90,8 +92,8 @@ public class PermissionServiceTest {
      */
     @Test
     public void createDefaultPermissions() {
-        final BPermissionConst[] values = BPermissionConst.values();
-        for (BPermissionConst value : values) {
+        final BPermissionDefinition[] values = BPermissionDefinition.values();
+        for (BPermissionDefinition value : values) {
             assertNotNull(permissionRepository.findFirstByName(value.toString()));
         }
     }

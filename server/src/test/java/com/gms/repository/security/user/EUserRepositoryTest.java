@@ -11,10 +11,10 @@ import com.gms.testutil.GmsMockUtil;
 import com.gms.testutil.GmsSecurityUtil;
 import com.gms.testutil.RestDoc;
 import com.gms.util.GMSRandom;
-import com.gms.util.constant.DefaultConst;
+import com.gms.util.constant.DefaultConstant;
 import com.gms.util.constant.LinkPath;
 import com.gms.util.constant.ResourcePath;
-import com.gms.util.constant.SecurityConst;
+import com.gms.util.constant.SecurityConstant;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Before;
@@ -35,6 +35,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -58,6 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Transactional
 public class EUserRepositoryTest {
 
     /**
@@ -84,15 +86,15 @@ public class EUserRepositoryTest {
     private FilterChainProxy springSecurityFilterChain;
 
     /**
-     * Instance of {@link SecurityConst}.
+     * Instance of {@link SecurityConstant}.
      */
     @Autowired
-    private SecurityConst sc;
+    private SecurityConstant securityConstant;
     /**
-     * Instance of {@link DefaultConst}.
+     * Instance of {@link DefaultConstant}.
      */
     @Autowired
-    private DefaultConst dc;
+    private DefaultConstant defaultConstant;
 
     /**
      * Instance of {@link AppService}.
@@ -173,15 +175,19 @@ public class EUserRepositoryTest {
         mvc = GmsMockUtil.getMvcMock(context, restDocumentation, restDocResHandler, springSecurityFilterChain);
         mvpNonDocumentary = GmsMockUtil.getMvcMock(context, springSecurityFilterChain);
 
-        apiPrefix = dc.getApiBasePath();
-        authHeader = sc.getATokenHeader();
-        tokenType = sc.getATokenType();
+        apiPrefix = defaultConstant.getApiBasePath();
+        authHeader = securityConstant.getATokenHeader();
+        tokenType = securityConstant.getATokenType();
 
-        pageSizeAttr = dc.getPageSizeParam();
-        pageSortAttr = dc.getPageSortParam();
-        pageSize = dc.getPageSize();
+        pageSizeAttr = defaultConstant.getPageSizeParam();
+        pageSortAttr = defaultConstant.getPageSortParam();
+        pageSize = defaultConstant.getPageSize();
 
-        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(dc, sc, mvc, objectMapper, false);
+        accessToken = GmsSecurityUtil.createSuperAdminAuthToken(defaultConstant,
+                                                                securityConstant,
+                                                                mvc,
+                                                                objectMapper,
+                                                                false);
     }
 
     /**
@@ -192,10 +198,10 @@ public class EUserRepositoryTest {
         String[] sortParams = {"username,asc", "name,desc"};
         String embeddedReqString = LinkPath.EMBEDDED + REQ_STRING;
         mvc.perform(get(apiPrefix + "/" + REQ_STRING)
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON)
-                .param(pageSizeAttr, pageSize)
-                .param(pageSortAttr, sortParams))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .param(pageSizeAttr, pageSize)
+                            .param(pageSortAttr, sortParams))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
@@ -231,7 +237,7 @@ public class EUserRepositoryTest {
                         )
                 ))
                 .andDo(restDocResHandler.document(relaxedRequestParameters(
-                        RestDoc.getRelaxedPagingParameters(dc)
+                        RestDoc.getRelaxedPagingParameters(defaultConstant)
                 )));
     }
 
@@ -242,8 +248,8 @@ public class EUserRepositoryTest {
     public void getE() throws Exception {
         createSampleUser();
         mvc.perform(get(apiPrefix + "/" + REQ_STRING + "/{id}", user.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocResHandler.document(
                         responseFields(
@@ -334,8 +340,8 @@ public class EUserRepositoryTest {
     public void deleteE() throws Exception {
         createSampleUser();
         mvc.perform(delete(apiPrefix + "/" + REQ_STRING + "/{id}", user.getId())
-                .header(authHeader, tokenType + " " + accessToken)
-                .accept(MediaType.APPLICATION_JSON))
+                            .header(authHeader, tokenType + " " + accessToken)
+                            .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andDo(restDocResHandler.document(
                         pathParameters(parameterWithName("id").description(EUserMeta.ID_INFO))
@@ -588,7 +594,7 @@ public class EUserRepositoryTest {
 
             // region name (upper case shortened) - username invalid - email invalid, lastName invalid
             prepareMapForSearchMultiTest(paramMap, nameU.substring(1, nameU.length() - 2), notFound, notFound,
-                    notFound, paramMapBase);
+                                         notFound, paramMapBase);
 
             testSearchMulti(url, paramMap);
             //endregion

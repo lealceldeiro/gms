@@ -4,7 +4,7 @@ package com.gms.util.configuration;
  * @author Asiel Leal Celdeiro | lealceldeiro@gmail.com
  * @version 0.1
  */
-public enum ConfigKey {
+public enum BusinessConfigurationKey {
 
     /**
      * App which handles multiple entities (enterprises, businesses,etc).

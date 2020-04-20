@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Getter
-public class DefaultConst {
+public class DefaultConstant {
 
     //region role
     /**
@@ -172,7 +172,7 @@ public class DefaultConst {
     /**
      * Request variable in which it is specified what should be the response language.
      *
-     * @see DefaultConst#DEFAULT_LANGUAGE_HEADER
+     * @see DefaultConstant#DEFAULT_LANGUAGE_HEADER
      */
     @Value("${gms.i18n.lang.holder:lang}")
     private String languageHolder;
@@ -186,7 +186,7 @@ public class DefaultConst {
     /**
      * Header in which it is specified what should be the response language.
      *
-     * @see DefaultConst#languageHolder
+     * @see DefaultConstant#languageHolder
      */
     public static final String DEFAULT_LANGUAGE_HEADER = HttpHeaders.ACCEPT_LANGUAGE;
     //endregion
