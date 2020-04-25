@@ -6,12 +6,11 @@
 
 ## And
 - [ ] This Pull Request DOES NOT target the `master` branch on this repository (if so it must point to develop).
-- [ ] I have only one commit (if not, squash them into one commit).
 - [ ] I have read the [**CONTRIBUTING**](../CONTRIBUTING.md) document.
 - [ ] My code follows the code style of this project.
 - [ ] I have added/updated tests to cover my changes.
 - [ ] All new and existing tests passed.
-- [ ] I have lint my code locally prior to submission.
+- [ ] I have lint my code locally prior to submission (frontend) or run the gradle task `check` (backend).
 - [ ] My change requires a change to the documentation.
 - [ ] I have updated the documentation accordingly.
 - [ ] There are not other open [Pull Requests](https://github.com/lealceldeiro/gms/pulls) for the same update/change.
