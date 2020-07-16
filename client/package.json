@@ -39,7 +39,7 @@
     "bootstrap": "^4.4.1",
     "copyfiles": "^2.2.0",
     "core-js": "^3.6.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "ngx-cookie": "^4.0.2",
     "ngx-toastr": "^10.2.0",
     "ngx-ui-loader": "^8.0.0",
